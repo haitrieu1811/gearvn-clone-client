@@ -1,0 +1,11 @@
+{
+  "register_login": {
+    "register": "Register",
+    "login": "Login",
+    "email": "Email",
+    "password": "Password",
+    "confirm_password": "Confirm password",
+    "already_have_account": "You already have account?",
+    "dont_have_account": "Do not have an account?"
+  }
+}

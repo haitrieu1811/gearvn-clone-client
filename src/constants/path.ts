@@ -1,3 +1,8 @@
-export const HOME_PATH = '/';
-export const LOGIN_PATH = '/login';
-export const REGISTER_PATH = '/register';
+const PATH = {
+  HOME: '/',
+  LOGIN: '/login',
+  REGISTER: '/register',
+  PROFILE: '/profile'
+} as const;
+
+export default PATH;

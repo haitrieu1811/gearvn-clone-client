@@ -1,0 +1,11 @@
+{
+  "register_login": {
+    "register": "Đăng ký",
+    "login": "Đăng nhập",
+    "email": "Email",
+    "password": "Mật khẩu",
+    "confirm_password": "Nhập lại mật khẩu",
+    "already_have_account": "Bạn đã có tài khoản?",
+    "dont_have_account": "Bạn chưa có tài khoản?"
+  }
+}

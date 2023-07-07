@@ -1,3 +1,40 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: sf-pro-display-regular, 'sans-serif';
+}
+
+@font-face {
+  font-family: sf-pro-display-regular;
+  src: url(../src//assets/fonts//sf-pro-display-regular_abbbcf80b2b5453188b767aec8c4061d.otf);
+}
+
+@font-face {
+  font-family: sf-pro-display-regularitalic;
+  src: url(../src//assets/fonts//sf-pro-display-regularitalic_e03d23dca1934307850f147d46ceec9d.otf);
+}
+
+@font-face {
+  font-family: sf-pro-display-medium;
+  src: url(../src//assets/fonts//sf-pro-display-medium_b03a4ea351ac4d0ba7e1b3bd31194735.otf);
+}
+
+@font-face {
+  font-family: sf-pro-display-semibold;
+  src: url(../src//assets/fonts//sf-pro-display-semibold_239d89cf45824f358e16eb4e6328794c.otf);
+}
+
+@font-face {
+  font-family: sf-pro-display-heavy;
+  src: url(../src//assets/fonts//sf-pro-display-heavy_4ae6682c2e5c44f2bc79506a451f07c1.otf);
+}
+
+@font-face {
+  font-family: sf-pro-display-blackitalic;
+  src: url(../src//assets/fonts//sf-pro-display-blackitalic_85c1d3c6cfac4672924c38222c9791d1.otf);
+}
