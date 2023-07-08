@@ -6,6 +6,7 @@
     "password": "Password",
     "confirm_password": "Confirm password",
     "already_have_account": "You already have account?",
-    "dont_have_account": "Do not have an account?"
+    "dont_have_account": "Do not have an account?",
+    "please_login": "Hello, please login"
   }
 }

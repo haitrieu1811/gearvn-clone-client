@@ -37,10 +37,12 @@ const Input = ({
   };
 
   return (
-    <div className={`relative ${classNameWrapper}`}>
-      {openEye && rest.type === 'password' && <EyeIcon onClick={toggleEye} />}
-      {!openEye && rest.type === 'password' && <EyeCloseIcon onClick={toggleEye} />}
-      <input {...rest} type={handleType()} className={classNameInput} {...registerResult} />
+    <div className={classNameWrapper}>
+      <div className='relative'>
+        {openEye && rest.type === 'password' && <EyeIcon onClick={toggleEye} />}
+        {!openEye && rest.type === 'password' && <EyeCloseIcon onClick={toggleEye} />}
+        <input {...rest} type={handleType()} className={classNameInput} {...registerResult} />
+      </div>
       <div className={classNameError}>{errorMessage}</div>
     </div>
   );

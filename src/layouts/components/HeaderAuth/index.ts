@@ -1,3 +1,1 @@
-import HeaderAuth from './HeaderAuth';
-
-export default HeaderAuth;
+export { default } from './HeaderAuth';

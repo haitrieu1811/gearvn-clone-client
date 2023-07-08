@@ -26,7 +26,7 @@ export const resources = {
 
 i18n.use(initReactI18next).init({
   resources,
-  lng: 'en',
+  lng: 'vi',
   ns: ['pages', 'components'],
   defaultNS,
   fallbackLng: 'vi',
