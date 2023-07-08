@@ -1,8 +1,8 @@
-import axios, { AxiosInstance } from 'axios';
+import axios, { AxiosInstance, InternalAxiosRequestConfig } from 'axios';
 
-import { URL_LOGIN, URL_LOGOUT, URL_REGISTER } from 'src/apis/auth.api';
+import { URL_LOGIN, URL_LOGOUT, URL_REFRESH_TOKEN, URL_REGISTER } from 'src/apis/auth.api';
 import CONFIG from 'src/constants/config';
-import { AuthResponse } from 'src/types/auth.type';
+import { AuthResponse, RefreshTokenResponse } from 'src/types/auth.type';
 import { User } from 'src/types/user.type';
 import {
   clearAuthFromLS,
@@ -12,18 +12,20 @@ import {
   setProfileToLS,
   setRefreshTokenToLS
 } from './auth';
+import { isExpiredTokenError, isUnauthorizedError } from './utils';
+import { ErrorResponse } from 'src/types/utils.type';
 
 class Http {
   instance: AxiosInstance;
   private accessToken: string;
   private refreshToken: string;
-  // private refreshTokenRequest: Promise<string> | null;
+  private refreshTokenRequest: Promise<string> | null;
   private profile: User | null;
 
   constructor() {
     this.accessToken = getAccessTokenFromLS();
     this.refreshToken = getRefreshTokenFromLS();
-    // this.refreshTokenRequest = null;
+    this.refreshTokenRequest = null;
     this.profile = null;
     this.instance = axios.create({
       baseURL: CONFIG.BASE_URL,
@@ -35,6 +37,9 @@ class Http {
 
     this.instance.interceptors.request.use(
       (config) => {
+        if (this.accessToken && config.headers) {
+          config.headers.Authorization = `Bearer ${this.accessToken}`;
+        }
         return config;
       },
       (error) => {
@@ -57,11 +62,72 @@ class Http {
         }
         return response;
       },
-      (error) => {
+      async (error) => {
+        // Xử lý lỗi 401
+        if (isUnauthorizedError(error)) {
+          const config = error.response?.config || ({ headers: {} } as InternalAxiosRequestConfig);
+          const { url } = config;
+          // Xử lý khi hết hạn token
+          if (isExpiredTokenError(error) && url !== URL_REFRESH_TOKEN) {
+            this.refreshTokenRequest = this.refreshTokenRequest
+              ? this.refreshTokenRequest
+              : this.handleRefreshToken().finally(() => {
+                  setTimeout(() => {
+                    this.refreshTokenRequest = null;
+                  }, 10000);
+                });
+            return this.refreshTokenRequest.then((access_token) => {
+              config.headers.Authorization = `Bearer ${access_token}`;
+              // Tiếp tục request cũ nếu bị lỗi
+              return this.instance({
+                ...config,
+                headers: {
+                  ...config.headers,
+                  Authorization: `Bearer ${access_token}`
+                }
+              });
+            });
+          }
+          clearAuthFromLS();
+          this.accessToken = '';
+          this.refreshToken = '';
+        }
         return Promise.reject(error);
       }
     );
   }
+
+  private handleRefreshToken = async () => {
+    // try {
+    //   const res = await this.instance.post<RefreshTokenResponse>(URL_REFRESH_TOKEN, {
+    //     refresh_token: this.refreshToken
+    //   });
+    //   const { access_token } = res.data.data;
+    //   setAccessTokenToLS(access_token);
+    //   this.accessToken = access_token;
+    //   return access_token;
+    // } catch (error) {
+    //   clearAuthFromLS();
+    //   this.accessToken = '';
+    //   this.refreshToken = '';
+    //   throw error;
+    // }
+    return this.instance
+      .post<RefreshTokenResponse>(URL_REFRESH_TOKEN, { refresh_token: this.refreshToken })
+      .then((res) => {
+        const { access_token, refresh_token } = res.data.data;
+        setAccessTokenToLS(access_token);
+        setRefreshTokenToLS(refresh_token);
+        this.accessToken = access_token;
+        return access_token;
+      })
+      .catch((error) => {
+        clearAuthFromLS();
+        this.accessToken = '';
+        this.refreshToken = '';
+        throw error;
+      });
+  };
 }
 
 const http = new Http().instance;
