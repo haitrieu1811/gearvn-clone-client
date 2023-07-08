@@ -5,10 +5,12 @@ import PATH from 'src/constants/path';
 import { AppContext } from 'src/contexts/app.context';
 const MainLayout = lazy(() => import('src/layouts/MainLayout'));
 const AuthLayout = lazy(() => import('src/layouts/AuthLayout'));
+const OnlyContent = lazy(() => import('src/layouts/OnlyContent'));
 const Home = lazy(() => import('src/pages/Home'));
 const Login = lazy(() => import('src/pages/Login'));
 const Register = lazy(() => import('src/pages/Register'));
 const Profile = lazy(() => import('src/pages/Profile'));
+const NotFound = lazy(() => import('src/pages/NotFound'));
 
 const ProtectedRoute = () => {
   const { isAuthenticated } = useContext(AppContext);
@@ -29,6 +31,16 @@ const useElement = () => {
         <Suspense>
           <MainLayout>
             <Home />
+          </MainLayout>
+        </Suspense>
+      )
+    },
+    {
+      path: PATH.NOT_FOUND,
+      element: (
+        <Suspense>
+          <MainLayout>
+            <NotFound />
           </MainLayout>
         </Suspense>
       )

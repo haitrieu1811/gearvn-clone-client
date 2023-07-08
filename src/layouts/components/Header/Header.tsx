@@ -6,10 +6,29 @@ import { Link } from 'react-router-dom';
 
 import authApi from 'src/apis/auth.api';
 import logo from 'src/assets/images/logo-white.svg';
-import { HandIcon, LogoutIcon, PurchaseIcon, UserIcon, ViewedIcon } from 'src/components/Icons';
+import {
+  BarIcon,
+  CartIcon,
+  CoinIcon,
+  CreditCardIcon,
+  HandIcon,
+  HotlineIcon,
+  ItemIcon,
+  LocationIcon,
+  LogoutIcon,
+  NewspaperIcon,
+  PurchaseIcon,
+  SearchIcon,
+  ShieldIcon,
+  UserIcon,
+  VideoIcon,
+  ViewedIcon
+} from 'src/components/Icons';
 import Wrapper from 'src/components/Wrapper';
 import PATH from 'src/constants/path';
 import { AppContext } from 'src/contexts/app.context';
+import HeaderAction from './HeaderAction';
+import SubMenuItem from './SubMenuItem';
 
 const Header = () => {
   const { t } = useTranslation('pages');
@@ -17,12 +36,12 @@ const Header = () => {
 
   const renderUserMenu = () => {
     return (
-      <Wrapper>
+      <Wrapper arrow>
         {!isAuthenticated ? (
           <div className='p-5 min-w-[300px]'>
             <div className='flex mb-4'>
               <HandIcon className='w-5 h-5' />
-              <span className='ml-3 text-sm'>{t('register_login.please_login')}</span>
+              <span className='ml-3 text-sm font-medium'>{t('register_login.please_login')}</span>
             </div>
             <div className='flex'>
               <Link
@@ -48,7 +67,7 @@ const Header = () => {
               </span>
             </Link>
             <Link to={PATH.HOME} className='px-5 py-3 flex hover:underline'>
-              <PurchaseIcon className='w-5 h-5' />
+              <PurchaseIcon className='w-5 h-5 fill-black' />
               <span className='ml-4 text-sm'>Đơn hàng của tôi</span>
             </Link>
             <Link to={PATH.HOME} className='px-5 py-3 flex hover:underline border-b'>
@@ -78,25 +97,77 @@ const Header = () => {
   };
 
   return (
-    <header className='bg-primary'>
-      <nav className='container py-4 flex justify-between items-center'>
-        <Link to={PATH.HOME} className='inline'>
-          <img src={logo} alt='Logo' className='w-[140px]' />
-        </Link>
-        <Tippy placement='bottom-end' render={renderUserMenu} offset={[0, 0]} interactive>
-          <div className='h-[42px] bg-[#BE1529] flex items-center justify-center p-2 rounded cursor-pointer'>
-            <UserIcon className='w-5 h-5 flex-shrink-0' />
-            {!isAuthenticated ? (
-              <span className='text-[13px] text-white ml-3 leading-tight'>{t('register_login.login')}</span>
-            ) : (
-              <span className='text-[13px] text-white ml-3 leading-tight'>
-                <div>Xin chào</div>
-                <div>{profile?.fullName ? profile.fullName : profile?.email.split('@')[0]}</div>
-              </span>
-            )}
+    <header className=''>
+      <div className='bg-primary'>
+        <nav className='container py-4 flex justify-between items-center'>
+          <Link to={PATH.HOME} className='inline'>
+            <img src={logo} alt='Logo' className='w-[140px]' />
+          </Link>
+
+          <div className='ml-4 h-[42px] bg-[#BE1529] px-2 py-1 flex items-center justify-center rounded cursor-pointer font-semibold'>
+            <BarIcon />
+            <span className='text-white text-sm ml-3'>Danh mục</span>
           </div>
-        </Tippy>
-      </nav>
+
+          <div className='relative flex-1 ml-2'>
+            <input
+              type='text'
+              placeholder='Bạn cần tìm gì'
+              className='w-full py-2 pl-[15px] pr-[50px] rounded outline-none text-[15px]'
+            />
+            <button className='absolute top-0 right-0 h-full w-9 flex justify-center items-center'>
+              <SearchIcon className='fill-white w-4 h-4' />
+            </button>
+          </div>
+
+          <HeaderAction icon={<HotlineIcon className='w-[18px]' />} textAbove='Hotline' textBelow='1800.6975' />
+          <HeaderAction icon={<LocationIcon className='w-[18px]' />} textAbove='Hệ thống' textBelow='Showroom' />
+          <HeaderAction
+            icon={<PurchaseIcon className='w-[18px] fill-white' />}
+            textAbove='Tra cứu'
+            textBelow='đơn hàng'
+          />
+          <HeaderAction
+            icon={
+              <div className='relative'>
+                <CartIcon className='w-[18px]' />
+                <span className='absolute -top-2 -right-2 bg-[#FDD835] text-[9px] w-4 h-4 rounded-full flex items-center justify-center font-bold border-[2px] border-white'>
+                  2
+                </span>
+              </div>
+            }
+            textAbove='Giỏ'
+            textBelow='hàng'
+          />
+
+          <Tippy placement='bottom-end' render={renderUserMenu} offset={[0, 15]} interactive>
+            <div className='h-[42px] bg-[#BE1529] flex items-center justify-center p-2 rounded cursor-pointer ml-4'>
+              <UserIcon className='w-5 h-5 flex-shrink-0' />
+              {!isAuthenticated ? (
+                <span className='text-[13px] text-white ml-3 leading-tight font-semibold'>
+                  <div>Đăng</div>
+                  <div>nhập</div>
+                </span>
+              ) : (
+                <span className='text-[13px] text-white ml-3 leading-tight font-semibold'>
+                  <div>Xin chào</div>
+                  <div>{profile?.fullName ? profile.fullName : profile?.email.split('@')[0]}</div>
+                </span>
+              )}
+            </div>
+          </Tippy>
+        </nav>
+      </div>
+      <div className='bg-white'>
+        <div className='flex items-center justify-center'>
+          <SubMenuItem icon={<ItemIcon className='fill-none w-5 h-5' />} name='Tổng hợp khuyến mãi' separate />
+          <SubMenuItem icon={<NewspaperIcon className='fill-none w-5 h-5' />} name='Tin công nghệ' separate />
+          <SubMenuItem icon={<VideoIcon className='fill-none w-5 h-5' />} name='Video' separate />
+          <SubMenuItem icon={<CreditCardIcon className='fill-none w-5 h-5' />} name='Hướng dẫn thanh toán' separate />
+          <SubMenuItem icon={<CoinIcon className='fill-none w-5 h-5' />} name='Hướng dẫn trả góp' separate />
+          <SubMenuItem icon={<ShieldIcon className='fill-none w-5 h-5' />} name='Chính sách bảo hành' />
+        </div>
+      </div>
     </header>
   );
 };

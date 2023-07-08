@@ -5,8 +5,10 @@ import { useContext } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 import authApi from 'src/apis/auth.api';
+import banner from 'src/assets/images/banner.png';
 import Button from 'src/components/Button';
 import Input from 'src/components/Input';
 import PATH from 'src/constants/path';
@@ -34,6 +36,7 @@ const Login = () => {
     onSuccess: (data) => {
       setIsAuthenticated(true);
       setProfile(data.data.data.user);
+      toast.success('Đăng nhập thành công');
     },
     onError: (error) => {
       if (isEntiryError<ErrorResponse<FormData>>(error)) {
@@ -55,10 +58,10 @@ const Login = () => {
   });
 
   return (
-    <div className='bg-primary'>
-      <div className='container py-12 md:py-16'>
+    <div className='bg-[#ffebe1] bg-cover bg-center bg-no-repeat' style={{ backgroundImage: `url(${banner})` }}>
+      <div className='container py-12 md:py-24'>
         <div className='grid grid-cols-12'>
-          <div className='bg-white p-10 lg:col-start-9 lg:col-span-4 rounded-sm col-span-12 col-start-1 md:col-span-8 md:col-start-3'>
+          <div className='bg-white p-10 lg:col-start-9 lg:col-span-4 rounded-sm col-span-12 col-start-1 md:col-span-8 md:col-start-3 shadow-sm'>
             <h2 className='text-2xl capitalize mb-5'>{t('register_login.login')}</h2>
             <form onSubmit={onSubmit}>
               <Input

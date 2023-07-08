@@ -10,7 +10,7 @@ const App = () => {
     <Fragment>
       {element}
       <ReactQueryDevtools />
-      <ToastContainer autoClose={3000} position='top-center' />
+      <ToastContainer autoClose={2000} position='top-center' />
     </Fragment>
   );
 };

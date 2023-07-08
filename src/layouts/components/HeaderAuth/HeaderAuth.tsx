@@ -17,7 +17,7 @@ const HeaderAuth = () => {
           <Link to={PATH.HOME} className='md:w-[150px] block w-[120px]'>
             <img src={logo} alt='Logo' />
           </Link>
-          <h1 className='font-medium md:text-2xl ml-5 text-xl capitalize'>
+          <h1 className='md:text-2xl ml-5 text-xl capitalize'>
             {isRegister ? t('register_login.register') : t('register_login.login')}
           </h1>
         </div>
