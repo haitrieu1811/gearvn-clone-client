@@ -1,14 +1,14 @@
-import { Fragment, ReactNode } from 'react';
-import Header from '../components/Header';
+import { ReactNode } from 'react';
 import Footer from '../components/Footer';
+import Header from '../components/Header';
 
 const MainLayout = ({ children }: { children: ReactNode }) => {
   return (
-    <Fragment>
+    <div className='bg-[#ececec]'>
       <Header />
       {children}
       <Footer />
-    </Fragment>
+    </div>
   );
 };
 

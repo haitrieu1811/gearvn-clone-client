@@ -7,7 +7,7 @@ import PATH from 'src/constants/path';
 const SubMenuItem = ({ icon, name, separate = false }: { icon: ReactNode; name: string; separate?: boolean }) => {
   return (
     <Fragment>
-      <Link to={PATH.HOME} className='flex items-center px-8 my-[10px] hover:text-red-500'>
+      <Link to={PATH.HOME} className='flex items-center px-8 my-[10px] hover:text-primary'>
         {icon}
         <span className='font-semibold text-[13px] ml-2'>{name}</span>
       </Link>

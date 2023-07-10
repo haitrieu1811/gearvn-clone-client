@@ -9,6 +9,7 @@ import logo from 'src/assets/images/logo-white.svg';
 import {
   BarIcon,
   CartIcon,
+  ChartPieIcon,
   CoinIcon,
   CreditCardIcon,
   HandIcon,
@@ -29,6 +30,7 @@ import PATH from 'src/constants/path';
 import { AppContext } from 'src/contexts/app.context';
 import HeaderAction from './HeaderAction';
 import SubMenuItem from './SubMenuItem';
+import { UserRole } from 'src/constants/enum';
 
 const Header = () => {
   const { t } = useTranslation('pages');
@@ -66,6 +68,12 @@ const Header = () => {
                 Xin chào, {profile?.fullName ? profile.fullName : profile?.email.split('@')[0]}
               </span>
             </Link>
+            {profile?.role !== UserRole.Customer && (
+              <Link to={PATH.DASHBOARD} className='px-5 py-3 flex hover:underline'>
+                <ChartPieIcon className='w-5 h-5' />
+                <span className='ml-4 text-sm'>Dashboard</span>
+              </Link>
+            )}
             <Link to={PATH.HOME} className='px-5 py-3 flex hover:underline'>
               <PurchaseIcon className='w-5 h-5 fill-black' />
               <span className='ml-4 text-sm'>Đơn hàng của tôi</span>
@@ -142,7 +150,7 @@ const Header = () => {
 
           <Tippy placement='bottom-end' render={renderUserMenu} offset={[0, 15]} interactive>
             <div className='h-[42px] bg-[#BE1529] flex items-center justify-center p-2 rounded cursor-pointer ml-4'>
-              <UserIcon className='w-5 h-5 flex-shrink-0' />
+              <UserIcon className='w-5 h-5 flex-shrink-0 stroke-white' />
               {!isAuthenticated ? (
                 <span className='text-[13px] text-white ml-3 leading-tight font-semibold'>
                   <div>Đăng</div>

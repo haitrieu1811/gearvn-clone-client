@@ -12,7 +12,7 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 
 const Button = ({
   children,
-  className = 'bg-primary w-full text-white uppercase rounded-sm py-2 hover:bg-primary/90 flex items-center justify-center',
+  className = 'bg-primary w-full text-white capitalize rounded py-2 hover:bg-primary/90 flex items-center justify-center font-medium',
   classNameWrapper,
   isLoading
 }: ButtonProps) => {

@@ -1,16 +1,23 @@
 import { lazy, Suspense, useContext } from 'react';
-import { Outlet, useRoutes, Navigate } from 'react-router-dom';
+import { Navigate, Outlet, useRoutes } from 'react-router-dom';
+import { UserRole } from 'src/constants/enum';
 
 import PATH from 'src/constants/path';
 import { AppContext } from 'src/contexts/app.context';
+
 const MainLayout = lazy(() => import('src/layouts/MainLayout'));
 const AuthLayout = lazy(() => import('src/layouts/AuthLayout'));
-const OnlyContent = lazy(() => import('src/layouts/OnlyContent'));
-const Home = lazy(() => import('src/pages/Home'));
-const Login = lazy(() => import('src/pages/Login'));
-const Register = lazy(() => import('src/pages/Register'));
-const Profile = lazy(() => import('src/pages/Profile'));
-const NotFound = lazy(() => import('src/pages/NotFound'));
+const DashboardLayout = lazy(() => import('src/layouts/DashboardLayout'));
+
+const Home = lazy(() => import('src/pages/shop/Home'));
+const Login = lazy(() => import('src/pages/shop/Login'));
+const Register = lazy(() => import('src/pages/shop/Register'));
+const Profile = lazy(() => import('src/pages/shop/Profile'));
+const NotFound = lazy(() => import('src/pages/shop/NotFound'));
+const Dashboard = lazy(() => import('src/pages/admin/Dashboard'));
+const DashboardUser = lazy(() => import('src/pages/admin/User'));
+const DashboardCategory = lazy(() => import('src/pages/admin/Category/List'));
+const DashboardCategoryCreate = lazy(() => import('src/pages/admin/Category/Create'));
 
 const ProtectedRoute = () => {
   const { isAuthenticated } = useContext(AppContext);
@@ -22,8 +29,18 @@ const RejectedRoute = () => {
   return !isAuthenticated ? <Outlet /> : <Navigate to={PATH.HOME} />;
 };
 
+const AdminAndSellerRoute = () => {
+  const { isAuthenticated, profile } = useContext(AppContext);
+  return isAuthenticated && (profile?.role === UserRole.Admin || profile?.role === UserRole.Seller) ? (
+    <Outlet />
+  ) : (
+    <Navigate to={PATH.HOME} />
+  );
+};
+
 const useElement = () => {
   const element = useRoutes([
+    // PUBLIC ROUTES
     {
       index: true,
       path: PATH.HOME,
@@ -45,6 +62,7 @@ const useElement = () => {
         </Suspense>
       )
     },
+    // PROTECTED ROUTES
     {
       path: '/',
       element: <ProtectedRoute />,
@@ -61,6 +79,7 @@ const useElement = () => {
         }
       ]
     },
+    // REJECTED ROUTES
     {
       path: '/',
       element: <RejectedRoute />,
@@ -82,6 +101,63 @@ const useElement = () => {
               <AuthLayout>
                 <Register />
               </AuthLayout>
+            </Suspense>
+          )
+        }
+      ]
+    },
+    // ADMIN AND SELLER ROUTES
+    {
+      path: '/',
+      element: <AdminAndSellerRoute />,
+      children: [
+        {
+          path: PATH.DASHBOARD,
+          element: (
+            <Suspense>
+              <DashboardLayout>
+                <Dashboard />
+              </DashboardLayout>
+            </Suspense>
+          )
+        },
+        {
+          path: PATH.DASHBOARD_USER,
+          element: (
+            <Suspense>
+              <DashboardLayout>
+                <DashboardUser />
+              </DashboardLayout>
+            </Suspense>
+          )
+        },
+        {
+          path: PATH.DASHBOARD_CATEGORY,
+          element: (
+            <Suspense>
+              <DashboardLayout>
+                <DashboardCategory />
+              </DashboardLayout>
+            </Suspense>
+          )
+        },
+        {
+          path: PATH.DASHBOARD_CATEGORY_CREATE,
+          element: (
+            <Suspense>
+              <DashboardLayout>
+                <DashboardCategoryCreate />
+              </DashboardLayout>
+            </Suspense>
+          )
+        },
+        {
+          path: PATH.DASHBOARD_CATEGORY_UPDATE,
+          element: (
+            <Suspense>
+              <DashboardLayout>
+                <DashboardCategoryCreate />
+              </DashboardLayout>
             </Suspense>
           )
         }

@@ -7,3 +7,7 @@ export interface ErrorResponse<Data> {
   message: string;
   data?: Data;
 }
+
+export interface OnlyMessageResponse {
+  message: string;
+}

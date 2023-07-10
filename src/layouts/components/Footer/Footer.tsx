@@ -41,8 +41,8 @@ const Footer = () => {
                 'https://theme.hstatic.net/200000722513/1001065590/14/ship_3.png?v=1171',
                 'https://theme.hstatic.net/200000722513/1001065590/14/ship_4.png?v=1171'
               ].map((url) => (
-                <div className='col-span-3'>
-                  <img key={url} src={url} alt='' />
+                <div key={url} className='col-span-3'>
+                  <img src={url} alt='' />
                 </div>
               ))}
             </div>
@@ -58,8 +58,8 @@ const Footer = () => {
                 'https://theme.hstatic.net/200000722513/1001065590/14/pay_7.png?v=1171',
                 'https://theme.hstatic.net/200000722513/1001065590/14/pay_8.png?v=1171'
               ].map((url) => (
-                <div className='col-span-3'>
-                  <img key={url} src={url} alt='' />
+                <div key={url} className='col-span-3'>
+                  <img src={url} alt='' />
                 </div>
               ))}
             </div>

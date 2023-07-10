@@ -13,7 +13,6 @@ import {
   setRefreshTokenToLS
 } from './auth';
 import { isExpiredTokenError, isUnauthorizedError } from './utils';
-import { ErrorResponse } from 'src/types/utils.type';
 
 class Http {
   instance: AxiosInstance;
@@ -91,6 +90,7 @@ class Http {
           clearAuthFromLS();
           this.accessToken = '';
           this.refreshToken = '';
+          this.profile = null;
         }
         return Promise.reject(error);
       }
@@ -98,20 +98,6 @@ class Http {
   }
 
   private handleRefreshToken = async () => {
-    // try {
-    //   const res = await this.instance.post<RefreshTokenResponse>(URL_REFRESH_TOKEN, {
-    //     refresh_token: this.refreshToken
-    //   });
-    //   const { access_token } = res.data.data;
-    //   setAccessTokenToLS(access_token);
-    //   this.accessToken = access_token;
-    //   return access_token;
-    // } catch (error) {
-    //   clearAuthFromLS();
-    //   this.accessToken = '';
-    //   this.refreshToken = '';
-    //   throw error;
-    // }
     return this.instance
       .post<RefreshTokenResponse>(URL_REFRESH_TOKEN, { refresh_token: this.refreshToken })
       .then((res) => {
