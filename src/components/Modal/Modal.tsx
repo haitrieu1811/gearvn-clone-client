@@ -26,7 +26,7 @@ const Modal = ({ isVisible, children, okText = 'Ok', cancelText = 'Hủy', onOk,
     <Fragment>
       {isVisible && (
         <div className='flex justify-center items-center fixed inset-0'>
-          <div className='bg-black/30 fixed inset-0'></div>
+          <div className='bg-black/30 fixed inset-0' onClick={handleCancel}></div>
           <div className='bg-white z-10 rounded-lg'>
             <div className='flex justify-between items-center px-3 py-2 border-b'>
               <div></div>
@@ -37,13 +37,13 @@ const Modal = ({ isVisible, children, okText = 'Ok', cancelText = 'Hủy', onOk,
             <div className='px-3 py-6 border-b'>{children}</div>
             <div className='flex justify-end p-3'>
               <button
-                className='py-2 px-4 rounded text-sm text-white bg-slate-400 hover:bg-slate-400/90'
+                className='py-2 px-4 rounded text-sm text-white bg-slate-400 hover:bg-slate-400/90 font-medium'
                 onClick={handleCancel}
               >
                 {cancelText}
               </button>
               <button
-                className='py-2 px-4 rounded text-sm text-white bg-blue-600 ml-2 hover:bg-blue-600/90'
+                className='py-2 px-4 rounded text-sm text-white bg-blue-600 ml-2 hover:bg-blue-600/90 font-medium'
                 onClick={handleOk}
               >
                 {okText}

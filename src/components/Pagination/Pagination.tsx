@@ -69,7 +69,7 @@ const Pagination = ({ pageSize, queryConfig, path }: { pageSize: number; queryCo
               }).toString()
             }}
             key={index}
-            className={classNames('w-9 h-9 mx-1 rounded-md flex justify-center items-center font-medium text-[15px]', {
+            className={classNames('w-8 h-8 mx-1 rounded-md flex justify-center items-center font-medium text-[15px]', {
               'bg-primary text-white pointer-events-none': isActive,
               'bg-white': !isActive
             })}
@@ -83,7 +83,7 @@ const Pagination = ({ pageSize, queryConfig, path }: { pageSize: number; queryCo
   return (
     <div className='flex flex-wrap items-center justify-end text-xl font-light'>
       {page === 1 ? (
-        <span className='w-9 h-9 mx-1 rounded-md flex justify-center items-center font-medium text-[15px] cursor-not-allowed'>
+        <span className='w-8 h-8 mx-1 rounded-md flex justify-center items-center font-medium text-[15px] cursor-not-allowed'>
           <ChevronLeft className='w-4 h-4' />
         </span>
       ) : (
@@ -94,7 +94,7 @@ const Pagination = ({ pageSize, queryConfig, path }: { pageSize: number; queryCo
               page: (page - 1).toString()
             }).toString()
           }}
-          className='w-9 h-9 mx-1 rounded-md flex justify-center items-center font-medium text-[15px]'
+          className='w-8 h-8 mx-1 rounded-md flex justify-center items-center font-medium text-[15px]'
         >
           <ChevronLeft className='w-4 h-4' />
         </Link>
@@ -103,7 +103,7 @@ const Pagination = ({ pageSize, queryConfig, path }: { pageSize: number; queryCo
       {renderPagination()}
 
       {page === pageSize ? (
-        <span className='w-9 h-9 mx-1 rounded-md flex justify-center items-center font-medium text-[15px] cursor-not-allowed'>
+        <span className='w-8 h-8 mx-1 rounded-md flex justify-center items-center font-medium text-[15px] cursor-not-allowed'>
           <ChevronRight className='w-4 h-4' />
         </span>
       ) : (
@@ -114,7 +114,7 @@ const Pagination = ({ pageSize, queryConfig, path }: { pageSize: number; queryCo
               page: (page + 1).toString()
             }).toString()
           }}
-          className='w-9 h-9 mx-1 rounded-md flex justify-center items-center font-medium text-[15px]'
+          className='w-8 h-8 mx-1 rounded-md flex justify-center items-center font-medium text-[15px]'
         >
           <ChevronRight className='w-4 h-4' />
         </Link>

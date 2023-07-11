@@ -101,7 +101,7 @@ const Create = () => {
         <ChevronLeft className='w-4 h-4 stroke-blue-600' />
         <span className='text-sm font-semibold text-blue-600 ml-2'>Quay lại</span>
       </button>
-      <div className='bg-white rounded p-6 shadow-sm w-1/2'>
+      <div className='bg-white rounded-lg p-6 shadow-sm w-1/2'>
         <h2 className='text-2xl font-bold'>{!isUpdateMode ? 'Tạo mới danh mục' : 'Cập nhật danh mục'}</h2>
         <form onSubmit={onSubmit}>
           <Input

@@ -228,7 +228,7 @@ export const SearchIcon = ({ className }: IconProps) => (
 );
 
 export const ItemIcon = ({ className }: IconProps) => (
-  <svg viewBox='0 0 19 19' xmlns='http://www.w3.org/2000/svg' className={className}>
+  <svg viewBox='0 0 19 19' fill='none' xmlns='http://www.w3.org/2000/svg' className={className}>
     <rect x='3.95453' y='3.95454' width='2.27273' height='2.27273' rx='1.13636' stroke='currentcolor' />
     <path d='M9.18179 11.6364L12.4545 14.9091' stroke='currentcolor' strokeLinecap='round' />
     <path d='M10 7.54546L14.9091 12.4545' stroke='currentcolor' strokeLinecap='round' />
@@ -402,7 +402,13 @@ export const PencilIcon = ({ className }: IconProps) => (
 );
 
 export const BellIcon = ({ className }: IconProps) => (
-  <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' stroke='currentColor' className={className}>
+  <svg
+    xmlns='http://www.w3.org/2000/svg'
+    viewBox='0 0 24 24'
+    stroke='currentColor'
+    strokeWidth={1.5}
+    className={className}
+  >
     <path
       strokeLinecap='round'
       strokeLinejoin='round'
@@ -454,7 +460,7 @@ export const TickIcon = ({ className }: IconProps) => (
     xmlns='http://www.w3.org/2000/svg'
     fill='none'
     viewBox='0 0 24 24'
-    strokeWidth={1.5}
+    strokeWidth={3}
     stroke='currentColor'
     className={className}
   >
@@ -493,6 +499,19 @@ export const PlusIcon = ({ className }: IconProps) => (
 );
 
 export const CloseIcon = ({ className }: IconProps) => (
+  <svg
+    xmlns='http://www.w3.org/2000/svg'
+    fill='none'
+    viewBox='0 0 24 24'
+    strokeWidth={1.5}
+    stroke='currentColor'
+    className={className}
+  >
+    <path strokeLinecap='round' strokeLinejoin='round' d='M6 18L18 6M6 6l12 12' />
+  </svg>
+);
+
+export const XMarkIcon = ({ className }: IconProps) => (
   <svg
     xmlns='http://www.w3.org/2000/svg'
     fill='none'

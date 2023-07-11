@@ -27,6 +27,9 @@ export interface Pagination {
 export interface GetUsersParams {
   page?: string;
   limit?: string;
+  gender?: string;
+  status?: string;
+  role?: string;
 }
 
 export type GetUserResponse = SuccessResponse<{ users: User[]; pagination: Pagination }>;

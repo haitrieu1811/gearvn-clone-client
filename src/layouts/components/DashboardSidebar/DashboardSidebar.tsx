@@ -18,7 +18,7 @@ const DashboardSidebar = () => {
           end
           to={PATH.DASHBOARD}
           className={({ isActive }) =>
-            classNames('flex items-center rounded-tr-full rounded-br-full py-3 px-5', {
+            classNames('flex items-center rounded-tr-sm rounded-br-sm py-2 px-5', {
               'hover:bg-slate-100': !isActive,
               'bg-gradient-to-r from-sky-500/30 to-indigo-500/30': isActive
             })
@@ -30,7 +30,7 @@ const DashboardSidebar = () => {
         <NavLink
           to={PATH.DASHBOARD_USER}
           className={({ isActive }) =>
-            classNames('flex items-center rounded-tr-full rounded-br-full py-3 px-5 mt-1', {
+            classNames('flex items-center rounded-tr-sm rounded-br-sm py-2 px-5 mt-1', {
               'hover:bg-slate-100': !isActive,
               'bg-gradient-to-r from-sky-500/30 to-indigo-500/30': isActive
             })
@@ -42,7 +42,7 @@ const DashboardSidebar = () => {
         <NavLink
           to={PATH.DASHBOARD_CATEGORY}
           className={({ isActive }) =>
-            classNames('flex items-center rounded-tr-full rounded-br-full py-3 px-5 mt-1', {
+            classNames('flex items-center rounded-tr-sm rounded-br-sm py-2 px-5 mt-1', {
               'hover:bg-slate-100': !isActive,
               'bg-gradient-to-r from-sky-500/30 to-indigo-500/30': isActive
             })
@@ -54,7 +54,7 @@ const DashboardSidebar = () => {
         <NavLink
           to={PATH.HOME}
           className={({ isActive }) =>
-            classNames('flex items-center rounded-tr-full rounded-br-full py-3 px-5 mt-1', {
+            classNames('flex items-center rounded-tr-sm rounded-br-sm py-2 px-5 mt-1', {
               'hover:bg-slate-100': !isActive,
               'bg-gradient-to-r from-sky-500/30 to-indigo-500/30': isActive
             })
@@ -66,7 +66,7 @@ const DashboardSidebar = () => {
         <NavLink
           to={PATH.HOME}
           className={({ isActive }) =>
-            classNames('flex items-center rounded-tr-full rounded-br-full py-3 px-5 mt-1', {
+            classNames('flex items-center rounded-tr-sm rounded-br-sm py-2 px-5 mt-1', {
               'hover:bg-slate-100': !isActive,
               'bg-gradient-to-r from-sky-500/30 to-indigo-500/30': isActive
             })
