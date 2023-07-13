@@ -1,5 +1,5 @@
 import { Gender, UserRole, UserStatus, UserVerifyStatus } from 'src/constants/enum';
-import { SuccessResponse } from './utils.type';
+import { Pagination, SuccessResponse } from './utils.type';
 
 export interface User {
   _id: string;
@@ -15,13 +15,6 @@ export interface User {
   date_of_birth: string;
   created_at: Date;
   updated_at: Date;
-}
-
-export interface Pagination {
-  total: number;
-  page: number;
-  limit: number;
-  page_size: number;
 }
 
 export interface GetUsersParams {

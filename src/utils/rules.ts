@@ -31,10 +31,50 @@ export const categorySchema = yup.object({
     .max(160, 'Tên tiếng Anh phải có độ dài từ 1 đến 160 kí tự')
 });
 
+export const brandSchema = yup.object({
+  name: yup.string().required('Tên nhãn hiệu không được để trống')
+});
+
+export const productSchema = yup.object({
+  name_vi: yup
+    .string()
+    .required('Tên sản phẩm tiếng Việt không được để trống')
+    .min(12, 'Tên sản phẩm dài từ 5 đến 500 ký tự')
+    .max(500, 'Tên sản phẩm dài từ 5 đến 500 ký tự'),
+  name_en: yup
+    .string()
+    .required('Tên sản phẩm tiếng Việt không được để trống')
+    .min(12, 'Tên sản phẩm dài từ 12 đến 500 ký tự')
+    .max(500, 'Tên sản phẩm dài từ 12 đến 500 ký tự'),
+  thumbnail: yup.string().required('Ảnh đại diện sản phẩm không được để trống'),
+  price: yup.string().required('Giá sản phẩm không được để trống'),
+  price_after_discount: yup.string().required('Giá sau khi giảm không được để trống'),
+  general_info: yup.string().required('Thông tin chung không được để trống'),
+  description: yup.string().required('Mô tả sản phẩm không được để trống'),
+  brand_id: yup.string().required('Hãy chọn một danh mục'),
+  category_id: yup.string().required('Hãy chọn một danh mục'),
+  specifications: yup.string().required('Thông số kỹ thuật không được để trống')
+});
+
 export const registerSchema = userSchema.pick(['email', 'password', 'confirm_password']);
 export const loginSchema = userSchema.pick(['email', 'password']);
 export const createCategorySchema = categorySchema.pick(['name_vi', 'name_en']);
+export const createBrandSchema = brandSchema.pick(['name']);
+export const createProductSchema = productSchema.pick([
+  'brand_id',
+  'category_id',
+  'description',
+  'general_info',
+  'name_en',
+  'name_vi',
+  'price',
+  'price_after_discount',
+  'specifications',
+  'thumbnail'
+]);
 
 export type RegisterSchema = yup.InferType<typeof registerSchema>;
 export type LoginSchema = yup.InferType<typeof loginSchema>;
 export type CreateCategorySchema = yup.InferType<typeof createCategorySchema>;
+export type CreateBrandSchema = yup.InferType<typeof createBrandSchema>;
+export type CreateProductSchema = yup.InferType<typeof createProductSchema>;

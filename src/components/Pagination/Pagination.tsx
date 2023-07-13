@@ -1,13 +1,17 @@
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
-import { Link, createSearchParams } from 'react-router-dom';
+import { Link, createSearchParams, useLocation } from 'react-router-dom';
+import queryString from 'query-string';
 
 import { ChevronLeft, ChevronRight } from '../Icons';
 
 const RANGE = 2;
 
-const Pagination = ({ pageSize, queryConfig, path }: { pageSize: number; queryConfig: any; path: string }) => {
-  const page = Number(queryConfig.page);
+const Pagination = ({ pageSize }: { pageSize: number }) => {
+  const location = useLocation();
+  const pathname = location.pathname;
+  const queryConfig = queryString.parse(location.search);
+  const page = Number(queryConfig.page) || 1;
 
   const renderPagination = () => {
     let dotBefore = false;
@@ -62,7 +66,7 @@ const Pagination = ({ pageSize, queryConfig, path }: { pageSize: number; queryCo
         return (
           <Link
             to={{
-              pathname: path,
+              pathname,
               search: createSearchParams({
                 ...queryConfig,
                 page: pageNumber.toString()
@@ -124,8 +128,7 @@ const Pagination = ({ pageSize, queryConfig, path }: { pageSize: number; queryCo
 };
 
 Pagination.propTypes = {
-  pageSize: PropTypes.number.isRequired,
-  path: PropTypes.string.isRequired
+  pageSize: PropTypes.number.isRequired
 };
 
 export default Pagination;

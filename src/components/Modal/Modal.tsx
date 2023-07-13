@@ -34,7 +34,7 @@ const Modal = ({ isVisible, children, okText = 'Ok', cancelText = 'Hủy', onOk,
                 <CloseIcon className='w-5 h-5' />
               </button>
             </div>
-            <div className='px-3 py-6 border-b'>{children}</div>
+            <div className='px-3 py-6 border-b text-[15px]'>{children}</div>
             <div className='flex justify-end p-3'>
               <button
                 className='py-2 px-4 rounded text-sm text-white bg-slate-400 hover:bg-slate-400/90 font-medium'

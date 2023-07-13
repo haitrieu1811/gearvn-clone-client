@@ -18,6 +18,10 @@ const Dashboard = lazy(() => import('src/pages/admin/Dashboard'));
 const DashboardUser = lazy(() => import('src/pages/admin/User'));
 const DashboardCategory = lazy(() => import('src/pages/admin/Category/List'));
 const DashboardCategoryCreate = lazy(() => import('src/pages/admin/Category/Create'));
+const DashboardBrand = lazy(() => import('src/pages/admin/Brand/List'));
+const DashboardBrandCreate = lazy(() => import('src/pages/admin/Brand/Create'));
+const DashboardProduct = lazy(() => import('src/pages/admin/Product/List'));
+const DashboardProductCreate = lazy(() => import('src/pages/admin/Product/Create'));
 
 const ProtectedRoute = () => {
   const { isAuthenticated } = useContext(AppContext);
@@ -157,6 +161,66 @@ const useElement = () => {
             <Suspense>
               <DashboardLayout>
                 <DashboardCategoryCreate />
+              </DashboardLayout>
+            </Suspense>
+          )
+        },
+        {
+          path: PATH.DASHBOARD_BRAND,
+          element: (
+            <Suspense>
+              <DashboardLayout>
+                <DashboardBrand />
+              </DashboardLayout>
+            </Suspense>
+          )
+        },
+        {
+          path: PATH.DASHBOARD_BRAND_CREATE,
+          element: (
+            <Suspense>
+              <DashboardLayout>
+                <DashboardBrandCreate />
+              </DashboardLayout>
+            </Suspense>
+          )
+        },
+        {
+          path: PATH.DASHBOARD_BRAND_UPDATE,
+          element: (
+            <Suspense>
+              <DashboardLayout>
+                <DashboardBrandCreate />
+              </DashboardLayout>
+            </Suspense>
+          )
+        },
+        {
+          path: PATH.DASHBOARD_PRODUCT,
+          element: (
+            <Suspense>
+              <DashboardLayout>
+                <DashboardProduct />
+              </DashboardLayout>
+            </Suspense>
+          )
+        },
+        {
+          path: PATH.DASHBOARD_PRODUCT_CREATE,
+          element: (
+            <Suspense>
+              <DashboardLayout>
+                <DashboardProductCreate />
+              </DashboardLayout>
+            </Suspense>
+          )
+        },
+        {
+          path: PATH.DASHBOARD_PRODUCT_UPDATE,
+          element: (
+            <Suspense>
+              <DashboardLayout>
+                <DashboardBrandCreate />
               </DashboardLayout>
             </Suspense>
           )

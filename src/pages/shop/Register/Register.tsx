@@ -14,7 +14,7 @@ import PATH from 'src/constants/path';
 import { AppContext } from 'src/contexts/app.context';
 import { ErrorResponse } from 'src/types/utils.type';
 import { RegisterSchema, registerSchema } from 'src/utils/rules';
-import { isEntiryError } from 'src/utils/utils';
+import { isEntityError } from 'src/utils/utils';
 
 type FormData = RegisterSchema;
 
@@ -37,7 +37,7 @@ const Register = () => {
       setProfile(data.data.data.user);
     },
     onError: (error) => {
-      if (isEntiryError<ErrorResponse<Omit<FormData, 'confirm_password'>>>(error)) {
+      if (isEntityError<ErrorResponse<Omit<FormData, 'confirm_password'>>>(error)) {
         const formError = error.response?.data.data;
         if (!isEmpty(formError)) {
           Object.keys(formError).forEach((key) => {

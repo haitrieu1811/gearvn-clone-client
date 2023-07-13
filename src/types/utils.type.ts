@@ -11,3 +11,10 @@ export interface ErrorResponse<Data> {
 export interface OnlyMessageResponse {
   message: string;
 }
+
+export interface Pagination {
+  total: number;
+  page: number;
+  limit: number;
+  page_size: number;
+}

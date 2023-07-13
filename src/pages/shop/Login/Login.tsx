@@ -15,7 +15,7 @@ import PATH from 'src/constants/path';
 import { AppContext } from 'src/contexts/app.context';
 import { ErrorResponse } from 'src/types/utils.type';
 import { LoginSchema, loginSchema } from 'src/utils/rules';
-import { isEntiryError } from 'src/utils/utils';
+import { isEntityError } from 'src/utils/utils';
 
 type FormData = LoginSchema;
 
@@ -39,7 +39,7 @@ const Login = () => {
       toast.success('Đăng nhập thành công');
     },
     onError: (error) => {
-      if (isEntiryError<ErrorResponse<FormData>>(error)) {
+      if (isEntityError<ErrorResponse<FormData>>(error)) {
         const formError = error.response?.data.data;
         if (!isEmpty(formError)) {
           Object.keys(formError).forEach((key) => {

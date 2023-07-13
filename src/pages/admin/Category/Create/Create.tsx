@@ -13,7 +13,7 @@ import Input from 'src/components/Input';
 import PATH from 'src/constants/path';
 import { ErrorResponse } from 'src/types/utils.type';
 import { CreateCategorySchema, createCategorySchema } from 'src/utils/rules';
-import { isEntiryError } from 'src/utils/utils';
+import { isEntityError } from 'src/utils/utils';
 
 type FormData = CreateCategorySchema;
 
@@ -60,7 +60,7 @@ const Create = () => {
       reset();
     },
     onError: (error) => {
-      if (isEntiryError<ErrorResponse<{ name_vi: string; name_en: string }>>(error)) {
+      if (isEntityError<ErrorResponse<{ name_vi: string; name_en: string }>>(error)) {
         const formError = error.response?.data.data;
         if (!isEmpty(formError)) {
           Object.keys(formError).map((key) => {
@@ -120,7 +120,10 @@ const Create = () => {
             register={register}
             errorMessage={errors.name_en?.message}
           />
-          <Button isLoading={createCategoryMutation.isLoading} classNameWrapper='mt-6'>
+          <Button
+            isLoading={!isUpdateMode ? createCategoryMutation.isLoading : updateCategoryMutation.isLoading}
+            classNameWrapper='mt-6'
+          >
             {!isUpdateMode ? 'Tạo mới' : 'Cập nhật'}
           </Button>
         </form>

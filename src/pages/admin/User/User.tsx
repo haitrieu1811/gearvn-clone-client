@@ -145,12 +145,7 @@ const User = () => {
           <div className={CLASSES.TABLE_FOOT}>
             <div></div>
             <div className='flex items-center'>
-              <Select
-                label='Người dùng mỗi trang'
-                options={LIMIT_OPTIONS}
-                classNameWrapper='mr-3'
-                onChange={handleChangeLimit}
-              />
+              <Select options={LIMIT_OPTIONS} classNameWrapper='mr-3' onChange={handleChangeLimit} />
               {pageSize && queryConfig && (
                 <Pagination pageSize={pageSize} queryConfig={queryConfig} path={PATH.DASHBOARD_USER} />
               )}

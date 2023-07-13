@@ -1,5 +1,4 @@
-import { Pagination } from './user.type';
-import { SuccessResponse } from './utils.type';
+import { Pagination, SuccessResponse } from './utils.type';
 
 export interface Category {
   _id: string;
@@ -19,7 +18,7 @@ export interface UpdateCategoryBody {
   name_en?: string;
 }
 
-export interface GetCategoriesParams {
+export interface GetCategoriesRequestParams {
   page?: string;
   limit?: string;
 }
