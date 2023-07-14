@@ -1,4 +1,4 @@
-import { ChangeEvent, ReactNode, useRef } from 'react';
+import { ChangeEvent, ReactNode, useRef, Fragment } from 'react';
 import { UseFormRegister } from 'react-hook-form';
 import { toast } from 'react-toastify';
 
@@ -6,11 +6,12 @@ interface InputFileProps {
   icon?: ReactNode;
   buttonName?: string;
   onChange?: (file?: File) => void;
-  register?: UseFormRegister<any>;
   name?: string;
+  register?: UseFormRegister<any>;
+  errorMessage?: string;
 }
 
-const InputFile = ({ icon, buttonName = 'Chọn file', name, register, onChange }: InputFileProps) => {
+const InputFile = ({ icon, buttonName = 'Chọn file', name, register, errorMessage, onChange }: InputFileProps) => {
   const _register = name && register ? { ...register(name) } : {};
   const inputFileRef = useRef<HTMLInputElement>(null);
 
@@ -28,15 +29,15 @@ const InputFile = ({ icon, buttonName = 'Chọn file', name, register, onChange 
   };
 
   return (
-    <div>
+    <Fragment>
       <input
         hidden
+        {..._register}
         ref={inputFileRef}
         type='file'
         accept='.jpg,.jpeg,.png'
         onChange={handleFileChange}
         onClick={(e) => ((e.target as any).value = null)}
-        {..._register}
       />
       <button
         type='button'
@@ -46,7 +47,8 @@ const InputFile = ({ icon, buttonName = 'Chọn file', name, register, onChange 
         {icon && icon}
         {buttonName}
       </button>
-    </div>
+      {errorMessage && <p className='text-sm text-red-500 mt-2 font-medium'>{errorMessage}</p>}
+    </Fragment>
   );
 };
 

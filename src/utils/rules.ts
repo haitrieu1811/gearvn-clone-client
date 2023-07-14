@@ -43,10 +43,9 @@ export const productSchema = yup.object({
     .max(500, 'Tên sản phẩm dài từ 5 đến 500 ký tự'),
   name_en: yup
     .string()
-    .required('Tên sản phẩm tiếng Việt không được để trống')
-    .min(12, 'Tên sản phẩm dài từ 12 đến 500 ký tự')
-    .max(500, 'Tên sản phẩm dài từ 12 đến 500 ký tự'),
-  thumbnail: yup.string().required('Ảnh đại diện sản phẩm không được để trống'),
+    .required('Tên sản phẩm tiếng Anh không được để trống')
+    .min(12, 'Tên sản phẩm dài từ 5 đến 500 ký tự')
+    .max(500, 'Tên sản phẩm dài từ 5 đến 500 ký tự'),
   price: yup.string().required('Giá sản phẩm không được để trống'),
   price_after_discount: yup.string().required('Giá sau khi giảm không được để trống'),
   general_info: yup.string().required('Thông tin chung không được để trống'),
@@ -69,8 +68,7 @@ export const createProductSchema = productSchema.pick([
   'name_vi',
   'price',
   'price_after_discount',
-  'specifications',
-  'thumbnail'
+  'specifications'
 ]);
 
 export type RegisterSchema = yup.InferType<typeof registerSchema>;

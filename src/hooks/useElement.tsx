@@ -5,23 +5,41 @@ import { UserRole } from 'src/constants/enum';
 import PATH from 'src/constants/path';
 import { AppContext } from 'src/contexts/app.context';
 
-const MainLayout = lazy(() => import('src/layouts/MainLayout'));
-const AuthLayout = lazy(() => import('src/layouts/AuthLayout'));
-const DashboardLayout = lazy(() => import('src/layouts/DashboardLayout'));
+import MainLayout from 'src/layouts/MainLayout/MainLayout';
+import AuthLayout from 'src/layouts/AuthLayout/AuthLayout';
+import DashboardLayout from 'src/layouts/DashboardLayout/DashboardLayout';
 
-const Home = lazy(() => import('src/pages/shop/Home'));
-const Login = lazy(() => import('src/pages/shop/Login'));
-const Register = lazy(() => import('src/pages/shop/Register'));
-const Profile = lazy(() => import('src/pages/shop/Profile'));
-const NotFound = lazy(() => import('src/pages/shop/NotFound'));
-const Dashboard = lazy(() => import('src/pages/admin/Dashboard'));
-const DashboardUser = lazy(() => import('src/pages/admin/User'));
-const DashboardCategory = lazy(() => import('src/pages/admin/Category/List'));
-const DashboardCategoryCreate = lazy(() => import('src/pages/admin/Category/Create'));
-const DashboardBrand = lazy(() => import('src/pages/admin/Brand/List'));
-const DashboardBrandCreate = lazy(() => import('src/pages/admin/Brand/Create'));
-const DashboardProduct = lazy(() => import('src/pages/admin/Product/List'));
-const DashboardProductCreate = lazy(() => import('src/pages/admin/Product/Create'));
+import Home from 'src/pages/shop/Home/Home';
+import Login from 'src/pages/shop/Login/Login';
+import Register from 'src/pages/shop/Register/Register';
+import Profile from 'src/pages/shop/Profile/Profile';
+import NotFound from 'src/pages/shop/NotFound/NotFound';
+import Dashboard from 'src/pages/admin/Dashboard/Dashboard';
+import DashboardUser from 'src/pages/admin/User';
+import DashboardCategory from 'src/pages/admin/Category/List';
+import DashboardCategoryCreate from 'src/pages/admin/Category/Create';
+import DashboardBrand from 'src/pages/admin/Brand/List';
+import DashboardBrandCreate from 'src/pages/admin/Brand/Create';
+import DashboardProduct from 'src/pages/admin/Product/List';
+import DashboardProductCreate from 'src/pages/admin/Product/Create';
+
+// const MainLayout = lazy(() => import('src/layouts/MainLayout'));
+// const AuthLayout = lazy(() => import('src/layouts/AuthLayout'));
+// const DashboardLayout = lazy(() => import('src/layouts/DashboardLayout'));
+
+// const Home = lazy(() => import('src/pages/shop/Home'));
+// const Login = lazy(() => import('src/pages/shop/Login'));
+// const Register = lazy(() => import('src/pages/shop/Register'));
+// const Profile = lazy(() => import('src/pages/shop/Profile'));
+// const NotFound = lazy(() => import('src/pages/shop/NotFound'));
+// const Dashboard = lazy(() => import('src/pages/admin/Dashboard'));
+// const DashboardUser = lazy(() => import('src/pages/admin/User'));
+// const DashboardCategory = lazy(() => import('src/pages/admin/Category/List'));
+// const DashboardCategoryCreate = lazy(() => import('src/pages/admin/Category/Create'));
+// const DashboardBrand = lazy(() => import('src/pages/admin/Brand/List'));
+// const DashboardBrandCreate = lazy(() => import('src/pages/admin/Brand/Create'));
+// const DashboardProduct = lazy(() => import('src/pages/admin/Product/List'));
+// const DashboardProductCreate = lazy(() => import('src/pages/admin/Product/Create'));
 
 const ProtectedRoute = () => {
   const { isAuthenticated } = useContext(AppContext);

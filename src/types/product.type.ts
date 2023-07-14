@@ -27,6 +27,20 @@ export interface GetProductsRequestParams {
   limit?: string;
 }
 
+export interface CreateProductRequestBody {
+  name_vi: string;
+  name_en: string;
+  thumbnail: string;
+  price: number;
+  price_after_discount: number;
+  general_info: string;
+  description: string;
+  images?: string[];
+  brand_id: string;
+  category_id: string;
+  specifications: string;
+}
+
 // Response
 export type GetProductsResponse = SuccessResponse<{
   products: Product[];
