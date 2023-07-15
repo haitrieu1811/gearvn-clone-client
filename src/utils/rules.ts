@@ -39,12 +39,12 @@ export const productSchema = yup.object({
   name_vi: yup
     .string()
     .required('Tên sản phẩm tiếng Việt không được để trống')
-    .min(12, 'Tên sản phẩm dài từ 5 đến 500 ký tự')
+    .min(12, 'Tên sản phẩm dài từ 12 đến 500 ký tự')
     .max(500, 'Tên sản phẩm dài từ 5 đến 500 ký tự'),
   name_en: yup
     .string()
     .required('Tên sản phẩm tiếng Anh không được để trống')
-    .min(12, 'Tên sản phẩm dài từ 5 đến 500 ký tự')
+    .min(12, 'Tên sản phẩm dài từ 12 đến 500 ký tự')
     .max(500, 'Tên sản phẩm dài từ 5 đến 500 ký tự'),
   price: yup.string().required('Giá sản phẩm không được để trống'),
   price_after_discount: yup.string().required('Giá sau khi giảm không được để trống'),

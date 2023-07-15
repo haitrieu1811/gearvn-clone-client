@@ -19,6 +19,14 @@ export interface Product {
   updated_at: string;
   brand: Brand;
   category: Category;
+
+  specifications?: string;
+  general_info: string;
+  description: string;
+  brand_id?: string;
+  category_id?: string;
+  user_id?: string;
+  images?: string[];
 }
 
 // Request
@@ -45,4 +53,8 @@ export interface CreateProductRequestBody {
 export type GetProductsResponse = SuccessResponse<{
   products: Product[];
   pagination: Pagination;
+}>;
+
+export type GetProductDetailResponse = SuccessResponse<{
+  product: Product;
 }>;

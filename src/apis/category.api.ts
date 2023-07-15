@@ -16,7 +16,7 @@ const URL_UPDATE = '/categories/update';
 const URL_DELETE = '/categories';
 
 const categoryApi = {
-  getList(params: GetCategoriesRequestParams) {
+  getList(params?: GetCategoriesRequestParams) {
     return http.get<GetCategoriesResponse>(URL_GET_LIST, { params });
   },
   getOne(category_id: string) {

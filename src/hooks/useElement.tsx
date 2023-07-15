@@ -238,7 +238,7 @@ const useElement = () => {
           element: (
             <Suspense>
               <DashboardLayout>
-                <DashboardBrandCreate />
+                <DashboardProductCreate />
               </DashboardLayout>
             </Suspense>
           )

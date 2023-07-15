@@ -71,9 +71,9 @@ const List = () => {
     }
   }, [brands]);
 
-  const startDelete = (brandId: string) => {
+  const startDelete = (brandId?: string) => {
     setModalVisible(true);
-    setCurrentId(brandId);
+    brandId && setCurrentId(brandId);
   };
 
   const stopDelete = () => {
@@ -82,9 +82,9 @@ const List = () => {
   };
 
   const handleDelete = () => {
-    if (currentId) {
-      deleteBrandMutation.mutate(currentId);
-    }
+    if (currentId) deleteBrandMutation.mutate([currentId]);
+    else deleteBrandMutation.mutate(checkedBrands.map((brand) => brand._id));
+    console.log('>>> checkedBrands', checkedBrands);
   };
 
   const handleChangeLimit = () => {};
@@ -153,6 +153,7 @@ const List = () => {
         pagination={{
           pageSize: (pageSize as number) || 10
         }}
+        startDelete={startDelete}
       />
       <Modal isVisible={modalVisible} onOk={handleDelete} onCancel={stopDelete}>
         Bạn có chắc muốn xóa nhãn hiệu này

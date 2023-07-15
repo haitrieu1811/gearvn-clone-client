@@ -92,13 +92,9 @@ const List = () => {
     setCurrentId(null);
   };
 
-  const handleDeleteOne = () => {
-    currentId && deleteCategoryMutation.mutate([currentId]);
-  };
-
-  const handleDeleteMany = () => {
-    const dataDelete = checkedCategories.map((category) => category._id);
-    deleteCategoryMutation.mutate(dataDelete);
+  const handleDelete = () => {
+    if (currentId) deleteCategoryMutation.mutate([currentId]);
+    else deleteCategoryMutation.mutate(checkedCategories.map((category) => category._id));
   };
 
   const handleChangeLimit = (selectValue: string) => {
@@ -186,7 +182,7 @@ const List = () => {
         startDelete={startDelete}
         isLoading={getCategoriesQuery.isLoading}
       />
-      <Modal isVisible={modalVisible} onOk={currentId ? handleDeleteOne : handleDeleteMany} onCancel={stopDelete}>
+      <Modal isVisible={modalVisible} onOk={handleDelete} onCancel={stopDelete}>
         {currentId
           ? 'Bạn có chắc muốn xóa danh mục này'
           : `Bạn có chắc muốn xóa ${checkedCategories.length} danh mục này`}

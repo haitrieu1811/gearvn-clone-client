@@ -103,7 +103,7 @@ const List = () => {
           product.brand.name,
           moment(product.created_at).fromNow(),
           moment(product.updated_at).fromNow(),
-          <TableAction />
+          <TableAction editPath={`${PATH.DASHBOARD_PRODUCT_UPDATE_WITHOUT_ID}/${product._id}`} />
         ])}
       />
     </div>

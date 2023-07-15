@@ -15,7 +15,7 @@ const URL_UPDATE_BRAND = '/products/brand';
 const URL_DELETE_BRAND = '/products/brand';
 
 const brandApi = {
-  getList(params: GetBrandsRequestParams) {
+  getList(params?: GetBrandsRequestParams) {
     return http.get<GetBrandsResponse>(URL_GET_BRANDS, { params });
   },
   getOne(brandId: string) {
@@ -27,8 +27,8 @@ const brandApi = {
   update({ body, brandId }: { body: UpdateBrandRequestBody; brandId: string }) {
     return http.put<OnlyMessageResponse>(`${URL_UPDATE_BRAND}/${brandId}`, body);
   },
-  delete(brandId: string) {
-    return http.delete<OnlyMessageResponse>(`${URL_DELETE_BRAND}/${brandId}`);
+  delete(brandIds: string[]) {
+    return http.delete<OnlyMessageResponse>(URL_DELETE_BRAND, { data: { brand_ids: brandIds } });
   }
 };
 

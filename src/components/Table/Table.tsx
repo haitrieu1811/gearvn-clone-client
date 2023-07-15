@@ -39,7 +39,7 @@ const Table = ({
   return (
     <Fragment>
       {initialData && initialData.length > 0 && (
-        <div className={`bg-white rounded-lg shadow-sm overflow-hidden ${classNameWrapper || ''}`}>
+        <div className={`bg-white rounded-tl-lg rounded-tr-lg shadow-sm ${classNameWrapper || ''}`}>
           <div className='grid grid-cols-12 gap-6 font-semibold py-3 px-8 border-b text-sm'>
             {columns.map((column, index) => (
               <div key={index} className={`flex items-center2 col-span-${column}`}>
@@ -59,7 +59,11 @@ const Table = ({
               ))}
             </div>
           ))}
-          <div className={'sticky bottom-0 bg-white py-4 px-5 flex justify-between items-center'}>
+          <div
+            className={
+              'sticky bottom-0 bg-white py-4 px-5 flex justify-between items-center rounded-bl-lg rounded-br-lg'
+            }
+          >
             <div className='flex items-center'>
               {checkedData && checkedData.length > 0 && (
                 <button
