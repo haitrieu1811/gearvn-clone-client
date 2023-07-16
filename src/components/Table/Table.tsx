@@ -42,7 +42,7 @@ const Table = ({
         <div className={`bg-white rounded-tl-lg rounded-tr-lg shadow-sm ${classNameWrapper || ''}`}>
           <div className='grid grid-cols-12 gap-6 font-semibold py-3 px-8 border-b text-sm'>
             {columns.map((column, index) => (
-              <div key={index} className={`flex items-center2 col-span-${column}`}>
+              <div key={index} className={`flex items-center col-span-${column}`}>
                 {head[index]}
               </div>
             ))}

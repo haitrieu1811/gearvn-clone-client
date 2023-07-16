@@ -8,7 +8,7 @@ const DashboardLayout = ({ children }: { children: ReactNode }) => {
     <div className='bg-[#eff0f6]'>
       <div className='flex'>
         <DashboardSidebar />
-        <div className='flex-1 ml-[240px] min-h-screen pt-8 px-10 pb-0'>
+        <div className='flex-1 ml-[240px] min-h-screen pt-8 px-4 pb-0'>
           <div className='flex justify-between items-center mb-8'>
             <h1 className='font-bold text-2xl'>Hello, haitrieu1811! Welcome back</h1>
             <div className='flex'>

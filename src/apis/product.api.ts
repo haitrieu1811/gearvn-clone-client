@@ -1,5 +1,5 @@
 import {
-  CreateProductRequestBody,
+  CreateAndUpdateProductBody,
   GetProductDetailResponse,
   GetProductsRequestParams,
   GetProductsResponse
@@ -7,19 +7,21 @@ import {
 import { OnlyMessageResponse } from 'src/types/utils.type';
 import http from 'src/utils/http';
 
-const URL_GET_LIST = '/products/list';
-const URL_GET_DETAIL = '/products/detail';
-const URL_CREATE = '/products/create';
-
 const productApi = {
   getList(params: GetProductsRequestParams) {
-    return http.get<GetProductsResponse>(URL_GET_LIST, { params });
+    return http.get<GetProductsResponse>('/products', { params });
   },
   getDetail(productId: string) {
-    return http.get<GetProductDetailResponse>(`${URL_GET_DETAIL}/${productId}`);
+    return http.get<GetProductDetailResponse>(`/products/${productId}`);
   },
-  create(body: CreateProductRequestBody) {
-    return http.post<OnlyMessageResponse>(URL_CREATE, body);
+  create(body: CreateAndUpdateProductBody) {
+    return http.post<OnlyMessageResponse>('/products', body);
+  },
+  update({ productId, body }: { productId: string; body: CreateAndUpdateProductBody }) {
+    return http.patch<OnlyMessageResponse>(`/products/${productId}`, body);
+  },
+  delete(productIds: string[]) {
+    return http.delete<OnlyMessageResponse>('/products', { data: { product_ids: productIds } });
   }
 };
 

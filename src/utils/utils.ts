@@ -1,4 +1,6 @@
 import axios, { AxiosError } from 'axios';
+
+import CONFIG from 'src/constants/config';
 import HTTP_STATUS from 'src/constants/httpStatus';
 import { ErrorResponse } from 'src/types/utils.type';
 
@@ -21,3 +23,5 @@ export const isExpiredTokenError = <UnauthorizedError>(error: unknown): error is
 export const formatCurrency = (currency: number) => {
   return new Intl.NumberFormat('de-DE').format(currency);
 };
+
+export const getImageUrl = (name: string) => `${CONFIG.BASE_URL}/static/image/${name}`;

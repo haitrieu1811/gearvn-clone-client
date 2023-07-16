@@ -35,7 +35,7 @@ export interface GetProductsRequestParams {
   limit?: string;
 }
 
-export interface CreateProductRequestBody {
+export interface CreateAndUpdateProductBody {
   name_vi: string;
   name_en: string;
   thumbnail: string;

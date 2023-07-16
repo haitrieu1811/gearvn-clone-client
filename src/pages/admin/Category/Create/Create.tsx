@@ -3,12 +3,12 @@ import { useMutation, useQuery } from '@tanstack/react-query';
 import isEmpty from 'lodash/isEmpty';
 import { Fragment, useEffect, useMemo } from 'react';
 import { useForm } from 'react-hook-form';
-import { useNavigate, useMatch, useParams } from 'react-router-dom';
+import { useMatch, useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
 import categoryApi from 'src/apis/category.api';
+import Back from 'src/components/Back';
 import Button from 'src/components/Button';
-import { ChevronLeft } from 'src/components/Icons';
 import Input from 'src/components/Input';
 import PATH from 'src/constants/path';
 import { ErrorResponse } from 'src/types/utils.type';
@@ -97,10 +97,7 @@ const Create = () => {
 
   return (
     <Fragment>
-      <button className='flex justify-center items-center mb-6 p-2 rounded hover:bg-slate-200' onClick={handleBack}>
-        <ChevronLeft className='w-4 h-4 stroke-blue-600' />
-        <span className='text-sm font-semibold text-blue-600 ml-2'>Quay lại</span>
-      </button>
+      <Back />
       <div className='bg-white rounded-lg p-6 shadow-sm w-1/2'>
         <h2 className='text-2xl font-bold'>{!isUpdateMode ? 'Tạo mới danh mục' : 'Cập nhật danh mục'}</h2>
         <form onSubmit={onSubmit}>

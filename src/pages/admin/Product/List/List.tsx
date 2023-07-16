@@ -1,29 +1,33 @@
-import { useQuery } from '@tanstack/react-query';
-import omitBy from 'lodash/omitBy';
+import { useMutation, useQuery } from '@tanstack/react-query';
+import { produce } from 'immer';
 import isUndefined from 'lodash/isUndefined';
-import { useContext, useEffect, useMemo } from 'react';
 import keyBy from 'lodash/keyBy';
+import omitBy from 'lodash/omitBy';
 import moment from 'moment';
+import { ChangeEvent, useContext, useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 import productApi from 'src/apis/product.api';
+import Checkbox from 'src/components/Checkbox';
+import { SearchIcon } from 'src/components/Icons';
+import Modal from 'src/components/Modal';
+import Table from 'src/components/Table';
+import TableAction from 'src/components/Table/TableAction';
+import PATH from 'src/constants/path';
+import { AppContext } from 'src/contexts/app.context';
 import UseQueryParams from 'src/hooks/useQueryParams';
 import { GetProductsRequestParams } from 'src/types/product.type';
-import { AppContext } from 'src/contexts/app.context';
-import Table from 'src/components/Table';
-import Checkbox from 'src/components/Checkbox';
-import TableAction from 'src/components/Table/TableAction';
 import { formatCurrency } from 'src/utils/utils';
-import { SearchIcon } from 'src/components/Icons';
-import PATH from 'src/constants/path';
 
 type QueryConfig = {
   [key in keyof GetProductsRequestParams]: string;
 };
 
 const List = () => {
+  const [currentId, setCurrentId] = useState<string | null>(null);
+  const [isOpenModal, setIsOpenModal] = useState<boolean>(false);
   const { extendedProducts, setExtendedProducts } = useContext(AppContext);
-
   const queryParams: QueryConfig = UseQueryParams();
   const queryConfig: QueryConfig = omitBy(
     {
@@ -35,13 +39,29 @@ const List = () => {
 
   const getProductsQuery = useQuery({
     queryKey: ['products', queryConfig],
-    queryFn: () => productApi.getList(queryConfig)
+    queryFn: () => productApi.getList(queryConfig),
+    keepPreviousData: true
+  });
+
+  const deleteProductMutation = useMutation({
+    mutationFn: productApi.delete,
+    onSuccess: (data) => {
+      toast.success(data.data.message);
+      getProductsQuery.refetch();
+      setIsOpenModal(false);
+    }
   });
 
   const products = useMemo(
     () => getProductsQuery.data?.data.data.products,
     [getProductsQuery.data?.data.data.products]
   );
+  const pageSize = useMemo(
+    () => getProductsQuery.data?.data.data.pagination.page_size,
+    [getProductsQuery.data?.data.data.pagination.page_size]
+  );
+  const checkedProducts = useMemo(() => extendedProducts.filter((product) => product.checked), [extendedProducts]);
+  const isAllChecked = useMemo(() => extendedProducts.every((product) => product.checked), [checkedProducts]);
 
   useEffect(() => {
     if (products) {
@@ -54,6 +74,38 @@ const List = () => {
       });
     }
   }, [products]);
+
+  const handleCheckOne = (productIndex: number) => (e: ChangeEvent<HTMLInputElement>) => {
+    setExtendedProducts(
+      produce((draft) => {
+        draft[productIndex].checked = e.target.checked;
+      })
+    );
+  };
+
+  const handleCheckAll = () => {
+    setExtendedProducts((prevState) =>
+      prevState.map((product) => ({
+        ...product,
+        checked: !isAllChecked
+      }))
+    );
+  };
+
+  const startDelete = (productId?: string) => {
+    setIsOpenModal(true);
+    productId && setCurrentId(productId);
+  };
+
+  const stopDelete = () => {
+    setIsOpenModal(false);
+    currentId && setCurrentId(null);
+  };
+
+  const handleDelete = () => {
+    if (currentId) deleteProductMutation.mutate([currentId]);
+    else deleteProductMutation.mutate(checkedProducts.map((product) => product._id));
+  };
 
   return (
     <div>
@@ -80,9 +132,10 @@ const List = () => {
 
       <Table
         initialData={products || []}
+        checkedData={checkedProducts}
         columns={[1, 3, 1, 1, 1, 1, 1, 1, 1, 1]}
         head={[
-          <Checkbox checked={false} onChange={() => {}} />,
+          <Checkbox checked={isAllChecked} onChange={handleCheckAll} />,
           'Tên sản phẩm',
           'Giá gốc',
           'Giá gốc',
@@ -93,8 +146,8 @@ const List = () => {
           'Cập nhật',
           'Thao tác'
         ]}
-        body={extendedProducts.map((product) => [
-          <Checkbox checked={false} onChange={() => {}} />,
+        body={extendedProducts.map((product, index) => [
+          <Checkbox checked={product.checked} onChange={handleCheckOne(index)} />,
           product.name_vi,
           formatCurrency(product.price),
           formatCurrency(product.price),
@@ -103,9 +156,22 @@ const List = () => {
           product.brand.name,
           moment(product.created_at).fromNow(),
           moment(product.updated_at).fromNow(),
-          <TableAction editPath={`${PATH.DASHBOARD_PRODUCT_UPDATE_WITHOUT_ID}/${product._id}`} />
+          <TableAction
+            editPath={`${PATH.DASHBOARD_PRODUCT_UPDATE_WITHOUT_ID}/${product._id}`}
+            deleteMethod={() => startDelete(product._id)}
+          />
         ])}
+        pagination={{
+          pageSize: pageSize || 0
+        }}
+        startDelete={startDelete}
+        isLoading={getProductsQuery.isLoading}
       />
+      <Modal isVisible={isOpenModal} onCancel={stopDelete} onOk={handleDelete}>
+        {currentId
+          ? 'Bạn có chắc muốn xóa sản phẩm này'
+          : `Bạn có chắc muốn xóa ${checkedProducts.length} sản phẩm đã chọn`}
+      </Modal>
     </div>
   );
 };

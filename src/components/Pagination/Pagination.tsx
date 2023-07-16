@@ -73,10 +73,13 @@ const Pagination = ({ pageSize }: { pageSize: number }) => {
               }).toString()
             }}
             key={index}
-            className={classNames('w-8 h-8 mx-1 rounded-md flex justify-center items-center font-medium text-[15px]', {
-              'bg-primary text-white pointer-events-none': isActive,
-              'bg-white': !isActive
-            })}
+            className={classNames(
+              'w-8 h-8 mx-1 rounded-full flex justify-center items-center font-medium text-[15px] select-none',
+              {
+                'bg-primary text-white pointer-events-none': isActive,
+                'bg-white': !isActive
+              }
+            )}
           >
             {pageNumber}
           </Link>

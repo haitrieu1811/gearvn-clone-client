@@ -1,17 +1,27 @@
 import { ChangeEvent, ReactNode, useRef, Fragment } from 'react';
 import { UseFormRegister } from 'react-hook-form';
 import { toast } from 'react-toastify';
+import toArray from 'lodash/toArray';
 
 interface InputFileProps {
   icon?: ReactNode;
   buttonName?: string;
-  onChange?: (file?: File) => void;
+  onChange?: (file?: File[]) => void;
   name?: string;
   register?: UseFormRegister<any>;
   errorMessage?: string;
+  multiple?: boolean;
 }
 
-const InputFile = ({ icon, buttonName = 'Chọn file', name, register, errorMessage, onChange }: InputFileProps) => {
+const InputFile = ({
+  icon,
+  buttonName = 'Chọn file',
+  name,
+  register,
+  errorMessage,
+  onChange,
+  multiple
+}: InputFileProps) => {
   const _register = name && register ? { ...register(name) } : {};
   const inputFileRef = useRef<HTMLInputElement>(null);
 
@@ -20,11 +30,14 @@ const InputFile = ({ icon, buttonName = 'Chọn file', name, register, errorMess
   };
 
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const fileFromLocal = e.target.files?.[0];
-    if (fileFromLocal && fileFromLocal.size >= 1048576) {
+    const filesFromLocal = e.target.files;
+    const _filesFromLocal = toArray(filesFromLocal);
+    const isSizeValid = _filesFromLocal.every((file) => file.size < 1048576);
+
+    if (!isSizeValid) {
       toast.error('Dung lượng file tối đa 1MB');
     } else {
-      onChange && onChange(fileFromLocal);
+      onChange && onChange(_filesFromLocal);
     }
   };
 
@@ -38,6 +51,7 @@ const InputFile = ({ icon, buttonName = 'Chọn file', name, register, errorMess
         accept='.jpg,.jpeg,.png'
         onChange={handleFileChange}
         onClick={(e) => ((e.target as any).value = null)}
+        multiple={multiple}
       />
       <button
         type='button'
