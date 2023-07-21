@@ -1,9 +1,17 @@
+import { MediaType } from 'src/constants/enum';
 import { Category } from './category.type';
 import { Pagination, SuccessResponse } from './utils.type';
 
 interface Brand {
   _id: string;
   name: string;
+  created_at: string;
+  updated_at: string;
+}
+interface Image {
+  _id: string;
+  name: string;
+  type: MediaType;
   created_at: string;
   updated_at: string;
 }
@@ -26,7 +34,7 @@ export interface Product {
   brand_id?: string;
   category_id?: string;
   user_id?: string;
-  images?: string[];
+  images?: Image[];
 }
 
 // Request
@@ -43,7 +51,6 @@ export interface CreateAndUpdateProductBody {
   price_after_discount: number;
   general_info: string;
   description: string;
-  images?: string[];
   brand_id: string;
   category_id: string;
   specifications: string;
@@ -57,4 +64,8 @@ export type GetProductsResponse = SuccessResponse<{
 
 export type GetProductDetailResponse = SuccessResponse<{
   product: Product;
+}>;
+
+export type CreateProductResponse = SuccessResponse<{
+  insertedId: string;
 }>;

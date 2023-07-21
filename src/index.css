@@ -26,6 +26,20 @@ html *::-webkit-scrollbar-track {
   background-color: rgba(0, 0, 0, 0);
 }
 
+h2 {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+table {
+  width: 100%;
+}
+
+table tr td {
+  border: 1px solid #dbdbdb;
+  padding: 6px 12px;
+}
+
 @font-face {
   font-family: sf-pro-display-regular;
   src: url(../src//assets/fonts//sf-pro-display-regular_abbbcf80b2b5453188b767aec8c4061d.otf);

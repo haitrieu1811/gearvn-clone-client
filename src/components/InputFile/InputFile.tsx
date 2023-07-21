@@ -1,7 +1,7 @@
-import { ChangeEvent, ReactNode, useRef, Fragment } from 'react';
+import toArray from 'lodash/toArray';
+import { ChangeEvent, Fragment, ReactNode, useRef } from 'react';
 import { UseFormRegister } from 'react-hook-form';
 import { toast } from 'react-toastify';
-import toArray from 'lodash/toArray';
 
 interface InputFileProps {
   icon?: ReactNode;
@@ -32,10 +32,10 @@ const InputFile = ({
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     const filesFromLocal = e.target.files;
     const _filesFromLocal = toArray(filesFromLocal);
-    const isSizeValid = _filesFromLocal.every((file) => file.size < 1048576);
+    const isSizeValid = _filesFromLocal.every((file) => file.size < 300 * 1024);
 
     if (!isSizeValid) {
-      toast.error('Dung lượng file tối đa 1MB');
+      toast.error('Dung lượng file tối đa 300KB');
     } else {
       onChange && onChange(_filesFromLocal);
     }
@@ -48,7 +48,7 @@ const InputFile = ({
         {..._register}
         ref={inputFileRef}
         type='file'
-        accept='.jpg,.jpeg,.png'
+        accept='.jpg,.jpeg,.png,.webp'
         onChange={handleFileChange}
         onClick={(e) => ((e.target as any).value = null)}
         multiple={multiple}

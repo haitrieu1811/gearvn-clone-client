@@ -1,45 +1,32 @@
-import { lazy, Suspense, useContext } from 'react';
+import { useContext } from 'react';
 import { Navigate, Outlet, useRoutes } from 'react-router-dom';
 import { UserRole } from 'src/constants/enum';
 
 import PATH from 'src/constants/path';
 import { AppContext } from 'src/contexts/app.context';
 
-import MainLayout from 'src/layouts/MainLayout/MainLayout';
 import AuthLayout from 'src/layouts/AuthLayout/AuthLayout';
 import DashboardLayout from 'src/layouts/DashboardLayout/DashboardLayout';
+import MainLayout from 'src/layouts/MainLayout/MainLayout';
 
+import DashboardBlogCreate from 'src/pages/admin/Blog/Create';
+import DashboardBlog from 'src/pages/admin/Blog/List';
+import DashboardBrandCreate from 'src/pages/admin/Brand/Create';
+import DashboardBrand from 'src/pages/admin/Brand/List';
+import DashboardCategoryCreate from 'src/pages/admin/Category/Create';
+import DashboardCategory from 'src/pages/admin/Category/List';
+import Dashboard from 'src/pages/admin/Dashboard/Dashboard';
+import DashboardProductCreate from 'src/pages/admin/Product/Create';
+import DashboardProduct from 'src/pages/admin/Product/List';
+import DashboardUser from 'src/pages/admin/User';
 import Home from 'src/pages/shop/Home/Home';
 import Login from 'src/pages/shop/Login/Login';
-import Register from 'src/pages/shop/Register/Register';
-import Profile from 'src/pages/shop/Profile/Profile';
 import NotFound from 'src/pages/shop/NotFound/NotFound';
-import Dashboard from 'src/pages/admin/Dashboard/Dashboard';
-import DashboardUser from 'src/pages/admin/User';
-import DashboardCategory from 'src/pages/admin/Category/List';
-import DashboardCategoryCreate from 'src/pages/admin/Category/Create';
-import DashboardBrand from 'src/pages/admin/Brand/List';
-import DashboardBrandCreate from 'src/pages/admin/Brand/Create';
-import DashboardProduct from 'src/pages/admin/Product/List';
-import DashboardProductCreate from 'src/pages/admin/Product/Create';
-
-// const MainLayout = lazy(() => import('src/layouts/MainLayout'));
-// const AuthLayout = lazy(() => import('src/layouts/AuthLayout'));
-// const DashboardLayout = lazy(() => import('src/layouts/DashboardLayout'));
-
-// const Home = lazy(() => import('src/pages/shop/Home'));
-// const Login = lazy(() => import('src/pages/shop/Login'));
-// const Register = lazy(() => import('src/pages/shop/Register'));
-// const Profile = lazy(() => import('src/pages/shop/Profile'));
-// const NotFound = lazy(() => import('src/pages/shop/NotFound'));
-// const Dashboard = lazy(() => import('src/pages/admin/Dashboard'));
-// const DashboardUser = lazy(() => import('src/pages/admin/User'));
-// const DashboardCategory = lazy(() => import('src/pages/admin/Category/List'));
-// const DashboardCategoryCreate = lazy(() => import('src/pages/admin/Category/Create'));
-// const DashboardBrand = lazy(() => import('src/pages/admin/Brand/List'));
-// const DashboardBrandCreate = lazy(() => import('src/pages/admin/Brand/Create'));
-// const DashboardProduct = lazy(() => import('src/pages/admin/Product/List'));
-// const DashboardProductCreate = lazy(() => import('src/pages/admin/Product/Create'));
+import ProductDetail from 'src/pages/shop/ProductDetail';
+import Profile from 'src/pages/shop/Profile/Profile';
+import Register from 'src/pages/shop/Register/Register';
+import Blog from 'src/pages/shop/Blog';
+import BlogDetail from 'src/pages/shop/BlogDetail';
 
 const ProtectedRoute = () => {
   const { isAuthenticated } = useContext(AppContext);
@@ -67,21 +54,41 @@ const useElement = () => {
       index: true,
       path: PATH.HOME,
       element: (
-        <Suspense>
-          <MainLayout>
-            <Home />
-          </MainLayout>
-        </Suspense>
+        <MainLayout>
+          <Home />
+        </MainLayout>
       )
     },
     {
       path: PATH.NOT_FOUND,
       element: (
-        <Suspense>
-          <MainLayout>
-            <NotFound />
-          </MainLayout>
-        </Suspense>
+        <MainLayout>
+          <NotFound />
+        </MainLayout>
+      )
+    },
+    {
+      path: PATH.PRODUCT_DETAIL,
+      element: (
+        <MainLayout>
+          <ProductDetail />
+        </MainLayout>
+      )
+    },
+    {
+      path: PATH.BLOG,
+      element: (
+        <MainLayout>
+          <Blog />
+        </MainLayout>
+      )
+    },
+    {
+      path: PATH.BLOG_DETAIL,
+      element: (
+        <MainLayout>
+          <BlogDetail />
+        </MainLayout>
       )
     },
     // PROTECTED ROUTES
@@ -92,11 +99,9 @@ const useElement = () => {
         {
           path: PATH.PROFILE,
           element: (
-            <Suspense>
-              <MainLayout>
-                <Profile />
-              </MainLayout>
-            </Suspense>
+            <MainLayout>
+              <Profile />
+            </MainLayout>
           )
         }
       ]
@@ -109,21 +114,17 @@ const useElement = () => {
         {
           path: PATH.LOGIN,
           element: (
-            <Suspense>
-              <AuthLayout>
-                <Login />
-              </AuthLayout>
-            </Suspense>
+            <AuthLayout>
+              <Login />
+            </AuthLayout>
           )
         },
         {
           path: PATH.REGISTER,
           element: (
-            <Suspense>
-              <AuthLayout>
-                <Register />
-              </AuthLayout>
-            </Suspense>
+            <AuthLayout>
+              <Register />
+            </AuthLayout>
           )
         }
       ]
@@ -136,111 +137,113 @@ const useElement = () => {
         {
           path: PATH.DASHBOARD,
           element: (
-            <Suspense>
-              <DashboardLayout>
-                <Dashboard />
-              </DashboardLayout>
-            </Suspense>
+            <DashboardLayout>
+              <Dashboard />
+            </DashboardLayout>
           )
         },
         {
           path: PATH.DASHBOARD_USER,
           element: (
-            <Suspense>
-              <DashboardLayout>
-                <DashboardUser />
-              </DashboardLayout>
-            </Suspense>
+            <DashboardLayout>
+              <DashboardUser />
+            </DashboardLayout>
           )
         },
         {
           path: PATH.DASHBOARD_CATEGORY,
           element: (
-            <Suspense>
-              <DashboardLayout>
-                <DashboardCategory />
-              </DashboardLayout>
-            </Suspense>
+            <DashboardLayout>
+              <DashboardCategory />
+            </DashboardLayout>
           )
         },
         {
           path: PATH.DASHBOARD_CATEGORY_CREATE,
           element: (
-            <Suspense>
-              <DashboardLayout>
-                <DashboardCategoryCreate />
-              </DashboardLayout>
-            </Suspense>
+            <DashboardLayout>
+              <DashboardCategoryCreate />
+            </DashboardLayout>
           )
         },
         {
           path: PATH.DASHBOARD_CATEGORY_UPDATE,
           element: (
-            <Suspense>
-              <DashboardLayout>
-                <DashboardCategoryCreate />
-              </DashboardLayout>
-            </Suspense>
+            <DashboardLayout>
+              <DashboardCategoryCreate />
+            </DashboardLayout>
           )
         },
         {
           path: PATH.DASHBOARD_BRAND,
           element: (
-            <Suspense>
-              <DashboardLayout>
-                <DashboardBrand />
-              </DashboardLayout>
-            </Suspense>
+            <DashboardLayout>
+              <DashboardBrand />
+            </DashboardLayout>
           )
         },
         {
           path: PATH.DASHBOARD_BRAND_CREATE,
           element: (
-            <Suspense>
-              <DashboardLayout>
-                <DashboardBrandCreate />
-              </DashboardLayout>
-            </Suspense>
+            <DashboardLayout>
+              <DashboardBrandCreate />
+            </DashboardLayout>
           )
         },
         {
           path: PATH.DASHBOARD_BRAND_UPDATE,
           element: (
-            <Suspense>
-              <DashboardLayout>
-                <DashboardBrandCreate />
-              </DashboardLayout>
-            </Suspense>
+            <DashboardLayout>
+              <DashboardBrandCreate />
+            </DashboardLayout>
           )
         },
         {
           path: PATH.DASHBOARD_PRODUCT,
           element: (
-            <Suspense>
-              <DashboardLayout>
-                <DashboardProduct />
-              </DashboardLayout>
-            </Suspense>
+            <DashboardLayout>
+              <DashboardProduct />
+            </DashboardLayout>
           )
         },
         {
           path: PATH.DASHBOARD_PRODUCT_CREATE,
           element: (
-            <Suspense>
-              <DashboardLayout>
-                <DashboardProductCreate />
-              </DashboardLayout>
-            </Suspense>
+            <DashboardLayout>
+              <DashboardProductCreate />
+            </DashboardLayout>
           )
         },
         {
           path: PATH.DASHBOARD_PRODUCT_UPDATE,
           element: (
-            <Suspense>
-              <DashboardLayout>
-                <DashboardProductCreate />
-              </DashboardLayout>
-            </Suspense>
+            <DashboardLayout>
+              <DashboardProductCreate />
+            </DashboardLayout>
+          )
+        },
+        {
+          path: PATH.DASHBOARD_BLOG,
+          element: (
+            <DashboardLayout>
+              <DashboardBlog />
+            </DashboardLayout>
+          )
+        },
+        {
+          path: PATH.DASHBOARD_BLOG_CREATE,
+          element: (
+            <DashboardLayout>
+              <DashboardBlogCreate />
+            </DashboardLayout>
+          )
+        },
+        {
+          path: PATH.DASHBOARD_BLOG_UPDATE,
+          element: (
+            <DashboardLayout>
+              <DashboardBlogCreate />
+            </DashboardLayout>
           )
         }
       ]

@@ -2,7 +2,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import isEmpty from 'lodash/isEmpty';
 import { Fragment, useEffect, useMemo, useState } from 'react';
-import { useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import { useMatch, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
@@ -12,14 +12,15 @@ import mediaApi from 'src/apis/media.api';
 import productApi from 'src/apis/product.api';
 import Back from 'src/components/Back';
 import Button from 'src/components/Button';
-import { CloudArrowUpIcon, PhotoIcon } from 'src/components/Icons';
+import { CloseIcon, CloudArrowUpIcon, PhotoIcon } from 'src/components/Icons';
 import Input from 'src/components/Input';
 import InputFile from 'src/components/InputFile';
-import Textarea from 'src/components/Textarea';
+import TextEditor from 'src/components/TextEditor/TextEditor';
 import PATH from 'src/constants/path';
+import { CreateAndUpdateProductBody } from 'src/types/product.type';
 import { ErrorResponse } from 'src/types/utils.type';
 import { CreateProductSchema, createProductSchema } from 'src/utils/rules';
-import { getImageUrl, isEntityError } from 'src/utils/utils';
+import { getImageUrl, htmlToMarkdown, isEntityError } from 'src/utils/utils';
 
 type FormData = CreateProductSchema;
 
@@ -29,17 +30,23 @@ const Create = () => {
   const isUpdateMode = Boolean(match);
   const [thumbnailFile, setThumbnailFile] = useState<File[] | null>(null);
   const [imagesFile, setImagesFile] = useState<File[] | null>(null);
+  const [generalInfo, setGeneralInfo] = useState<string>('');
+  const [specifications, setSpecifications] = useState<string>('');
+  const [description, setDescription] = useState<string>('');
 
+  // Lấy danh sách nhãn hiệu sản phẩm
   const getBrandsQuery = useQuery({
     queryKey: ['brands'],
     queryFn: () => brandApi.getList()
   });
 
+  // Lấy danh sách danh mục sản phẩm
   const getCategoriesQuery = useQuery({
     queryKey: ['categories'],
     queryFn: () => categoryApi.getList()
   });
 
+  // Lấy thông tin chi tiết sản phẩm
   const getProductDetailQuery = useQuery({
     queryKey: ['product', product_id],
     queryFn: () => productApi.getDetail(product_id as string),
@@ -48,6 +55,7 @@ const Create = () => {
 
   const {
     handleSubmit,
+    control,
     register,
     setError,
     setValue,
@@ -80,6 +88,7 @@ const Create = () => {
     [getCategoriesQuery.data?.data.data.categories]
   );
 
+  // Điền thông tin vào form khi ở chế độ Update
   useEffect(() => {
     if (product) {
       const {
@@ -95,26 +104,35 @@ const Create = () => {
       } = product;
       setValue('brand_id', brand_id as string);
       setValue('category_id', category_id as string);
-      setValue('description', description);
-      setValue('general_info', general_info);
       setValue('name_en', name_en as string);
       setValue('name_vi', name_vi);
       setValue('price', String(price));
       setValue('price_after_discount', String(price_after_discount));
-      setValue('specifications', specifications as string);
+      setValue('general_info', general_info);
+      setValue('specifications', specifications || '');
+      setValue('description', description);
+
+      // Giúp hiển thị text ở TextEditor chứ không có giá trị về mặc dữ liệu
+      setGeneralInfo(htmlToMarkdown(general_info));
+      setSpecifications(htmlToMarkdown(specifications || ''));
+      setDescription(htmlToMarkdown(description));
     }
   }, [product, setValue]);
 
+  // Xử lý khi thay đổi ảnh đại diện sản phẩm
   const handleThumbnailChange = (files?: File[]) => {
     setThumbnailFile(files || null);
   };
 
+  // Xử lý khi thay đổi danh sách hình ảnh sản phẩm
   const handleImagesChange = (files?: File[]) => {
     setImagesFile(files || null);
   };
 
+  // Tải lên hình ảnh sản phẩm
   const uploadImageMutation = useMutation(mediaApi.uploadImage);
 
+  // Tạo sản phẩm
   const createProductMutation = useMutation({
     mutationFn: productApi.create,
     onSuccess: (data) => {
@@ -137,6 +155,7 @@ const Create = () => {
     }
   });
 
+  // Cập nhật sản phẩm
   const updateProductMutation = useMutation({
     mutationFn: productApi.update,
     onSuccess: (data) => {
@@ -147,9 +166,45 @@ const Create = () => {
     }
   });
 
+  // Thêm hình ảnh sản phẩm
+  const addImageMutation = useMutation(productApi.addImage);
+
+  // Phương thức xóa hình ảnh sản phẩm
+  const deleteImageMutation = useMutation({
+    mutationFn: productApi.deleteImage,
+    onSuccess: (data) => {
+      toast.success(data.data.message);
+      getProductDetailQuery.refetch();
+    }
+  });
+
+  // Tiến hành xóa hình ảnh sản phẩm
+  const handleDeleteImage = (mediaId: string) => {
+    deleteImageMutation.mutate(mediaId);
+  };
+
+  // Cập nhật giá trị thông tin chung
+  const changeGeneralInfo = ({ html, text }: { html: string; text: string }) => {
+    setValue('general_info', html);
+    setGeneralInfo(text);
+  };
+
+  // Cập nhật giá trị thông số kỹ thuật
+  const changeSpecifications = ({ html, text }: { html: string; text: string }) => {
+    setValue('specifications', html);
+    setSpecifications(text);
+  };
+
+  // Cập nhật giá trị mô tả
+  const changeDescription = ({ html, text }: { html: string; text: string }) => {
+    setValue('description', html);
+    setDescription(text);
+  };
+
+  // Xử lý khi submit form
   const onSubmit = handleSubmit(async (data) => {
-    let thumbnail = !isUpdateMode ? '' : product?.thumbnail || '';
-    let images: string[] = product && product.images && product.images.length > 0 ? product.images : [];
+    let thumbnail = product && product.thumbnail ? product.thumbnail : '';
+    let images: string[] = [];
     if (thumbnailFile) {
       const form = new FormData();
       form.append('image', thumbnailFile[0]);
@@ -166,23 +221,28 @@ const Create = () => {
       }
       await uploadImageMutation.mutateAsync(form, {
         onSuccess: (data) => {
-          console.log('Images data', data);
           const responseImage = data.data.data.medias.map((media) => media.name);
-          images = [...images, ...responseImage];
+          images = responseImage;
         }
       });
     }
-    const body = {
+    const body: CreateAndUpdateProductBody = {
       ...data,
       price: Number(data.price),
       price_after_discount: Number(data.price_after_discount),
-      thumbnail,
-      images
+      thumbnail
     };
-    console.log('body', body);
-
-    if (!isUpdateMode) createProductMutation.mutate(body);
-    else updateProductMutation.mutate({ body, productId: product_id as string });
+    let productId = product_id;
+    if (!isUpdateMode) {
+      const res = await createProductMutation.mutateAsync(body);
+      productId = res.data.data.insertedId;
+    } else {
+      updateProductMutation.mutate({ body, productId: product_id as string });
+    }
+    // Thêm hình ảnh vào database
+    if (images.length > 0) {
+      addImageMutation.mutate({ body: { images }, productId: productId as string });
+    }
   });
 
   return (
@@ -194,6 +254,7 @@ const Create = () => {
           <div className='grid grid-cols-12 gap-10'>
             <div className='col-span-8'>
               <div className='grid grid-cols-12 gap-6 mt-6'>
+                {/* Tên tiếng Việt */}
                 <div className='col-span-6'>
                   <label htmlFor='name_vi' className='font-medium text-sm mb-2 ml-1 block'>
                     Tên tiếng Việt:
@@ -207,6 +268,7 @@ const Create = () => {
                     errorMessage={errors.name_vi?.message}
                   />
                 </div>
+                {/* Tên tiếng Anh */}
                 <div className='col-span-6'>
                   <label htmlFor='name_en' className='font-medium text-sm mb-2 ml-1 block'>
                     Tên tiếng Anh:
@@ -222,6 +284,7 @@ const Create = () => {
                 </div>
               </div>
               <div className='grid grid-cols-12 gap-6 mt-6'>
+                {/* Giá gốc */}
                 <div className='col-span-6'>
                   <label htmlFor='price' className='font-medium text-sm mb-2 ml-1 block'>
                     Giá gốc:
@@ -235,6 +298,7 @@ const Create = () => {
                     errorMessage={errors.price?.message}
                   />
                 </div>
+                {/* Giá khuyến mãi */}
                 <div className='col-span-6'>
                   <label htmlFor='price_after_discount' className='font-medium text-sm mb-2 ml-1 block'>
                     Giá khuyến mãi:
@@ -250,6 +314,7 @@ const Create = () => {
                 </div>
               </div>
               <div className='grid grid-cols-12 gap-6 mt-6'>
+                {/* Nhãn hiệu */}
                 <div className='col-span-6'>
                   <label className='font-medium text-sm mb-2 ml-1 block'>Nhãn hiệu:</label>
                   {brands && brands.length > 0 && (
@@ -272,6 +337,7 @@ const Create = () => {
                     </Fragment>
                   )}
                 </div>
+                {/* Danh mục */}
                 <div className='col-span-6'>
                   <label className='font-medium text-sm mb-2 ml-1 block'>Danh mục:</label>
                   {categories && categories.length > 0 && (
@@ -295,19 +361,53 @@ const Create = () => {
                   )}
                 </div>
               </div>
-              <div className='grid grid-cols-12 gap-6 mt-6'>
-                <div className='col-span-6'>
-                  <label className='font-medium text-sm mb-2 ml-1 block'>Thông tin chung:</label>
-                  <Textarea name='general_info' register={register} errorMesssage={errors.general_info?.message} />
-                </div>
-                <div className='col-span-6'>
-                  <label className='font-medium text-sm mb-2 ml-1 block'>Thông số kĩ thuật:</label>
-                  <Textarea name='specifications' register={register} errorMesssage={errors.specifications?.message} />
-                </div>
+              {/* Thông tin chung */}
+              <div className='mt-6'>
+                <label className='font-medium text-sm mb-3 ml-1 block'>Thông tin chung:</label>
+                <Controller
+                  control={control}
+                  name='general_info'
+                  render={({ field }) => (
+                    <TextEditor
+                      name={field.name}
+                      value={generalInfo}
+                      onChange={changeGeneralInfo}
+                      errorMessage={errors.general_info?.message}
+                    />
+                  )}
+                />
               </div>
-              <div className='mt-8'>
-                <label className='font-medium text-sm mb-2 ml-1 block'>Mô tả sản phẩm:</label>
-                <Textarea name='description' register={register} errorMesssage={errors.description?.message} />
+              {/* Thông số kỹ thuật */}
+              <div className='mt-6'>
+                <label className='font-medium text-sm mb-3 ml-1 block'>Thông số kỹ thuật:</label>
+                <Controller
+                  control={control}
+                  name='specifications'
+                  render={({ field }) => (
+                    <TextEditor
+                      name={field.name}
+                      value={specifications}
+                      onChange={changeSpecifications}
+                      errorMessage={errors.specifications?.message}
+                    />
+                  )}
+                />
+              </div>
+              {/* Mô tả */}
+              <div className='mt-6'>
+                <label className='font-medium text-sm mb-3 ml-1 block'>Mô tả:</label>
+                <Controller
+                  control={control}
+                  name='description'
+                  render={({ field }) => (
+                    <TextEditor
+                      name={field.name}
+                      value={description}
+                      onChange={changeDescription}
+                      errorMessage={errors.description?.message}
+                    />
+                  )}
+                />
               </div>
             </div>
             <div className='col-span-4'>
@@ -338,21 +438,31 @@ const Create = () => {
                     <CloudArrowUpIcon className='w-10 h-10' />
                   </div>
                 ) : (
-                  <div className='grid grid-cols-12 mb-3'>
+                  <div className='grid grid-cols-12 mb-3 gap-2'>
                     {product?.images?.map((image, index) => (
-                      <img
-                        key={index}
-                        src={getImageUrl(image)}
-                        alt='Thumbnail'
-                        className='col-span-4 h-[80px] rounded object-cover'
-                      />
+                      <div key={index} className='col-span-4 relative group'>
+                        <img
+                          src={getImageUrl(image.name)}
+                          alt='Thumbnail'
+                          className='w-full h-[80px] rounded object-cover'
+                        />
+                        <div
+                          className='absolute inset-0 bg-black/20 flex justify-center items-center cursor-pointer opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto duration-200'
+                          tabIndex={0}
+                          aria-hidden='true'
+                          role='button'
+                          onClick={() => handleDeleteImage(image._id)}
+                        >
+                          <CloseIcon className='w-10 h-10 stroke-white' />
+                        </div>
+                      </div>
                     ))}
                     {previewImages?.map((image, index) => (
                       <img
                         key={index}
                         src={image}
                         alt='Thumbnail'
-                        className='col-span-4 h-[80px] rounded object-cover'
+                        className='col-span-4 w-full h-[80px] rounded object-cover'
                       />
                     ))}
                   </div>

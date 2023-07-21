@@ -36,7 +36,7 @@ const DashboardSidebar = () => {
         <DashboardItem
           path={PATH.DASHBOARD_CATEGORY}
           icon={<ShoppingBagIcon className='w-4 h-4 stroke-black' />}
-          name='Danh mục sản phẩm'
+          name='Danh mục'
         />
         <DashboardItem
           path={PATH.DASHBOARD_BRAND}
@@ -48,7 +48,11 @@ const DashboardSidebar = () => {
           icon={<ItemIcon className='w-4 h-4 stroke-black' />}
           name='Sản phẩm'
         />
-        {/* <DashboardItem path={PATH.HOME} icon={<NewspaperIcon className='w-4 h-4 stroke-black' />} name='Blog' /> */}
+        <DashboardItem
+          path={PATH.DASHBOARD_BLOG}
+          icon={<NewspaperIcon className='w-4 h-4 stroke-black' />}
+          name='Blog'
+        />
       </div>
       <div className='py-5 px-6 pl-0'>
         <button className='flex items-center rounded py-3 px-4 hover:bg-slate-100 w-full'>

@@ -169,7 +169,12 @@ const Header = () => {
       <div className='bg-white'>
         <div className='flex items-center justify-center'>
           <SubMenuItem icon={<ItemIcon className='fill-none w-5 h-5' />} name='Tổng hợp khuyến mãi' separate />
-          <SubMenuItem icon={<NewspaperIcon className='fill-none w-5 h-5' />} name='Tin công nghệ' separate />
+          <SubMenuItem
+            to={PATH.BLOG}
+            icon={<NewspaperIcon className='fill-none w-5 h-5' />}
+            name='Tin công nghệ'
+            separate
+          />
           <SubMenuItem icon={<VideoIcon className='fill-none w-5 h-5' />} name='Video' separate />
           <SubMenuItem icon={<CreditCardIcon className='fill-none w-5 h-5' />} name='Hướng dẫn thanh toán' separate />
           <SubMenuItem icon={<CoinIcon className='fill-none w-5 h-5' />} name='Hướng dẫn trả góp' separate />

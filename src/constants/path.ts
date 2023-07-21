@@ -3,6 +3,11 @@ const PATH = {
   LOGIN: '/login',
   REGISTER: '/register',
   PROFILE: '/profile',
+  PRODUCT_DETAIL: '/product/:name_id',
+  PRODUCT_DETAIL_WITHOUT_ID: '/product',
+  BLOG: '/blog',
+  BLOG_DETAIL: '/blog/:name_id',
+  BLOG_DETAIL_WITHOUT_ID: '/blog',
   DASHBOARD: '/dashboard',
   DASHBOARD_USER: '/dashboard/user',
   DASHBOARD_CATEGORY: '/dashboard/category',
@@ -17,6 +22,10 @@ const PATH = {
   DASHBOARD_PRODUCT_CREATE: '/dashboard/product/create',
   DASHBOARD_PRODUCT_UPDATE: '/dashboard/product/update/:product_id',
   DASHBOARD_PRODUCT_UPDATE_WITHOUT_ID: '/dashboard/product/update',
+  DASHBOARD_BLOG: '/dashboard/blog',
+  DASHBOARD_BLOG_CREATE: '/dashboard/blog/create',
+  DASHBOARD_BLOG_UPDATE: '/dashboard/blog/update/:blog_id',
+  DASHBOARD_BLOG_UPDATE_WITHOUT_ID: '/dashboard/blog/update',
   NOT_FOUND: '*'
 } as const;
 

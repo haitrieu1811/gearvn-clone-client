@@ -55,6 +55,13 @@ export const productSchema = yup.object({
   specifications: yup.string().required('Thông số kỹ thuật không được để trống')
 });
 
+export const blogSchema = yup.object({
+  name_vi: yup.string().required('Tiêu đề tiếng Việt bài viết không được để trống').trim(),
+  name_en: yup.string().required('Tiêu đề tiếng Anh bài viết không được để trống').trim(),
+  content_vi: yup.string().required('Nội dung tiếng Việt bài viết không được để trống').trim(),
+  content_en: yup.string().required('Nội dung tiếng Anh bài viết không được để trống').trim()
+});
+
 export const registerSchema = userSchema.pick(['email', 'password', 'confirm_password']);
 export const loginSchema = userSchema.pick(['email', 'password']);
 export const createCategorySchema = categorySchema.pick(['name_vi', 'name_en']);
@@ -70,9 +77,11 @@ export const createProductSchema = productSchema.pick([
   'price_after_discount',
   'specifications'
 ]);
+export const createBlogSchema = blogSchema.pick(['name_vi', 'name_en', 'content_vi', 'content_en']);
 
 export type RegisterSchema = yup.InferType<typeof registerSchema>;
 export type LoginSchema = yup.InferType<typeof loginSchema>;
 export type CreateCategorySchema = yup.InferType<typeof createCategorySchema>;
 export type CreateBrandSchema = yup.InferType<typeof createBrandSchema>;
 export type CreateProductSchema = yup.InferType<typeof createProductSchema>;
+export type CreateBlogSchema = yup.InferType<typeof createBlogSchema>;

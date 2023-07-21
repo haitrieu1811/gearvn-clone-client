@@ -111,7 +111,7 @@ const List = () => {
     <div>
       <div className='flex justify-between items-center mb-4 bg-white py-3 px-4 rounded-lg shadow-sm'>
         <div>
-          <div className='relative'>
+          {/* <div className='relative'>
             <input
               type='text'
               placeholder='Tìm kiếm'
@@ -120,7 +120,7 @@ const List = () => {
             <button className='absolute top-1/2 -translate-y-1/2 right-0 h-full w-10 flex justify-center items-center'>
               <SearchIcon className='w-4 h-4' />
             </button>
-          </div>
+          </div> */}
         </div>
         <Link
           to={PATH.DASHBOARD_PRODUCT_CREATE}
@@ -133,11 +133,10 @@ const List = () => {
       <Table
         initialData={products || []}
         checkedData={checkedProducts}
-        columns={[1, 3, 1, 1, 1, 1, 1, 1, 1, 1]}
+        columns={[1, 4, 1, 1, 1, 1, 1, 1, 1]}
         head={[
           <Checkbox checked={isAllChecked} onChange={handleCheckAll} />,
           'Tên sản phẩm',
-          'Giá gốc',
           'Giá gốc',
           'Giá sau khi giảm',
           'Danh mục',
@@ -149,7 +148,6 @@ const List = () => {
         body={extendedProducts.map((product, index) => [
           <Checkbox checked={product.checked} onChange={handleCheckOne(index)} />,
           product.name_vi,
-          formatCurrency(product.price),
           formatCurrency(product.price),
           formatCurrency(product.price_after_discount),
           product.category.name_vi,

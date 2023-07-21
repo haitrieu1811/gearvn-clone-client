@@ -1,5 +1,6 @@
 import {
   CreateAndUpdateProductBody,
+  CreateProductResponse,
   GetProductDetailResponse,
   GetProductsRequestParams,
   GetProductsResponse
@@ -15,13 +16,19 @@ const productApi = {
     return http.get<GetProductDetailResponse>(`/products/${productId}`);
   },
   create(body: CreateAndUpdateProductBody) {
-    return http.post<OnlyMessageResponse>('/products', body);
+    return http.post<CreateProductResponse>('/products', body);
   },
   update({ productId, body }: { productId: string; body: CreateAndUpdateProductBody }) {
     return http.patch<OnlyMessageResponse>(`/products/${productId}`, body);
   },
   delete(productIds: string[]) {
     return http.delete<OnlyMessageResponse>('/products', { data: { product_ids: productIds } });
+  },
+  addImage({ productId, body }: { productId: string; body: { images: string[] } }) {
+    return http.post<OnlyMessageResponse>(`/products/image/${productId}`, body);
+  },
+  deleteImage(mediaId: string) {
+    return http.delete<OnlyMessageResponse>(`/products/image/${mediaId}`);
   }
 };
 

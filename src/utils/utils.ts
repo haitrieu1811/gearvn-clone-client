@@ -1,4 +1,5 @@
 import axios, { AxiosError } from 'axios';
+import turndown from 'turndown';
 
 import CONFIG from 'src/constants/config';
 import HTTP_STATUS from 'src/constants/httpStatus';
@@ -24,4 +25,36 @@ export const formatCurrency = (currency: number) => {
   return new Intl.NumberFormat('de-DE').format(currency);
 };
 
-export const getImageUrl = (name: string) => `${CONFIG.BASE_URL}/static/image/${name}`;
+export const getImageUrl = (name: string) => {
+  return `${CONFIG.BASE_URL}/static/image/${name}`;
+};
+
+export const rateSale = (originalPrice: number, salePrice: number) => {
+  return Math.round(((originalPrice - salePrice) / originalPrice) * 100);
+};
+
+const removeSpecialCharacter = (str: string) => {
+  return str
+    .replace(/!|@|%|\^|\*|\(|\)|\+|\=|\<|\>|\?|\/|,|\.|\:|\;|\'|\"|\&|\#|\[|\]|~|\$|_|`|-|{|}|\||\\/g, '')
+    .toLowerCase();
+};
+
+export const generateNameId = ({ name, id }: { name: string; id: string }) => {
+  return removeSpecialCharacter(name).replace(/\s/g, '-') + `-i-${id}`;
+};
+
+export const getIdFromNameId = (nameId: string) => {
+  const arr = nameId.split('-i-');
+  return arr[arr.length - 1];
+};
+
+export const htmlToPlainText = (html: string) => {
+  const div = document.createElement('div');
+  div.innerHTML = html;
+  return div.innerText;
+};
+
+export const htmlToMarkdown = (html: string) => {
+  const turndownService = new turndown();
+  return turndownService.turndown(html);
+};
