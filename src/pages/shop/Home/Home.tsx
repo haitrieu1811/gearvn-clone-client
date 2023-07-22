@@ -81,13 +81,15 @@ const Home = () => {
       </div>
       {/* Danh sách sản phẩm */}
       <div className='grid grid-cols-10 gap-3'>
-        {products && products.length > 0 ? (
+        {products &&
+          products.length > 0 &&
           products.map((product, index) => (
             <div key={index} className='col-span-2'>
               <ProductItem data={product} />
             </div>
-          ))
-        ) : (
+          ))}
+
+        {products && products.length <= 0 && !getProductsQuery.isLoading && (
           <div className='col-span-10 p-[15px] bg-[#fcf8e3] border border-[#faebcc] text-sm text-[#8a6d3b]'>
             Chưa có sản phẩm nào trong danh mục này
           </div>

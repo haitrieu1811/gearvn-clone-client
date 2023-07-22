@@ -23,10 +23,12 @@ const Filter = ({ data, label, queryName }: FilterProps) => {
   const navigate = useNavigate();
   const location = useLocation();
   const queryParams = UseQueryParams();
-
+  const defaultValue = useMemo(
+    () => (queryName in queryParams ? queryParams[queryName].split('-') : []),
+    [queryParams]
+  );
   const [isActive, setIsActive] = useState<boolean>(false);
-  const [choosenValue, setChoosenValue] = useState<string[]>([]);
-
+  const [choosenValue, setChoosenValue] = useState<string[]>(defaultValue);
   const isChoosen = useMemo(() => choosenValue.length > 0, [choosenValue]);
 
   // Xử lý khi mở

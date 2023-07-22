@@ -13,7 +13,7 @@ const ProductItem = ({ data }: ProductItemProps) => {
     <div className='border rounded shadow-sm'>
       <Link
         to={`${PATH.PRODUCT_DETAIL_WITHOUT_ID}/${generateNameId({ name: data.name_vi, id: data._id })}`}
-        className='p-[10px]'
+        className='p-[10px] block'
       >
         <img src={getImageUrl(data.thumbnail)} alt={data.name_vi} className='h-[210px] w-full object-cover' />
       </Link>
