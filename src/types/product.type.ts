@@ -41,6 +41,8 @@ export interface Product {
 export interface GetProductsRequestParams {
   page?: string;
   limit?: string;
+  category?: string;
+  brand?: string;
 }
 
 export interface CreateAndUpdateProductBody {

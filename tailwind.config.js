@@ -7,6 +7,9 @@ export default {
     extend: {
       colors: {
         primary: '#E30019'
+      },
+      boxShadow: {
+        '3xl': 'rgba(0, 0, 0, 0.5) 0px 2px 20px 0px'
       }
     }
   },

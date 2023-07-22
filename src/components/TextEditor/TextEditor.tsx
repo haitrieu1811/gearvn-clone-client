@@ -14,9 +14,9 @@ interface TextEditorProps {
 }
 
 const TextEditor = ({ onChange, value, name, errorMessage, placeholder }: TextEditorProps) => {
-  function handleEditorChange({ html, text }: { html: string; text: string }) {
+  const handleEditorChange = ({ html, text }: { html: string; text: string }) => {
     onChange && onChange({ html, text });
-  }
+  };
 
   return (
     <Fragment>

@@ -5,12 +5,12 @@ import DashboardSidebar from '../components/DashboardSidebar';
 
 const DashboardLayout = ({ children }: { children: ReactNode }) => {
   return (
-    <div className='bg-[#eff0f6]'>
+    <div className='bg-[#f7f7f7]'>
       <div className='flex'>
         <DashboardSidebar />
-        <div className='flex-1 ml-[240px] min-h-screen pt-8 px-4 pb-0'>
-          <div className='flex justify-between items-center mb-8'>
-            <h1 className='font-bold text-2xl'>Hello, haitrieu1811! Welcome back</h1>
+        <div className='flex-1 ml-[240px] min-h-screen px-4'>
+          <div className='flex justify-between items-center mb-8 pt-8'>
+            <h1 className='font-medium text-2xl'>Hello, haitrieu1811! Welcome back</h1>
             <div className='flex'>
               <button className='rounded bg-white p-2 flex justify-center items-center ml-3 relative'>
                 <BellIcon className='w-5 h-5 fill-none' />

@@ -39,7 +39,8 @@ const List = () => {
   // Lấy danh sách các blog
   const getBlogsQuery = useQuery({
     queryKey: ['products', queryConfig],
-    queryFn: () => blogApi.getList(queryConfig)
+    queryFn: () => blogApi.getList(queryConfig),
+    keepPreviousData: true
   });
 
   const blogs = useMemo(() => getBlogsQuery.data?.data.data.blogs, [getBlogsQuery.data?.data.data.blogs]);
@@ -149,7 +150,7 @@ const List = () => {
       />
       <Modal isVisible={modalOpen} onCancel={stopDelete} onOk={handleDelete}>
         {currentId
-          ? 'Bạn có chắc muốn xóa sản phẩm này'
+          ? 'Bạn có chắc muốn xóa bài viết này'
           : `Bạn có chắc muốn xóa ${checkedBlogs.length} bài viết đã chọn`}
       </Modal>
     </Fragment>
