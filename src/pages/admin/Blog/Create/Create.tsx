@@ -154,7 +154,7 @@ const Create = () => {
     <Fragment>
       <Back />
       <div className='bg-white rounded-lg shadow-sm p-6'>
-        <h2 className='text-2xl font-bold mb-6'>{!isUpdateMode ? 'Tạo bài viết mới' : 'Cập nhật bài viết'}</h2>
+        <h2 className='text-2xl font-semibold mb-6'>{!isUpdateMode ? 'Tạo bài viết mới' : 'Cập nhật bài viết'}</h2>
         <form onSubmit={onSubmit}>
           <div className='grid grid-cols-12 gap-10'>
             <div className='col-span-8'>

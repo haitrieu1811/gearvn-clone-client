@@ -10,27 +10,20 @@ import {
   BarIcon,
   CartIcon,
   ChartPieIcon,
-  CoinIcon,
-  CreditCardIcon,
   HandIcon,
   HotlineIcon,
-  ItemIcon,
   LocationIcon,
   LogoutIcon,
-  NewspaperIcon,
   PurchaseIcon,
   SearchIcon,
-  ShieldIcon,
   UserIcon,
-  VideoIcon,
   ViewedIcon
 } from 'src/components/Icons';
 import Wrapper from 'src/components/Wrapper';
+import { UserRole } from 'src/constants/enum';
 import PATH from 'src/constants/path';
 import { AppContext } from 'src/contexts/app.context';
 import HeaderAction from './HeaderAction';
-import SubMenuItem from './SubMenuItem';
-import { UserRole } from 'src/constants/enum';
 
 const Header = () => {
   const { t } = useTranslation('pages');
@@ -105,7 +98,7 @@ const Header = () => {
   };
 
   return (
-    <header className=''>
+    <header className='sticky top-0 left-0 right-0 z-[99999]'>
       <div className='bg-primary'>
         <nav className='container py-4 flex justify-between items-center'>
           <Link to={PATH.HOME} className='inline'>
@@ -165,21 +158,6 @@ const Header = () => {
             </div>
           </Tippy>
         </nav>
-      </div>
-      <div className='bg-white'>
-        <div className='flex items-center justify-center'>
-          <SubMenuItem icon={<ItemIcon className='fill-none w-5 h-5' />} name='Tổng hợp khuyến mãi' separate />
-          <SubMenuItem
-            to={PATH.BLOG}
-            icon={<NewspaperIcon className='fill-none w-5 h-5' />}
-            name='Tin công nghệ'
-            separate
-          />
-          <SubMenuItem icon={<VideoIcon className='fill-none w-5 h-5' />} name='Video' separate />
-          <SubMenuItem icon={<CreditCardIcon className='fill-none w-5 h-5' />} name='Hướng dẫn thanh toán' separate />
-          <SubMenuItem icon={<CoinIcon className='fill-none w-5 h-5' />} name='Hướng dẫn trả góp' separate />
-          <SubMenuItem icon={<ShieldIcon className='fill-none w-5 h-5' />} name='Chính sách bảo hành' />
-        </div>
       </div>
     </header>
   );

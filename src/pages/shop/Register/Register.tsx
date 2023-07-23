@@ -7,7 +7,6 @@ import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 
 import authApi from 'src/apis/auth.api';
-import banner from 'src/assets/images/banner.png';
 import Button from 'src/components/Button';
 import Input from 'src/components/Input';
 import PATH from 'src/constants/path';

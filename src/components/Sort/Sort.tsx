@@ -65,7 +65,7 @@ const Sort = ({ data }: SortProps) => {
       <button className='flex items-center border border-[#CFCFCF] text-[13px] rounded py-[5px] px-3'>
         <SortIcon className='w-5 h-5 mr-[5px]' />
         <span>
-          <span className='mr-1'>Xếp theo:</span> <strong>{currentSort.name}</strong>
+          <span className='mr-1'>Xếp theo:</span> <span className='font-semibold'>{currentSort.name}</span>
         </span>
         <CaretDownIcon className='w-2 h-2 fill-black ml-2' />
       </button>

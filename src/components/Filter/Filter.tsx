@@ -75,12 +75,12 @@ const Filter = ({ data, label, queryName }: FilterProps) => {
 
   const render = () => {
     return (
-      <div className='rounded shadow-3xl bg-white relative before:absolute before:left-6 before:bottom-full before:border-[11px] before:border-transparent before:border-b-white'>
+      <div className='rounded max-w-[500px] shadow-3xl bg-white relative before:absolute before:left-6 before:bottom-full before:border-[11px] before:border-transparent before:border-b-white'>
         <div className='first:-ml-2 p-4'>
           {data.map((item) => (
             <button
               key={item.value}
-              className={classNames('border text-sm rounded p-2 ml-2', {
+              className={classNames('border text-sm rounded p-2 ml-2 mt-2', {
                 'border-[#1982F9] text-[#1982F9]': choosenValue.includes(item.value),
                 'border-[#cfcfcf] hover:border-[#1982F9] hover:text-[#1982F9]': !choosenValue.includes(item.value)
               })}

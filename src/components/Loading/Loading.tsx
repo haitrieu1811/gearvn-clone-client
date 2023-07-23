@@ -1,9 +1,11 @@
-const Loading = () => {
+import PropTypes from 'prop-types';
+
+const Loading = ({ className }: { className?: string }) => {
   return (
     <div role='status'>
       <svg
         aria-hidden='true'
-        className='w-12 h-12 mr-2 text-gray-200 animate-spin fill-blue-600'
+        className={`text-gray-200 animate-spin fill-blue-600 ${className}`}
         viewBox='0 0 100 101'
         fill='none'
         xmlns='http://www.w3.org/2000/svg'
@@ -20,6 +22,10 @@ const Loading = () => {
       <span className='sr-only'>Loading...</span>
     </div>
   );
+};
+
+Loading.propTypes = {
+  className: PropTypes.string
 };
 
 export default Loading;

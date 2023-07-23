@@ -9,7 +9,7 @@ import { toast } from 'react-toastify';
 
 import brandApi from 'src/apis/brand.api';
 import Checkbox from 'src/components/Checkbox';
-import { PlusIcon, SearchIcon } from 'src/components/Icons';
+import { SearchIcon } from 'src/components/Icons';
 import Modal from 'src/components/Modal';
 import Table from 'src/components/Table';
 import TableAction from 'src/components/Table/TableAction';
@@ -120,7 +120,6 @@ const List = () => {
           to={PATH.DASHBOARD_BRAND_CREATE}
           className='px-2 py-[6px] rounded bg-blue-600 flex justify-center items-center'
         >
-          <PlusIcon className='w-4 h-4 stroke-white mr-2' />
           <span className='text-white text-sm font-medium'>Tạo mới</span>
         </Link>
       </div>

@@ -26,12 +26,16 @@ const ProductItem = ({ data }: ProductItemProps) => {
             {data.name_vi}
           </Link>
         </div>
-        <div className='text-[#6D6E72] text-[13px] line-through'>{formatCurrency(data.price)}đ</div>
+        {data.price > data.price_after_discount && (
+          <div className='text-[#6D6E72] text-[13px] line-through'>{formatCurrency(data.price)}đ</div>
+        )}
         <div className='flex items-center'>
-          <div className='text-primary font-bold'>{formatCurrency(data.price_after_discount)}đ</div>
-          <span className='border rounded-sm border-primary px-1 bg-[#FFEDED] text-[13px] text-primary ml-[10px] font-medium'>
-            -{rateSale(data.price, data.price_after_discount)}%
-          </span>
+          <div className='text-primary font-semibold'>{formatCurrency(data.price_after_discount)}đ</div>
+          {rateSale(data.price, data.price_after_discount) > 0 && (
+            <span className='border rounded-sm border-primary px-1 bg-[#FFEDED] text-[13px] text-primary ml-[10px] font-medium'>
+              -{rateSale(data.price, data.price_after_discount)}%
+            </span>
+          )}
         </div>
       </div>
     </div>

@@ -6,7 +6,7 @@ const FooterContact = ({ field, to, time }: { field: string; to: string; time?: 
   return (
     <Fragment>
       <span className='text-[#111111] w-[25%]'>{field}</span>
-      <Link to='tel:18006975' className='text-[#1982F9] font-bold mr-1'>
+      <Link to='tel:18006975' className='text-[#1982F9] font-semibold mr-1'>
         {to}
       </Link>
       <span className='text-[#111111]'>{time}</span>

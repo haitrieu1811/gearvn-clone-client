@@ -89,7 +89,6 @@ const User = () => {
           to={PATH.DASHBOARD_CATEGORY_CREATE}
           className='px-2 py-[6px] rounded bg-blue-600 flex justify-center items-center'
         >
-          <PlusIcon className='w-4 h-4 stroke-white mr-2' />
           <span className='text-white text-sm font-medium'>Tạo mới</span>
         </Link>
       </div>
@@ -146,9 +145,7 @@ const User = () => {
             <div></div>
             <div className='flex items-center'>
               <Select options={LIMIT_OPTIONS} classNameWrapper='mr-3' onChange={handleChangeLimit} />
-              {pageSize && queryConfig && (
-                <Pagination pageSize={pageSize} queryConfig={queryConfig} path={PATH.DASHBOARD_USER} />
-              )}
+              {pageSize && queryConfig && <Pagination pageSize={pageSize} />}
             </div>
           </div>
         </div>

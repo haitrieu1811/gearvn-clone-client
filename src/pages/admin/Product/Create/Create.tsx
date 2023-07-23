@@ -140,6 +140,9 @@ const Create = () => {
       reset();
       setThumbnailFile(null);
       setImagesFile(null);
+      setGeneralInfo('');
+      setSpecifications('');
+      setDescription('');
     },
     onError: (error) => {
       if (isEntityError<ErrorResponse<{ [key in keyof FormData]: string }>>(error)) {
@@ -249,7 +252,7 @@ const Create = () => {
     <Fragment>
       <Back />
       <div className='bg-white rounded-lg shadow-sm p-6'>
-        <h2 className='text-2xl font-bold mb-6'>{!isUpdateMode ? 'Tạo sản phẩm mới' : 'Cập nhật sản phẩm'}</h2>
+        <h2 className='text-2xl font-semibold mb-6'>{!isUpdateMode ? 'Tạo sản phẩm mới' : 'Cập nhật sản phẩm'}</h2>
         <form onSubmit={onSubmit} encType='multipart/form-data'>
           <div className='grid grid-cols-12 gap-10'>
             <div className='col-span-8'>

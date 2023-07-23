@@ -47,7 +47,7 @@ const Blog = () => {
                 </Link>
                 <Link
                   to={`${PATH.BLOG_DETAIL_WITHOUT_ID}/${generateNameId({ name: blogs[0].name_vi, id: blogs[0]._id })}`}
-                  className='font-medium text-[22px] mt-4 block line-clamp-2'
+                  className='font-semibold text-[22px] mt-4 block line-clamp-2'
                 >
                   {blogs[0].name_vi}
                 </Link>
@@ -65,7 +65,7 @@ const Blog = () => {
               </Link>
               <Link
                 to={`${PATH.BLOG_DETAIL_WITHOUT_ID}/${generateNameId({ name: blogs[1].name_vi, id: blogs[1]._id })}`}
-                className='line-clamp-2 font-medium block my-2'
+                className='line-clamp-2 font-semibold block my-2'
               >
                 {blogs[1].name_vi}
               </Link>
@@ -82,9 +82,9 @@ const Blog = () => {
                 </Link>
                 <Link
                   to={`${PATH.BLOG_DETAIL_WITHOUT_ID}/${generateNameId({ name: blog.name_vi, id: blog._id })}`}
-                  className='text-[#333333] font-medium line-clamp-2 block mt-2'
+                  className='text-[#333333] font-semibold line-clamp-2 block mt-2'
                 >
-                  AOV Day 2023 - Ngày hội Liên Quân Free Skin Keera
+                  {blog.name_vi}
                 </Link>
               </div>
             ))}
@@ -102,7 +102,7 @@ const Blog = () => {
                 <div className='flex-1 ml-4'>
                   <Link
                     to={`${PATH.BLOG_DETAIL_WITHOUT_ID}/${generateNameId({ name: blog.name_vi, id: blog._id })}`}
-                    className='font-medium mb-[10px] block'
+                    className='font-semibold mb-[10px] block'
                   >
                     {blog.name_vi}
                   </Link>

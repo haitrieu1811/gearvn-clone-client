@@ -8,7 +8,6 @@ import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
 import authApi from 'src/apis/auth.api';
-import banner from 'src/assets/images/banner.png';
 import Button from 'src/components/Button';
 import Input from 'src/components/Input';
 import PATH from 'src/constants/path';

@@ -8,7 +8,7 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: 'sf-pro-display-regular', sans-serif;
+  font-family: sf-pro-display-regular, sans-serif;
 }
 
 html *::-webkit-scrollbar {
@@ -26,23 +26,22 @@ html *::-webkit-scrollbar-track {
   background-color: rgba(0, 0, 0, 0);
 }
 
-h2 {
-  font-size: 24px;
-  font-weight: bold;
+.font-medium {
+  font-family: sf-pro-display-medium, 'sans-serif';
 }
 
-table {
-  width: 100%;
+.font-semibold {
+  font-family: sf-pro-display-semibold, 'sans-serif';
 }
 
-table tr td {
-  border: 1px solid #dbdbdb;
-  padding: 6px 12px;
+.font-bold {
+  font-family: sf-pro-display-heavy, 'sans-serif';
 }
 
 @font-face {
   font-family: sf-pro-display-regular;
   src: url(../src//assets/fonts//sf-pro-display-regular_abbbcf80b2b5453188b767aec8c4061d.otf);
+  font-weight: 500;
 }
 
 @font-face {
@@ -63,9 +62,4 @@ table tr td {
 @font-face {
   font-family: sf-pro-display-heavy;
   src: url(../src//assets/fonts//sf-pro-display-heavy_4ae6682c2e5c44f2bc79506a451f07c1.otf);
-}
-
-@font-face {
-  font-family: sf-pro-display-blackitalic;
-  src: url(../src//assets/fonts//sf-pro-display-blackitalic_85c1d3c6cfac4672924c38222c9791d1.otf);
 }
