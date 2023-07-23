@@ -43,6 +43,8 @@ export interface GetProductsRequestParams {
   limit?: string;
   category?: string;
   brand?: string;
+  sortBy?: string;
+  orderBy?: string;
 }
 
 export interface CreateAndUpdateProductBody {

@@ -56,7 +56,7 @@ const Register = () => {
   });
 
   return (
-    <div className='bg-[#ffebe1] bg-cover bg-center bg-no-repeat' style={{ backgroundImage: `url(${banner})` }}>
+    <div className='bg-primary'>
       <div className='container py-12 md:py-24'>
         <div className='grid grid-cols-12'>
           <div className='bg-white p-10 lg:col-start-9 lg:col-span-4 rounded-sm col-span-12 col-start-1 md:col-span-8 md:col-start-3 shadow-sm'>

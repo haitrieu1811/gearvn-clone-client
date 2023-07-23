@@ -27,6 +27,7 @@ const Filter = ({ data, label, queryName }: FilterProps) => {
     () => (queryName in queryParams ? queryParams[queryName].split('-') : []),
     [queryParams]
   );
+
   const [isActive, setIsActive] = useState<boolean>(false);
   const [choosenValue, setChoosenValue] = useState<string[]>(defaultValue);
   const isChoosen = useMemo(() => choosenValue.length > 0, [choosenValue]);
@@ -149,6 +150,12 @@ const Filter = ({ data, label, queryName }: FilterProps) => {
 };
 
 Filter.propTypes = {
+  data: PropTypes.arrayOf(
+    PropTypes.shape({
+      value: PropTypes.string.isRequired,
+      text: PropTypes.string.isRequired
+    })
+  ).isRequired,
   label: PropTypes.string.isRequired,
   queryName: PropTypes.string.isRequired
 };
