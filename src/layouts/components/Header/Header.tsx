@@ -55,7 +55,7 @@ const Header = () => {
           </div>
         ) : (
           <div className='min-w-[300px]'>
-            <Link to={PATH.PROFILE} className='px-5 py-4 flex hover:underline border-b'>
+            <Link to={PATH.ACCOUNT_PROFILE} className='px-5 py-4 flex hover:underline border-b'>
               <HandIcon className='w-5 h-5' />
               <span className='ml-4 text-sm font-medium'>
                 Xin chào, {profile?.fullName ? profile.fullName : profile?.email.split('@')[0]}
@@ -67,11 +67,11 @@ const Header = () => {
                 <span className='ml-4 text-sm'>Dashboard</span>
               </Link>
             )}
-            <Link to={PATH.HOME} className='px-5 py-3 flex hover:underline'>
+            <Link to={PATH.ACCOUNT_ORDER} className='px-5 py-3 flex hover:underline'>
               <PurchaseIcon className='w-5 h-5 fill-black' />
               <span className='ml-4 text-sm'>Đơn hàng của tôi</span>
             </Link>
-            <Link to={PATH.HOME} className='px-5 py-3 flex hover:underline border-b'>
+            <Link to={PATH.ACCOUNT_VIEWED_PRODUCT} className='px-5 py-3 flex hover:underline border-b'>
               <ViewedIcon className='w-5 h-5' />
               <span className='ml-4 text-sm'>Đã xem gần đây</span>
             </Link>

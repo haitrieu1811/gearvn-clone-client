@@ -1,3 +1,4 @@
+import { Gender } from 'src/constants/enum';
 import * as yup from 'yup';
 
 export const userSchema = yup.object({
@@ -15,7 +16,19 @@ export const userSchema = yup.object({
   confirm_password: yup
     .string()
     .required('Nhập lại khẩu không được để trống')
-    .oneOf([yup.ref('password')], 'Nhập lại mật khẩu không chính xác')
+    .oneOf([yup.ref('password')], 'Nhập lại mật khẩu không chính xác'),
+  fullname: yup
+    .string()
+    .required('Họ tên không được để trống')
+    .min(1, 'Họ tên dài từ 1 đến 100 ký tự')
+    .max(100, 'Họ tên dài từ 1 đến 100 ký tự'),
+  gender: yup.string().required('Hãy chọn giới tính'),
+  phoneNumber: yup
+    .string()
+    .required('Số điện thoại không được để trống')
+    .min(10, 'Số điện thoại dài từ 10 đến 11 ký tự')
+    .max(11, 'Số điện thoại dài từ 10 đến 11 ký tự'),
+  date_of_birth: yup.string().required('Hãy chọn ngày sinh')
 });
 
 export const categorySchema = yup.object({
@@ -78,6 +91,7 @@ export const createProductSchema = productSchema.pick([
   'specifications'
 ]);
 export const createBlogSchema = blogSchema.pick(['name_vi', 'name_en', 'content_vi', 'content_en']);
+export const updateMeSchema = userSchema.pick(['fullname', 'phoneNumber', 'gender', 'date_of_birth']);
 
 export type RegisterSchema = yup.InferType<typeof registerSchema>;
 export type LoginSchema = yup.InferType<typeof loginSchema>;
@@ -85,3 +99,4 @@ export type CreateCategorySchema = yup.InferType<typeof createCategorySchema>;
 export type CreateBrandSchema = yup.InferType<typeof createBrandSchema>;
 export type CreateProductSchema = yup.InferType<typeof createProductSchema>;
 export type CreateBlogSchema = yup.InferType<typeof createBlogSchema>;
+export type UpdateMeSchema = yup.InferType<typeof updateMeSchema>;

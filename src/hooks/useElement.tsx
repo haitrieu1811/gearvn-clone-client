@@ -19,14 +19,18 @@ import Dashboard from 'src/pages/admin/Dashboard/Dashboard';
 import DashboardProductCreate from 'src/pages/admin/Product/Create';
 import DashboardProduct from 'src/pages/admin/Product/List';
 import DashboardUser from 'src/pages/admin/User';
+import Account from 'src/pages/shop/Account';
+import AccountAddress from 'src/pages/shop/Account/Address';
+import AccountHistoryOrder from 'src/pages/shop/Account/HistoryOrder';
+import AccountProfile from 'src/pages/shop/Account/Profile';
+import AccountViewedProduct from 'src/pages/shop/Account/ViewedProduct';
+import Blog from 'src/pages/shop/Blog';
+import BlogDetail from 'src/pages/shop/BlogDetail';
 import Home from 'src/pages/shop/Home/Home';
 import Login from 'src/pages/shop/Login/Login';
 import NotFound from 'src/pages/shop/NotFound/NotFound';
 import ProductDetail from 'src/pages/shop/ProductDetail';
-import Profile from 'src/pages/shop/Profile/Profile';
 import Register from 'src/pages/shop/Register/Register';
-import Blog from 'src/pages/shop/Blog';
-import BlogDetail from 'src/pages/shop/BlogDetail';
 
 const ProtectedRoute = () => {
   const { isAuthenticated } = useContext(AppContext);
@@ -97,12 +101,30 @@ const useElement = () => {
       element: <ProtectedRoute />,
       children: [
         {
-          path: PATH.PROFILE,
+          path: PATH.ACCOUNT,
           element: (
             <MainLayout>
-              <Profile />
+              <Account />
             </MainLayout>
-          )
+          ),
+          children: [
+            {
+              path: PATH.ACCOUNT_PROFILE,
+              element: <AccountProfile />
+            },
+            {
+              path: PATH.ACCOUNT_ORDER,
+              element: <AccountHistoryOrder />
+            },
+            {
+              path: PATH.ACCOUNT_VIEWED_PRODUCT,
+              element: <AccountViewedProduct />
+            },
+            {
+              path: PATH.ACCOUNT_ADDRESS,
+              element: <AccountAddress />
+            }
+          ]
         }
       ]
     },

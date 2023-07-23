@@ -17,6 +17,7 @@ export interface User {
   updated_at: Date;
 }
 
+// Request
 export interface GetUsersParams {
   page?: string;
   limit?: string;
@@ -25,4 +26,17 @@ export interface GetUsersParams {
   role?: string;
 }
 
+export interface UpdateMeRequestBody {
+  fullName?: string;
+  gender?: Gender;
+  phoneNumber?: string;
+  date_of_birth?: string;
+  avatar?: string;
+}
+
+// Response
 export type GetUserResponse = SuccessResponse<{ users: User[]; pagination: Pagination }>;
+
+export type GetMeResponse = SuccessResponse<{
+  user: User;
+}>;
