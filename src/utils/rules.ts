@@ -1,5 +1,5 @@
-import { Gender } from 'src/constants/enum';
 import * as yup from 'yup';
+import REGEX from 'src/constants/regex';
 
 export const userSchema = yup.object({
   email: yup
@@ -17,7 +17,7 @@ export const userSchema = yup.object({
     .string()
     .required('Nhập lại khẩu không được để trống')
     .oneOf([yup.ref('password')], 'Nhập lại mật khẩu không chính xác'),
-  fullname: yup
+  fullName: yup
     .string()
     .required('Họ tên không được để trống')
     .min(1, 'Họ tên dài từ 1 đến 100 ký tự')
@@ -26,9 +26,8 @@ export const userSchema = yup.object({
   phoneNumber: yup
     .string()
     .required('Số điện thoại không được để trống')
-    .min(10, 'Số điện thoại dài từ 10 đến 11 ký tự')
-    .max(11, 'Số điện thoại dài từ 10 đến 11 ký tự'),
-  date_of_birth: yup.string().required('Hãy chọn ngày sinh')
+    .matches(REGEX.PHONE_NUMBER, 'Số điện thoại không hợp lệ'),
+  date_of_birth: yup.date().required().max(new Date(), 'Hãy chọn một ngày trong quá khứ')
 });
 
 export const categorySchema = yup.object({
@@ -91,7 +90,7 @@ export const createProductSchema = productSchema.pick([
   'specifications'
 ]);
 export const createBlogSchema = blogSchema.pick(['name_vi', 'name_en', 'content_vi', 'content_en']);
-export const updateMeSchema = userSchema.pick(['fullname', 'phoneNumber', 'gender', 'date_of_birth']);
+export const updateMeSchema = userSchema.pick(['fullName', 'phoneNumber', 'gender', 'date_of_birth']);
 
 export type RegisterSchema = yup.InferType<typeof registerSchema>;
 export type LoginSchema = yup.InferType<typeof loginSchema>;

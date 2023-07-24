@@ -57,7 +57,7 @@ const Header = () => {
           <div className='min-w-[300px]'>
             <Link to={PATH.ACCOUNT_PROFILE} className='px-5 py-4 flex hover:underline border-b'>
               <HandIcon className='w-5 h-5' />
-              <span className='ml-4 text-sm font-medium'>
+              <span className='ml-4 text-sm font-semibold'>
                 Xin chào, {profile?.fullName ? profile.fullName : profile?.email.split('@')[0]}
               </span>
             </Link>

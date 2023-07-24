@@ -7,7 +7,11 @@ interface DateSelectProps {
 }
 
 const DateSelect = ({ onChange, value }: DateSelectProps) => {
-  const [date, setDate] = useState({
+  const [date, setDate] = useState<{
+    date: number;
+    month: number;
+    year: number;
+  }>({
     date: 1,
     month: 0,
     year: 1910
@@ -37,10 +41,11 @@ const DateSelect = ({ onChange, value }: DateSelectProps) => {
     <div className='grid grid-cols-12 gap-6'>
       <select
         name='date'
-        id=''
+        value={date.date}
         className='col-span-4 border border-[#cfcfcf] rounded h-10 px-4 outline-none text-[#535353]'
         onChange={handleChange}
       >
+        <option disabled>Ngày</option>
         {range(1, 32).map((date) => (
           <option key={date} value={date}>
             {date}
@@ -49,10 +54,11 @@ const DateSelect = ({ onChange, value }: DateSelectProps) => {
       </select>
       <select
         name='month'
-        id=''
+        value={date.month}
         className='col-span-4 border border-[#cfcfcf] rounded h-10 px-4 outline-none text-[#535353]'
         onChange={handleChange}
       >
+        <option disabled>Tháng</option>
         {range(0, 12).map((month) => (
           <option key={month} value={month}>
             {month + 1}
@@ -61,10 +67,11 @@ const DateSelect = ({ onChange, value }: DateSelectProps) => {
       </select>
       <select
         name='year'
-        id=''
+        value={date.year}
         className='col-span-4 border border-[#cfcfcf] rounded h-10 px-4 outline-none text-[#535353]'
         onChange={handleChange}
       >
+        <option disabled>Năm</option>
         {range(1910, 2024).map((year) => (
           <option key={year} value={year}>
             {year}
