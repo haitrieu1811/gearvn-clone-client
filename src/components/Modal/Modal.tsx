@@ -6,14 +6,27 @@ import { CloseIcon } from '../Icons';
 
 interface ModalProps {
   isVisible: boolean;
+  name?: string;
   children: ReactNode;
   okText?: string;
   cancelText?: string;
   onOk?: () => void;
   onCancel?: () => void;
+  okButton?: boolean;
+  cancelButton?: boolean;
 }
 
-const Modal = ({ isVisible, children, okText = 'Ok', cancelText = 'Hủy', onOk, onCancel }: ModalProps) => {
+const Modal = ({
+  isVisible,
+  name,
+  children,
+  okText = 'Ok',
+  cancelText = 'Hủy',
+  onOk,
+  onCancel,
+  okButton = true,
+  cancelButton = true
+}: ModalProps) => {
   const handleOk = () => {
     onOk && onOk();
   };
@@ -25,30 +38,39 @@ const Modal = ({ isVisible, children, okText = 'Ok', cancelText = 'Hủy', onOk,
   return createPortal(
     <Fragment>
       {isVisible && (
-        <div className='flex justify-center items-center fixed inset-0'>
+        <div className='flex justify-center items-center fixed inset-0 z-[99999999]'>
           <div className='bg-black/30 fixed inset-0' onClick={handleCancel}></div>
           <div className='bg-white z-10 rounded-lg'>
+            {/* Head */}
             <div className='flex justify-between items-center px-3 py-2 border-b'>
-              <div></div>
+              <h2 className='font-semibold'>{name && name}</h2>
               <button className='p-1 rounded hover:bg-slate-100/80' onClick={handleCancel}>
                 <CloseIcon className='w-5 h-5' />
               </button>
             </div>
-            <div className='px-3 py-6 border-b text-[15px]'>{children}</div>
-            <div className='flex justify-end p-3'>
-              <button
-                className='py-2 px-4 rounded text-sm text-white bg-slate-400 hover:bg-slate-400/90 font-medium'
-                onClick={handleCancel}
-              >
-                {cancelText}
-              </button>
-              <button
-                className='py-2 px-4 rounded text-sm text-white bg-blue-600 ml-2 hover:bg-blue-600/90 font-medium'
-                onClick={handleOk}
-              >
-                {okText}
-              </button>
-            </div>
+            {/* Body */}
+            <div className='py-6 px-3 text-[15px]'>{children}</div>
+            {/* Foot */}
+            {(cancelButton || okButton) && (
+              <div className='flex justify-end p-3 border-t'>
+                {cancelButton && (
+                  <button
+                    className='py-2 px-4 rounded text-sm text-white bg-slate-400 hover:bg-slate-400/90 font-medium'
+                    onClick={handleCancel}
+                  >
+                    {cancelText}
+                  </button>
+                )}
+                {okButton && (
+                  <button
+                    className='py-2 px-4 rounded text-sm text-white bg-blue-600 ml-2 hover:bg-blue-600/90 font-medium'
+                    onClick={handleOk}
+                  >
+                    {okText}
+                  </button>
+                )}
+              </div>
+            )}
           </div>
         </div>
       )}

@@ -30,6 +30,18 @@ export const userSchema = yup.object({
   date_of_birth: yup.date().required().max(new Date(), 'Hãy chọn một ngày trong quá khứ')
 });
 
+export const addressSchema = yup.object({
+  province: yup.string().required('Tỉnh/thành phố không được để trống'),
+  district: yup.string().required('Quận/huyện không được để trống'),
+  ward: yup.string().required('Phường/xã không được để trống'),
+  street: yup
+    .string()
+    .required('Số nhà/tên đường không được để trống')
+    .min(1, 'Số nhà tên đường dài từ 1 đến 250 ký tự')
+    .max(250, 'Số nhà tên đường dài từ 1 đến 250 ký tự'),
+  type: yup.number().required('Loại địa chỉ không được để trống')
+});
+
 export const categorySchema = yup.object({
   name_vi: yup
     .string()
@@ -91,6 +103,7 @@ export const createProductSchema = productSchema.pick([
 ]);
 export const createBlogSchema = blogSchema.pick(['name_vi', 'name_en', 'content_vi', 'content_en']);
 export const updateMeSchema = userSchema.pick(['fullName', 'phoneNumber', 'gender', 'date_of_birth']);
+export const addAddressSchema = addressSchema.pick(['province', 'district', 'ward', 'street', 'type']);
 
 export type RegisterSchema = yup.InferType<typeof registerSchema>;
 export type LoginSchema = yup.InferType<typeof loginSchema>;
@@ -99,3 +112,4 @@ export type CreateBrandSchema = yup.InferType<typeof createBrandSchema>;
 export type CreateProductSchema = yup.InferType<typeof createProductSchema>;
 export type CreateBlogSchema = yup.InferType<typeof createBlogSchema>;
 export type UpdateMeSchema = yup.InferType<typeof updateMeSchema>;
+export type AddAddressSchema = yup.InferType<typeof addAddressSchema>;

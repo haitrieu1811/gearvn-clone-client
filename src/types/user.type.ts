@@ -1,5 +1,15 @@
-import { Gender, UserRole, UserStatus, UserVerifyStatus } from 'src/constants/enum';
+import { AddressType, Gender, UserRole, UserStatus, UserVerifyStatus } from 'src/constants/enum';
 import { Pagination, SuccessResponse } from './utils.type';
+
+interface AddressItem {
+  _id: string;
+  province: string;
+  district: string;
+  ward: string;
+  street: string;
+  type: AddressType;
+  isDefault: boolean;
+}
 
 export interface User {
   _id: string;
@@ -11,7 +21,7 @@ export interface User {
   verify: UserVerifyStatus;
   status: UserStatus;
   phoneNumber: string;
-  addresses: never[];
+  addresses: AddressItem[];
   date_of_birth: string;
   created_at: Date;
   updated_at: Date;
@@ -32,6 +42,14 @@ export interface UpdateMeRequestBody {
   phoneNumber?: string;
   date_of_birth?: string;
   avatar?: string;
+}
+
+export interface AddAddressRequestBody {
+  province: string;
+  district: string;
+  ward: string;
+  street: string;
+  type: AddressType;
 }
 
 // Response

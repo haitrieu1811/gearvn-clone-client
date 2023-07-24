@@ -9,7 +9,6 @@ const Account = () => {
           <AccountSidebar />
         </div>
         <div className='col-span-9 bg-white rounded shadow-sm'>
-          <h2 className='py-4 px-6 text-2xl font-semibold'>Thông tin tài khoản</h2>
           <Outlet />
         </div>
       </div>

@@ -1,7 +1,7 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import isEmpty from 'lodash/isEmpty';
-import { useEffect, useMemo } from 'react';
+import { Fragment, useEffect, useMemo } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { toast } from 'react-toastify';
 
@@ -84,101 +84,104 @@ const Profile = () => {
   });
 
   return (
-    <form onSubmit={onSubmit}>
-      {me && (
-        <div className='py-4 pl-6 pr-[290px]'>
-          {/* Họ tên */}
-          <div className='grid grid-cols-12 gap-6'>
-            <div className='col-span-4 flex items-center justify-end'>
-              <label htmlFor='fullName'>Họ tên</label>
-            </div>
-            <div className='col-span-8'>
-              <Input
-                type='text'
-                placeholder='Họ tên'
-                id='fullName'
-                name='fullName'
-                register={register}
-                errorMessage={errors.fullName?.message}
-              />
-            </div>
-          </div>
-          {/* Giới tính */}
-          <div className='grid grid-cols-12 gap-6 mt-4'>
-            <div className='col-span-4 flex items-center justify-end'>
-              <label>Giới tính</label>
-            </div>
-            <div className='col-span-8 flex items-center'>
-              <div className='flex items-center'>
-                <input type='radio' id='male' {...register('gender')} value={Gender.Male} />
-                <label htmlFor='male' className='ml-1 select-none'>
-                  Nam
-                </label>
+    <Fragment>
+      <h2 className='py-4 px-6 text-2xl font-semibold'>Thông tin tài khoản</h2>
+      <form onSubmit={onSubmit}>
+        {me && (
+          <div className='py-4 pl-6 pr-[290px]'>
+            {/* Họ tên */}
+            <div className='grid grid-cols-12 gap-6'>
+              <div className='col-span-4 flex items-center justify-end'>
+                <label htmlFor='fullName'>Họ tên</label>
               </div>
-              <div className='flex items-center ml-4'>
-                <input type='radio' id='female' {...register('gender')} value={Gender.Female} />
-                <label htmlFor='female' className='ml-1 select-none'>
-                  Nữ
-                </label>
+              <div className='col-span-8'>
+                <Input
+                  type='text'
+                  placeholder='Họ tên'
+                  id='fullName'
+                  name='fullName'
+                  register={register}
+                  errorMessage={errors.fullName?.message}
+                />
               </div>
             </div>
-          </div>
-          {/* Số điện thoại */}
-          <div className='grid grid-cols-12 gap-6 mt-4'>
-            <div className='col-span-4 flex items-center justify-end'>
-              <label htmlFor='phone_number'>Số điện thoại</label>
+            {/* Giới tính */}
+            <div className='grid grid-cols-12 gap-6 mt-4'>
+              <div className='col-span-4 flex items-center justify-end'>
+                <label>Giới tính</label>
+              </div>
+              <div className='col-span-8 flex items-center'>
+                <div className='flex items-center'>
+                  <input type='radio' id='male' {...register('gender')} value={Gender.Male} />
+                  <label htmlFor='male' className='ml-1 select-none'>
+                    Nam
+                  </label>
+                </div>
+                <div className='flex items-center ml-4'>
+                  <input type='radio' id='female' {...register('gender')} value={Gender.Female} />
+                  <label htmlFor='female' className='ml-1 select-none'>
+                    Nữ
+                  </label>
+                </div>
+              </div>
             </div>
-            <div className='col-span-8'>
-              <Input
-                type='text'
-                placeholder='Số điện thoại'
-                name='phoneNumber'
-                id='phone_number'
-                register={register}
-                errorMessage={errors.phoneNumber?.message}
-              />
+            {/* Số điện thoại */}
+            <div className='grid grid-cols-12 gap-6 mt-4'>
+              <div className='col-span-4 flex items-center justify-end'>
+                <label htmlFor='phone_number'>Số điện thoại</label>
+              </div>
+              <div className='col-span-8'>
+                <Input
+                  type='text'
+                  placeholder='Số điện thoại'
+                  name='phoneNumber'
+                  id='phone_number'
+                  register={register}
+                  errorMessage={errors.phoneNumber?.message}
+                />
+              </div>
             </div>
-          </div>
-          {/* Email */}
-          <div className='grid grid-cols-12 gap-6 mt-4'>
-            <div className='col-span-4 flex items-center justify-end'>
-              <label htmlFor=''>Email</label>
+            {/* Email */}
+            <div className='grid grid-cols-12 gap-6 mt-4'>
+              <div className='col-span-4 flex items-center justify-end'>
+                <label htmlFor=''>Email</label>
+              </div>
+              <div className='col-span-8'>
+                <input
+                  type='text'
+                  placeholder='Email'
+                  className='w-full border border-[#CFCFCF] rounded h-10 px-4 outline-none bg-slate-100/50 cursor-not-allowed'
+                  value={me.email}
+                  disabled
+                />
+              </div>
             </div>
-            <div className='col-span-8'>
-              <input
-                type='text'
-                placeholder='Email'
-                className='w-full border border-[#CFCFCF] rounded h-10 px-4 outline-none bg-slate-100/50 cursor-not-allowed'
-                value={me.email}
-                disabled
-              />
+            {/* Ngày sinh */}
+            <div className='grid grid-cols-12 gap-6 mt-4'>
+              <div className='col-span-4 flex items-center justify-end'>
+                <label>Ngày sinh</label>
+              </div>
+              <div className='col-span-8'>
+                <Controller
+                  control={control}
+                  name='date_of_birth'
+                  render={({ field }) => <DateSelect value={field.value} onChange={field.onChange} />}
+                />
+              </div>
             </div>
-          </div>
-          {/* Ngày sinh */}
-          <div className='grid grid-cols-12 gap-6 mt-4'>
-            <div className='col-span-4 flex items-center justify-end'>
-              <label>Ngày sinh</label>
-            </div>
-            <div className='col-span-8'>
-              <Controller
-                control={control}
-                name='date_of_birth'
-                render={({ field }) => <DateSelect value={field.value} onChange={field.onChange} />}
-              />
-            </div>
-          </div>
-          {/* Lưu thay đổi */}
-          <div className='grid grid-cols-12 gap-6 my-4'>
-            <div className='col-span-4 flex items-center justify-end'></div>
-            <div className='col-span-8'>
-              <div className='w-[150px] h-[38px] text-sm'>
-                <Button isLoading={updateMeMutation.isLoading}>Lưu thay đổi</Button>
+            {/* Lưu thay đổi */}
+            <div className='grid grid-cols-12 gap-6 my-4'>
+              <div className='col-span-4 flex items-center justify-end'></div>
+              <div className='col-span-8'>
+                <div className='w-[150px] h-[38px] text-sm'>
+                  <Button isLoading={updateMeMutation.isLoading}>Lưu thay đổi</Button>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      )}
-    </form>
+        )}
+      </form>
+    </Fragment>
   );
 };
 

@@ -13,6 +13,7 @@ import {
   setRefreshTokenToLS
 } from './auth';
 import { isExpiredTokenError, isUnauthorizedError } from './utils';
+import { URL_USER_ADDRESS, URL_UPDATE_ME } from 'src/apis/user.api';
 
 class Http {
   instance: AxiosInstance;
@@ -49,7 +50,7 @@ class Http {
     this.instance.interceptors.response.use(
       (response) => {
         const { url } = response.config;
-        if (url === URL_LOGIN || url === URL_REGISTER) {
+        if (url === URL_LOGIN || url === URL_REGISTER || url === URL_UPDATE_ME || url?.includes(URL_USER_ADDRESS)) {
           this.accessToken = (response.data as AuthResponse).data.access_token;
           this.refreshToken = (response.data as AuthResponse).data.refresh_token;
           this.profile = (response.data as AuthResponse).data.user;
