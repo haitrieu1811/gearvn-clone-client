@@ -124,7 +124,7 @@ const Home = () => {
         )}
         {/* Loading */}
         {getProductsQuery.isLoading && (
-          <div className='flex justify-center pt-[50px]'>
+          <div className='flex justify-center py-[50px]'>
             <Loading className='w-12 h-12' />
           </div>
         )}

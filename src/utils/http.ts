@@ -51,12 +51,18 @@ class Http {
       (response) => {
         const { url } = response.config;
         if (url === URL_LOGIN || url === URL_REGISTER || url === URL_UPDATE_ME || url?.includes(URL_USER_ADDRESS)) {
-          this.accessToken = (response.data as AuthResponse).data.access_token;
-          this.refreshToken = (response.data as AuthResponse).data.refresh_token;
-          this.profile = (response.data as AuthResponse).data.user;
-          setAccessTokenToLS(this.accessToken);
-          setRefreshTokenToLS(this.refreshToken);
-          setProfileToLS(this.profile);
+          if (
+            (response.data as AuthResponse).data.access_token &&
+            (response.data as AuthResponse).data.refresh_token &&
+            (response.data as AuthResponse).data.user
+          ) {
+            this.accessToken = (response.data as AuthResponse).data.access_token;
+            this.refreshToken = (response.data as AuthResponse).data.refresh_token;
+            this.profile = (response.data as AuthResponse).data.user;
+            setAccessTokenToLS(this.accessToken);
+            setRefreshTokenToLS(this.refreshToken);
+            setProfileToLS(this.profile);
+          }
         } else if (url === URL_LOGOUT) {
           clearAuthFromLS();
         }

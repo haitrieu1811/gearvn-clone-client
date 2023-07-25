@@ -50,6 +50,16 @@ export interface AddAddressRequestBody {
   ward: string;
   street: string;
   type: AddressType;
+  isDefault: boolean;
+}
+
+export interface UpdateAddressRequestBody {
+  province: string;
+  district: string;
+  ward: string;
+  street: string;
+  type: AddressType;
+  isDefault: boolean;
 }
 
 // Response
@@ -57,4 +67,8 @@ export type GetUserResponse = SuccessResponse<{ users: User[]; pagination: Pagin
 
 export type GetMeResponse = SuccessResponse<{
   user: User;
+}>;
+
+export type GetAddressResponse = SuccessResponse<{
+  address: AddressItem;
 }>;

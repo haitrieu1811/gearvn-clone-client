@@ -2,37 +2,58 @@ import { useMutation } from '@tanstack/react-query';
 import { Fragment, useContext, useMemo, useState } from 'react';
 import { toast } from 'react-toastify';
 
+import userApi from 'src/apis/user.api';
 import CreateAddress from 'src/components/CreateAddress';
 import { PlusIcon } from 'src/components/Icons';
 import Modal from 'src/components/Modal';
 import { AppContext } from 'src/contexts/app.context';
-import userApi from 'src/apis/user.api';
 
 const Address = () => {
   const [addModalOpen, setAddModalOpen] = useState<boolean>(false);
   const [deleteConfirmModalOpen, setDeleteConfirmModalOpen] = useState<boolean>(false);
   const [currentId, setCurrentId] = useState<string | null>(null);
+  const [isUpdateMode, setIsUpdateMode] = useState<boolean>(false);
   const { profile, setProfile } = useContext(AppContext);
 
   const addresses = useMemo(() => profile?.addresses, [profile]);
   const defaultAddress = useMemo(() => addresses?.find((address) => address.isDefault), [profile]);
 
-  const startAddAddress = () => {
+  // Bắt đầu thêm
+  const startAdd = () => {
     setAddModalOpen(true);
   };
 
-  const stopAddAddress = () => {
+  // Dừng thêm
+  const stopAdd = () => {
     setAddModalOpen(false);
   };
 
+  // Bắt đầu xóa
   const startDelete = (addressId: string) => {
     setDeleteConfirmModalOpen(true);
     setCurrentId(addressId);
   };
 
+  // Dừng xóa
   const stopDelete = () => {
     setDeleteConfirmModalOpen(false);
     currentId && setCurrentId(null);
+  };
+
+  // Bắt đầu cập nhật
+  const startUpdate = (addressId: string) => {
+    setAddModalOpen(true);
+    setIsUpdateMode(true);
+    setCurrentId(addressId);
+  };
+
+  // Dừng cập nhật
+  const stopUpdate = () => {
+    console.log('stopUpdate');
+
+    setAddModalOpen(false);
+    setIsUpdateMode(false);
+    setCurrentId(null);
   };
 
   // Xóa địa chỉ
@@ -44,19 +65,6 @@ const Address = () => {
       stopDelete();
     }
   });
-
-  const setDefaultAddressMutation = useMutation({
-    mutationFn: userApi.setDefaultAddress,
-    onSuccess: (data) => {
-      setProfile(data.data.data.user);
-    }
-  });
-
-  // Đặt địa chỉ thành mặc định
-  const setDefaultAddress = (addressId: string) => {
-    setDefaultAddressMutation.mutate(addressId);
-  };
-
   const handleDeleteAddress = () => {
     if (currentId && currentId !== defaultAddress?._id) {
       deleteAddressMutation.mutate(currentId);
@@ -66,14 +74,22 @@ const Address = () => {
     }
   };
 
+  // Đặt địa chỉ thành mặc định
+  const setDefaultAddressMutation = useMutation({
+    mutationFn: userApi.setDefaultAddress,
+    onSuccess: (data) => {
+      setProfile(data.data.data.user);
+    }
+  });
+  const setDefaultAddress = (addressId: string) => {
+    setDefaultAddressMutation.mutate(addressId);
+  };
+
   return (
     <Fragment>
       <div className='py-4 px-6 flex justify-between items-center'>
         <h2 className='text-2xl font-semibold'>Sổ địa chỉ</h2>
-        <button
-          className='flex items-center bg-[#005EC9] rounded py-2 px-3 hover:bg-[#005EC9]/90'
-          onClick={startAddAddress}
-        >
+        <button className='flex items-center bg-[#005EC9] rounded py-2 px-3 hover:bg-[#005EC9]/90' onClick={startAdd}>
           <PlusIcon className='w-3 h-3 stroke-white mr-1' />
           <span className='text-sm text-white'>Thêm địa chỉ mới</span>
         </button>
@@ -98,7 +114,9 @@ const Address = () => {
                 </div>
               </div>
               <div className='flex items-center'>
-                <button className='text-sm font-semibold text-[#005EC9]'>Sửa</button>
+                <button className='text-sm font-semibold text-[#005EC9]' onClick={() => startUpdate(address._id)}>
+                  Sửa
+                </button>
                 <div className='h-4 w-[1px] bg-slate-300 mx-[6px]' />
                 <button className='text-sm font-semibold text-primary' onClick={() => startDelete(address._id)}>
                   Xóa
@@ -112,13 +130,13 @@ const Address = () => {
         Nếu địa chỉ nhận hàng chưa chính xác, vui lòng kiểm tra và cập nhật. Mỗi tài khoản chỉ được tạo tối đa 3 địa chỉ
       </div>
       <Modal
-        name='Thêm địa chỉ'
+        name={!isUpdateMode ? 'Thêm địa chỉ' : 'Cập nhật địa chỉ'}
         isVisible={addModalOpen}
-        onCancel={stopAddAddress}
+        onCancel={!isUpdateMode ? stopAdd : stopUpdate}
         cancelButton={false}
         okButton={false}
       >
-        <CreateAddress onSuccess={stopAddAddress} />
+        <CreateAddress onSuccess={isUpdateMode ? stopUpdate : stopAdd} currentId={isUpdateMode ? currentId : null} />
       </Modal>
       <Modal isVisible={deleteConfirmModalOpen} onCancel={stopDelete} onOk={handleDeleteAddress}>
         Bạn có chắc muốn xóa địa chỉ này

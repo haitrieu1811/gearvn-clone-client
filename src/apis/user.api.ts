@@ -1,9 +1,11 @@
 import { AuthResponse } from 'src/types/auth.type';
 import {
   AddAddressRequestBody,
+  GetAddressResponse,
   GetMeResponse,
   GetUserResponse,
   GetUsersParams,
+  UpdateAddressRequestBody,
   UpdateMeRequestBody
 } from 'src/types/user.type';
 import http from 'src/utils/http';
@@ -24,6 +26,12 @@ const userApi = {
   },
   addAddress(body: AddAddressRequestBody) {
     return http.post<AuthResponse>(URL_USER_ADDRESS, body);
+  },
+  getAddress(addressId: string) {
+    return http.get<GetAddressResponse>(`${URL_USER_ADDRESS}/${addressId}`);
+  },
+  updateAddress({ body, addressId }: { body: UpdateAddressRequestBody; addressId: string }) {
+    return http.put<AuthResponse>(`${URL_USER_ADDRESS}/${addressId}`, body);
   },
   deleteAddress(addressId: string) {
     return http.delete<AuthResponse>(`${URL_USER_ADDRESS}/${addressId}`);

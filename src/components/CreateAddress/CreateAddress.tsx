@@ -1,9 +1,9 @@
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useContext } from 'react';
+import { useMutation, useQuery } from '@tanstack/react-query';
+import { useContext, useEffect, useMemo } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 
-import { useMutation } from '@tanstack/react-query';
 import userApi from 'src/apis/user.api';
 import { AddressType } from 'src/constants/enum';
 import { AppContext } from 'src/contexts/app.context';
@@ -17,20 +17,45 @@ type FormData = AddAddressSchema;
 
 interface CreateAddressProps {
   onSuccess?: () => void;
+  currentId?: string | null;
 }
 
-const CreateAddress = ({ onSuccess }: CreateAddressProps) => {
-  const { setProfile } = useContext(AppContext);
+const CreateAddress = ({ onSuccess, currentId = null }: CreateAddressProps) => {
+  const { profile, setProfile } = useContext(AppContext);
+
+  const getAddressQuery = useQuery({
+    queryKey: ['address', currentId],
+    queryFn: () => userApi.getAddress(currentId as string),
+    enabled: Boolean(currentId)
+  });
+
+  const address = useMemo(() => getAddressQuery.data?.data.data.address, [getAddressQuery.data?.data.data.address]);
+  const isDefault = useMemo(() => profile && profile?.addresses.length === 0, [profile]);
 
   const {
     handleSubmit,
     register,
     reset,
+    setValue,
+    watch,
     formState: { errors }
   } = useForm<FormData>({
     resolver: yupResolver(addAddressSchema)
   });
 
+  useEffect(() => {
+    if (address) {
+      setValue('district', address.district);
+      setValue('province', address.province);
+      setValue('ward', address.ward);
+      setValue('street', address.street);
+      setValue('type', address.type);
+    }
+  }, [address, setValue]);
+
+  const type = watch('type');
+
+  // Thêm địa chỉ
   const addAddressMutation = useMutation({
     mutationFn: userApi.addAddress,
     onSuccess: (data) => {
@@ -46,8 +71,33 @@ const CreateAddress = ({ onSuccess }: CreateAddressProps) => {
     }
   });
 
+  // Cập nhật địa chỉ
+  const updateAddressMutation = useMutation({
+    mutationFn: userApi.updateAddress,
+    onSuccess: (data) => {
+      toast.success(data.data.message);
+      setProfile(data.data.data.user);
+      onSuccess && onSuccess();
+    }
+  });
+
   const onSubmit = handleSubmit((data) => {
-    addAddressMutation.mutate(data);
+    if (!Boolean(currentId)) {
+      addAddressMutation.mutate({
+        ...data,
+        isDefault: isDefault as boolean
+      });
+    } else {
+      if (address) {
+        updateAddressMutation.mutate({
+          body: {
+            ...data,
+            isDefault: address.isDefault
+          },
+          addressId: address._id
+        });
+      }
+    }
   });
 
   return (
@@ -98,8 +148,9 @@ const CreateAddress = ({ onSuccess }: CreateAddressProps) => {
             <input
               type='radio'
               id='office'
-              value={AddressType.Office}
               className='peer appearance-none'
+              checked={address ? AddressType.Office === Number(type) : undefined}
+              value={AddressType.Office}
               {...register('type')}
             />
             <label
@@ -113,8 +164,9 @@ const CreateAddress = ({ onSuccess }: CreateAddressProps) => {
             <input
               type='radio'
               id='home'
-              value={AddressType.Home}
               className='peer appearance-none'
+              checked={address ? AddressType.Home === Number(type) : undefined}
+              value={AddressType.Home}
               {...register('type')}
             />
             <label
@@ -126,8 +178,11 @@ const CreateAddress = ({ onSuccess }: CreateAddressProps) => {
           </div>
         </div>
         {errors.type?.message && <div className='text-sm text-red-500 mt-4'>{errors.type?.message}</div>}
-        <Button classNameWrapper='mt-6' isLoading={addAddressMutation.isLoading}>
-          Hoàn thành
+        <Button
+          classNameWrapper='mt-6'
+          isLoading={Boolean(currentId) ? updateAddressMutation.isLoading : addAddressMutation.isLoading}
+        >
+          {Boolean(currentId) ? 'Cập nhật' : 'Thêm mới'}
         </Button>
       </div>
     </form>
