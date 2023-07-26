@@ -1,8 +1,8 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import isEmpty from 'lodash/isEmpty';
-import { Fragment, useEffect, useMemo } from 'react';
-import { useForm, Controller } from 'react-hook-form';
+import { useEffect, useMemo } from 'react';
+import { Controller, useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 
 import userApi from 'src/apis/user.api';
@@ -84,7 +84,7 @@ const Profile = () => {
   });
 
   return (
-    <Fragment>
+    <div className='bg-white rounded shadow-sm'>
       <h2 className='py-4 px-6 text-2xl font-semibold'>Thông tin tài khoản</h2>
       <form onSubmit={onSubmit}>
         {me && (
@@ -181,7 +181,7 @@ const Profile = () => {
           </div>
         )}
       </form>
-    </Fragment>
+    </div>
   );
 };
 

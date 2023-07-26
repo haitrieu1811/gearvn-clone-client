@@ -1,5 +1,5 @@
 import { useMutation } from '@tanstack/react-query';
-import { Fragment, useContext, useMemo, useState } from 'react';
+import { useContext, useMemo, useState } from 'react';
 import { toast } from 'react-toastify';
 
 import userApi from 'src/apis/user.api';
@@ -49,8 +49,6 @@ const Address = () => {
 
   // Dừng cập nhật
   const stopUpdate = () => {
-    console.log('stopUpdate');
-
     setAddModalOpen(false);
     setIsUpdateMode(false);
     setCurrentId(null);
@@ -86,7 +84,7 @@ const Address = () => {
   };
 
   return (
-    <Fragment>
+    <div className='bg-white rounded shadow-sm pb-10'>
       <div className='py-4 px-6 flex justify-between items-center'>
         <h2 className='text-2xl font-semibold'>Sổ địa chỉ</h2>
         <button className='flex items-center bg-[#005EC9] rounded py-2 px-3 hover:bg-[#005EC9]/90' onClick={startAdd}>
@@ -141,7 +139,7 @@ const Address = () => {
       <Modal isVisible={deleteConfirmModalOpen} onCancel={stopDelete} onOk={handleDeleteAddress}>
         Bạn có chắc muốn xóa địa chỉ này
       </Modal>
-    </Fragment>
+    </div>
   );
 };
 

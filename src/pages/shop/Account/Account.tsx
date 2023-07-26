@@ -8,7 +8,7 @@ const Account = () => {
         <div className='col-span-3 bg-white rounded shadow-sm'>
           <AccountSidebar />
         </div>
-        <div className='col-span-9 bg-white rounded shadow-sm'>
+        <div className='col-span-9'>
           <Outlet />
         </div>
       </div>
