@@ -1,7 +1,7 @@
 import { AddressType, Gender, UserRole, UserStatus, UserVerifyStatus } from 'src/constants/enum';
 import { Pagination, SuccessResponse } from './utils.type';
 
-interface AddressItem {
+export interface Address {
   _id: string;
   province: string;
   district: string;
@@ -21,7 +21,7 @@ export interface User {
   verify: UserVerifyStatus;
   status: UserStatus;
   phoneNumber: string;
-  addresses: AddressItem[];
+  addresses: Address[];
   date_of_birth: string;
   created_at: Date;
   updated_at: Date;
@@ -70,5 +70,5 @@ export type GetMeResponse = SuccessResponse<{
 }>;
 
 export type GetAddressResponse = SuccessResponse<{
-  address: AddressItem;
+  address: Address;
 }>;

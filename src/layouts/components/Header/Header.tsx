@@ -1,10 +1,11 @@
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import Tippy from '@tippyjs/react/headless';
-import { useContext } from 'react';
+import { useContext, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 
 import authApi from 'src/apis/auth.api';
+import purchaseApi from 'src/apis/purchase.api';
 import logo from 'src/assets/images/logo-white.svg';
 import {
   BarIcon,
@@ -85,6 +86,7 @@ const Header = () => {
     );
   };
 
+  // Đăng xuất
   const logoutMutation = useMutation({
     mutationFn: authApi.logout,
     onSuccess: () => {
@@ -92,10 +94,19 @@ const Header = () => {
       setProfile(null);
     }
   });
-
   const logout = () => {
     logoutMutation.mutate();
   };
+
+  // Số lượng giỏ hàng
+  const getCartListQuery = useQuery({
+    queryKey: ['cart_list'],
+    queryFn: () => purchaseApi.getCart()
+  });
+  const cartSize = useMemo(
+    () => getCartListQuery.data?.data.data.cart_size,
+    [getCartListQuery.data?.data.data.cart_size]
+  );
 
   return (
     <header className='sticky top-0 left-0 right-0 z-[99999]'>
@@ -113,7 +124,7 @@ const Header = () => {
           <div className='relative flex-1 ml-2'>
             <input
               type='text'
-              placeholder='Bạn cần tìm gì'
+              placeholder='Bạn cần tìm gì?'
               className='w-full py-2 pl-[15px] pr-[50px] rounded outline-none text-[15px]'
             />
             <button className='absolute top-0 right-0 h-full w-9 flex justify-center items-center'>
@@ -123,23 +134,27 @@ const Header = () => {
 
           <HeaderAction icon={<HotlineIcon className='w-[18px]' />} textAbove='Hotline' textBelow='1800.6975' />
           <HeaderAction icon={<LocationIcon className='w-[18px]' />} textAbove='Hệ thống' textBelow='Showroom' />
-          <HeaderAction
-            icon={<PurchaseIcon className='w-[18px] fill-white' />}
-            textAbove='Tra cứu'
-            textBelow='đơn hàng'
-          />
-          <HeaderAction
-            icon={
-              <div className='relative'>
-                <CartIcon className='w-[18px]' />
-                <span className='absolute -top-2 -right-2 bg-[#FDD835] text-[9px] w-4 h-4 rounded-full flex items-center justify-center font-bold border-[2px] border-white'>
-                  2
-                </span>
-              </div>
-            }
-            textAbove='Giỏ'
-            textBelow='hàng'
-          />
+          <Link to={PATH.ACCOUNT_ORDER}>
+            <HeaderAction
+              icon={<PurchaseIcon className='w-[18px] fill-white' />}
+              textAbove='Tra cứu'
+              textBelow='đơn hàng'
+            />
+          </Link>
+          <Link to={PATH.CART}>
+            <HeaderAction
+              icon={
+                <div className='relative'>
+                  <CartIcon className='w-[18px]' />
+                  <span className='absolute -top-2 -right-2 bg-[#FDD835] text-[9px] w-4 h-4 rounded-full flex items-center justify-center font-bold border-[2px] border-white'>
+                    {cartSize || 0}
+                  </span>
+                </div>
+              }
+              textAbove='Giỏ'
+              textBelow='hàng'
+            />
+          </Link>
 
           <Tippy placement='bottom-end' render={renderUserMenu} offset={[0, 15]} interactive>
             <div className='h-[42px] bg-[#BE1529] flex items-center justify-center p-2 rounded cursor-pointer ml-4'>

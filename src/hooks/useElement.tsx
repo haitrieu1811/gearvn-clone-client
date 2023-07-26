@@ -26,6 +26,7 @@ import AccountProfile from 'src/pages/shop/Account/Profile';
 import AccountViewedProduct from 'src/pages/shop/Account/ViewedProduct';
 import Blog from 'src/pages/shop/Blog';
 import BlogDetail from 'src/pages/shop/BlogDetail';
+import Cart from 'src/pages/shop/Cart';
 import Home from 'src/pages/shop/Home/Home';
 import Login from 'src/pages/shop/Login/Login';
 import NotFound from 'src/pages/shop/NotFound/NotFound';
@@ -125,6 +126,14 @@ const useElement = () => {
               element: <AccountAddress />
             }
           ]
+        },
+        {
+          path: PATH.CART,
+          element: (
+            <MainLayout>
+              <Cart />
+            </MainLayout>
+          )
         }
       ]
     },

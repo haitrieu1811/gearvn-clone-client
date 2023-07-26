@@ -1,19 +1,26 @@
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import classNames from 'classnames';
 import DOMPurify from 'dompurify';
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 import productApi from 'src/apis/product.api';
+import purchaseApi from 'src/apis/purchase.api';
 import { ArrowLeftIcon, ArrowRightIcon } from 'src/components/Icons';
 import Loading from 'src/components/Loading';
+import QuantityController from 'src/components/QuantityController/QuantityController';
+import PATH from 'src/constants/path';
 import { formatCurrency, getIdFromNameId, getImageUrl, rateSale } from 'src/utils/utils';
 
 const ProductDetail = () => {
+  const queryClient = useQueryClient();
+  const navigate = useNavigate();
   const { name_id } = useParams();
   const productId = getIdFromNameId(name_id as string);
   const [indexCurrentImages, setIndexCurrentImages] = useState<number[]>([0, 5]);
   const [activeImage, setActiveImage] = useState<string>('');
+  const [buyCount, setBuyCount] = useState<number>(1);
   const imageRef = useRef<HTMLImageElement>(null);
 
   // Lấy thông tin chi tiết sản phẩm
@@ -74,6 +81,46 @@ const ProductDetail = () => {
   // Bỏ zoom hình ảnh
   const handleRemoveZoomImage = () => {
     imageRef.current?.removeAttribute('style');
+  };
+
+  // Thay đổi số lượng mua
+  const handleChangeBuyCount = (value: number) => {
+    setBuyCount(value);
+  };
+
+  // Thêm vào giỏ hàng
+  const addToCartMutation = useMutation({
+    mutationFn: purchaseApi.addToCart,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['cart_list'] });
+    }
+  });
+
+  // Thêm vào giỏ hàng
+  const addToCart = async () => {
+    await addToCartMutation.mutateAsync(
+      { buyCount, productId },
+      {
+        onSuccess: (data) => {
+          toast.success(data.data.message);
+        }
+      }
+    );
+    setBuyCount(1);
+  };
+
+  // Mua ngay
+  const buyNow = () => {
+    if (product) {
+      addToCartMutation.mutate(
+        { productId: product._id, buyCount },
+        {
+          onSuccess: (data) => {
+            navigate(PATH.CART, { state: { cartItemId: data.data.data.purchase._id } });
+          }
+        }
+      );
+    }
   };
 
   return (
@@ -145,10 +192,10 @@ const ProductDetail = () => {
               <h1 className='font-semibold text-2xl'>{product.name_vi}</h1>
               <div className='flex items-center mt-4'>
                 <div className='text-primary font-semibold text-[32px]'>
-                  {formatCurrency(product.price_after_discount)}đ
+                  {formatCurrency(product.price_after_discount)}₫
                 </div>
                 {product.price > product.price_after_discount && (
-                  <div className='text-lg ml-3 line-through text-[#6D6E72]'>{formatCurrency(product.price)}đ</div>
+                  <div className='text-lg ml-3 line-through text-[#6D6E72]'>{formatCurrency(product.price)}₫</div>
                 )}
                 {rateSale(product.price, product.price_after_discount) > 0 && (
                   <span className='text-[12px] py-[3px] px-2 ml-3 text-primary border border-primary rounded-sm whitespace-nowrap'>
@@ -156,11 +203,28 @@ const ProductDetail = () => {
                   </span>
                 )}
               </div>
+              <div className='my-8 flex items-center'>
+                <div className='font-medium mr-6'>Số lượng:</div>
+                <QuantityController
+                  value={buyCount}
+                  max={100}
+                  onType={handleChangeBuyCount}
+                  onDecrease={handleChangeBuyCount}
+                  onIncrease={handleChangeBuyCount}
+                />
+                <div className='ml-6 text-slate-500'>100 sản phẩm có sẵn</div>
+              </div>
               <div className='flex mt-4'>
-                <button className='border border-primary rounded text-primary text-lg px-6 py-2 bg-primary/10 hover:opacity-80'>
+                <button
+                  onClick={addToCart}
+                  className='border border-primary rounded text-primary text-lg px-6 py-2 bg-primary/10 hover:opacity-80'
+                >
                   Thêm vào giỏ hàng
                 </button>
-                <button className='border border-primary rounded text-white text-lg px-6 py-2 bg-primary ml-4 hover:opacity-80'>
+                <button
+                  onClick={buyNow}
+                  className='border border-primary rounded text-white text-lg px-6 py-2 bg-primary ml-4 hover:opacity-80'
+                >
                   Mua ngay
                 </button>
               </div>

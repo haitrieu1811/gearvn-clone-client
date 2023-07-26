@@ -6,6 +6,7 @@ import { Category } from 'src/types/category.type';
 import { Brand } from 'src/types/brand.type';
 import { Product } from 'src/types/product.type';
 import { BlogListItem } from 'src/types/blog.type';
+import { Purchase } from 'src/types/purchase.type';
 
 interface ExtendedCategory extends Category {
   checked: boolean;
@@ -22,6 +23,12 @@ interface ExtendedProduct extends Product {
 interface ExtendedBlog extends BlogListItem {
   checked: boolean;
 }
+
+interface ExtendedPurchase extends Purchase {
+  checked: boolean;
+  disabled: boolean;
+}
+
 interface AppContextType {
   isAuthenticated: boolean;
   setIsAuthenticated: Dispatch<SetStateAction<boolean>>;
@@ -36,6 +43,8 @@ interface AppContextType {
   setExtendedProducts: Dispatch<SetStateAction<ExtendedProduct[]>>;
   extendedBlogs: ExtendedBlog[];
   setExtendedBlogs: Dispatch<SetStateAction<ExtendedBlog[]>>;
+  extendedCartList: ExtendedPurchase[];
+  setExtendedCartList: Dispatch<SetStateAction<ExtendedPurchase[]>>;
 }
 
 const initialContext = {
@@ -51,7 +60,9 @@ const initialContext = {
   extendedProducts: [],
   setExtendedProducts: () => null,
   extendedBlogs: [],
-  setExtendedBlogs: () => null
+  setExtendedBlogs: () => null,
+  extendedCartList: [],
+  setExtendedCartList: () => null
 };
 
 export const AppContext = createContext<AppContextType>(initialContext);
@@ -63,6 +74,7 @@ const AppProvider = ({ children }: { children: ReactNode }) => {
   const [extendedBrands, setExtendedBrands] = useState<ExtendedBrand[]>(initialContext.extendedBrands);
   const [extendedProducts, setExtendedProducts] = useState<ExtendedProduct[]>(initialContext.extendedProducts);
   const [extendedBlogs, setExtendedBlogs] = useState<ExtendedBlog[]>(initialContext.extendedBlogs);
+  const [extendedCartList, setExtendedCartList] = useState<ExtendedPurchase[]>(initialContext.extendedCartList);
 
   const reset = () => {
     setIsAuthenticated(false);
@@ -82,7 +94,9 @@ const AppProvider = ({ children }: { children: ReactNode }) => {
     extendedProducts,
     setExtendedProducts,
     extendedBlogs,
-    setExtendedBlogs
+    setExtendedBlogs,
+    extendedCartList,
+    setExtendedCartList
   };
 
   return <AppContext.Provider value={VALUES}>{children}</AppContext.Provider>;

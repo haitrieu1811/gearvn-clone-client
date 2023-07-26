@@ -1,9 +1,10 @@
 import { useQuery } from '@tanstack/react-query';
-import { useMemo } from 'react';
+import { useMemo, Fragment } from 'react';
 import { Link } from 'react-router-dom';
 
 import blogApi from 'src/apis/blog.api';
 import { CaretDownIcon, ClockIcon } from 'src/components/Icons';
+import Loading from 'src/components/Loading';
 import PATH from 'src/constants/path';
 import UseQueryParams from 'src/hooks/useQueryParams';
 import { GetBlogListRequestQuery } from 'src/types/blog.type';
@@ -27,11 +28,10 @@ const Blog = () => {
   });
 
   const blogs = useMemo(() => getBlogsQuery.data?.data.data.blogs, [getBlogsQuery.data?.data.data.blogs]);
-  console.log(blogs);
 
   return (
-    <div>
-      {blogs && blogs.length > 0 && (
+    <Fragment>
+      {blogs && blogs.length > 0 && !getBlogsQuery.isLoading && (
         <div className='container my-4 bg-white rounded shadow-sm pb-8'>
           <div className='grid grid-cols-12 gap-10 pt-4'>
             <div className='col-span-7'>
@@ -128,7 +128,12 @@ const Blog = () => {
           </div>
         </div>
       )}
-    </div>
+      {getBlogsQuery.isLoading && (
+        <div className='container flex justify-center my-3 py-[100px] bg-white'>
+          <Loading className='w-12 h-12' />
+        </div>
+      )}
+    </Fragment>
   );
 };
 
