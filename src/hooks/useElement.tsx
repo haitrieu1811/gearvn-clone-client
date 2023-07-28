@@ -32,6 +32,7 @@ import Login from 'src/pages/shop/Login/Login';
 import NotFound from 'src/pages/shop/NotFound/NotFound';
 import ProductDetail from 'src/pages/shop/ProductDetail';
 import Register from 'src/pages/shop/Register/Register';
+import OrderDetail from 'src/pages/shop/Account/OrderDetail';
 
 const ProtectedRoute = () => {
   const { isAuthenticated } = useContext(AppContext);
@@ -124,6 +125,10 @@ const useElement = () => {
             {
               path: PATH.ACCOUNT_ADDRESS,
               element: <AccountAddress />
+            },
+            {
+              path: PATH.ACCOUNT_ORDER_DETAIL,
+              element: <OrderDetail />
             }
           ]
         },

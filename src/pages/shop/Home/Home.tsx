@@ -22,7 +22,7 @@ const Home = () => {
   const queryConfig: QueryConfig = omitBy(
     {
       page: queryParams.page || 1,
-      limit: queryParams.limit || 10,
+      limit: queryParams.limit || 20,
       category: queryParams.category,
       brand: queryParams.brand,
       sortBy: queryParams.sortBy,

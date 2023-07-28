@@ -9,6 +9,7 @@ import purchaseApi from 'src/apis/purchase.api';
 import Button from 'src/components/Button';
 import CartItem from 'src/components/CartItem';
 import { ChevronLeft } from 'src/components/Icons';
+import Loading from 'src/components/Loading';
 import PATH from 'src/constants/path';
 import { AppContext } from 'src/contexts/app.context';
 import { formatCurrency } from 'src/utils/utils';
@@ -102,7 +103,6 @@ const Cart = () => {
       getCartListQuery.refetch();
     }
   });
-
   const checkout = () => {
     if (address) {
       const purchaseIds = checkedCartList.map((purchase) => purchase._id);
@@ -120,6 +120,7 @@ const Cart = () => {
             <ChevronLeft className='w-4 h-4' /> <span className='font-medium ml-[5px]'>Mua thêm sản phẩm khác</span>
           </Link>
           <div className='rounded bg-white shadow-sm'>
+            {/* Giỏ hàng */}
             {extendedCartList && extendedCartList.length > 0 && !getCartListQuery.isLoading && (
               <Fragment>
                 {/* Danh sách sản phẩm mua */}
@@ -157,6 +158,7 @@ const Cart = () => {
                 </div>
               </Fragment>
             )}
+            {/* Giỏ hàng trống */}
             {extendedCartList && extendedCartList.length <= 0 && !getCartListQuery.isLoading && (
               <div className='flex flex-col items-center py-6'>
                 <div className='text-sm text-center'>Giỏ hàng của bạn đang trống</div>
@@ -166,6 +168,12 @@ const Cart = () => {
                 >
                   Tiếp tục mua hàng
                 </Link>
+              </div>
+            )}
+            {/* Tải trang */}
+            {getCartListQuery.isLoading && (
+              <div className='py-[100px] flex justify-center'>
+                <Loading className='w-12 h-12' />
               </div>
             )}
           </div>

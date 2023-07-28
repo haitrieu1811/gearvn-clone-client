@@ -41,53 +41,53 @@ const AccountSidebar = () => {
           to={PATH.ACCOUNT_PROFILE}
           className={({ isActive }) =>
             classNames('flex items-center py-3 px-[20px]', {
-              'text-primary font-semibold': isActive,
+              'text-primary font-semibold groupactive': isActive,
               'hover:text-primary': !isActive
             })
           }
         >
-          <UserFillIcon className='w-[18px] h-[18px] mr-3' />
-          <span>Thông tin tài khoản</span>
+          <UserFillIcon className='w-[18px] h-[18px] mr-3 fill-[#535353] group-[active]:fill-primary' />
+          Thông tin tài khoản
         </NavLink>
         <NavLink
           to={PATH.ACCOUNT_ADDRESS}
           className={({ isActive }) =>
             classNames('flex items-center py-3 px-[20px]', {
-              'text-primary font-semibold': isActive,
+              'text-primary font-semibold groupactive': isActive,
               'hover:text-primary': !isActive
             })
           }
         >
-          <LocationFillIcon className='w-[18px] h-[18px] mr-3' />
-          <span>Sổ địa chỉ</span>
+          <LocationFillIcon className='w-[18px] h-[18px] mr-3 fill-[#535353] group-[active]:fill-primary' />
+          Sổ địa chỉ
         </NavLink>
         <NavLink
           to={PATH.ACCOUNT_ORDER}
           className={({ isActive }) =>
-            classNames('flex items-center py-3 px-[20px]', {
-              'text-primary font-semibold': isActive,
+            classNames('flex items-center py-3 px-[20px] parent-div', {
+              'text-primary font-semibold groupactive': isActive,
               'hover:text-primary': !isActive
             })
           }
         >
-          <OrderFillIcon className='w-[18px] h-[18px] mr-3' />
-          <span>Quản lý đơn hàng</span>
+          <OrderFillIcon className='w-[18px] h-[18px] mr-3 fill-[#535353] group-[active]:fill-primary' />
+          Quản lý đơn hàng
         </NavLink>
         <NavLink
           to={PATH.ACCOUNT_VIEWED_PRODUCT}
           className={({ isActive }) =>
             classNames('flex items-center py-3 px-[20px]', {
-              'text-primary font-semibold': isActive,
+              'text-primary font-semibold groupactive': isActive,
               'hover:text-primary': !isActive
             })
           }
         >
-          <EyeFillIcon className='w-[18px] h-[18px] mr-3' />
-          <span>Sản phẩm đã xem</span>
+          <EyeFillIcon className='w-[18px] h-[18px] mr-3 fill-[#535353] group-[active]:fill-primary' />
+          Sản phẩm đã xem
         </NavLink>
         <button className={classNames('flex items-center w-full py-3 px-[20px] hover:text-primary')} onClick={logout}>
           <LogoutFillIcon className='w-[18px] h-[18px] mr-3' />
-          <span>Đăng xuất</span>
+          Đăng xuất
         </button>
       </div>
     </Fragment>
