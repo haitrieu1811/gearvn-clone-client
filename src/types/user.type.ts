@@ -1,5 +1,6 @@
 import { AddressType, Gender, UserRole, UserStatus, UserVerifyStatus } from 'src/constants/enum';
 import { Pagination, SuccessResponse } from './utils.type';
+import { Product } from './product.type';
 
 export interface Address {
   _id: string;
@@ -9,6 +10,13 @@ export interface Address {
   street: string;
   type: AddressType;
   isDefault: boolean;
+}
+
+export interface ViewedProduct {
+  _id: string;
+  product: Product;
+  created_at: string;
+  updated_at: string;
 }
 
 export interface User {
@@ -71,4 +79,8 @@ export type GetMeResponse = SuccessResponse<{
 
 export type GetAddressResponse = SuccessResponse<{
   address: Address;
+}>;
+
+export type GetViewedProductsResponse = SuccessResponse<{
+  viewed_products: ViewedProduct[];
 }>;

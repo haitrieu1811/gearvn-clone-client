@@ -6,7 +6,7 @@ import { Fragment, useMemo } from 'react';
 import { Link, createSearchParams, useLocation, useNavigate } from 'react-router-dom';
 
 import orderApi from 'src/apis/order.api';
-import { EmptyOrderImage } from 'src/components/Icons';
+import { EmptyImage } from 'src/components/Icons';
 import Loading from 'src/components/Loading';
 import OrderItem from 'src/components/OrderItem';
 import { OrderStatus } from 'src/constants/enum';
@@ -113,7 +113,7 @@ const HistoryOrder = () => {
       {/* Hiển thị khi không có đơn hàng nào */}
       {orders && orders.length <= 0 && !getOrdersQuery.isLoading && (
         <div className='bg-white rounded shadow-sm mt-4 py-8 flex justify-center items-center flex-col'>
-          <EmptyOrderImage />
+          <EmptyImage />
           <p className='my-4 text-center'>Quý khách chưa có đơn hàng nào.</p>
           <Link
             to={PATH.HOME}

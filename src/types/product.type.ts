@@ -25,9 +25,9 @@ export interface Product {
   price_after_discount: number;
   created_at: string;
   updated_at: string;
-  brand: Brand;
-  category: Category;
 
+  brand?: Brand;
+  category?: Category;
   specifications?: string;
   general_info: string;
   description: string;

@@ -5,9 +5,11 @@ import {
   GetMeResponse,
   GetUserResponse,
   GetUsersParams,
+  GetViewedProductsResponse,
   UpdateAddressRequestBody,
   UpdateMeRequestBody
 } from 'src/types/user.type';
+import { OnlyMessageResponse } from 'src/types/utils.type';
 import http from 'src/utils/http';
 
 export const URL_USERS_LIST = '/users/list';
@@ -38,6 +40,12 @@ const userApi = {
   },
   setDefaultAddress(addressId: string) {
     return http.put<AuthResponse>(`/users/address/set-default/${addressId}`);
+  },
+  getViewedProducts() {
+    return http.get<GetViewedProductsResponse>('/users/viewed-product');
+  },
+  addViewedProduct(body: { product_id: string }) {
+    return http.post<OnlyMessageResponse>('/users/viewed-product', body);
   }
 };
 

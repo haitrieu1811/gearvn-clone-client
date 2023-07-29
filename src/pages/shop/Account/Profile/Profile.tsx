@@ -9,6 +9,7 @@ import userApi from 'src/apis/user.api';
 import Button from 'src/components/Button';
 import DateSelect from 'src/components/DateSelect';
 import Input from 'src/components/Input';
+import Loading from 'src/components/Loading';
 import { Gender } from 'src/constants/enum';
 import { ErrorResponse } from 'src/types/utils.type';
 import { UpdateMeSchema, updateMeSchema } from 'src/utils/rules';
@@ -86,8 +87,9 @@ const Profile = () => {
   return (
     <div className='bg-white rounded shadow-sm'>
       <h2 className='py-4 px-6 text-2xl font-semibold'>Thông tin tài khoản</h2>
+      {/* Thông tin tài khoản */}
       <form onSubmit={onSubmit}>
-        {me && (
+        {me && !getMeQuery.isLoading && (
           <div className='py-4 pl-6 pr-[290px]'>
             {/* Họ tên */}
             <div className='grid grid-cols-12 gap-6'>
@@ -181,6 +183,12 @@ const Profile = () => {
           </div>
         )}
       </form>
+      {/* Tải trang */}
+      {getMeQuery.isLoading && (
+        <div className='py-[100px] flex justify-center'>
+          <Loading className='w-12 h-12' />
+        </div>
+      )}
     </div>
   );
 };

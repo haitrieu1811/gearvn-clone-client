@@ -7,6 +7,7 @@ import { toast } from 'react-toastify';
 
 import productApi from 'src/apis/product.api';
 import purchaseApi from 'src/apis/purchase.api';
+import userApi from 'src/apis/user.api';
 import { ArrowLeftIcon, ArrowRightIcon } from 'src/components/Icons';
 import Loading from 'src/components/Loading';
 import QuantityController from 'src/components/QuantityController/QuantityController';
@@ -18,10 +19,26 @@ const ProductDetail = () => {
   const navigate = useNavigate();
   const { name_id } = useParams();
   const productId = getIdFromNameId(name_id as string);
+  const [isMounted, setIsMounted] = useState(false);
   const [indexCurrentImages, setIndexCurrentImages] = useState<number[]>([0, 5]);
   const [activeImage, setActiveImage] = useState<string>('');
   const [buyCount, setBuyCount] = useState<number>(1);
   const imageRef = useRef<HTMLImageElement>(null);
+
+  useEffect(() => {
+    setIsMounted(true);
+    return () => {
+      setIsMounted(false);
+    };
+  }, []);
+
+  // Thêm vào lịch sử xem sản phẩm
+  const addViewedProductMutation = useMutation(userApi.addViewedProduct);
+  useEffect(() => {
+    if (isMounted && productId) {
+      addViewedProductMutation.mutateAsync({ product_id: productId });
+    }
+  }, [isMounted, productId]);
 
   // Lấy thông tin chi tiết sản phẩm
   const getProductQuery = useQuery({
@@ -159,7 +176,7 @@ const ProductDetail = () => {
                         <div
                           key={image._id}
                           className={classNames(
-                            'col-span-2 bg-white border rounded cursor-pointer relative pt-[100%]',
+                            'col-span-2 bg-white border-[2px] rounded cursor-pointer relative pt-[100%]',
                             {
                               'border-primary': isActive,
                               'border-transparent': !isActive
