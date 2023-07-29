@@ -10,7 +10,7 @@ import purchaseApi from 'src/apis/purchase.api';
 import userApi from 'src/apis/user.api';
 import { ArrowLeftIcon, ArrowRightIcon } from 'src/components/Icons';
 import Loading from 'src/components/Loading';
-import QuantityController from 'src/components/QuantityController/QuantityController';
+import QuantityController from 'src/components/QuantityController';
 import PATH from 'src/constants/path';
 import { formatCurrency, getIdFromNameId, getImageUrl, rateSale } from 'src/utils/utils';
 

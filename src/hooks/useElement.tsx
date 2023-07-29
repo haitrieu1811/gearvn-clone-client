@@ -33,6 +33,7 @@ import NotFound from 'src/pages/shop/NotFound/NotFound';
 import ProductDetail from 'src/pages/shop/ProductDetail';
 import Register from 'src/pages/shop/Register/Register';
 import OrderDetail from 'src/pages/shop/Account/OrderDetail';
+import Search from 'src/pages/shop/Search';
 
 const ProtectedRoute = () => {
   const { isAuthenticated } = useContext(AppContext);
@@ -94,6 +95,14 @@ const useElement = () => {
       element: (
         <MainLayout>
           <BlogDetail />
+        </MainLayout>
+      )
+    },
+    {
+      path: PATH.SEARCH,
+      element: (
+        <MainLayout>
+          <Search />
         </MainLayout>
       )
     },

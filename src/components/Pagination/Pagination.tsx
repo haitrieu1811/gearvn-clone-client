@@ -7,7 +7,13 @@ import { ChevronLeft, ChevronRight } from '../Icons';
 
 const RANGE = 2;
 
-const Pagination = ({ pageSize }: { pageSize: number }) => {
+interface PaginationProps {
+  pageSize: number;
+  classNameWrapper?: string;
+  classNamePaginationItem?: string;
+}
+
+const Pagination = ({ pageSize }: PaginationProps) => {
   const location = useLocation();
   const pathname = location.pathname;
   const queryConfig = queryString.parse(location.search);

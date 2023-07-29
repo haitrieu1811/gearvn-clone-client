@@ -15,6 +15,7 @@ const PATH = {
   ACCOUNT_VIEWED_PRODUCT: '/account/viewed-product',
   ACCOUNT_ADDRESS: '/account/address',
   CART: '/cart',
+  SEARCH: '/search',
 
   DASHBOARD: '/dashboard',
   DASHBOARD_USER: '/dashboard/user',

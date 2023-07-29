@@ -1,7 +1,13 @@
 import { ReactNode } from 'react';
 import PropTypes from 'prop-types';
 
-const HeaderAction = ({ textAbove, textBelow, icon }: { textAbove: string; textBelow: string; icon: ReactNode }) => {
+interface HeaderActionProps {
+  textAbove: string;
+  textBelow: string;
+  icon: ReactNode;
+}
+
+const HeaderAction = ({ textAbove, textBelow, icon }: HeaderActionProps) => {
   return (
     <div className='flex items-center ml-7'>
       {icon}
