@@ -1,23 +1,31 @@
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query';
 import isEmpty from 'lodash/isEmpty';
-import { useEffect, useMemo } from 'react';
+import isUndefined from 'lodash/isUndefined';
+import omitBy from 'lodash/omitBy';
+import { useContext, useEffect } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 
+import mediaApi from 'src/apis/media.api';
 import userApi from 'src/apis/user.api';
 import Button from 'src/components/Button';
 import DateSelect from 'src/components/DateSelect';
 import Input from 'src/components/Input';
 import Loading from 'src/components/Loading';
 import { Gender } from 'src/constants/enum';
+import { AppContext } from 'src/contexts/app.context';
 import { ErrorResponse } from 'src/types/utils.type';
 import { UpdateMeSchema, updateMeSchema } from 'src/utils/rules';
 import { isEntityError } from 'src/utils/utils';
+import { AccountContext } from '../Account';
 
 type FormData = UpdateMeSchema;
 
 const Profile = () => {
+  const { setProfile } = useContext(AppContext);
+  const { avatarFile, setAvatarFile, me, getMeQuery } = useContext(AccountContext);
+
   const {
     control,
     register,
@@ -35,14 +43,6 @@ const Profile = () => {
     }
   });
 
-  // Lấy thông tin tài khoản
-  const getMeQuery = useQuery({
-    queryKey: ['me'],
-    queryFn: () => userApi.getMe()
-  });
-
-  const me = useMemo(() => getMeQuery.data?.data.data.user, [getMeQuery.data?.data.data.user]);
-
   // Đặt giá trị mặc định
   useEffect(() => {
     if (me) {
@@ -58,7 +58,9 @@ const Profile = () => {
     mutationFn: userApi.updateMe,
     onSuccess: (data) => {
       toast.success(data.data.message);
-      getMeQuery.refetch();
+      getMeQuery && getMeQuery.refetch();
+      setProfile(data.data.data.user);
+      setAvatarFile(null);
     },
     onError: (error) => {
       if (isEntityError<ErrorResponse<{ [key in keyof FormData]: string }>>(error)) {
@@ -74,22 +76,36 @@ const Profile = () => {
     }
   });
 
+  // Upload hình ảnh
+  const updateImageMutation = useMutation(mediaApi.uploadImage);
+
   // Submit form
-  const onSubmit = handleSubmit((data) => {
-    const body = {
-      ...data,
-      gender: Number(data.gender),
-      date_of_birth: data.date_of_birth?.toISOString()
-    };
+  const onSubmit = handleSubmit(async (data) => {
+    let avatar: string | undefined = undefined;
+    if (avatarFile) {
+      const form = new FormData();
+      form.append('image', avatarFile[0]);
+      const res = await updateImageMutation.mutateAsync(form);
+      avatar = res.data.data.medias[0].name;
+    }
+    const body = omitBy(
+      {
+        ...data,
+        gender: Number(data.gender),
+        date_of_birth: data.date_of_birth?.toISOString(),
+        avatar
+      },
+      isUndefined
+    );
     updateMeMutation.mutate(body);
   });
 
   return (
     <div className='bg-white rounded shadow-sm'>
-      <h2 className='py-4 px-6 text-2xl font-semibold'>Thông tin tài khoản</h2>
       {/* Thông tin tài khoản */}
-      <form onSubmit={onSubmit}>
-        {me && !getMeQuery.isLoading && (
+      {me && getMeQuery && !getMeQuery.isLoading && (
+        <form onSubmit={onSubmit}>
+          <h2 className='py-4 px-6 text-2xl font-semibold'>Thông tin tài khoản</h2>
           <div className='py-4 pl-6 pr-[290px]'>
             {/* Họ tên */}
             <div className='grid grid-cols-12 gap-6'>
@@ -181,11 +197,11 @@ const Profile = () => {
               </div>
             </div>
           </div>
-        )}
-      </form>
+        </form>
+      )}
       {/* Tải trang */}
-      {getMeQuery.isLoading && (
-        <div className='py-[100px] flex justify-center'>
+      {getMeQuery && getMeQuery.isLoading && (
+        <div className='py-[150px] flex justify-center'>
           <Loading className='w-12 h-12' />
         </div>
       )}

@@ -4,23 +4,23 @@ import { UseFormRegister } from 'react-hook-form';
 import { toast } from 'react-toastify';
 
 interface InputFileProps {
-  icon?: ReactNode;
-  buttonName?: string;
+  children: ReactNode;
   onChange?: (file?: File[]) => void;
   name?: string;
   register?: UseFormRegister<any>;
   errorMessage?: string;
   multiple?: boolean;
+  maxFileSize?: number;
 }
 
 const InputFile = ({
-  icon,
-  buttonName = 'Chọn file',
+  children,
   name,
   register,
   errorMessage,
   onChange,
-  multiple
+  multiple = false,
+  maxFileSize = 300 * 1024
 }: InputFileProps) => {
   const _register = name && register ? { ...register(name) } : {};
   const inputFileRef = useRef<HTMLInputElement>(null);
@@ -32,10 +32,9 @@ const InputFile = ({
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     const filesFromLocal = e.target.files;
     const _filesFromLocal = toArray(filesFromLocal);
-    const isSizeValid = _filesFromLocal.every((file) => file.size < 300 * 1024);
-
+    const isSizeValid = _filesFromLocal.every((file) => file.size < maxFileSize);
     if (!isSizeValid) {
-      toast.error('Dung lượng file tối đa 300KB');
+      toast.error(`Dung lượng file tối đa ${maxFileSize / 1024}KB`);
     } else {
       onChange && onChange(_filesFromLocal);
     }
@@ -53,14 +52,9 @@ const InputFile = ({
         onClick={(e) => ((e.target as any).value = null)}
         multiple={multiple}
       />
-      <button
-        type='button'
-        onClick={handleUpload}
-        className='bg-slate-50 border rounded-sm w-full py-2 text-sm font-medium flex justify-center items-center'
-      >
-        {icon && icon}
-        {buttonName}
-      </button>
+      <div tabIndex={0} role='button' aria-hidden='true' onClick={handleUpload}>
+        {children}
+      </div>
       {errorMessage && <p className='text-sm text-red-500 mt-2 font-medium'>{errorMessage}</p>}
     </Fragment>
   );

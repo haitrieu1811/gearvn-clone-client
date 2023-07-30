@@ -33,8 +33,9 @@ import HeaderAction from './HeaderAction';
 const SEARCH_RESULT_LIMIT = 5;
 
 const Header = () => {
-  const { t } = useTranslation('pages');
   const navigate = useNavigate();
+  const { t } = useTranslation('pages');
+
   const { isAuthenticated, setIsAuthenticated, profile, setProfile } = useContext(AppContext);
   const [keywordSearch, setKeywordSearch] = useState<string>('');
   const [showSearchResult, setShowSearchResult] = useState<boolean>(false);
@@ -69,7 +70,7 @@ const Header = () => {
           <div className='min-w-[300px]'>
             <Link to={PATH.ACCOUNT_PROFILE} className='px-5 py-4 flex hover:underline border-b'>
               <HandIcon className='w-5 h-5' />
-              <span className='ml-4 text-sm font-semibold'>
+              <span className='ml-4 text-sm font-semibold capitalize'>
                 Xin chào, {profile?.fullName ? profile.fullName : profile?.email.split('@')[0]}
               </span>
             </Link>
@@ -125,7 +126,7 @@ const Header = () => {
     navigate({
       pathname: PATH.SEARCH,
       search: createSearchParams({
-        name: KeywordSearchDebounce
+        name: keywordSearch
       }).toString()
     });
     setKeywordSearch('');
@@ -284,7 +285,9 @@ const Header = () => {
               ) : (
                 <span className='text-[13px] text-white ml-3 leading-tight font-semibold'>
                   <div>Xin chào</div>
-                  <div>{profile?.fullName ? profile.fullName : profile?.email.split('@')[0]}</div>
+                  <div className='capitalize'>
+                    {profile?.fullName ? profile.fullName : profile?.email.split('@')[0]}
+                  </div>
                 </span>
               )}
             </div>

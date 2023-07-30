@@ -10,16 +10,17 @@ import fallbackAvatar from 'src/assets/images/fallback-avatar.jpg';
 import notFound from 'src/assets/images/not-found.jpg';
 import Badge from 'src/components/Badge';
 import Checkbox from 'src/components/Checkbox';
-import { PencilIcon, PlusIcon, TrashIcon } from 'src/components/Icons';
+import { PencilIcon, TrashIcon } from 'src/components/Icons';
 import Pagination from 'src/components/Pagination';
 import RadioGroup from 'src/components/RadioGroup';
+import Select from 'src/components/Select';
 import CLASSES from 'src/constants/classes';
 import { Gender, UserRole, UserStatus } from 'src/constants/enum';
 import PATH from 'src/constants/path';
 import UseQueryParams from 'src/hooks/useQueryParams';
 import { GetUsersParams } from 'src/types/user.type';
+import { getImageUrl } from 'src/utils/utils';
 import { GENDERS, LIMIT_OPTIONS, ROLES } from './constants';
-import Select from 'src/components/Select';
 
 export type QueryConfig = {
   [key in keyof GetUsersParams]: string;
@@ -113,7 +114,11 @@ const User = () => {
                 <Checkbox />
               </div>
               <div className='col-span-5 flex items-center'>
-                <img src={user.avatar || fallbackAvatar} alt={user.email} className='w-7 h-7 object-cover rounded-sm' />
+                <img
+                  src={getImageUrl(user.avatar) || fallbackAvatar}
+                  alt={user.email}
+                  className='w-7 h-7 object-cover rounded-sm'
+                />
                 <span className='ml-4'>{user.email}</span>
               </div>
               <div className='col-span-1 flex items-center'>

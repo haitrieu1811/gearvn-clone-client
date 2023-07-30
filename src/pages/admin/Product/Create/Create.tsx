@@ -427,12 +427,12 @@ const Create = () => {
                     className='w-full max-h-[240px] mb-3 rounded object-cover'
                   />
                 )}
-                <InputFile
-                  icon={<PhotoIcon className='w-4 h-4 mr-2' />}
-                  buttonName={!isUpdateMode ? 'Tải ảnh đại diện sản phẩm' : 'Cập nhật ảnh đại diện mới'}
-                  onChange={handleThumbnailChange}
-                  name='thumbnail'
-                />
+                <InputFile onChange={handleThumbnailChange} name='thumbnail'>
+                  <button className='bg-slate-50 border rounded-sm w-full py-2 text-sm font-medium flex justify-center items-center'>
+                    <PhotoIcon className='w-4 h-4 mr-2' />
+                    <span>{!isUpdateMode ? 'Tải ảnh đại diện sản phẩm' : 'Cập nhật ảnh đại diện mới'}</span>
+                  </button>
+                </InputFile>
               </div>
               {/* Images */}
               <div className='mt-10'>
@@ -470,13 +470,12 @@ const Create = () => {
                     ))}
                   </div>
                 )}
-                <InputFile
-                  icon={<PhotoIcon className='w-4 h-4 mr-2' />}
-                  buttonName={!isUpdateMode ? 'Tải lên các hình ảnh của sản phẩm' : 'Thêm hình ảnh sản phẩm'}
-                  name='images'
-                  onChange={handleImagesChange}
-                  multiple
-                />
+                <InputFile name='images' onChange={handleImagesChange} multiple>
+                  <button className='bg-slate-50 border rounded-sm w-full py-2 text-sm font-medium flex justify-center items-center'>
+                    <PhotoIcon className='w-4 h-4 mr-2' />
+                    <span>{!isUpdateMode ? 'Tải lên các hình ảnh của sản phẩm' : 'Thêm hình ảnh sản phẩm'}</span>
+                  </button>
+                </InputFile>
               </div>
             </div>
           </div>

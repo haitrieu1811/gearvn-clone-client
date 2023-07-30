@@ -1,13 +1,15 @@
 import { useQuery } from '@tanstack/react-query';
 import isUndefined from 'lodash/isUndefined';
 import omitBy from 'lodash/omitBy';
-import { useMemo } from 'react';
+import { FormEvent, useMemo, useState } from 'react';
+import { createSearchParams, useNavigate } from 'react-router-dom';
 
 import productApi from 'src/apis/product.api';
 import { EmptyImage } from 'src/components/Icons';
 import Loading from 'src/components/Loading';
 import Pagination from 'src/components/Pagination';
 import ProductItem from 'src/components/ProductItem';
+import PATH from 'src/constants/path';
 import UseQueryParams from 'src/hooks/useQueryParams';
 import { GetProductsRequestParams } from 'src/types/product.type';
 
@@ -16,6 +18,7 @@ type QueryConfig = {
 };
 
 const Search = () => {
+  const navigate = useNavigate();
   const queryParams: QueryConfig = UseQueryParams();
   const queryConfig: QueryConfig = omitBy(
     {
@@ -24,6 +27,8 @@ const Search = () => {
     },
     isUndefined
   );
+
+  const [keywordSearch, setKeywordSearch] = useState<string>('');
 
   const getProductsQuery = useQuery({
     queryKey: ['products', queryConfig],
@@ -44,6 +49,18 @@ const Search = () => {
     () => getProductsQuery.data?.data.data.pagination.page_size,
     [getProductsQuery.data?.data.data.pagination.page_size]
   );
+
+  // Tìm kiếm lại
+  const searchAgain = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    navigate({
+      pathname: PATH.SEARCH,
+      search: createSearchParams({
+        ...queryConfig,
+        name: keywordSearch
+      }).toString()
+    });
+  };
 
   return (
     <div>
@@ -73,18 +90,23 @@ const Search = () => {
         {products && products.length <= 0 && !getProductsQuery.isLoading && (
           <div className='flex flex-col justify-center items-center'>
             <EmptyImage />
-            <form className='my-6 w-[500px] h-10 flex'>
+            <div className='w-[500px] text-center'>
+              <h2 className='font-semibold text-[#333333] mb-[10px]'>Không tìm thấy nội dung bạn yêu cầu</h2>
+              <p className='text-sm mb-5'>
+                Không tìm thấy <span className='font-bold'>"{queryConfig.name}"</span>. Vui lòng kiểm tra chính tả, sử
+                dụng các từ tổng quát hơn và thử lại!
+              </p>
+            </div>
+            <form className='mb-5 w-[500px] h-10 flex' onSubmit={searchAgain}>
               <input
                 type='text'
                 placeholder='Tìm kiếm'
+                value={keywordSearch}
+                onChange={(e) => setKeywordSearch(e.target.value)}
                 className='flex-1 h-full border border-black rounded-sm py-[5px] px-[10px] outline-none text-sm'
               />
               <button className='bg-black text-white rounded-sm w-[100px] ml-1 text-sm'>Tìm kiếm</button>
             </form>
-            <div className='text-center text-sm'>
-              <p className='mb-2'>Rất tiếc, chúng tôi không tìm thấy kết quả cho từ khóa của bạn</p>
-              <p className='mb-2'>Vui lòng kiểm tra chính tả, sử dụng các từ tổng quát hơn và thử lại!</p>
-            </div>
           </div>
         )}
 

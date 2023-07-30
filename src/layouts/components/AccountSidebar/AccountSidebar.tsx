@@ -1,23 +1,32 @@
-import classNames from 'classnames';
-import { Fragment, useContext } from 'react';
-import { NavLink } from 'react-router-dom';
 import { useMutation } from '@tanstack/react-query';
+import classNames from 'classnames';
+import { Fragment, useContext, useMemo } from 'react';
+import { NavLink } from 'react-router-dom';
 
+import authApi from 'src/apis/auth.api';
 import {
   DefaultUserIcon,
   EyeFillIcon,
   LocationFillIcon,
   LogoutFillIcon,
   OrderFillIcon,
+  PencilIcon,
   UserFillIcon
 } from 'src/components/Icons';
+import InputFile from 'src/components/InputFile';
 import PATH from 'src/constants/path';
-import authApi from 'src/apis/auth.api';
 import { AppContext } from 'src/contexts/app.context';
+import { AccountContext } from 'src/pages/shop/Account/Account';
+import { getImageUrl } from 'src/utils/utils';
 
 const AccountSidebar = () => {
   const { setIsAuthenticated, setProfile } = useContext(AppContext);
+  const { avatarFile, setAvatarFile, me } = useContext(AccountContext);
 
+  const avatarPreview = useMemo(() => (avatarFile ? URL.createObjectURL(avatarFile[0]) : null), [avatarFile]);
+  const avatar = useMemo(() => me?.avatar, [me]);
+
+  // Đăng xuất
   const logoutMutation = useMutation({
     mutationFn: authApi.logout,
     onSuccess: () => {
@@ -25,17 +34,37 @@ const AccountSidebar = () => {
       setProfile(null);
     }
   });
-
   const logout = () => {
     logoutMutation.mutate();
   };
 
+  // Xử lý khi đổi ảnh đại diện
+  const handleChangeAvatar = (files?: File[]) => {
+    setAvatarFile(files || null);
+  };
+
   return (
     <Fragment>
-      <div className='p-4 border-b border-[#cfcfcf] flex items-center mb-[6px]'>
-        <DefaultUserIcon className='w-12 h-12' />
-        <span className='ml-6 text-lg font-semibold'>Trần Hải Triều</span>
-      </div>
+      {me && (
+        <form className='p-4 border-b border-[#cfcfcf] flex items-center mb-[6px]'>
+          <div className='relative w-12 h-12 rounded-full overflow-hidden group flex-shrink-0'>
+            {!avatar && !avatarPreview && <DefaultUserIcon className='w-full h-full' />}
+            {(avatar || avatarPreview) && (
+              <img
+                src={avatarPreview || getImageUrl(avatar || '')}
+                className='w-full h-full object-cover'
+                alt={me.fullName}
+              />
+            )}
+            <InputFile onChange={handleChangeAvatar}>
+              <span className='absolute top-0 left-0 w-full h-full flex justify-center items-center bg-black/20 rounded-full opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto'>
+                <PencilIcon className='w-4 h-4 stroke-white' />
+              </span>
+            </InputFile>
+          </div>
+          <span className='ml-6 text-lg font-semibold line-clamp-1 capitalize'>{me.fullName}</span>
+        </form>
+      )}
       <div>
         <NavLink
           to={PATH.ACCOUNT_PROFILE}
