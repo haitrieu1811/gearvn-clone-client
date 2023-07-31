@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Link, createSearchParams, useLocation } from 'react-router-dom';
 import queryString from 'query-string';
 
-import { ChevronLeft, ChevronRight } from '../Icons';
+import { ChevronLeftIcon, ChevronRightIcon } from '../Icons';
 
 const RANGE = 2;
 
@@ -101,7 +101,7 @@ const Pagination = ({
       <div className='flex flex-wrap items-center text-xl font-light'>
         {page === 1 ? (
           <span className={`cursor-not-allowed ${classNamePrevNext}`}>
-            <ChevronLeft className='w-4 h-4' />
+            <ChevronLeftIcon className='w-4 h-4' />
           </span>
         ) : (
           <Link
@@ -113,7 +113,7 @@ const Pagination = ({
             }}
             className={classNamePrevNext}
           >
-            <ChevronLeft className='w-4 h-4' />
+            <ChevronLeftIcon className='w-4 h-4' />
           </Link>
         )}
 
@@ -121,7 +121,7 @@ const Pagination = ({
 
         {page === pageSize ? (
           <span className={`cursor-not-allowed ${classNamePrevNext}`}>
-            <ChevronRight className='w-4 h-4' />
+            <ChevronRightIcon className='w-4 h-4' />
           </span>
         ) : (
           <Link
@@ -133,7 +133,7 @@ const Pagination = ({
             }}
             className={classNamePrevNext}
           >
-            <ChevronRight className='w-4 h-4' />
+            <ChevronRightIcon className='w-4 h-4' />
           </Link>
         )}
       </div>

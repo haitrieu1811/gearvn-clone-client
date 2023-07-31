@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { useState } from 'react';
 import classNames from 'classnames';
 
-import { ChevronDown, TickIcon } from '../Icons';
+import { ChevronDownIcon, TickIcon } from '../Icons';
 import Wrapper from '../Wrapper';
 
 export interface OptionsSelect {
@@ -81,7 +81,7 @@ const Select = ({
         )}
       >
         <span>{activeLabel || label}</span>
-        <ChevronDown className='w-3 h-3 ml-5' />
+        <ChevronDownIcon className='w-3 h-3 ml-5' />
       </div>
     </Tippy>
   );

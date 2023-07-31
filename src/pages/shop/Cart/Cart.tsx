@@ -8,7 +8,7 @@ import { toast } from 'react-toastify';
 import purchaseApi from 'src/apis/purchase.api';
 import Button from 'src/components/Button';
 import CartItem from 'src/components/CartItem';
-import { ChevronLeft } from 'src/components/Icons';
+import { ChevronLeftIcon } from 'src/components/Icons';
 import Loading from 'src/components/Loading';
 import PATH from 'src/constants/path';
 import { AppContext } from 'src/contexts/app.context';
@@ -117,7 +117,7 @@ const Cart = () => {
       <div className='container flex justify-center'>
         <div className='w-[600px]'>
           <Link to={PATH.HOME} className='flex items-center text-[#1982F9] p-4'>
-            <ChevronLeft className='w-4 h-4' /> <span className='font-medium ml-[5px]'>Mua thêm sản phẩm khác</span>
+            <ChevronLeftIcon className='w-4 h-4' /> <span className='font-medium ml-[5px]'>Mua thêm sản phẩm khác</span>
           </Link>
           <div className='rounded bg-white shadow-sm'>
             {/* Giỏ hàng */}

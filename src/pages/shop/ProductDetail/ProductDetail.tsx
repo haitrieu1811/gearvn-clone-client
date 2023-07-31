@@ -9,7 +9,7 @@ import blogApi from 'src/apis/blog.api';
 import productApi from 'src/apis/product.api';
 import purchaseApi from 'src/apis/purchase.api';
 import userApi from 'src/apis/user.api';
-import { ChevronDown } from 'src/components/Icons';
+import { ChevronDownIcon } from 'src/components/Icons';
 import Loading from 'src/components/Loading';
 import QuantityController from 'src/components/QuantityController';
 import PATH from 'src/constants/path';
@@ -196,7 +196,7 @@ const ProductDetail = () => {
                 <span className='font-medium text-[#1982F9] mr-2'>
                   {!readMore ? 'Đọc tiếp bài viết' : 'Thu gọn bài viết'}
                 </span>
-                <ChevronDown
+                <ChevronDownIcon
                   className={classNames('w-[10px] h-[10px] stroke-[#1982F9] stroke-[3]', {
                     'rotate-180': readMore
                   })}
