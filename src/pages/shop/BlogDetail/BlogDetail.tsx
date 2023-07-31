@@ -1,49 +1,82 @@
 import { useQuery } from '@tanstack/react-query';
 import DOMPurify from 'dompurify';
-import { Fragment, useMemo } from 'react';
+import moment from 'moment';
+import { useMemo } from 'react';
 import { useParams } from 'react-router-dom';
 
 import blogApi from 'src/apis/blog.api';
+import BlogVertical from 'src/components/BlogVertical';
 import { ClockIcon } from 'src/components/Icons';
+import Loading from 'src/components/Loading';
 import { getIdFromNameId, getImageUrl } from 'src/utils/utils';
 
 const BlogDetail = () => {
   const { name_id } = useParams();
   const blogId = getIdFromNameId(name_id as string);
 
+  // Chi tiết blog
   const getBlogQuery = useQuery({
     queryKey: ['blog', blogId],
     queryFn: () => blogApi.getDetail(blogId),
     enabled: Boolean(blogId)
   });
 
+  // Danh sách blog khác
+  const getBlogsQuery = useQuery({
+    queryKey: ['blogs'],
+    queryFn: () => blogApi.getList({ limit: '6' })
+  });
+
   const blog = useMemo(() => getBlogQuery.data?.data.data.blog, [getBlogQuery.data?.data.data.blog]);
+  const orderBlogs = useMemo(() => getBlogsQuery.data?.data.data.blogs, [getBlogsQuery.data?.data.data.blogs]);
 
   return (
-    <Fragment>
+    <div className='container bg-white rounded shadow-sm my-3 pb-12'>
+      {/* Chi tiết blog */}
       {blog && (
-        <div className='container bg-white rounded shadow-sm my-3'>
-          <div className='px-[220px] py-4'>
-            <img src={getImageUrl(blog.thumbnail)} alt={blog.name_vi} className='w-full object-contain rounded mb-4' />
-            <h1 className='text-[28px] font-medium mb-4'>{blog.name_vi}</h1>
-            <div className='flex items-center text-sm mb-4'>
-              <span className='flex items-center'>
-                <ClockIcon className='w-4 h-4' />
-                <span className='text-slate-500 ml-1'>Thứ Năm 22,06,2023</span>
-              </span>
-              <span className='w-1 h-1 rounded-full bg-slate-500 block mx-2' />
-              <span className='text-blue-600'>Lê Thị Mỹ Duyên</span>
-            </div>
+        <div className='px-[220px] py-4'>
+          <img src={getImageUrl(blog.thumbnail)} alt={blog.name_vi} className='w-full object-contain rounded mb-4' />
+          <h1 className='text-[28px] font-semibold mb-4'>{blog.name_vi}</h1>
+          <div className='flex items-center mb-4'>
+            <span className='flex items-center'>
+              <ClockIcon className='w-4 h-4' />
+              <span className='text-[#535353] ml-1 text-sm'>{moment(blog.created_at).format('kk:mm, DD.MM.YYYY')}</span>
+            </span>
+            <span className='w-1 h-1 rounded-full bg-[#535353] block mx-[10px]' />
+            <span className='text-[#005EC9] text-sm'>Lê Thị Mỹ Duyên</span>
+          </div>
+          <div className='text__content'>
             <div
               dangerouslySetInnerHTML={{
                 __html: DOMPurify.sanitize(blog.content_vi)
               }}
-              className='leading-loose text-[17px] text-justify'
+              className='text-lg text-justify text-[#111111]'
             />
           </div>
         </div>
       )}
-    </Fragment>
+
+      {/* Danh sách blog khác */}
+      {orderBlogs && orderBlogs.length > 0 && (
+        <div className='px-[110px] mt-12'>
+          <h2 className='text-2xl font-semibold uppercase mb-4 text-[#333333]'>Bài viết liên quan</h2>
+          <div className='grid grid-cols-12 gap-6'>
+            {orderBlogs.map((blog) => (
+              <div key={blog._id} className='col-span-4'>
+                <BlogVertical data={blog} />
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Loading */}
+      {getBlogQuery.isLoading && getBlogsQuery.isLoading && (
+        <div className='flex justify-center py-[200px]'>
+          <Loading className='w-12 h-12' />
+        </div>
+      )}
+    </div>
   );
 };
 

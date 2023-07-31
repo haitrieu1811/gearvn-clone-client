@@ -38,10 +38,33 @@ html *::-webkit-scrollbar-track {
   font-family: sf-pro-display-heavy, 'sans-serif';
 }
 
+.text__content p {
+  margin-bottom: 16px;
+}
+
+.text__content strong {
+  font-family: sf-pro-display-heavy, 'sans-serif';
+}
+
+.text__content img {
+  margin: 0 auto;
+}
+
+.text__content h1,
+.text__content h2,
+.text__content h3,
+.text__content h4,
+.text__content h5,
+.text__content h6 {
+  font-family: sf-pro-display-heavy, 'sans-serif';
+  font-size: 20px;
+  margin-bottom: 16px;
+  line-height: 1.5;
+}
+
 @font-face {
   font-family: sf-pro-display-regular;
   src: url(../src//assets/fonts//sf-pro-display-regular_abbbcf80b2b5453188b767aec8c4061d.otf);
-  font-weight: 500;
 }
 
 @font-face {

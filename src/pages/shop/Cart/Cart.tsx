@@ -172,7 +172,7 @@ const Cart = () => {
             )}
             {/* Tải trang */}
             {getCartListQuery.isLoading && (
-              <div className='py-[100px] flex justify-center'>
+              <div className='py-[150px] flex justify-center'>
                 <Loading className='w-12 h-12' />
               </div>
             )}

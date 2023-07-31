@@ -3,6 +3,7 @@ import { useMemo, Fragment } from 'react';
 import { Link } from 'react-router-dom';
 
 import blogApi from 'src/apis/blog.api';
+import BlogVertical from 'src/components/BlogVertical';
 import { CaretDownIcon, ClockIcon } from 'src/components/Icons';
 import Loading from 'src/components/Loading';
 import PATH from 'src/constants/path';
@@ -76,17 +77,7 @@ const Blog = () => {
           </div>
           <div className='grid grid-cols-12 gap-4 mt-6'>
             {blogs.slice(2, 6).map((blog) => (
-              <div key={blog._id} className='col-span-3'>
-                <Link to={`${PATH.BLOG_DETAIL_WITHOUT_ID}/${generateNameId({ name: blog.name_vi, id: blog._id })}`}>
-                  <img src={getImageUrl(blog.thumbnail)} alt='' className='w-full h-[160px] object-cover rounded-sm' />
-                </Link>
-                <Link
-                  to={`${PATH.BLOG_DETAIL_WITHOUT_ID}/${generateNameId({ name: blog.name_vi, id: blog._id })}`}
-                  className='text-[#333333] font-semibold line-clamp-2 block mt-2'
-                >
-                  {blog.name_vi}
-                </Link>
-              </div>
+              <BlogVertical key={blog._id} data={blog} />
             ))}
           </div>
           <div className='mt-6'>

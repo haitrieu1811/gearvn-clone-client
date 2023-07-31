@@ -2,7 +2,7 @@ import Tippy from '@tippyjs/react/headless';
 import classNames from 'classnames';
 import omit from 'lodash/omit';
 import PropTypes from 'prop-types';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { createSearchParams, useLocation, useNavigate } from 'react-router-dom';
 
 import UseQueryParams from 'src/hooks/useQueryParams';
@@ -47,7 +47,9 @@ const Filter = ({ data, label, queryName }: FilterProps) => {
     let newChoosenValue: string[];
     if (!choosenValue.includes(value)) newChoosenValue = [...choosenValue, value];
     else newChoosenValue = choosenValue.filter((item) => item !== value);
-    setChoosenValue(newChoosenValue);
+
+    if (newChoosenValue.length > 0) setChoosenValue(newChoosenValue);
+    else handleUnChoose();
   };
 
   // Bỏ chọn

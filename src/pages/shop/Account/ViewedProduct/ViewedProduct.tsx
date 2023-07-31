@@ -19,8 +19,6 @@ const ViewedProduct = () => {
     [getViewedProductsQuery.data?.data.data.viewed_products]
   );
 
-  console.log('viewedProducts', viewedProducts);
-
   return (
     <div className='bg-white rounded shadow-sm'>
       {/* Hiển thị khi có dữ liệu */}

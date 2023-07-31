@@ -10,7 +10,6 @@ import { toast } from 'react-toastify';
 
 import productApi from 'src/apis/product.api';
 import Checkbox from 'src/components/Checkbox';
-import { SearchIcon } from 'src/components/Icons';
 import Modal from 'src/components/Modal';
 import Table from 'src/components/Table';
 import TableAction from 'src/components/Table/TableAction';
@@ -133,10 +132,11 @@ const List = () => {
       <Table
         initialData={products || []}
         checkedData={checkedProducts}
-        columns={[1, 4, 1, 1, 1, 1, 1, 1, 1]}
+        columns={[5, 1, 1, 1, 1, 1, 1, 1]}
         head={[
-          <Checkbox checked={isAllChecked} onChange={handleCheckAll} />,
-          'Tên sản phẩm',
+          <div className='flex items-center'>
+            <Checkbox checked={isAllChecked} onChange={handleCheckAll} /> <span className='ml-6'>Tên sản phẩm</span>
+          </div>,
           'Giá gốc',
           'Giá sau khi giảm',
           'Danh mục',
@@ -146,12 +146,14 @@ const List = () => {
           'Thao tác'
         ]}
         body={extendedProducts.map((product, index) => [
-          <Checkbox checked={product.checked} onChange={handleCheckOne(index)} />,
-          product.name_vi,
+          <div className='flex items-center'>
+            <Checkbox checked={product.checked} onChange={handleCheckOne(index)} />{' '}
+            <span className='ml-6'>{product.name_vi}</span>
+          </div>,
           formatCurrency(product.price),
           formatCurrency(product.price_after_discount),
-          product.category.name_vi,
-          product.brand.name,
+          product.category?.name_vi,
+          product.brand?.name,
           moment(product.created_at).fromNow(),
           moment(product.updated_at).fromNow(),
           <TableAction

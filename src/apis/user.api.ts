@@ -3,6 +3,7 @@ import {
   AddAddressRequestBody,
   GetAddressResponse,
   GetMeResponse,
+  GetQuantityPerCollectionResponse,
   GetUserResponse,
   GetUsersParams,
   GetViewedProductsResponse,
@@ -46,6 +47,9 @@ const userApi = {
   },
   addViewedProduct(body: { product_id: string }) {
     return http.post<OnlyMessageResponse>('/users/viewed-product', body);
+  },
+  getQuantityPerCollection() {
+    return http.get<GetQuantityPerCollectionResponse>('/users/quantity-per-collection');
   }
 };
 

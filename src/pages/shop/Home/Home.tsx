@@ -8,6 +8,7 @@ import categoryApi from 'src/apis/category.api';
 import productApi from 'src/apis/product.api';
 import Filter from 'src/components/Filter';
 import Loading from 'src/components/Loading';
+import Pagination from 'src/components/Pagination/Pagination';
 import ProductItem from 'src/components/ProductItem';
 import Sort from 'src/components/Sort';
 import UseQueryParams from 'src/hooks/useQueryParams';
@@ -22,7 +23,7 @@ const Home = () => {
   const queryConfig: QueryConfig = omitBy(
     {
       page: queryParams.page || 1,
-      limit: queryParams.limit || 20,
+      limit: queryParams.limit || 10,
       category: queryParams.category,
       brand: queryParams.brand,
       sortBy: queryParams.sortBy,
@@ -55,6 +56,10 @@ const Home = () => {
   const categories = useMemo(
     () => getCategoriesQuery.data?.data.data.categories,
     [getCategoriesQuery.data?.data.data.categories]
+  );
+  const pageSize = useMemo(
+    () => getProductsQuery.data?.data.data.pagination.page_size,
+    [getProductsQuery.data?.data.data.pagination.page_size]
   );
 
   return (
@@ -108,13 +113,23 @@ const Home = () => {
         </div>
         {/* Danh sách sản phẩm */}
         {products && products.length > 0 && !getProductsQuery.isLoading && (
-          <div className='grid grid-cols-10 gap-3'>
-            {products.map((product, index) => (
-              <div key={index} className='col-span-2'>
-                <ProductItem data={product} />
-              </div>
-            ))}
-          </div>
+          <Fragment>
+            <div className='grid grid-cols-10 gap-3'>
+              {products.map((product, index) => (
+                <div key={index} className='col-span-2'>
+                  <ProductItem data={product} />
+                </div>
+              ))}
+            </div>
+            <div className='flex justify-center mt-10'>
+              <Pagination
+                pageSize={pageSize || 0}
+                classNameItem='w-10 h-10 mx-1 rounded-full flex justify-center items-center font-semibold text-base select-none'
+                classNameItemActive='bg-black text-white select-none'
+                classNameItemUnActive='bg-[#f3f3f3]'
+              />
+            </div>
+          </Fragment>
         )}
         {/* Không có sản phẩm nào phù hợp */}
         {products && products.length <= 0 && !getProductsQuery.isLoading && (

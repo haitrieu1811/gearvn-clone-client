@@ -70,8 +70,11 @@ const Header = () => {
           <div className='min-w-[300px]'>
             <Link to={PATH.ACCOUNT_PROFILE} className='px-5 py-4 flex hover:underline border-b'>
               <HandIcon className='w-5 h-5' />
-              <span className='ml-4 text-sm font-semibold capitalize'>
-                Xin chào, {profile?.fullName ? profile.fullName : profile?.email.split('@')[0]}
+              <span className='ml-4 text-sm font-semibold'>
+                Xin chào,{' '}
+                <span className='capitalize font-semibold'>
+                  {profile?.fullName ? profile.fullName : profile?.email.split('@')[0]}
+                </span>
               </span>
             </Link>
             {profile?.role !== UserRole.Customer && (
@@ -194,12 +197,10 @@ const Header = () => {
             Xem thêm {searchResultCount - SEARCH_RESULT_LIMIT} sản phẩm
           </button>
         )}
-
         {/* Hiển thị khi không có dữ liệu */}
         {searchResult && searchResult.length <= 0 && !getProductsQuery.isLoading && (
           <div className='text-sm text-center text-[#111111] py-4'>Không có sản phẩm nào...</div>
         )}
-
         {/* Loading */}
         {getProductsQuery.isLoading && (
           <div className='flex justify-center py-10'>

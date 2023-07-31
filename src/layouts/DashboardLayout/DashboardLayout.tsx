@@ -9,12 +9,12 @@ const DashboardLayout = ({ children }: { children: ReactNode }) => {
       <div className='flex'>
         <DashboardSidebar />
         <div className='flex-1 ml-[240px] min-h-screen px-4'>
-          <div className='flex justify-between items-center mb-8 pt-8'>
-            <h1 className='font-medium text-2xl'>Hello, haitrieu1811! Welcome back</h1>
+          <div className='flex justify-between items-center my-8'>
+            <div></div>
             <div className='flex'>
               <button className='rounded bg-white p-2 flex justify-center items-center ml-3 relative'>
                 <BellIcon className='w-5 h-5 fill-none' />
-                <span className='absolute -top-2 -right-2 bg-red-500 text-xs text-white font-bold rounded-full w-5 h-5 flex justify-center items-center'>
+                <span className='absolute -top-1 -right-1  bg-red-500 text-xs text-white font-bold rounded-full w-4 h-4 flex justify-center items-center'>
                   2
                 </span>
               </button>

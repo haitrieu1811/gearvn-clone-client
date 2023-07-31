@@ -10,10 +10,22 @@ const RANGE = 2;
 interface PaginationProps {
   pageSize: number;
   classNameWrapper?: string;
-  classNamePaginationItem?: string;
+  classNameItem?: string;
+  classNameItemActive?: string;
+  classNameItemUnActive?: string;
+  classNamePrevNext?: string;
+  classNameDots?: string;
 }
 
-const Pagination = ({ pageSize }: PaginationProps) => {
+const Pagination = ({
+  pageSize,
+  classNameWrapper,
+  classNameItem = 'w-8 h-8 mx-1 rounded-full flex justify-center items-center font-medium text-[15px] select-none',
+  classNameItemActive = 'bg-primary text-white pointer-events-none',
+  classNameItemUnActive = 'bg-white',
+  classNamePrevNext = 'w-8 h-8 mx-1 rounded-md flex justify-center items-center font-medium text-[15px]',
+  classNameDots = 'w-8 h-8 mx-1 rounded-md flex justify-center items-center font-medium text-[15px]'
+}: PaginationProps) => {
   const location = useLocation();
   const pathname = location.pathname;
   const queryConfig = queryString.parse(location.search);
@@ -27,10 +39,7 @@ const Pagination = ({ pageSize }: PaginationProps) => {
       if (!dotBefore) {
         dotBefore = true;
         return (
-          <span
-            key={index}
-            className='w-8 h-8 mx-1 rounded-md flex justify-center items-center font-medium text-[15px]'
-          >
+          <span key={index} className={classNameDots}>
             ...
           </span>
         );
@@ -41,10 +50,7 @@ const Pagination = ({ pageSize }: PaginationProps) => {
       if (!dotAfter) {
         dotAfter = true;
         return (
-          <span
-            key={index}
-            className='w-8 h-8 mx-1 rounded-md flex justify-center items-center font-medium text-[15px]'
-          >
+          <span key={index} className={classNameDots}>
             ...
           </span>
         );
@@ -79,13 +85,10 @@ const Pagination = ({ pageSize }: PaginationProps) => {
               }).toString()
             }}
             key={index}
-            className={classNames(
-              'w-8 h-8 mx-1 rounded-full flex justify-center items-center font-medium text-[15px] select-none',
-              {
-                'bg-primary text-white pointer-events-none': isActive,
-                'bg-white': !isActive
-              }
-            )}
+            className={classNames(classNameItem, {
+              [classNameItemActive]: isActive,
+              [classNameItemUnActive]: !isActive
+            })}
           >
             {pageNumber}
           </Link>
@@ -94,44 +97,46 @@ const Pagination = ({ pageSize }: PaginationProps) => {
   };
 
   return (
-    <div className='flex flex-wrap items-center justify-end text-xl font-light'>
-      {page === 1 ? (
-        <span className='w-8 h-8 mx-1 rounded-md flex justify-center items-center font-medium text-[15px] cursor-not-allowed'>
-          <ChevronLeft className='w-4 h-4' />
-        </span>
-      ) : (
-        <Link
-          to={{
-            search: createSearchParams({
-              ...queryConfig,
-              page: (page - 1).toString()
-            }).toString()
-          }}
-          className='w-8 h-8 mx-1 rounded-md flex justify-center items-center font-medium text-[15px]'
-        >
-          <ChevronLeft className='w-4 h-4' />
-        </Link>
-      )}
+    <div className={classNameWrapper}>
+      <div className='flex flex-wrap items-center text-xl font-light'>
+        {page === 1 ? (
+          <span className={`cursor-not-allowed ${classNamePrevNext}`}>
+            <ChevronLeft className='w-4 h-4' />
+          </span>
+        ) : (
+          <Link
+            to={{
+              search: createSearchParams({
+                ...queryConfig,
+                page: (page - 1).toString()
+              }).toString()
+            }}
+            className={classNamePrevNext}
+          >
+            <ChevronLeft className='w-4 h-4' />
+          </Link>
+        )}
 
-      {renderPagination()}
+        {renderPagination()}
 
-      {page === pageSize ? (
-        <span className='w-8 h-8 mx-1 rounded-md flex justify-center items-center font-medium text-[15px] cursor-not-allowed'>
-          <ChevronRight className='w-4 h-4' />
-        </span>
-      ) : (
-        <Link
-          to={{
-            search: createSearchParams({
-              ...queryConfig,
-              page: (page + 1).toString()
-            }).toString()
-          }}
-          className='w-8 h-8 mx-1 rounded-md flex justify-center items-center font-medium text-[15px]'
-        >
-          <ChevronRight className='w-4 h-4' />
-        </Link>
-      )}
+        {page === pageSize ? (
+          <span className={`cursor-not-allowed ${classNamePrevNext}`}>
+            <ChevronRight className='w-4 h-4' />
+          </span>
+        ) : (
+          <Link
+            to={{
+              search: createSearchParams({
+                ...queryConfig,
+                page: (page + 1).toString()
+              }).toString()
+            }}
+            className={classNamePrevNext}
+          >
+            <ChevronRight className='w-4 h-4' />
+          </Link>
+        )}
+      </div>
     </div>
   );
 };

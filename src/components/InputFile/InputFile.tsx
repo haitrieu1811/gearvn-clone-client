@@ -2,6 +2,7 @@ import toArray from 'lodash/toArray';
 import { ChangeEvent, Fragment, ReactNode, useRef } from 'react';
 import { UseFormRegister } from 'react-hook-form';
 import { toast } from 'react-toastify';
+import PropTypes from 'prop-types';
 
 interface InputFileProps {
   children: ReactNode;
@@ -58,6 +59,14 @@ const InputFile = ({
       {errorMessage && <p className='text-sm text-red-500 mt-2 font-medium'>{errorMessage}</p>}
     </Fragment>
   );
+};
+
+InputFile.propTypes = {
+  onChange: PropTypes.func,
+  name: PropTypes.string,
+  errorMessage: PropTypes.string,
+  multiple: PropTypes.bool,
+  maxFileSize: PropTypes.number
 };
 
 export default InputFile;

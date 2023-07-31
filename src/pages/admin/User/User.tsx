@@ -115,7 +115,7 @@ const User = () => {
               </div>
               <div className='col-span-5 flex items-center'>
                 <img
-                  src={getImageUrl(user.avatar) || fallbackAvatar}
+                  src={user.avatar ? getImageUrl(user.avatar) : fallbackAvatar}
                   alt={user.email}
                   className='w-7 h-7 object-cover rounded-sm'
                 />

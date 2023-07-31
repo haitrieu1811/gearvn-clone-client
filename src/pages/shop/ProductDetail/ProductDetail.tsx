@@ -1,29 +1,30 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import classNames from 'classnames';
 import DOMPurify from 'dompurify';
-import { useEffect, useMemo, useRef, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useEffect, useMemo, useState } from 'react';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import blogApi from 'src/apis/blog.api';
 
 import productApi from 'src/apis/product.api';
 import purchaseApi from 'src/apis/purchase.api';
 import userApi from 'src/apis/user.api';
-import { ArrowLeftIcon, ArrowRightIcon } from 'src/components/Icons';
+import { ChevronDown } from 'src/components/Icons';
 import Loading from 'src/components/Loading';
 import QuantityController from 'src/components/QuantityController';
 import PATH from 'src/constants/path';
-import { formatCurrency, getIdFromNameId, getImageUrl, rateSale } from 'src/utils/utils';
+import { formatCurrency, generateNameId, getIdFromNameId, getImageUrl, rateSale } from 'src/utils/utils';
+import SliderImages from './SliderImages';
 
 const ProductDetail = () => {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
   const { name_id } = useParams();
   const productId = getIdFromNameId(name_id as string);
+
   const [isMounted, setIsMounted] = useState(false);
-  const [indexCurrentImages, setIndexCurrentImages] = useState<number[]>([0, 5]);
-  const [activeImage, setActiveImage] = useState<string>('');
   const [buyCount, setBuyCount] = useState<number>(1);
-  const imageRef = useRef<HTMLImageElement>(null);
+  const [readMore, setReadMore] = useState<boolean>(false);
 
   useEffect(() => {
     setIsMounted(true);
@@ -48,57 +49,6 @@ const ProductDetail = () => {
   });
 
   const product = useMemo(() => getProductQuery.data?.data.data.product, [getProductQuery.data?.data.data.product]);
-  const currentImages = useMemo(
-    () => (product && product.images ? product.images.slice(...indexCurrentImages) : []),
-    [product, indexCurrentImages]
-  );
-
-  // Active hình ảnh đầu tiên của sản phẩm
-  useEffect(() => {
-    if (product && product.images && product.images.length > 0) {
-      setActiveImage(product.images[0].name);
-    }
-  }, [product]);
-
-  // Prev slider hình ảnh
-  const prevSliderImages = () => {
-    if (indexCurrentImages[0] > 0) {
-      setIndexCurrentImages((prevState) => [prevState[0] - 1, prevState[1] - 1]);
-    }
-  };
-
-  // Next slider hình ảnh
-  const nextSliderImages = () => {
-    if (product && product.images) {
-      if (indexCurrentImages[1] < product.images.length) {
-        setIndexCurrentImages((prevState) => [prevState[0] + 1, prevState[1] + 1]);
-      }
-    }
-  };
-
-  // Zoom hình ảnh
-  const handleZoomImage = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-    const image = imageRef.current as HTMLImageElement;
-    const { naturalWidth, naturalHeight } = image;
-    const rect = e.currentTarget.getBoundingClientRect();
-
-    const offsetX = e.pageX - (rect.x + window.scrollX);
-    const offsetY = e.pageY - (rect.y + window.scrollY);
-
-    const top = offsetY * (1 - naturalHeight / rect.height);
-    const left = offsetX * (1 - naturalWidth / rect.width);
-
-    image.style.width = `${naturalWidth}px`;
-    image.style.height = `${naturalHeight}px`;
-    image.style.maxWidth = 'unset';
-    image.style.top = `${top}px`;
-    image.style.left = `${left}px`;
-  };
-
-  // Bỏ zoom hình ảnh
-  const handleRemoveZoomImage = () => {
-    imageRef.current?.removeAttribute('style');
-  };
 
   // Thay đổi số lượng mua
   const handleChangeBuyCount = (value: number) => {
@@ -113,7 +63,7 @@ const ProductDetail = () => {
     }
   });
 
-  // Thêm vào giỏ hàng
+  // Xử lý thêm vào giỏ hàng
   const addToCart = async () => {
     await addToCartMutation.mutateAsync(
       { buyCount, productId },
@@ -140,69 +90,24 @@ const ProductDetail = () => {
     }
   };
 
+  // Danh sách blog
+  const getBlogsQuery = useQuery({
+    queryKey: ['blogs'],
+    queryFn: () => blogApi.getList({ limit: '5' })
+  });
+
+  const blogs = useMemo(() => getBlogsQuery.data?.data.data.blogs, [getBlogsQuery.data?.data.data.blogs]);
+
   return (
     <div className='my-4'>
+      {/* Thông tin chi tiết sản phẩm */}
       {product && !getProductQuery.isLoading && (
         <div className='container'>
+          {/* Hình ảnh, thông tin */}
           <div className='flex justify-between bg-white rounded'>
             {/* Hình ảnh sản phẩm */}
             <div className='p-6 w-[420px]'>
-              <div
-                className='overflow-hidden pt-[100%] relative hover:cursor-zoom-in'
-                onMouseMove={handleZoomImage}
-                onMouseLeave={handleRemoveZoomImage}
-              >
-                <img
-                  ref={imageRef}
-                  src={getImageUrl(activeImage)}
-                  alt={product.name_vi}
-                  className='absolute inset-0 w-full h-full object-cover rounded'
-                />
-              </div>
-              {product.images && product.images.length > 0 && (
-                <div className='relative group'>
-                  {indexCurrentImages[0] > 0 && (
-                    <button
-                      className='absolute left-1 top-1/2 -translate-y-1/2 border bg-white w-[32px] h-[32px] rounded-full  items-center justify-center shadow hidden group-hover:flex z-[1]'
-                      onClick={prevSliderImages}
-                    >
-                      <ArrowLeftIcon className='w-3 h-3' />
-                    </button>
-                  )}
-                  <div className='grid grid-cols-10 gap-2 mt-2'>
-                    {currentImages.map((image) => {
-                      const isActive = image.name === activeImage;
-                      return (
-                        <div
-                          key={image._id}
-                          className={classNames(
-                            'col-span-2 bg-white border-[2px] rounded cursor-pointer relative pt-[100%]',
-                            {
-                              'border-primary': isActive,
-                              'border-transparent': !isActive
-                            }
-                          )}
-                          onClick={() => setActiveImage(image.name)}
-                        >
-                          <img
-                            src={getImageUrl(image.name)}
-                            alt={image.name}
-                            className='absolute inset-0 rounded object-cover w-full h-full'
-                          />
-                        </div>
-                      );
-                    })}
-                  </div>
-                  {indexCurrentImages[1] < product.images.length && (
-                    <button
-                      className='absolute right-1 top-1/2 -translate-y-1/2 border bg-white w-[32px] h-[32px] rounded-full hidden items-center justify-center shadow group-hover:flex'
-                      onClick={nextSliderImages}
-                    >
-                      <ArrowRightIcon className='w-3 h-3' />
-                    </button>
-                  )}
-                </div>
-              )}
+              <SliderImages product={product} />
             </div>
             {/* Thông tin sản phẩm */}
             <div className='flex-1 p-6 border-l'>
@@ -253,30 +158,84 @@ const ProductDetail = () => {
               />
             </div>
           </div>
+
+          {/* Mô tả sản phẩm, blogs */}
           <div className='flex justify-between items-start mt-4'>
-            {/* Mô tả sản phẩm */}
-            <div className='flex-1 bg-white rounded'>
-              <h2 className='font-semibold text-2xl py-4 px-6'>Mô tả sản phẩm</h2>
+            <div className='relative flex-1 bg-white rounded'>
+              {/* Mô tả sản phẩm */}
               <div
-                dangerouslySetInnerHTML={{
-                  __html: DOMPurify.sanitize(product.description)
-                }}
-                className='px-6 pb-6 text-[#333333] leading-loose'
-              />
-            </div>
-            {/* Thông số kỹ thuật */}
-            <div className='w-[40%] bg-white rounded ml-4'>
-              <h2 className='font-semibold text-2xl py-4 px-6'>Thông số kỹ thuật</h2>
+                className={classNames('pb-20', {
+                  [`h-[402px] overflow-y-hidden`]: !readMore,
+                  'h-auto': readMore
+                })}
+              >
+                <h2 className='font-semibold text-2xl py-4 px-6'>Mô tả sản phẩm</h2>
+                <div className='text__content'>
+                  <div
+                    dangerouslySetInnerHTML={{
+                      __html: DOMPurify.sanitize(product.description)
+                    }}
+                    className='px-6 text-[#111111] text-lg'
+                  />
+                </div>
+              </div>
+              {/* Thu gọn, mở rộng bài viết */}
               <div
-                dangerouslySetInnerHTML={{
-                  __html: DOMPurify.sanitize(product.specifications || '')
-                }}
-                className='px-6 pb-6 text-[#333333] leading-loose'
-              />
+                tabIndex={0}
+                aria-hidden='true'
+                role='button'
+                className={classNames(
+                  'flex justify-center items-center py-[15px] select-none absolute bottom-0 left-0 right-0 bg-white',
+                  {
+                    'before:absolute before:bottom-full before:left-0 before:w-full before:h-[200%] before:pointer-events-none before:bg-gradient-to-b before:from-[#ffffff00] before:to-[#ffffff]':
+                      !readMore
+                  }
+                )}
+                onClick={() => setReadMore((prevState) => !prevState)}
+              >
+                <span className='font-medium text-[#1982F9] mr-2'>
+                  {!readMore ? 'Đọc tiếp bài viết' : 'Thu gọn bài viết'}
+                </span>
+                <ChevronDown
+                  className={classNames('w-[10px] h-[10px] stroke-[#1982F9] stroke-[3]', {
+                    'rotate-180': readMore
+                  })}
+                />
+              </div>
             </div>
+            {/* Tin tức về sản phẩm */}
+            {blogs && blogs.length > 0 && (
+              <div className='w-[40%] bg-white rounded ml-4'>
+                <h2 className='font-semibold text-2xl py-4 px-6'>Tin tức về sản phẩm</h2>
+                <div className='px-6 pb-2'>
+                  {blogs.map((blog) => (
+                    <div key={blog._id} className='flex mb-4'>
+                      <Link
+                        to={`${PATH.BLOG_DETAIL_WITHOUT_ID}/${generateNameId({ name: blog.name_vi, id: blog._id })}`}
+                        className='flex-shrink-0'
+                      >
+                        <img
+                          src={getImageUrl(blog.thumbnail)}
+                          alt={blog.name_vi}
+                          className='w-[88px] h-[50px] object-cover rounded'
+                        />
+                      </Link>
+                      <Link
+                        to={`${PATH.BLOG_DETAIL_WITHOUT_ID}/${generateNameId({ name: blog.name_vi, id: blog._id })}`}
+                        className='flex-1 ml-4 line-clamp-2'
+                      >
+                        {blog.name_vi}
+                      </Link>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
         </div>
       )}
+
+      {/* Loading */}
       {getProductQuery.isLoading && (
         <div className='bg-white min-h-screen rounded shadow-sm flex justify-center pt-[50px]'>
           <Loading className='w-12 h-12' />

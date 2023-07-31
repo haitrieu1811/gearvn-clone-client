@@ -35,6 +35,15 @@ export interface User {
   updated_at: Date;
 }
 
+export interface QuantityPerCollection {
+  users: number;
+  products: number;
+  orders: number;
+  categories: number;
+  brands: number;
+  blogs: number;
+}
+
 // Request
 export interface GetUsersParams {
   page?: string;
@@ -84,3 +93,5 @@ export type GetAddressResponse = SuccessResponse<{
 export type GetViewedProductsResponse = SuccessResponse<{
   viewed_products: ViewedProduct[];
 }>;
+
+export type GetQuantityPerCollectionResponse = SuccessResponse<QuantityPerCollection>;

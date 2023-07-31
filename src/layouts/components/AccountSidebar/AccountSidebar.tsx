@@ -62,7 +62,9 @@ const AccountSidebar = () => {
               </span>
             </InputFile>
           </div>
-          <span className='ml-6 text-lg font-semibold line-clamp-1 capitalize'>{me.fullName}</span>
+          <span className='ml-6 text-lg font-semibold line-clamp-1 capitalize'>
+            {me.fullName ? me.fullName : me.email.split('@')[0]}
+          </span>
         </form>
       )}
       <div>
