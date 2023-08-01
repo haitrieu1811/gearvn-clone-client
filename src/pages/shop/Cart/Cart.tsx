@@ -113,8 +113,8 @@ const Cart = () => {
   };
 
   return (
-    <div className='mb-4'>
-      <div className='container flex justify-center'>
+    <div className='mb-2 md:mb-4'>
+      <div className='md:container flex justify-center'>
         <div className='w-[600px]'>
           <Link to={PATH.HOME} className='flex items-center text-[#1982F9] p-4'>
             <ChevronLeftIcon className='w-4 h-4' /> <span className='font-medium ml-[5px]'>Mua thêm sản phẩm khác</span>
@@ -139,14 +139,16 @@ const Cart = () => {
                   ))}
                 </div>
                 {/* Thông tin thanh toán */}
-                <div className='p-6 sticky bottom-0 bg-white border-t border-[#cfcfcf]'>
+                <div className='px-4 py-6 md:p-6 sticky bottom-0 bg-white border-t border-[#cfcfcf]'>
                   <div className='flex justify-between items-center mb-2'>
                     <div className='font-semibold'>Phí vận chuyển:</div>
                     <div className='font-semibold'>Miễn phí</div>
                   </div>
                   <div className='flex justify-between items-center mb-6'>
                     <div className='text-lg font-semibold'>Tổng tiền:</div>
-                    <div className='text-2xl text-primary font-semibold'>{formatCurrency(total as number)}₫</div>
+                    <div className='text-xl md:text-2xl text-primary font-semibold'>
+                      {formatCurrency(total as number)}₫
+                    </div>
                   </div>
                   <Button
                     disabled={checkedCartList.length <= 0}

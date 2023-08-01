@@ -10,12 +10,16 @@ interface ProductItemProps {
 
 const ProductItem = ({ data }: ProductItemProps) => {
   return (
-    <div className='border rounded shadow-sm min-h-[350px]'>
+    <div className='border rounded shadow-sm min-h-[290px] lg:min-h-[350px]'>
       <Link
         to={`${PATH.PRODUCT_DETAIL_WITHOUT_ID}/${generateNameId({ name: data.name_vi, id: data._id })}`}
         className='p-[10px] block'
       >
-        <img src={getImageUrl(data.thumbnail)} alt={data.name_vi} className='h-[210px] w-full object-cover' />
+        <img
+          src={getImageUrl(data.thumbnail)}
+          alt={data.name_vi}
+          className='h-[150px] lg:h-[210px] w-full object-cover'
+        />
       </Link>
       <div className='p-4 pt-[6px]'>
         <div className='mb-[10px]'>

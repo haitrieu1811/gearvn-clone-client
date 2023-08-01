@@ -65,7 +65,7 @@ const Search = () => {
 
   return (
     <div>
-      <div className='container bg-white my-4 rounded shadow-sm py-6'>
+      <div className='px-2 lg:container bg-white my-2 md:my-4 rounded shadow-sm py-6'>
         <h1 className='uppercase text-2xl font-semibold text-[#333333] text-center mb-6'>Tìm kiếm</h1>
 
         {/* Hiển thị khi có dữ liệu */}
@@ -74,9 +74,9 @@ const Search = () => {
             <div className='text-sm text-center mb-4'>
               Tìm kiếm theo <span className='font-bold'>"{queryConfig.name}"</span>. ({productsCount} sản phẩm)
             </div>
-            <div className='grid grid-cols-10 gap-3'>
+            <div className='grid grid-cols-12 lg:grid-cols-10 gap-3'>
               {products.map((product) => (
-                <div key={product._id} className='col-span-2'>
+                <div key={product._id} className='col-span-6 md:col-span-4   lg:col-span-2'>
                   <ProductItem data={product} />
                 </div>
               ))}

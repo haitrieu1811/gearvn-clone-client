@@ -93,25 +93,27 @@ const Address = () => {
         </button>
       </div>
       {addresses && addresses.length > 0 && (
-        <div className='px-6 py-4'>
+        <div className='px-2 md:px-6 py-4'>
           {addresses.map((address) => (
             <div key={address._id} className='py-3 border-b border-[#cfcfcf] flex justify-between items-center'>
               <div className='flex items-center'>
                 {address.isDefault ? (
-                  <span className='py-1 px-2 text-sm border border-primary rounded text-primary mr-4'>Mặc định</span>
+                  <span className='py-1 px-2 whitespace-nowrap text-xs md:text-sm border border-primary rounded text-primary mr-4'>
+                    Mặc định
+                  </span>
                 ) : (
                   <button
-                    className='mr-4 text-sm border border-[#cfcfcf] rounded py-1 px-2 text-slate-500'
+                    className='mr-4 whitespace-nowrap text-xs md:text-sm border border-[#cfcfcf] rounded py-1 px-1 md:px-2 text-slate-500'
                     onClick={() => setDefaultAddress(address._id)}
                   >
                     Thiết lập mặc định
                   </button>
                 )}
-                <div className='text-slate-700 capitalize'>
+                <div className='text-slate-700 capitalize text-sm md:text-base'>
                   {address.street}, {address.ward}, {address.district}, {address.province}
                 </div>
               </div>
-              <div className='flex items-center'>
+              <div className='flex items-center ml-2 md:ml-4'>
                 <button className='text-sm font-semibold text-[#005EC9]' onClick={() => startUpdate(address._id)}>
                   Sửa
                 </button>
@@ -124,7 +126,7 @@ const Address = () => {
           ))}
         </div>
       )}
-      <div className='px-4 py-2 bg-yellow-100 text-sm font-medium inline-block mx-6 rounded'>
+      <div className='px-4 py-2 bg-yellow-100 text-sm font-medium inline-block mx-2 md:mx-6 rounded'>
         Nếu địa chỉ nhận hàng chưa chính xác, vui lòng kiểm tra và cập nhật. Mỗi tài khoản chỉ được tạo tối đa 3 địa chỉ
       </div>
       <Modal

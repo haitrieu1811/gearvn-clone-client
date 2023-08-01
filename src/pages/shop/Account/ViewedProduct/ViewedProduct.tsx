@@ -27,7 +27,7 @@ const ViewedProduct = () => {
           <h2 className='py-4 px-6 text-2xl font-semibold'>Sản phẩm đã xem</h2>
           <div className='grid grid-cols-12 gap-3 py-6 px-3'>
             {viewedProducts.map((viewedProduct) => (
-              <div key={viewedProduct._id} className='col-span-3'>
+              <div key={viewedProduct._id} className='col-span-6 md:col-span-4 lg:col-span-3'>
                 <ProductItem data={viewedProduct.product} />
               </div>
             ))}

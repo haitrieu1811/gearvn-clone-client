@@ -63,8 +63,8 @@ const Product = () => {
   );
 
   return (
-    <div className='container'>
-      <div className='bg-white my-4 rounded shadow-sm pb-10 px-3'>
+    <div className='lg:container'>
+      <div className='bg-white my-2 lg:my-4 rounded shadow-sm pb-10 px-3'>
         {/* Bộ lọc sản phẩm */}
         <div className='py-6 px-3 flex'>
           {categories && categories.length > 0 && (
@@ -114,9 +114,9 @@ const Product = () => {
         {/* Danh sách sản phẩm */}
         {products && products.length > 0 && !getProductsQuery.isLoading && (
           <Fragment>
-            <div className='grid grid-cols-10 gap-3'>
+            <div className='grid grid-cols-12 lg:grid-cols-10 gap-3'>
               {products.map((product, index) => (
-                <div key={index} className='col-span-2'>
+                <div key={index} className='col-span-6 md:col-span-4 lg:col-span-2'>
                   <ProductItem data={product} />
                 </div>
               ))}

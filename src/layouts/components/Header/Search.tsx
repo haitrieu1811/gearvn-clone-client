@@ -37,14 +37,14 @@ const Search = () => {
   // Render kết quả tìm kiếm
   const renderSearchResult = () => (
     <Wrapper>
-      <div className='w-[328px] px-4'>
+      <div className='w-full md:w-[315px] px-4'>
         {/* Hiển thị khi có dữ liệu */}
         {searchResult &&
           searchResult.length > 0 &&
           !getProductsQuery.isLoading &&
           searchResult.slice(0, SEARCH_RESULT_LIMIT).map((product) => (
             <div key={product._id} className='flex justify-between items-center py-3 border-b'>
-              <div className='flex-1'>
+              <div className='flex-1 pr-4'>
                 <Link
                   to={`${PATH.PRODUCT_DETAIL_WITHOUT_ID}/${generateNameId({ name: product.name_vi, id: product._id })}`}
                   className='text-[13px] text-[#111111] hover:text-primary line-clamp-1'
@@ -113,12 +113,12 @@ const Search = () => {
       interactive
       visible={KeywordSearchDebounce.length > 0 && showSearchResult}
       placement='bottom-end'
-      offset={[0, 2]}
+      offset={[0, 3]}
       render={renderSearchResult}
       onClickOutside={() => setShowSearchResult(false)}
       zIndex={9999999}
     >
-      <form className='relative flex-1 ml-2' onSubmit={redirectToSearchPage}>
+      <form className='relative flex-1 md:w-[315px] ml-2' onSubmit={redirectToSearchPage}>
         <input
           type='text'
           placeholder='Bạn cần tìm gì?'

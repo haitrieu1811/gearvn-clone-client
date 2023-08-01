@@ -4,7 +4,7 @@ import PATH from 'src/constants/path';
 
 const NotFound = () => {
   return (
-    <div className='container flex justify-center items-center flex-col bg-white rounded shadow-sm my-4 pb-12'>
+    <div className='container flex justify-center items-center flex-col bg-white rounded shadow-sm my-2 md:my-4 pb-12'>
       <img src={notFound} alt='Not found' className='w-[70%]' />
       <div className='text-lg font-semibold mt-5 mb-[30px] text-center'>
         Rất tiếc trang bạn tìm kiếm đang không tồn tại

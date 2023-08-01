@@ -41,11 +41,11 @@ const Account = () => {
         me
       }}
     >
-      <div className='container my-4 grid grid-cols-12 gap-4'>
-        <div className='col-span-3 bg-white rounded shadow-sm'>
+      <div className='lg:container my-2 lg:my-4 grid grid-cols-12 gap-2 lg:gap-4'>
+        <div className='col-span-12 lg:col-span-3 bg-white rounded shadow-sm'>
           <AccountSidebar />
         </div>
-        <div className='col-span-9'>
+        <div className='col-span-12 lg:col-span-9'>
           <Outlet />
         </div>
       </div>

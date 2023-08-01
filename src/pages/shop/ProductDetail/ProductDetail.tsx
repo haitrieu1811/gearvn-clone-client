@@ -99,25 +99,27 @@ const ProductDetail = () => {
   const blogs = useMemo(() => getBlogsQuery.data?.data.data.blogs, [getBlogsQuery.data?.data.data.blogs]);
 
   return (
-    <div className='my-4'>
+    <div className='my-2 lg:my-4'>
       {/* Thông tin chi tiết sản phẩm */}
       {product && !getProductQuery.isLoading && (
-        <div className='container'>
+        <div className='lg:container'>
           {/* Hình ảnh, thông tin */}
-          <div className='flex justify-between bg-white rounded'>
+          <div className='flex bg-white rounded flex-wrap lg:flex-nowrap'>
             {/* Hình ảnh sản phẩm */}
-            <div className='p-6 w-[420px]'>
+            <div className='px-2 lg:p-6 w-full lg:w-[420px]'>
               <SliderImages product={product} />
             </div>
             {/* Thông tin sản phẩm */}
-            <div className='flex-1 p-6 border-l'>
-              <h1 className='font-semibold text-2xl'>{product.name_vi}</h1>
+            <div className='flex-1 p-2 py-6 lg:p-6 lg:border-l'>
+              <h1 className='font-semibold text-[20px] md:text-2xl'>{product.name_vi}</h1>
               <div className='flex items-center mt-4'>
-                <div className='text-primary font-semibold text-[32px]'>
+                <div className='text-primary font-semibold text-[20px] md:text-[32px]'>
                   {formatCurrency(product.price_after_discount)}₫
                 </div>
                 {product.price > product.price_after_discount && (
-                  <div className='text-lg ml-3 line-through text-[#6D6E72]'>{formatCurrency(product.price)}₫</div>
+                  <div className='text-base md:text-lg ml-3 line-through text-[#6D6E72]'>
+                    {formatCurrency(product.price)}₫
+                  </div>
                 )}
                 {rateSale(product.price, product.price_after_discount) > 0 && (
                   <span className='text-[12px] py-[3px] px-2 ml-3 text-primary border border-primary rounded-sm whitespace-nowrap'>
@@ -126,7 +128,7 @@ const ProductDetail = () => {
                 )}
               </div>
               <div className='my-8 flex items-center'>
-                <div className='font-medium mr-6'>Số lượng:</div>
+                <div className='font-medium mr-6 text-sm md:text-base'>Số lượng:</div>
                 <QuantityController
                   value={buyCount}
                   max={100}
@@ -134,18 +136,18 @@ const ProductDetail = () => {
                   onDecrease={handleChangeBuyCount}
                   onIncrease={handleChangeBuyCount}
                 />
-                <div className='ml-6 text-slate-500'>100 sản phẩm có sẵn</div>
+                <div className='ml-6 text-slate-500 text-sm md:text-base'>100 sản phẩm có sẵn</div>
               </div>
               <div className='flex mt-4'>
                 <button
                   onClick={addToCart}
-                  className='border border-primary rounded text-primary text-lg px-6 py-2 bg-primary/10 hover:opacity-80'
+                  className='border border-primary rounded text-primary text-base md:text-lg px-2 md:px-6 py-2 bg-primary/10 hover:opacity-80 flex-1 lg:flex-none'
                 >
                   Thêm vào giỏ hàng
                 </button>
                 <button
                   onClick={buyNow}
-                  className='border border-primary rounded text-white text-lg px-6 py-2 bg-primary ml-4 hover:opacity-80'
+                  className='border border-primary rounded text-white text-base md:text-lg px-2 md:px-6 py-2 bg-primary ml-2 md:ml-4 hover:opacity-80 flex-1 lg:flex-none'
                 >
                   Mua ngay
                 </button>
@@ -158,10 +160,9 @@ const ProductDetail = () => {
               />
             </div>
           </div>
-
           {/* Mô tả sản phẩm, blogs */}
-          <div className='flex justify-between items-start mt-4'>
-            <div className='relative flex-1 bg-white rounded'>
+          <div className='flex items-start flex-wrap lg:flex-nowrap mt-4'>
+            <div className='relative w-full lg:w-auto lg:flex-1 bg-white rounded'>
               {/* Mô tả sản phẩm */}
               <div
                 className={classNames('pb-20', {
@@ -169,13 +170,13 @@ const ProductDetail = () => {
                   'h-auto': readMore
                 })}
               >
-                <h2 className='font-semibold text-2xl py-4 px-6'>Mô tả sản phẩm</h2>
+                <h2 className='font-semibold text-xl md:text-2xl py-4 px-2 lg:px-6'>Mô tả sản phẩm</h2>
                 <div className='text__content'>
                   <div
                     dangerouslySetInnerHTML={{
                       __html: DOMPurify.sanitize(product.description)
                     }}
-                    className='px-6 text-[#111111] text-lg'
+                    className='px-2 lg:px-6 text-[#111111] text-lg'
                   />
                 </div>
               </div>
@@ -205,9 +206,9 @@ const ProductDetail = () => {
             </div>
             {/* Tin tức về sản phẩm */}
             {blogs && blogs.length > 0 && (
-              <div className='w-[40%] bg-white rounded ml-4'>
-                <h2 className='font-semibold text-2xl py-4 px-6'>Tin tức về sản phẩm</h2>
-                <div className='px-6 pb-2'>
+              <div className='bg-white rounded mt-2 lg:mt-0 lg:ml-4 w-full lg:w-[40%]'>
+                <h2 className='font-semibold text-xl md:text-2xl py-4 px-2 lg:px-6'>Tin tức về sản phẩm</h2>
+                <div className='px-2 lg:px-6 pb-2'>
                   {blogs.map((blog) => (
                     <div key={blog._id} className='flex mb-4'>
                       <Link

@@ -38,11 +38,11 @@ const DateSelect = ({ onChange, value }: DateSelectProps) => {
   };
 
   return (
-    <div className='grid grid-cols-12 gap-6'>
+    <div className='grid grid-cols-12 gap-2 lg:gap-6'>
       <select
         name='date'
         value={date.date}
-        className='col-span-4 border border-[#cfcfcf] rounded h-10 px-4 outline-none text-[#535353]'
+        className='col-span-4 border border-[#cfcfcf] rounded h-10 px-2 md:px-4 outline-none text-[#535353] text-sm md:text-base'
         onChange={handleChange}
       >
         <option disabled>Ngày</option>
@@ -55,7 +55,7 @@ const DateSelect = ({ onChange, value }: DateSelectProps) => {
       <select
         name='month'
         value={date.month}
-        className='col-span-4 border border-[#cfcfcf] rounded h-10 px-4 outline-none text-[#535353]'
+        className='col-span-4 border border-[#cfcfcf] rounded h-10 px-2 md:px-4 outline-none text-[#535353] text-sm md:text-base'
         onChange={handleChange}
       >
         <option disabled>Tháng</option>
@@ -68,7 +68,7 @@ const DateSelect = ({ onChange, value }: DateSelectProps) => {
       <select
         name='year'
         value={date.year}
-        className='col-span-4 border border-[#cfcfcf] rounded h-10 px-4 outline-none text-[#535353]'
+        className='col-span-4 border border-[#cfcfcf] rounded h-10 px-2 md:px-4 outline-none text-[#535353] text-sm md:text-base'
         onChange={handleChange}
       >
         <option disabled>Năm</option>

@@ -6,7 +6,6 @@ import {
   ChairIcon,
   HeadphoneIcon,
   KeyboardIcon,
-  LaptopGamingIcon,
   LaptopIcon,
   MouseIcon,
   PcIcon,
@@ -26,13 +25,15 @@ export interface MegaMenuItem {
 
 const MegaMenu = () => {
   const [menuList, setMenuList] = useState<MegaMenuItem[] | null>(null);
+  const [showMenu, setShowMenu] = useState<boolean>(false);
 
   const onMouseEnter = (menuList: MegaMenuItem[]) => {
     setMenuList(menuList);
+    setShowMenu(true);
   };
 
   const onMouseLeave = () => {
-    setMenuList(null);
+    !showMenu && setMenuList(null);
   };
 
   return (
@@ -105,8 +106,12 @@ const MegaMenu = () => {
           />
         </div>
         {/* Menu */}
-        {menuList && (
-          <div className='ml-2 bg-white rounded p-[10px] absolute right-0 top-0 left-[216px] w-[944px]'>
+        {menuList && showMenu && (
+          <div
+            className='ml-2 bg-white rounded p-[10px] absolute right-0 top-0 left-[216px] w-[944px]'
+            onMouseEnter={() => setShowMenu(true)}
+            onMouseLeave={() => setShowMenu(false)}
+          >
             <div className='grid grid-cols-10 gap-10'>
               {menuList.map((menu, index) => (
                 <div key={index} className='col-span-2 p-[5px] pb-4'>

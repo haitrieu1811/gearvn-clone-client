@@ -106,10 +106,10 @@ const Profile = () => {
       {me && getMeQuery && !getMeQuery.isLoading && (
         <form onSubmit={onSubmit}>
           <h2 className='py-4 px-6 text-2xl font-semibold'>Thông tin tài khoản</h2>
-          <div className='py-4 pl-6 pr-[290px]'>
+          <div className='px-2 md:px-4 py-4 lg:pl-6 lg:pr-[290px]'>
             {/* Họ tên */}
-            <div className='grid grid-cols-12 gap-6'>
-              <div className='col-span-4 flex items-center justify-end'>
+            <div className='grid grid-cols-12 gap-4 md:gap-6'>
+              <div className='col-span-4 flex items-center justify-end text-sm md:text-base'>
                 <label htmlFor='fullName'>Họ tên</label>
               </div>
               <div className='col-span-8'>
@@ -125,7 +125,7 @@ const Profile = () => {
             </div>
             {/* Giới tính */}
             <div className='grid grid-cols-12 gap-6 mt-4'>
-              <div className='col-span-4 flex items-center justify-end'>
+              <div className='col-span-4 flex items-center justify-end text-sm md:text-base'>
                 <label>Giới tính</label>
               </div>
               <div className='col-span-8 flex items-center'>
@@ -145,7 +145,7 @@ const Profile = () => {
             </div>
             {/* Số điện thoại */}
             <div className='grid grid-cols-12 gap-6 mt-4'>
-              <div className='col-span-4 flex items-center justify-end'>
+              <div className='col-span-4 flex items-center justify-end text-sm md:text-base'>
                 <label htmlFor='phone_number'>Số điện thoại</label>
               </div>
               <div className='col-span-8'>
@@ -161,7 +161,7 @@ const Profile = () => {
             </div>
             {/* Email */}
             <div className='grid grid-cols-12 gap-6 mt-4'>
-              <div className='col-span-4 flex items-center justify-end'>
+              <div className='col-span-4 flex items-center justify-end text-sm md:text-base'>
                 <label htmlFor=''>Email</label>
               </div>
               <div className='col-span-8'>
@@ -176,7 +176,7 @@ const Profile = () => {
             </div>
             {/* Ngày sinh */}
             <div className='grid grid-cols-12 gap-6 mt-4'>
-              <div className='col-span-4 flex items-center justify-end'>
+              <div className='col-span-4 flex items-center justify-end text-sm md:text-base'>
                 <label>Ngày sinh</label>
               </div>
               <div className='col-span-8'>

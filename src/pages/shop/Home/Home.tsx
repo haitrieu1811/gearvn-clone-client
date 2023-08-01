@@ -1,6 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { useMemo } from 'react';
 import { Link } from 'react-router-dom';
+import { useMediaQuery } from 'react-responsive';
 
 import blogApi from 'src/apis/blog.api';
 import productApi from 'src/apis/product.api';
@@ -10,8 +11,11 @@ import Loading from 'src/components/Loading';
 import PATH from 'src/constants/path';
 import MegaMenu from 'src/layouts/components/Header/MegaMenu';
 import ProductSection from './ProductSection';
+import CONFIG from 'src/constants/config';
 
 const Home = () => {
+  const isTablet = useMediaQuery({ maxWidth: CONFIG.TABLET_SCREEN_SIZE });
+
   const getKeyboardsQuery = useQuery({
     queryKey: ['keyboards'],
     queryFn: () => productApi.getList({ category: '64afcf014a921a14beb05915', limit: '5' })
@@ -41,34 +45,36 @@ const Home = () => {
   const blogs = useMemo(() => getBlogsQuery.data?.data.data.blogs, [getBlogsQuery.data?.data.data.blogs]);
 
   return (
-    <div className='my-3'>
+    <div className='my-2 lg:my-3'>
       {/* Mega menu, carousel */}
-      <div className='container'>
+      <div className='px-2 lg:container'>
         <div className='flex'>
-          <MegaMenu />
-          <div className='grid grid-cols-12 gap-1 ml-[15px]'>
-            <div className='col-span-8'>
+          {!isTablet && <MegaMenu />}
+          <div className='flex-1 grid grid-cols-12 gap-2 lg:ml-[15px]'>
+            <div className='col-span-12 lg:col-span-8'>
               <Carousel />
             </div>
-            <div className='col-span-4'>
-              <Link to={PATH.HOME}>
-                <img
-                  src='https://file.hstatic.net/200000722513/file/banner_slider_-_right_1_04cb85fcde584ec0a0818d9e5e212282.png'
-                  alt=''
-                />
-              </Link>
-              <Link to={PATH.HOME}>
-                <img
-                  src='https://file.hstatic.net/200000722513/file/banner_slider_-_right_2_5f844c8513ea42628d4e5e49c7a28d70.png'
-                  alt=''
-                />
-              </Link>
+            <div className='col-span-12 lg:col-span-4'>
+              <div className='grid grid-cols-12'>
+                <Link to={PATH.HOME} className='col-span-6 lg:col-span-12 -ml-3 lg:ml-0'>
+                  <img
+                    src='https://file.hstatic.net/200000722513/file/banner_slider_-_right_1_04cb85fcde584ec0a0818d9e5e212282.png'
+                    alt=''
+                  />
+                </Link>
+                <Link to={PATH.HOME} className='col-span-6 lg:col-span-12 block lg:mt-2'>
+                  <img
+                    src='https://file.hstatic.net/200000722513/file/banner_slider_-_right_2_5f844c8513ea42628d4e5e49c7a28d70.png'
+                    alt=''
+                  />
+                </Link>
+              </div>
             </div>
           </div>
         </div>
       </div>
       {/* Laptop bán chạy */}
-      <div className='container mt-3'>
+      <div className='lg:container mt-3'>
         {laptops && laptops.length > 0 && !getLaptopsQuery.isLoading && (
           <ProductSection
             headingTitle='Laptop bán chạy'
@@ -81,7 +87,7 @@ const Home = () => {
               },
               {
                 to: `${PATH.PRODUCT}?category=64afbb1839753e4263bc467e-64bcd8a8ae38e6a282211269&brand=64bcda92ae38e6a282211272`,
-                name: 'Acer'
+                name: 'ACER'
               },
               {
                 to: `${PATH.PRODUCT}?category=64afbb1839753e4263bc467e-64bcd8a8ae38e6a282211269&brand=64bcda92ae38e6a282211272`,
@@ -97,7 +103,7 @@ const Home = () => {
         )}
       </div>
       {/* Bàn phím bán chạy */}
-      <div className='container mt-3'>
+      <div className='lg:container mt-3'>
         {keyboards && keyboards.length > 0 && !getKeyboardsQuery.isLoading && (
           <ProductSection
             headingTitle='Bàn phím bán chạy'
@@ -106,7 +112,7 @@ const Home = () => {
             subLinks={[
               {
                 to: `${PATH.PRODUCT}?category=64afcf014a921a14beb05915&brand=64b9081ca692e0ad3a11afd6`,
-                name: 'AKKO'
+                name: 'Akko'
               }
             ]}
           />
@@ -118,7 +124,7 @@ const Home = () => {
         )}
       </div>
       {/* Chuột bán chạy */}
-      <div className='container mt-3'>
+      <div className='lg:container mt-3'>
         {mouses && mouses.length > 0 && !getMousesQuery.isLoading && (
           <ProductSection
             headingTitle='Chuột bán chạy'
@@ -135,7 +141,7 @@ const Home = () => {
               },
               {
                 to: `${PATH.PRODUCT}?category=64b8f36ca692e0ad3a11afcc&brand=64b8f385a692e0ad3a11afcd`,
-                name: 'Cooler master'
+                name: 'Cooler Master'
               }
             ]}
           />
@@ -147,7 +153,7 @@ const Home = () => {
         )}
       </div>
       {/* Tin tức công nghệ */}
-      <div className='container mt-3'>
+      <div className='lg:container mt-3'>
         {blogs && blogs.length > 0 && !getBlogsQuery.isLoading && (
           <div className='bg-white rounded shadow-sm'>
             <div className='flex justify-between items-center py-3 px-6'>
@@ -159,7 +165,7 @@ const Home = () => {
             {blogs && blogs.length > 0 && (
               <div className='grid grid-cols-12 gap-4 px-6 pb-8'>
                 {blogs.map((blog) => (
-                  <div key={blog._id} className='col-span-3'>
+                  <div key={blog._id} className='col-span-6 lg:col-span-3'>
                     <BlogVertical data={blog} />
                   </div>
                 ))}

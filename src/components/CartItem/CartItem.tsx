@@ -7,9 +7,7 @@ import purchaseApi from 'src/apis/purchase.api';
 import PATH from 'src/constants/path';
 import { Purchase } from 'src/types/purchase.type';
 import { formatCurrency, generateNameId, getImageUrl } from 'src/utils/utils';
-import { TrashIcon } from '../Icons';
 import QuantityController from '../QuantityController';
-import Checkbox from '../Checkbox';
 
 interface CartItemProps {
   index: number;
@@ -60,8 +58,8 @@ const CartItem = ({
         onChange={(e) => handleCheck({ cartItemIndex: index, e })}
         className='peer appearance-none absolute'
       />
-      <div className='flex justify-between p-6 mb-2 peer-checked:bg-slate-100 cursor-pointer'>
-        <div className='w-[90px] flex items-center'>
+      <div className='flex justify-between p-2 md:p-6 mb-2 peer-checked:bg-slate-100 cursor-pointer'>
+        <div className='w-[70px] md:w-[90px] flex items-center'>
           <div>
             <div className='border border-[#ececec] rounded-sm'>
               <Link
@@ -73,7 +71,7 @@ const CartItem = ({
                 <img
                   src={getImageUrl(data.product.thumbnail)}
                   alt={data.product.name_vi}
-                  className='w-[90px] h-[90px] object-cover'
+                  className='w-[70px] h-[70px] md:w-[90px] md:h-[90px] object-cover'
                 />
               </Link>
             </div>
@@ -94,12 +92,12 @@ const CartItem = ({
               name: data.product.name_vi,
               id: data.product._id
             })}`}
-            className='pr-5 font-semibold line-clamp-2'
+            className='pr-5 font-semibold line-clamp-3 md:line-clamp-2 text-sm md:text-base'
           >
             {data.product.name_vi}
           </Link>
           <div className='flex flex-col items-end'>
-            <div className='text-primary font-semibold text-lg'>
+            <div className='text-primary font-semibold text-base md:text-lg'>
               {formatCurrency(data.product.price_after_discount * data.buy_count)}₫
             </div>
             <div className='text-[#6D6E72] text-sm'>{formatCurrency(data.product.price_after_discount)}₫</div>

@@ -31,10 +31,10 @@ const BlogDetail = () => {
   const orderBlogs = useMemo(() => getBlogsQuery.data?.data.data.blogs, [getBlogsQuery.data?.data.data.blogs]);
 
   return (
-    <div className='container bg-white rounded shadow-sm my-3 pb-12'>
+    <div className='px-2 md:container bg-white rounded shadow-sm my-2 lg:my-4 pb-12'>
       {/* Chi tiết blog */}
       {blog && (
-        <div className='px-[220px] py-4'>
+        <div className='md:px-[80px] lg:px-[220px] my-2 md:py-4'>
           <img src={getImageUrl(blog.thumbnail)} alt={blog.name_vi} className='w-full object-contain rounded mb-4' />
           <h1 className='text-[28px] font-semibold mb-4'>{blog.name_vi}</h1>
           <div className='flex items-center mb-4'>
@@ -58,11 +58,11 @@ const BlogDetail = () => {
 
       {/* Danh sách blog khác */}
       {orderBlogs && orderBlogs.length > 0 && (
-        <div className='px-[110px] mt-12'>
-          <h2 className='text-2xl font-semibold uppercase mb-4 text-[#333333]'>Bài viết liên quan</h2>
-          <div className='grid grid-cols-12 gap-6'>
+        <div className='md:px-[40px] lg:px-[110px] mt-4 md:mt-12'>
+          <h2 className='text-2xl font-semibold uppercase md:mb-4 text-[#333333]'>Bài viết liên quan</h2>
+          <div className='grid grid-cols-12 gap-2 md:gap-6'>
             {orderBlogs.map((blog) => (
-              <div key={blog._id} className='col-span-4'>
+              <div key={blog._id} className='col-span-6 md:col-span-4 mt-4 md:mt-0'>
                 <BlogVertical data={blog} />
               </div>
             ))}

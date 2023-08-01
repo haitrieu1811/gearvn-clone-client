@@ -40,7 +40,7 @@ const Modal = ({
       {isVisible && (
         <div className='flex justify-center items-center fixed inset-0 z-[99999999]'>
           <div className='bg-black/30 fixed inset-0' onClick={handleCancel}></div>
-          <div className='bg-white z-10 rounded-lg'>
+          <div className='bg-white z-10 rounded-lg max-w-[90%]'>
             {/* Head */}
             <div className='flex justify-between items-center px-3 py-2 border-b'>
               <h2 className='font-semibold'>{name && name}</h2>
