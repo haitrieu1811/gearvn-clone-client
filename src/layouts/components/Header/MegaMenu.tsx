@@ -1,6 +1,5 @@
-import classNames from 'classnames';
+import { Fragment, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { useState } from 'react';
 
 import {
   AccessoryIcon,
@@ -17,11 +16,6 @@ import PATH from 'src/constants/path';
 import MenuLink from './MenuLink';
 import { MEGA_MENU_DATA } from './constants';
 
-interface MegaMenuProps {
-  isShow: boolean;
-  toggleMenu: () => void;
-}
-
 export interface MegaMenuItem {
   heading: string;
   data: {
@@ -30,7 +24,7 @@ export interface MegaMenuItem {
   }[];
 }
 
-const MegaMenu = ({ isShow, toggleMenu }: MegaMenuProps) => {
+const MegaMenu = () => {
   const [menuList, setMenuList] = useState<MegaMenuItem[] | null>(null);
 
   const onMouseEnter = (menuList: MegaMenuItem[]) => {
@@ -38,32 +32,24 @@ const MegaMenu = ({ isShow, toggleMenu }: MegaMenuProps) => {
   };
 
   const onMouseLeave = () => {
-    // setMenuList(null);
+    setMenuList(null);
   };
 
   return (
-    <div
-      className={classNames('absolute top-full left-0 w-full duration-200', {
-        'opacity-0 pointer-events-none': !isShow,
-        'opacity-100 pointer-events-auto': isShow
-      })}
-    >
-      {/* Mask */}
-      <div onClick={toggleMenu} className='absolute left-0 right-0 w-full h-screen bg-black/50' />
-
-      <div className='relative z-10 container pt-[15px] flex items-start'>
+    <Fragment>
+      <div className='relative z-10'>
         {/* Sidebar */}
         <div className='w-[216px] bg-white rounded'>
           <MenuLink
-            onMouseEnter={() => onMouseEnter(MEGA_MENU_DATA.LAPTOP)}
-            onMouseLeave={onMouseLeave}
-            to={PATH.HOME}
+            to={PATH.PRODUCT}
             icon={<LaptopIcon />}
             name='Laptop'
+            onMouseEnter={() => onMouseEnter(MEGA_MENU_DATA.LAPTOP)}
+            onMouseLeave={onMouseLeave}
           />
           <MenuLink
-            to={PATH.HOME}
-            icon={<LaptopGamingIcon />}
+            to={PATH.PRODUCT}
+            icon={<LaptopIcon />}
             name='Laptop Gaming'
             onMouseEnter={() => onMouseEnter(MEGA_MENU_DATA.PC_GAMING)}
             onMouseLeave={onMouseLeave}
@@ -118,10 +104,9 @@ const MegaMenu = ({ isShow, toggleMenu }: MegaMenuProps) => {
             onMouseLeave={onMouseLeave}
           />
         </div>
-
         {/* Menu */}
         {menuList && (
-          <div className='flex-1 ml-[10px] bg-white rounded p-[10px]'>
+          <div className='ml-2 bg-white rounded p-[10px] absolute right-0 top-0 left-[216px] w-[944px]'>
             <div className='grid grid-cols-10 gap-10'>
               {menuList.map((menu, index) => (
                 <div key={index} className='col-span-2 p-[5px] pb-4'>
@@ -141,7 +126,7 @@ const MegaMenu = ({ isShow, toggleMenu }: MegaMenuProps) => {
           </div>
         )}
       </div>
-    </div>
+    </Fragment>
   );
 };
 

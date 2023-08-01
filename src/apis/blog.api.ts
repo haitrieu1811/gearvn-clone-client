@@ -9,8 +9,8 @@ import { OnlyMessageResponse } from 'src/types/utils.type';
 import http from 'src/utils/http';
 
 const blogApi = {
-  getList(query: GetBlogListRequestQuery) {
-    return http.get<GetBlogListResponse>('/blogs', { params: query });
+  getList(params?: GetBlogListRequestQuery) {
+    return http.get<GetBlogListResponse>('/blogs', { params });
   },
   getDetail(blogId: string) {
     return http.get<GetBlogDetailResponse>(`blogs/${blogId}`);

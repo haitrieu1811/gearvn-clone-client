@@ -833,12 +833,15 @@ export const CheckCircleGreenIcon = ({ className }: IconProps) => (
 );
 
 export const LaptopIcon = ({ className }: IconProps) => (
-  <svg width={20} height={13} viewBox='0 0 20 13' xmlns='http://www.w3.org/2000/svg' className={className}>
-    <mask id='path-1-inside-1_5068_8551'>
+  <svg width={20} height={13} viewBox='0 0 20 13' fill='none' xmlns='http://www.w3.org/2000/svg' className={className}>
+    <mask id='path-1-inside-1_5068_8551' fill='currentcolor'>
       <path d='M4.00002 1C3.44774 1 3.00002 1.44772 3.00002 2V8.5C3.00002 9.05229 3.44774 9.5 4.00002 9.5H16C16.5523 9.5 17 9.05229 17 8.5V2C17 1.44772 16.5523 1 16 1H4.00002ZM3.70002 0H10H16.3C16.7774 0 17.2353 0.184374 17.5728 0.512563C17.9104 0.840752 18.1 1.28587 18.1 1.75V8.75C18.1 9.21413 17.9104 9.65925 17.5728 9.98744C17.2353 10.3156 16.7774 10.5 16.3 10.5H3.70002C3.22263 10.5 2.7648 10.3156 2.42723 9.98744C2.08967 9.65925 1.90002 9.21413 1.90002 8.75V1.75C1.90002 1.28587 2.08967 0.840752 2.42723 0.512563C2.7648 0.184374 3.22263 0 3.70002 0Z' />
     </mask>
-    <path d='M4.00002 1C3.44774 1 3.00002 1.44772 3.00002 2V8.5C3.00002 9.05229 3.44774 9.5 4.00002 9.5H16C16.5523 9.5 17 9.05229 17 8.5V2C17 1.44772 16.5523 1 16 1H4.00002ZM3.70002 0H10H16.3C16.7774 0 17.2353 0.184374 17.5728 0.512563C17.9104 0.840752 18.1 1.28587 18.1 1.75V8.75C18.1 9.21413 17.9104 9.65925 17.5728 9.98744C17.2353 10.3156 16.7774 10.5 16.3 10.5H3.70002C3.22263 10.5 2.7648 10.3156 2.42723 9.98744C2.08967 9.65925 1.90002 9.21413 1.90002 8.75V1.75C1.90002 1.28587 2.08967 0.840752 2.42723 0.512563C2.7648 0.184374 3.22263 0 3.70002 0Z' />
-    <path d='M1 12L19 12' strokeLinecap='round' />
+    <path
+      d='M4.00002 1C3.44774 1 3.00002 1.44772 3.00002 2V8.5C3.00002 9.05229 3.44774 9.5 4.00002 9.5H16C16.5523 9.5 17 9.05229 17 8.5V2C17 1.44772 16.5523 1 16 1H4.00002ZM3.70002 0H10H16.3C16.7774 0 17.2353 0.184374 17.5728 0.512563C17.9104 0.840752 18.1 1.28587 18.1 1.75V8.75C18.1 9.21413 17.9104 9.65925 17.5728 9.98744C17.2353 10.3156 16.7774 10.5 16.3 10.5H3.70002C3.22263 10.5 2.7648 10.3156 2.42723 9.98744C2.08967 9.65925 1.90002 9.21413 1.90002 8.75V1.75C1.90002 1.28587 2.08967 0.840752 2.42723 0.512563C2.7648 0.184374 3.22263 0 3.70002 0Z'
+      fill='currentcolor'
+    />
+    <path d='M1 12L19 12' stroke='currentcolor' strokeLinecap='round' />
   </svg>
 );
 
@@ -989,5 +992,59 @@ export const AccessoryIcon = ({ className }: IconProps) => (
 export const MenuLinkArrowIcon = ({ className }: IconProps) => (
   <svg viewBox='0 0 6 8' fill='none' xmlns='http://www.w3.org/2000/svg' className={className}>
     <path d='M1.5 1.5L4.5 4L1.5 6.5' strokeWidth={2} strokeLinecap='round' strokeLinejoin='round' />
+  </svg>
+);
+
+export const TruckIcon = ({ className }: IconProps) => (
+  <svg viewBox='0 0 22 16' fill='none' xmlns='http://www.w3.org/2000/svg' className={className}>
+    <path
+      d='M18.5 4H16V2C16 0.9 15.1 0 14 0H2C0.9 0 0 0.9 0 2V11C0 12.1 0.9 13 2 13C2 14.66 3.34 16 5 16C6.66 16 8 14.66 8 13H14C14 14.66 15.34 16 17 16C18.66 16 20 14.66 20 13H21C21.55 13 22 12.55 22 12V8.67C22 8.24 21.86 7.82 21.6 7.47L19.3 4.4C19.11 4.15 18.81 4 18.5 4ZM5 14C4.45 14 4 13.55 4 13C4 12.45 4.45 12 5 12C5.55 12 6 12.45 6 13C6 13.55 5.55 14 5 14ZM18.5 5.5L20.46 8H16V5.5H18.5ZM17 14C16.45 14 16 13.55 16 13C16 12.45 16.45 12 17 12C17.55 12 18 12.45 18 13C18 13.55 17.55 14 17 14Z'
+      fill='#FF3C53'
+    />
+  </svg>
+);
+
+export const CarouselNextIcon = () => (
+  <svg
+    width={8}
+    height={17}
+    xmlns='http://www.w3.org/2000/svg'
+    xmlnsXlink='http://www.w3.org/1999/xlink'
+    version='1.1'
+    x='0px'
+    y='0px'
+    viewBox='0 0 24 24'
+    xmlSpace='preserve'
+  >
+    <polygon points='6.379,20.908 7.546,22.075 17.621,12 7.546,1.925 6.379,3.092 15.287,12 ' />
+  </svg>
+);
+
+export const CarouselPrevIcon = () => (
+  <svg
+    width={8}
+    height={17}
+    xmlns='http://www.w3.org/2000/svg'
+    xmlnsXlink='http://www.w3.org/1999/xlink'
+    version='1.1'
+    x='0px'
+    y='0px'
+    viewBox='0 0 50 50'
+    enableBackground='new 0 0 50 50'
+    xmlSpace='preserve'
+  >
+    <metadata>
+      {/*?xpacket begin="&#65279;" id="W5M0MpCehiHzreSzNTczkc9d"?*/}
+      {/* <x:xmpmeta xmlns:x='adobe:ns:meta/' x:xmptk='Adobe XMP Core 5.3-c011 66.145661, 2012/02/06-14:56:27' /> */}
+      {/*?xpacket end="w"?*/}
+    </metadata>
+    <g display='none'>
+      <rect x={1} y={1} display='inline' fill='#000000' width={48} height={48} />
+    </g>
+    <g>
+      <g>
+        <polygon points='34.675,47.178 12.497,25 34.675,2.822 37.503,5.65 18.154,25 37.503,44.35   ' />
+      </g>
+    </g>
   </svg>
 );

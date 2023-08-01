@@ -1,150 +1,179 @@
 import { useQuery } from '@tanstack/react-query';
-import isUndefined from 'lodash/isUndefined';
-import omitBy from 'lodash/omitBy';
-import { Fragment, useMemo } from 'react';
+import { useMemo } from 'react';
+import { Link } from 'react-router-dom';
 
-import brandApi from 'src/apis/brand.api';
-import categoryApi from 'src/apis/category.api';
+import blogApi from 'src/apis/blog.api';
 import productApi from 'src/apis/product.api';
-import Filter from 'src/components/Filter';
+import BlogVertical from 'src/components/BlogVertical';
+import Carousel from 'src/components/Carousel';
 import Loading from 'src/components/Loading';
-import Pagination from 'src/components/Pagination/Pagination';
-import ProductItem from 'src/components/ProductItem';
-import Sort from 'src/components/Sort';
-import UseQueryParams from 'src/hooks/useQueryParams';
-import { GetProductsRequestParams } from 'src/types/product.type';
-
-type QueryConfig = {
-  [key in keyof GetProductsRequestParams]: string;
-};
+import PATH from 'src/constants/path';
+import MegaMenu from 'src/layouts/components/Header/MegaMenu';
+import ProductSection from './ProductSection';
 
 const Home = () => {
-  const queryParams: QueryConfig = UseQueryParams();
-  const queryConfig: QueryConfig = omitBy(
-    {
-      page: queryParams.page || 1,
-      limit: queryParams.limit || 10,
-      category: queryParams.category,
-      brand: queryParams.brand,
-      sortBy: queryParams.sortBy,
-      orderBy: queryParams.orderBy
-    },
-    isUndefined
-  );
-
-  const getProductsQuery = useQuery({
-    queryKey: ['products', queryConfig],
-    queryFn: () => productApi.getList(queryConfig),
-    keepPreviousData: true
+  const getKeyboardsQuery = useQuery({
+    queryKey: ['keyboards'],
+    queryFn: () => productApi.getList({ category: '64afcf014a921a14beb05915', limit: '5' })
   });
 
-  const getBrandsQuery = useQuery({
-    queryKey: ['brands'],
-    queryFn: () => brandApi.getList()
+  const getLaptopsQuery = useQuery({
+    queryKey: ['laptops'],
+    queryFn: () => productApi.getList({ category: '64afbb1839753e4263bc467e-64bcd8a8ae38e6a282211269', limit: '5' })
   });
 
-  const getCategoriesQuery = useQuery({
-    queryKey: ['categories'],
-    queryFn: () => categoryApi.getList()
+  const getMousesQuery = useQuery({
+    queryKey: ['mouses'],
+    queryFn: () => productApi.getList({ category: '64b8f36ca692e0ad3a11afcc', limit: '5' })
   });
 
-  const products = useMemo(
-    () => getProductsQuery.data?.data.data.products,
-    [getProductsQuery.data?.data.data.products]
+  const getBlogsQuery = useQuery({
+    queryKey: ['blogs'],
+    queryFn: () => blogApi.getList({ limit: '4' })
+  });
+
+  const keyboards = useMemo(
+    () => getKeyboardsQuery.data?.data.data.products,
+    [getKeyboardsQuery.data?.data.data.products]
   );
-  const brands = useMemo(() => getBrandsQuery.data?.data.data.brands, [getBrandsQuery.data?.data.data.brands]);
-  const categories = useMemo(
-    () => getCategoriesQuery.data?.data.data.categories,
-    [getCategoriesQuery.data?.data.data.categories]
-  );
-  const pageSize = useMemo(
-    () => getProductsQuery.data?.data.data.pagination.page_size,
-    [getProductsQuery.data?.data.data.pagination.page_size]
-  );
+  const laptops = useMemo(() => getLaptopsQuery.data?.data.data.products, [getLaptopsQuery.data?.data.data.products]);
+  const mouses = useMemo(() => getMousesQuery.data?.data.data.products, [getMousesQuery.data?.data.data.products]);
+  const blogs = useMemo(() => getBlogsQuery.data?.data.data.blogs, [getBlogsQuery.data?.data.data.blogs]);
 
   return (
-    <Fragment>
-      <div className='container bg-white my-4 rounded shadow-sm pb-10'>
-        {/* Bộ lọc sản phẩm */}
-        <div className='py-6 px-3 flex'>
-          {categories && categories.length > 0 && (
-            <Filter
-              queryName='category'
-              label='Danh mục sản phẩm'
-              data={categories.map((category) => ({
-                value: category._id,
-                text: category.name_vi
-              }))}
-            />
-          )}
-          <div className='mx-1' />
-          {brands && brands.length > 0 && (
-            <Filter
-              queryName='brand'
-              label='Nhãn hiệu'
-              data={brands.map((brand) => ({
-                value: brand._id,
-                text: brand.name
-              }))}
-            />
-          )}
+    <div className='my-3'>
+      {/* Mega menu, carousel */}
+      <div className='container'>
+        <div className='flex'>
+          <MegaMenu />
+          <div className='grid grid-cols-12 gap-1 ml-[15px]'>
+            <div className='col-span-8'>
+              <Carousel />
+            </div>
+            <div className='col-span-4'>
+              <Link to={PATH.HOME}>
+                <img
+                  src='https://file.hstatic.net/200000722513/file/banner_slider_-_right_1_04cb85fcde584ec0a0818d9e5e212282.png'
+                  alt=''
+                />
+              </Link>
+              <Link to={PATH.HOME}>
+                <img
+                  src='https://file.hstatic.net/200000722513/file/banner_slider_-_right_2_5f844c8513ea42628d4e5e49c7a28d70.png'
+                  alt=''
+                />
+              </Link>
+            </div>
+          </div>
         </div>
-        {/* Sắp xếp sản phẩm */}
-        <div className='flex justify-end mb-4'>
-          <Sort
-            data={[
+      </div>
+      {/* Laptop bán chạy */}
+      <div className='container mt-3'>
+        {laptops && laptops.length > 0 && !getLaptopsQuery.isLoading && (
+          <ProductSection
+            headingTitle='Laptop bán chạy'
+            data={laptops}
+            viewAllTo={`${PATH.PRODUCT}?category=64afbb1839753e4263bc467e-64bcd8a8ae38e6a282211269`}
+            subLinks={[
               {
-                orderBy: 'desc',
-                sortBy: 'created_at',
-                name: 'Nổi bật'
+                to: `${PATH.PRODUCT}?category=64afbb1839753e4263bc467e-64bcd8a8ae38e6a282211269&brand=64afcf2d4a921a14beb05916`,
+                name: 'ASUS'
               },
               {
-                orderBy: 'desc',
-                sortBy: 'price_after_discount',
-                name: 'Giá giảm dần'
+                to: `${PATH.PRODUCT}?category=64afbb1839753e4263bc467e-64bcd8a8ae38e6a282211269&brand=64bcda92ae38e6a282211272`,
+                name: 'Acer'
               },
               {
-                orderBy: 'asc',
-                sortBy: 'price_after_discount',
-                name: 'Giá tăng dần'
+                to: `${PATH.PRODUCT}?category=64afbb1839753e4263bc467e-64bcd8a8ae38e6a282211269&brand=64bcda92ae38e6a282211272`,
+                name: 'LENOVO'
               }
             ]}
           />
-        </div>
-        {/* Danh sách sản phẩm */}
-        {products && products.length > 0 && !getProductsQuery.isLoading && (
-          <Fragment>
-            <div className='grid grid-cols-10 gap-3'>
-              {products.map((product, index) => (
-                <div key={index} className='col-span-2'>
-                  <ProductItem data={product} />
-                </div>
-              ))}
-            </div>
-            <div className='flex justify-center mt-10'>
-              <Pagination
-                pageSize={pageSize || 0}
-                classNameItem='w-10 h-10 mx-1 rounded-full flex justify-center items-center font-semibold text-base select-none'
-                classNameItemActive='bg-black text-white select-none'
-                classNameItemUnActive='bg-[#f3f3f3]'
-              />
-            </div>
-          </Fragment>
         )}
-        {/* Không có sản phẩm nào phù hợp */}
-        {products && products.length <= 0 && !getProductsQuery.isLoading && (
-          <div className='p-[15px] bg-[#fcf8e3] border border-[#faebcc] text-sm text-[#8a6d3b]'>
-            Chưa có sản phẩm nào trong danh mục này
-          </div>
-        )}
-        {/* Loading */}
-        {getProductsQuery.isLoading && (
-          <div className='flex justify-center py-[50px]'>
+        {getLaptopsQuery.isLoading && (
+          <div className='bg-white rounded shadow-sm flex justify-center py-[100px]'>
             <Loading className='w-12 h-12' />
           </div>
         )}
       </div>
-    </Fragment>
+      {/* Bàn phím bán chạy */}
+      <div className='container mt-3'>
+        {keyboards && keyboards.length > 0 && !getKeyboardsQuery.isLoading && (
+          <ProductSection
+            headingTitle='Bàn phím bán chạy'
+            data={keyboards}
+            viewAllTo={`${PATH.PRODUCT}?category=64afcf014a921a14beb05915`}
+            subLinks={[
+              {
+                to: `${PATH.PRODUCT}?category=64afcf014a921a14beb05915&brand=64b9081ca692e0ad3a11afd6`,
+                name: 'AKKO'
+              }
+            ]}
+          />
+        )}
+        {getKeyboardsQuery.isLoading && (
+          <div className='bg-white rounded shadow-sm flex justify-center py-[100px]'>
+            <Loading className='w-12 h-12' />
+          </div>
+        )}
+      </div>
+      {/* Chuột bán chạy */}
+      <div className='container mt-3'>
+        {mouses && mouses.length > 0 && !getMousesQuery.isLoading && (
+          <ProductSection
+            headingTitle='Chuột bán chạy'
+            data={mouses}
+            viewAllTo={`${PATH.PRODUCT}?category=64b8f36ca692e0ad3a11afcc`}
+            subLinks={[
+              {
+                to: `${PATH.PRODUCT}?category=64b8f36ca692e0ad3a11afcc&brand=64c3e3eb9267282e701739b6`,
+                name: 'Dare-U'
+              },
+              {
+                to: `${PATH.PRODUCT}?category=64b8f36ca692e0ad3a11afcc&brand=64bcdb59ae38e6a282211275`,
+                name: 'Razer'
+              },
+              {
+                to: `${PATH.PRODUCT}?category=64b8f36ca692e0ad3a11afcc&brand=64b8f385a692e0ad3a11afcd`,
+                name: 'Cooler master'
+              }
+            ]}
+          />
+        )}
+        {getMousesQuery.isLoading && (
+          <div className='bg-white rounded shadow-sm flex justify-center py-[100px]'>
+            <Loading className='w-12 h-12' />
+          </div>
+        )}
+      </div>
+      {/* Tin tức công nghệ */}
+      <div className='container mt-3'>
+        {blogs && blogs.length > 0 && !getBlogsQuery.isLoading && (
+          <div className='bg-white rounded shadow-sm'>
+            <div className='flex justify-between items-center py-3 px-6'>
+              <h2 className='text-2xl font-semibold'>Tin tức công nghệ</h2>
+              <Link to={PATH.BLOG} className='text-lg text-[#1982F9] hover:text-primary'>
+                Xem tất cả
+              </Link>
+            </div>
+            {blogs && blogs.length > 0 && (
+              <div className='grid grid-cols-12 gap-4 px-6 pb-8'>
+                {blogs.map((blog) => (
+                  <div key={blog._id} className='col-span-3'>
+                    <BlogVertical data={blog} />
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
+        {getBlogsQuery.isLoading && (
+          <div className='bg-white rounded shadow-sm flex justify-center py-[100px]'>
+            <Loading className='w-12 h-12' />
+          </div>
+        )}
+      </div>
+    </div>
   );
 };
 

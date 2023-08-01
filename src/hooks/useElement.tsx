@@ -34,6 +34,7 @@ import ProductDetail from 'src/pages/shop/ProductDetail';
 import Register from 'src/pages/shop/Register/Register';
 import OrderDetail from 'src/pages/shop/Account/OrderDetail';
 import Search from 'src/pages/shop/Search';
+import Product from 'src/pages/shop/Product';
 
 const ProtectedRoute = () => {
   const { isAuthenticated } = useContext(AppContext);
@@ -71,6 +72,14 @@ const useElement = () => {
       element: (
         <MainLayout>
           <NotFound />
+        </MainLayout>
+      )
+    },
+    {
+      path: PATH.PRODUCT,
+      element: (
+        <MainLayout>
+          <Product />
         </MainLayout>
       )
     },

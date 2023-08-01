@@ -18,11 +18,11 @@ const MenuLink = ({ to, icon, name, onMouseEnter, onMouseLeave }: MenuLinkProps)
       to={to}
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
-      className='relative flex justify-between items-center px-4 py-[6px] hover:bg-[#ea1c04] group after:absolute after:left-full after:top-0 after:bottom-0 after:border-[16px] after:border-transparent after:border-l-[#ea1c04] z-10 after:hidden hover:after:block'
+      className='relative flex justify-between items-center px-4 py-[6px] hover:bg-[#ea1c04] group after:absolute after:left-full after:top-0 after:bottom-0 after:border-[16px] after:border-transparent after:border-l-[#ea1c04] z-10 after:hidden hover:after:block hover:text-white'
     >
-      <span className='flex items-center'>
-        <div className='w-6 group-hover:stroke-white group-hover:fill-white'>{icon}</div>
-        <span className='text-[13px] ml-3 group-hover:text-white'>{name}</span>
+      <span className='flex items-center group-hover:text-white'>
+        <div className='w-6'>{icon}</div>
+        <span className='text-[13px] ml-3'>{name}</span>
       </span>
       <MenuLinkArrowIcon className='w-2 h-2 stroke-black group-hover:stroke-white' />
     </Link>

@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import classNames from 'classnames';
 
 import logo from 'src/assets/images/logo-white.svg';
 import { BarIcon } from 'src/components/Icons';
@@ -42,7 +43,18 @@ const Header = () => {
       </div>
 
       {/* Mega menu */}
-      <MegaMenu isShow={showMenu} toggleMenu={toggleMenu} />
+      <div
+        className={classNames('absolute top-full left-0 w-full duration-200', {
+          'opacity-0 pointer-events-none': !showMenu,
+          'opacity-100 pointer-events-auto': showMenu
+        })}
+      >
+        {/* Mask */}
+        <div onClick={toggleMenu} className='absolute left-0 right-0 w-full h-screen bg-black/50' />
+        <div className='container mt-[15px]'>
+          <MegaMenu />
+        </div>
+      </div>
     </header>
   );
 };

@@ -116,7 +116,7 @@ const HistoryOrder = () => {
           <EmptyImage />
           <p className='my-4 text-center'>Quý khách chưa có đơn hàng nào.</p>
           <Link
-            to={PATH.HOME}
+            to={PATH.PRODUCT}
             className='py-[10px] px-7 rounded uppercase text-white bg-primary font-medium text-sm hover:bg-primary/90'
           >
             Tiếp tục mua hàng

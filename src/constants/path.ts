@@ -2,6 +2,7 @@ const PATH = {
   HOME: '/',
   LOGIN: '/login',
   REGISTER: '/register',
+  PRODUCT: '/product',
   PRODUCT_DETAIL: '/product/:name_id',
   PRODUCT_DETAIL_WITHOUT_ID: '/product',
   BLOG: '/blog',

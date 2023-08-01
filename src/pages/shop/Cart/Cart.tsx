@@ -163,7 +163,7 @@ const Cart = () => {
               <div className='flex flex-col items-center py-6'>
                 <div className='text-sm text-center'>Giỏ hàng của bạn đang trống</div>
                 <Link
-                  to={PATH.HOME}
+                  to={PATH.PRODUCT}
                   className='py-2 px-6 border border-[#1982F9] rounded my-4 text-[#1982F9] uppercase text-sm font-semibold'
                 >
                   Tiếp tục mua hàng
