@@ -50,7 +50,7 @@ const BlogDetail = () => {
               dangerouslySetInnerHTML={{
                 __html: DOMPurify.sanitize(blog.content_vi)
               }}
-              className='text-lg text-justify text-[#111111]'
+              className='text-base md:text-lg text-justify text-[#111111]'
             />
           </div>
         </div>
@@ -58,8 +58,8 @@ const BlogDetail = () => {
 
       {/* Danh sách blog khác */}
       {orderBlogs && orderBlogs.length > 0 && (
-        <div className='md:px-[40px] lg:px-[110px] mt-4 md:mt-12'>
-          <h2 className='text-2xl font-semibold uppercase md:mb-4 text-[#333333]'>Bài viết liên quan</h2>
+        <div className='md:px-[40px] lg:px-[110px] mt-12'>
+          <h2 className='text-lg md:text-2xl font-semibold uppercase md:mb-4 text-[#333333]'>Bài viết liên quan</h2>
           <div className='grid grid-cols-12 gap-2 md:gap-6'>
             {orderBlogs.map((blog) => (
               <div key={blog._id} className='col-span-6 md:col-span-4 mt-4 md:mt-0'>
@@ -71,11 +71,7 @@ const BlogDetail = () => {
       )}
 
       {/* Loading */}
-      {getBlogQuery.isLoading && getBlogsQuery.isLoading && (
-        <div className='flex justify-center py-[200px]'>
-          <Loading className='w-12 h-12' />
-        </div>
-      )}
+      {getBlogQuery.isLoading && <Loading />}
     </div>
   );
 };

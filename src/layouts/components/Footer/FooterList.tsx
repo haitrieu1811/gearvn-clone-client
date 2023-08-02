@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 
-import FooterHeading from '../FooterHeading';
-import FooterLink from '../FooterLink';
+import FooterHeading from './FooterHeading';
+import FooterLink from './FooterLink';
 
 interface LinkItem {
   name: string;

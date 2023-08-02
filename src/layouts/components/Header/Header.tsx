@@ -49,10 +49,10 @@ const Header = () => {
               </Link>
               {/* Danh mục */}
               <div
-                className='ml-4 h-[42px] bg-[#BE1529] px-2 py-1 flex items-center justify-center rounded cursor-pointer select-none'
+                className='ml-4 h-[42px] bg-[#BE1529] px-2 flex items-center justify-center rounded cursor-pointer select-none'
                 onClick={toggleMenu}
               >
-                <BarIcon />
+                <BarIcon className='fill-white' />
                 <span className='text-white text-[13px] ml-3 font-semibold'>Danh mục</span>
               </div>
               {/* Tìm kiếm */}
@@ -82,10 +82,10 @@ const Header = () => {
 
       {/* Header của mobile và tablet */}
       {isTablet && (
-        <header>
-          <nav className='bg-primary p-2 flex items-center'>
+        <header className='sticky top-0 left-0 right-0 z-[99999]'>
+          <nav className='bg-primary p-2 flex'>
             <button className='ml-2'>
-              <BarIcon className='w-[22px] h-9' />
+              <BarIcon className='w-[22px] h-9 fill-white' />
             </button>
             <Link to={PATH.HOME} className='ml-4 mr-2'>
               <img src={logoMobile} alt='Logo mobile' />

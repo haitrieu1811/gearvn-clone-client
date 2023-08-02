@@ -85,11 +85,14 @@ const Address = () => {
 
   return (
     <div className='bg-white rounded shadow-sm pb-10'>
-      <div className='py-4 px-6 flex justify-between items-center'>
-        <h2 className='text-2xl font-semibold'>Sổ địa chỉ</h2>
-        <button className='flex items-center bg-[#005EC9] rounded py-2 px-3 hover:bg-[#005EC9]/90' onClick={startAdd}>
+      <div className='py-4 px-4 md:px-6 flex justify-between items-center'>
+        <h2 className='text-xl md:text-2xl font-semibold'>Sổ địa chỉ</h2>
+        <button
+          className='flex items-center bg-[#005EC9] rounded py-[6px] md:py-2 px-2 md:px-3 hover:bg-[#005EC9]/90'
+          onClick={startAdd}
+        >
           <PlusIcon className='w-3 h-3 stroke-white mr-1' />
-          <span className='text-sm text-white'>Thêm địa chỉ mới</span>
+          <span className='text-xs md:text-sm text-white'>Thêm địa chỉ mới</span>
         </button>
       </div>
       {addresses && addresses.length > 0 && (
@@ -109,16 +112,16 @@ const Address = () => {
                     Thiết lập mặc định
                   </button>
                 )}
-                <div className='text-slate-700 capitalize text-sm md:text-base'>
+                <div className='text-slate-700 capitalize text-xs md:text-base'>
                   {address.street}, {address.ward}, {address.district}, {address.province}
                 </div>
               </div>
               <div className='flex items-center ml-2 md:ml-4'>
-                <button className='text-sm font-semibold text-[#005EC9]' onClick={() => startUpdate(address._id)}>
+                <button className='text-xs font-semibold text-[#005EC9]' onClick={() => startUpdate(address._id)}>
                   Sửa
                 </button>
                 <div className='h-4 w-[1px] bg-slate-300 mx-1' />
-                <button className='text-sm font-semibold text-primary' onClick={() => startDelete(address._id)}>
+                <button className='text-xs font-semibold text-primary' onClick={() => startDelete(address._id)}>
                   Xóa
                 </button>
               </div>
@@ -126,7 +129,7 @@ const Address = () => {
           ))}
         </div>
       )}
-      <div className='px-4 py-2 bg-yellow-100 text-sm font-medium inline-block mx-2 md:mx-6 rounded'>
+      <div className='px-4 py-2 bg-yellow-100 text-xs md:text-sm font-medium inline-block mx-2 md:mx-6 rounded'>
         Nếu địa chỉ nhận hàng chưa chính xác, vui lòng kiểm tra và cập nhật. Mỗi tài khoản chỉ được tạo tối đa 3 địa chỉ
       </div>
       <Modal

@@ -126,11 +126,8 @@ const Blog = () => {
           </div>
         </div>
       )}
-      {getBlogsQuery.isLoading && (
-        <div className='container flex justify-center my-3 py-[100px] bg-white'>
-          <Loading className='w-12 h-12' />
-        </div>
-      )}
+      {/* Loading */}
+      {getBlogsQuery.isLoading && <Loading />}
     </Fragment>
   );
 };

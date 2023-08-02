@@ -2,7 +2,7 @@ import Tippy from '@tippyjs/react/headless';
 import classNames from 'classnames';
 import omit from 'lodash/omit';
 import PropTypes from 'prop-types';
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { createSearchParams, useLocation, useNavigate } from 'react-router-dom';
 
 import UseQueryParams from 'src/hooks/useQueryParams';
@@ -82,7 +82,7 @@ const Filter = ({ data, label, queryName }: FilterProps) => {
           {data.map((item) => (
             <button
               key={item.value}
-              className={classNames('border text-sm rounded p-2 ml-2 mt-2', {
+              className={classNames('border text-xs md:text-sm rounded p-[6px] md:p-2 ml-2 mt-2', {
                 'border-[#1982F9] text-[#1982F9]': choosenValue.includes(item.value),
                 'border-[#cfcfcf] hover:border-[#1982F9] hover:text-[#1982F9]': !choosenValue.includes(item.value)
               })}
@@ -94,16 +94,19 @@ const Filter = ({ data, label, queryName }: FilterProps) => {
         </div>
         <div className='border-t p-4 flex justify-center'>
           <button
-            className={classNames('py-[6px] px-10 border border-primary rounded text-sm text-primary', {
-              'pointer-events-none': !isChoosen,
-              'opacity-50': !isChoosen
-            })}
+            className={classNames(
+              'py-[6px] px-6 md:px-10 border border-primary rounded text-xs md:text-sm text-primary',
+              {
+                'pointer-events-none': !isChoosen,
+                'opacity-50': !isChoosen
+              }
+            )}
             onClick={handleUnChoose}
           >
             Bỏ chọn
           </button>
           <button
-            className={classNames('py-[6px] px-10 rounded text-sm text-white bg-[#1982F9] ml-3', {
+            className={classNames('py-[6px] px-6 md:px-10 rounded text-xs md:text-sm text-white bg-[#1982F9] ml-3', {
               'pointer-events-none': !isChoosen,
               'opacity-50': !isChoosen
             })}
@@ -127,13 +130,13 @@ const Filter = ({ data, label, queryName }: FilterProps) => {
       onHide={onHide}
     >
       <button
-        className={classNames('px-[10px] py-2 border flex justify-between items-center rounded', {
+        className={classNames('px-[10px] py-[6px] md:py-2 border flex justify-between items-center rounded', {
           'border-[#1982F9]': isActive,
           'border-[#cfcfcf]': !isActive
         })}
       >
         <span
-          className={classNames('text-sm', {
+          className={classNames('text-xs md:text-sm', {
             'text-[#1982F9]': isChoosen,
             'text-[#111111]': !isChoosen
           })}

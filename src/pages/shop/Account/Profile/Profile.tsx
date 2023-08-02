@@ -105,14 +105,16 @@ const Profile = () => {
       {/* Thông tin tài khoản */}
       {me && getMeQuery && !getMeQuery.isLoading && (
         <form onSubmit={onSubmit}>
-          <h2 className='py-4 px-6 text-2xl font-semibold'>Thông tin tài khoản</h2>
+          <h2 className='py-4 px-2 md:px-6 text-xl md:text-2xl font-semibold'>Thông tin tài khoản</h2>
           <div className='px-2 md:px-4 py-4 lg:pl-6 lg:pr-[290px]'>
             {/* Họ tên */}
-            <div className='grid grid-cols-12 gap-4 md:gap-6'>
-              <div className='col-span-4 flex items-center justify-end text-sm md:text-base'>
-                <label htmlFor='fullName'>Họ tên</label>
+            <div className='grid grid-cols-12 gap-2 md:gap-6'>
+              <div className='col-span-12 md:col-span-4 flex items-center md:justify-end'>
+                <label htmlFor='fullName' className='text-sm md:text-base'>
+                  Họ tên
+                </label>
               </div>
-              <div className='col-span-8'>
+              <div className='col-span-12 md:col-span-8'>
                 <Input
                   type='text'
                   placeholder='Họ tên'
@@ -124,31 +126,33 @@ const Profile = () => {
               </div>
             </div>
             {/* Giới tính */}
-            <div className='grid grid-cols-12 gap-6 mt-4'>
-              <div className='col-span-4 flex items-center justify-end text-sm md:text-base'>
-                <label>Giới tính</label>
+            <div className='grid grid-cols-12 gap-2 md:gap-6 mt-4'>
+              <div className='col-span-12 md:col-span-4 flex items-center  md:justify-end'>
+                <label className='text-sm md:text-base'>Giới tính</label>
               </div>
-              <div className='col-span-8 flex items-center'>
+              <div className='col-span-12 md:col-span-8 flex items-center'>
                 <div className='flex items-center'>
                   <input type='radio' id='male' {...register('gender')} value={Gender.Male} />
-                  <label htmlFor='male' className='ml-1 select-none'>
+                  <label htmlFor='male' className='ml-1 select-none text-sm md:text-base'>
                     Nam
                   </label>
                 </div>
                 <div className='flex items-center ml-4'>
                   <input type='radio' id='female' {...register('gender')} value={Gender.Female} />
-                  <label htmlFor='female' className='ml-1 select-none'>
+                  <label htmlFor='female' className='ml-1 select-none text-sm md:text-base'>
                     Nữ
                   </label>
                 </div>
               </div>
             </div>
             {/* Số điện thoại */}
-            <div className='grid grid-cols-12 gap-6 mt-4'>
-              <div className='col-span-4 flex items-center justify-end text-sm md:text-base'>
-                <label htmlFor='phone_number'>Số điện thoại</label>
+            <div className='grid grid-cols-12 gap-2 md:gap-6 mt-4'>
+              <div className='col-span-12 md:col-span-4 flex items-center md:justify-end'>
+                <label htmlFor='phone_number' className='text-sm md:text-base'>
+                  Số điện thoại
+                </label>
               </div>
-              <div className='col-span-8'>
+              <div className='col-span-12 md:col-span-8'>
                 <Input
                   type='text'
                   placeholder='Số điện thoại'
@@ -160,26 +164,26 @@ const Profile = () => {
               </div>
             </div>
             {/* Email */}
-            <div className='grid grid-cols-12 gap-6 mt-4'>
-              <div className='col-span-4 flex items-center justify-end text-sm md:text-base'>
-                <label htmlFor=''>Email</label>
+            <div className='grid grid-cols-12 gap-2 md:gap-6 mt-4'>
+              <div className='col-span-12 md:col-span-4 flex items-center md:justify-end'>
+                <label className='text-sm md:text-base'>Email</label>
               </div>
-              <div className='col-span-8'>
+              <div className='col-span-12 md:col-span-8'>
                 <input
                   type='text'
                   placeholder='Email'
-                  className='w-full border border-[#CFCFCF] rounded h-10 px-4 outline-none bg-slate-100/50 cursor-not-allowed'
+                  className='w-full border border-[#CFCFCF] rounded h-10 px-3 md:px-4 outline-none bg-slate-100/50 cursor-not-allowed text-sm md:text-base'
                   value={me.email}
                   disabled
                 />
               </div>
             </div>
             {/* Ngày sinh */}
-            <div className='grid grid-cols-12 gap-6 mt-4'>
-              <div className='col-span-4 flex items-center justify-end text-sm md:text-base'>
-                <label>Ngày sinh</label>
+            <div className='grid grid-cols-12 gap-2 md:gap-6 mt-4'>
+              <div className='col-span-12 md:col-span-4 flex items-center md:justify-end'>
+                <label className='text-sm md:text-base'>Ngày sinh</label>
               </div>
-              <div className='col-span-8'>
+              <div className='col-span-12 md:col-span-8'>
                 <Controller
                   control={control}
                   name='date_of_birth'
@@ -188,10 +192,10 @@ const Profile = () => {
               </div>
             </div>
             {/* Lưu thay đổi */}
-            <div className='grid grid-cols-12 gap-6 my-4'>
+            <div className='grid grid-cols-12 gap-2 md:gap-6 my-4'>
               <div className='col-span-4 flex items-center justify-end'></div>
-              <div className='col-span-8'>
-                <div className='w-[150px] h-[38px] text-sm'>
+              <div className='col-span-12 md:col-span-8'>
+                <div className='w-[120px] h-[28px] md:w-[150px] md:h-[38px] text-xs md:text-sm'>
                   <Button isLoading={updateMeMutation.isLoading}>Lưu thay đổi</Button>
                 </div>
               </div>
@@ -200,11 +204,7 @@ const Profile = () => {
         </form>
       )}
       {/* Tải trang */}
-      {getMeQuery && getMeQuery.isLoading && (
-        <div className='py-[150px] flex justify-center'>
-          <Loading className='w-12 h-12' />
-        </div>
-      )}
+      {getMeQuery && getMeQuery.isLoading && <Loading />}
     </div>
   );
 };

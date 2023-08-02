@@ -96,11 +96,7 @@ const Home = () => {
             ]}
           />
         )}
-        {getLaptopsQuery.isLoading && (
-          <div className='bg-white rounded shadow-sm flex justify-center py-[100px]'>
-            <Loading className='w-12 h-12' />
-          </div>
-        )}
+        {getLaptopsQuery.isLoading && <Loading />}
       </div>
       {/* Bàn phím bán chạy */}
       <div className='lg:container mt-3'>
@@ -117,11 +113,7 @@ const Home = () => {
             ]}
           />
         )}
-        {getKeyboardsQuery.isLoading && (
-          <div className='bg-white rounded shadow-sm flex justify-center py-[100px]'>
-            <Loading className='w-12 h-12' />
-          </div>
-        )}
+        {getKeyboardsQuery.isLoading && <Loading />}
       </div>
       {/* Chuột bán chạy */}
       <div className='lg:container mt-3'>
@@ -146,24 +138,20 @@ const Home = () => {
             ]}
           />
         )}
-        {getMousesQuery.isLoading && (
-          <div className='bg-white rounded shadow-sm flex justify-center py-[100px]'>
-            <Loading className='w-12 h-12' />
-          </div>
-        )}
+        {getMousesQuery.isLoading && <Loading />}
       </div>
       {/* Tin tức công nghệ */}
       <div className='lg:container mt-3'>
         {blogs && blogs.length > 0 && !getBlogsQuery.isLoading && (
           <div className='bg-white rounded shadow-sm'>
-            <div className='flex justify-between items-center py-3 px-6'>
-              <h2 className='text-2xl font-semibold'>Tin tức công nghệ</h2>
-              <Link to={PATH.BLOG} className='text-lg text-[#1982F9] hover:text-primary'>
+            <div className='flex justify-between items-center py-3 px-4 md:px-6'>
+              <h2 className='text-lg md:text-2xl font-semibold'>Tin tức công nghệ</h2>
+              <Link to={PATH.BLOG} className='text-sm md:text-lg text-[#1982F9] hover:text-primary'>
                 Xem tất cả
               </Link>
             </div>
             {blogs && blogs.length > 0 && (
-              <div className='grid grid-cols-12 gap-4 px-6 pb-8'>
+              <div className='grid grid-cols-12 gap-4 px-4 md:px-6 pb-8'>
                 {blogs.map((blog) => (
                   <div key={blog._id} className='col-span-6 lg:col-span-3'>
                     <BlogVertical data={blog} />
@@ -173,11 +161,7 @@ const Home = () => {
             )}
           </div>
         )}
-        {getBlogsQuery.isLoading && (
-          <div className='bg-white rounded shadow-sm flex justify-center py-[100px]'>
-            <Loading className='w-12 h-12' />
-          </div>
-        )}
+        {getBlogsQuery.isLoading && <Loading />}
       </div>
     </div>
   );

@@ -15,7 +15,7 @@ interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
 
 const Input = ({
   classNameWrapper,
-  classNameInput = 'outline-none border border-[#CFCFCF] py-2 px-4 block w-full rounded focus:border-slate-500 text-black text-[15px]',
+  classNameInput = 'outline-none border border-[#CFCFCF] py-2 px-3 md:px-4 block w-full rounded focus:border-slate-500 text-sm md:text-base',
   classNameError = 'text-sm text-red-500 mt-2',
   errorMessage,
   name,

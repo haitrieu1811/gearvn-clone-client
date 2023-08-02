@@ -124,7 +124,7 @@ const Product = () => {
             <div className='flex justify-center mt-10'>
               <Pagination
                 pageSize={pageSize || 0}
-                classNameItem='w-10 h-10 mx-1 rounded-full flex justify-center items-center font-semibold text-base select-none'
+                classNameItem='w-8 h-8 md:w-10 md:h-10 mx-1 rounded-full flex justify-center items-center font-semibold text-sm md:text-base select-none'
                 classNameItemActive='bg-black text-white pointer-events-none'
                 classNameItemUnActive='bg-[#f3f3f3]'
               />
@@ -133,16 +133,12 @@ const Product = () => {
         )}
         {/* Không có sản phẩm nào phù hợp */}
         {products && products.length <= 0 && !getProductsQuery.isLoading && (
-          <div className='p-[15px] bg-[#fcf8e3] border border-[#faebcc] text-sm text-[#8a6d3b]'>
+          <div className='p-2 md:p-[15px] bg-[#fcf8e3] border border-[#faebcc] text-xs md:text-sm text-[#8a6d3b]'>
             Chưa có sản phẩm nào trong danh mục này
           </div>
         )}
         {/* Loading */}
-        {getProductsQuery.isLoading && (
-          <div className='flex justify-center py-[50px]'>
-            <Loading className='w-12 h-12' />
-          </div>
-        )}
+        {getProductsQuery.isLoading && <Loading />}
       </div>
     </div>
   );

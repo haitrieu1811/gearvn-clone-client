@@ -14,7 +14,7 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 
 const Button = ({
   children,
-  className = 'bg-primary w-full text-white uppercase rounded py-2 hover:bg-primary/90 flex items-center justify-center font-medium select-none',
+  className = 'bg-primary w-full text-white text-sm md:text-base uppercase rounded py-2 hover:bg-primary/90 flex items-center justify-center font-medium select-none',
   classNameWrapper,
   isLoading,
   disabled,

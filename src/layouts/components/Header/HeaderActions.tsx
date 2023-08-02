@@ -8,7 +8,11 @@ import HeaderAction from './HeaderAction';
 const HeaderActions = ({ cartSize }: { cartSize: number }) => {
   return (
     <div className='flex items-center'>
-      <HeaderAction icon={<HotlineIcon className='w-[18px]' />} textAbove='Hotline' textBelow='1800.6975' />
+      <HeaderAction
+        icon={<HotlineIcon className='w-[18px] stroke-white' />}
+        textAbove='Hotline'
+        textBelow='1800.6975'
+      />
       <HeaderAction icon={<LocationIcon className='w-[18px]' />} textAbove='Hệ thống' textBelow='Showroom' />
       <Link to={PATH.ACCOUNT_ORDER}>
         <HeaderAction

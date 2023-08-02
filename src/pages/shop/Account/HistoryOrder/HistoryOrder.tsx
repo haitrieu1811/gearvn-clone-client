@@ -70,32 +70,36 @@ const HistoryOrder = () => {
   return (
     <Fragment>
       <div className='bg-white rounded-tl rounded-tr shadow-sm'>
-        <h2 className='py-4 px-6 text-2xl font-semibold'>Quản lý đơn hàng</h2>
+        <h2 className='py-4 px-2 md:px-6 text-xl md:text-2xl font-semibold'>Quản lý đơn hàng</h2>
         {/* Nav links */}
-        <nav className='flex justify-between mt-4'>
-          {NAV_LINKS.map((navLink, index) => {
-            const isActive = queryConfig.status === String(navLink.status);
-            return (
-              <div
-                key={index}
-                aria-hidden='true'
-                tabIndex={0}
-                role='button'
-                className={classNames(
-                  'relative whitespace-nowrap text-center uppercase text-[#535353] font-semibold flex-auto px-1 pb-2 after:absolute after:bottom-0 after:left-0 after:h-[2px] after:duration-200',
-                  {
-                    'after:bg-primary text-black after:w-full': isActive,
-                    'after:bg-transparent after:w-0': !isActive
-                  }
-                )}
-                onClick={() => changeStatus(String(navLink.status))}
-              >
-                {navLink.name}{' '}
-                {isActive && <span className='text-[#FF3C53] ml-[2px]'>({quantity[navLink.status]})</span>}
-              </div>
-            );
-          })}
-        </nav>
+        <div className='overflow-x-auto'>
+          <nav className='flex justify-between mt-2 md:mt-4 w-[800px] md:w-full'>
+            {NAV_LINKS.map((navLink, index) => {
+              const isActive = queryConfig.status === String(navLink.status);
+              return (
+                <div
+                  key={index}
+                  aria-hidden='true'
+                  tabIndex={0}
+                  role='button'
+                  className={classNames(
+                    'relative whitespace-nowrap text-center uppercase text-[#535353] text-sm md:text-base font-semibold flex-auto px-1 pb-2 after:absolute after:bottom-0 after:left-0 after:h-[2px] after:duration-200',
+                    {
+                      'after:bg-primary text-black after:w-full': isActive,
+                      'after:bg-transparent after:w-0': !isActive
+                    }
+                  )}
+                  onClick={() => changeStatus(String(navLink.status))}
+                >
+                  {navLink.name}{' '}
+                  {isActive && (
+                    <span className='text-[#FF3C53] text-sm md:text-base ml-[2px]'>({quantity[navLink.status]})</span>
+                  )}
+                </div>
+              );
+            })}
+          </nav>
+        </div>
       </div>
       {/* Danh sách đơn hàng */}
       <div>
@@ -104,20 +108,16 @@ const HistoryOrder = () => {
           !getOrdersQuery.isLoading &&
           orders.map((order) => <OrderItem key={order._id} data={order} />)}
 
-        {getOrdersQuery.isLoading && (
-          <div className='bg-white rounded shadow-sm flex justify-center mt-4 py-[100px]'>
-            <Loading className='w-12 h-12' />
-          </div>
-        )}
+        {getOrdersQuery.isLoading && <Loading />}
       </div>
       {/* Hiển thị khi không có đơn hàng nào */}
       {orders && orders.length <= 0 && !getOrdersQuery.isLoading && (
-        <div className='bg-white rounded shadow-sm mt-4 py-8 flex justify-center items-center flex-col'>
+        <div className='bg-white rounded shadow-sm mt-2 md:mt-4 py-4 md:py-8 flex justify-center items-center flex-col'>
           <EmptyImage />
-          <p className='my-4 text-center'>Quý khách chưa có đơn hàng nào.</p>
+          <p className='my-4 text-center text-sm md:text-base'>Quý khách chưa có đơn hàng nào.</p>
           <Link
             to={PATH.PRODUCT}
-            className='py-[10px] px-7 rounded uppercase text-white bg-primary font-medium text-sm hover:bg-primary/90'
+            className='py-2 md:py-[10px] px-4 md:px-7 rounded uppercase text-white bg-primary font-medium text-xs md:text-sm hover:bg-primary/90'
           >
             Tiếp tục mua hàng
           </Link>

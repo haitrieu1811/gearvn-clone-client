@@ -2,7 +2,6 @@ import 'swiper/css';
 import 'swiper/css/navigation';
 import { Autoplay, Navigation, Pagination } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { CarouselNextIcon, CarouselPrevIcon } from '../Icons';
 
 const Carousel = () => {
   return (

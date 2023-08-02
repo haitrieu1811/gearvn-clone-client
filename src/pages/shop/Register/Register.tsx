@@ -56,9 +56,9 @@ const Register = () => {
 
   return (
     <div className='bg-primary'>
-      <div className='container py-12 md:py-24'>
+      <div className='container py-10 md:py-24'>
         <div className='grid grid-cols-12'>
-          <div className='bg-white p-10 lg:col-start-9 lg:col-span-4 rounded-sm col-span-12 col-start-1 md:col-span-8 md:col-start-3 shadow-sm'>
+          <div className='bg-white p-10 lg:col-start-9 lg:col-span-4 rounded col-span-12 col-start-1 md:col-span-8 md:col-start-3 shadow-sm'>
             <h2 className='text-2xl capitalize mb-5'>{t('register_login.register')}</h2>
             <form onSubmit={onSubmit}>
               <Input

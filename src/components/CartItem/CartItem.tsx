@@ -71,16 +71,16 @@ const CartItem = ({
                 <img
                   src={getImageUrl(data.product.thumbnail)}
                   alt={data.product.name_vi}
-                  className='w-[70px] h-[70px] md:w-[90px] md:h-[90px] object-cover'
+                  className='w-[60px] h-[60px] md:w-[90px] md:h-[90px] object-cover'
                 />
               </Link>
             </div>
             <div className='flex justify-center items-center mt-3'>
-              <button onClick={chooseToBuy} className='text-[#6D6E72] text-sm font-medium'>
+              <button onClick={chooseToBuy} className='text-[#6D6E72] text-xs font-medium'>
                 {!checked ? 'Chọn' : 'Bỏ chọn'}
               </button>
               <div className='w-[1px] h-3 bg-slate-400 mx-[6px]' />
-              <button onClick={() => handleDelete(data._id)} className='text-[#6D6E72] text-sm font-medium'>
+              <button onClick={() => handleDelete(data._id)} className='text-[#6D6E72] text-xs font-medium'>
                 Xóa
               </button>
             </div>
@@ -92,15 +92,15 @@ const CartItem = ({
               name: data.product.name_vi,
               id: data.product._id
             })}`}
-            className='pr-5 font-semibold line-clamp-3 md:line-clamp-2 text-sm md:text-base'
+            className='pr-5 font-semibold line-clamp-3 md:line-clamp-2 text-xs md:text-base'
           >
             {data.product.name_vi}
           </Link>
           <div className='flex flex-col items-end'>
-            <div className='text-primary font-semibold text-base md:text-lg'>
+            <div className='text-primary font-semibold text-sm md:text-lg'>
               {formatCurrency(data.product.price_after_discount * data.buy_count)}₫
             </div>
-            <div className='text-[#6D6E72] text-sm'>{formatCurrency(data.product.price_after_discount)}₫</div>
+            <div className='text-[#6D6E72] text-xs'>{formatCurrency(data.product.price_after_discount)}₫</div>
             <div className='mt-4'>
               <QuantityController
                 value={data.buy_count}

@@ -28,49 +28,52 @@ const OrderDetail = () => {
       {/* Thông tin đơn hàng */}
       {order && !getOrderDetailQuery.isLoading && (
         <Fragment>
-          <div className='py-4 px-6 flex justify-between items-center'>
-            <h2 className='text-2xl'>
+          <div className='py-4 px-2 md:px-6 flex flex-wrap md:flex-nowrap justify-between items-center'>
+            <h2 className='text-base md:text-2xl w-full md:w-auto text-center md:text-left'>
               <span className='font-semibold'>Chi tiết đơn hàng {`#${order._id.slice(-6)}`} -</span>{' '}
-              <span className='text-[#FF7A00] font-semibold'>{orderStatusName[order.status]}</span>
+              <span className='text-[#FF7A00] font-semibold md:mt-0'>{orderStatusName[order.status]}</span>
             </h2>
-            <div>Đặt lúc: {moment(order.created_at).format('kk:mm, DD.MM.YYYY')}</div>
+            <div className='text-sm md:text-base w-full md:w-auto mt-1 text-center md:text-left'>
+              Đặt lúc: {moment(order.created_at).format('kk:mm, DD.MM.YYYY')}
+            </div>
           </div>
-          <div className='px-6 py-4'>
-            {/* Thông tin khách hàng, hình thức thanh toán */}
-            <div className='flex'>
+          <div className='px-2 md:px-6 py-2 md:py-4'>
+            <div className='flex flex-wrap md:flex-nowrap'>
+              {/* Thông tin khách hàng */}
               <div className='flex-1 px-4 py-3 rounded border border-[#cfcfcf]'>
                 <div className='flex items-center mb-3'>
-                  <CustomerInfoImage className='w-6 h-6 mr-2' />{' '}
-                  <h3 className='text-[#333333] font-semibold'>Thông tin khách hàng</h3>
+                  <CustomerInfoImage className='w-5 h-5 md:w-6 md:h-6 mr-2' />{' '}
+                  <h3 className='text-[#333333] font-semibold text-sm md:text-base'>Thông tin khách hàng</h3>
                 </div>
-                <div className='flex mb-4'>
+                <div className='flex mb-4 text-xs md:text-base'>
                   <span className='w-1/3'>Người nhận:</span>
                   <span className='flex-1'>
                     {order.contact.customer_name} - {order.contact.phone_number}
                   </span>
                 </div>
-                <div className='flex mb-4'>
+                <div className='flex mb-4 text-xs md:text-base'>
                   <span className='w-1/3'>Địa chỉ nhận hàng:</span>
                   <span className='capitalize flex-1'>{`${order.contact.street}, ${order.contact.ward}, ${order.contact.district}, ${order.contact.province}`}</span>
                 </div>
-                <div className='flex'>
+                <div className='flex text-xs md:text-base'>
                   <span className='w-1/3'>Thời gian nhận hàng:</span>
                   <span className='flex-1'>{moment(order.created_at).add(3, 'days').format('DD.MM.YYYY')}</span>
                 </div>
               </div>
-              <div className='px-4 py-3 rounded border border-[#cfcfcf] ml-6 w-[324px]'>
+              {/* Hình thức thanh toán */}
+              <div className='px-4 py-3 rounded border border-[#cfcfcf] mt-2 md:mt-0 md:ml-6 w-full md:w-[324px]'>
                 <div className='flex items-center mb-3'>
-                  <PaymentMethodImage className='w-6 h-6 mr-2' />{' '}
-                  <h3 className='text-[#333333] font-semibold'>Hình thức thanh toán</h3>
+                  <PaymentMethodImage className='w-5 h-5 md:w-6 md:h-6 mr-2' />{' '}
+                  <h3 className='text-[#333333] font-semibold text-sm md:text-base'>Hình thức thanh toán</h3>
                 </div>
-                <div className='text-[#FF7A00]'>Thanh toán khi nhận hàng</div>
+                <div className='text-[#FF7A00] text-xs md:text-base'>Thanh toán khi nhận hàng</div>
               </div>
             </div>
             {/* Thông tin sản phẩm */}
-            <div className='px-4 py-3 rounded border border-[#cfcfcf] mt-6'>
+            <div className='px-2 md:px-4 py-3 rounded border border-[#cfcfcf] mt-2 md:mt-6'>
               <div className='flex items-center mb-3'>
-                <ProductInfoImage className='w-6 h-6 mr-2' />{' '}
-                <h3 className='text-[#333333] font-semibold'>Thông tin sản phẩm</h3>
+                <ProductInfoImage className='w-5 h-5 md:w-6 md:h-6 mr-2' />{' '}
+                <h3 className='text-[#333333] font-semibold text-sm md:text-base'>Thông tin sản phẩm</h3>
               </div>
               {/* Danh sách sản phẩm */}
               <div>
@@ -82,11 +85,12 @@ const OrderDetail = () => {
                           name: purchase.product.name_vi,
                           id: purchase.product._id
                         })}`}
+                        className='flex-shrink-0'
                       >
                         <img
                           src={getImageUrl(purchase.product.thumbnail)}
                           alt={purchase.product.name_vi}
-                          className='w-[90px] h-[90px] rounded-sm'
+                          className='w-[50px] h-[50px] md:w-[90px] md:h-[90px] rounded-sm'
                         />
                       </Link>
                       <div className='ml-2 flex flex-col'>
@@ -95,13 +99,14 @@ const OrderDetail = () => {
                             name: purchase.product.name_vi,
                             id: purchase.product._id
                           })}`}
+                          className='text-xs md:text-base line-clamp-2'
                         >
                           {purchase.product.name_vi}
                         </Link>
-                        <span className='text-sm text-[#535353]'>Số lượng: {purchase.buy_count}</span>
+                        <span className='text-xs md:text-sm text-[#535353]'>Số lượng: {purchase.buy_count}</span>
                       </div>
                     </div>
-                    <div className='text-primary'>
+                    <div className='text-primary ml-2 text-xs md:text-base'>
                       {`${formatCurrency(purchase.product.price_after_discount * purchase.buy_count)}₫`}
                     </div>
                   </div>
@@ -110,7 +115,7 @@ const OrderDetail = () => {
             </div>
             {/* Thông tin thanh toán */}
             <div className='mt-4 flex justify-end'>
-              <div className='w-[424px]'>
+              <div className='w-full md:w-[424px] text-xs md:text-base'>
                 <div className='flex justify-between items-center mb-3'>
                   <span>Giá tạm tính:</span>
                   <span>{`${formatCurrency(order.total_amount)}₫`}</span>
@@ -135,9 +140,9 @@ const OrderDetail = () => {
               </div>
             </div>
             {/* Quay lại danh sách đơn hàng */}
-            <div className='mt-16 mb-8 flex justify-center'>
+            <div className='mt-8 md:mt-16 mb-4 md:mb-8 flex justify-center'>
               <button
-                className='bg-[#1982F9] rounded px-6 py-3 text-white hover:bg-[#1982F9]/90'
+                className='bg-[#1982F9] rounded px-3 md:px-6 py-2 md:py-3 text-white text-xs md:text-base hover:bg-[#1982F9]/90'
                 onClick={() => navigate(-1)}
               >
                 Quay lại danh sách đơn hàng
@@ -147,11 +152,7 @@ const OrderDetail = () => {
         </Fragment>
       )}
       {/* Tải trang */}
-      {getOrderDetailQuery.isLoading && (
-        <div className='flex justify-center p-[200px]'>
-          <Loading className='w-12 h-12' />
-        </div>
-      )}
+      {getOrderDetailQuery.isLoading && <Loading />}
     </div>
   );
 };

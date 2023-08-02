@@ -24,8 +24,8 @@ const ViewedProduct = () => {
       {/* Hiển thị khi có dữ liệu */}
       {viewedProducts && viewedProducts.length > 0 && !getViewedProductsQuery.isLoading && (
         <Fragment>
-          <h2 className='py-4 px-6 text-2xl font-semibold'>Sản phẩm đã xem</h2>
-          <div className='grid grid-cols-12 gap-3 py-6 px-3'>
+          <h2 className='py-4 px-2 md:px-6 text-xl md:text-2xl font-semibold'>Sản phẩm đã xem</h2>
+          <div className='grid grid-cols-12 gap-3 py-2 md:py-6 px-3'>
             {viewedProducts.map((viewedProduct) => (
               <div key={viewedProduct._id} className='col-span-6 md:col-span-4 lg:col-span-3'>
                 <ProductItem data={viewedProduct.product} />
@@ -47,11 +47,7 @@ const ViewedProduct = () => {
       )}
 
       {/* Tải trang */}
-      {getViewedProductsQuery.isLoading && (
-        <div className='flex justify-center py-[100px]'>
-          <Loading className='w-12 h-12' />
-        </div>
-      )}
+      {getViewedProductsQuery.isLoading && <Loading />}
     </div>
   );
 };

@@ -87,11 +87,7 @@ const Search = () => {
           <div className='text-sm text-center text-[#111111] py-4'>Không có sản phẩm nào...</div>
         )}
         {/* Loading */}
-        {getProductsQuery.isLoading && (
-          <div className='flex justify-center py-10'>
-            <Loading className='w-6 h-6' />
-          </div>
-        )}
+        {getProductsQuery.isLoading && <Loading className='w-6 h-6' />}
       </div>
     </Wrapper>
   );
@@ -125,7 +121,7 @@ const Search = () => {
           value={keywordSearch}
           onChange={(e) => setKeywordSearch(e.target.value)}
           onFocus={() => setShowSearchResult(true)}
-          className='w-full h-full py-2 pl-[15px] pr-[50px] rounded outline-none text-[15px]'
+          className='w-full h-full py-2 pl-[15px] pr-[50px] rounded outline-none text-xs md:text-[15px]'
         />
         <button className='absolute top-0 right-0 h-full w-9 flex justify-center items-center'>
           <SearchIcon className='fill-white w-4 h-4' />

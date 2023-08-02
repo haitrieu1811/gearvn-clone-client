@@ -99,11 +99,7 @@ const Table = ({
       {/* Hiển thị khi không có dữ liệu */}
       {initialData && initialData.length <= 0 && !isLoading && <div className='font-medium'>Chưa có bản ghi nào</div>}
       {/* Loading */}
-      {isLoading && (
-        <div className='flex justify-center items-center mt-10'>
-          <Loading />
-        </div>
-      )}
+      {isLoading && <Loading />}
     </Fragment>
   );
 };

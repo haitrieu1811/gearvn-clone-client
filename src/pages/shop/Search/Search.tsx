@@ -84,7 +84,7 @@ const Search = () => {
             <div className='flex justify-center mt-10'>
               <Pagination
                 pageSize={pageSize || 0}
-                classNameItem='w-10 h-10 mx-1 rounded-full flex justify-center items-center font-semibold text-base select-none'
+                classNameItem='w-8 h-8 md:w-10 md:h-10 mx-1 rounded-full flex justify-center items-center font-semibold text-sm md:text-base select-none'
                 classNameItemActive='bg-black text-white select-none'
                 classNameItemUnActive='bg-[#f3f3f3]'
               />
@@ -117,11 +117,7 @@ const Search = () => {
         )}
 
         {/* Loading */}
-        {getProductsQuery.isLoading && (
-          <div className='py-[100px] flex justify-center'>
-            <Loading className='w-12 h-12' />
-          </div>
-        )}
+        {getProductsQuery.isLoading && <Loading />}
       </div>
     </div>
   );

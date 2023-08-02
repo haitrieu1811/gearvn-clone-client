@@ -13,15 +13,11 @@ const BlogVertical = ({ data }: BlogVerticalProps) => {
   return (
     <div className='col-span-3'>
       <Link to={`${PATH.BLOG_DETAIL_WITHOUT_ID}/${generateNameId({ name: data.name_vi, id: data._id })}`}>
-        <img
-          src={getImageUrl(data.thumbnail)}
-          alt=''
-          className='w-full h-[100px] md:h-[160px] object-cover rounded-sm'
-        />
+        <img src={getImageUrl(data.thumbnail)} alt='' className='w-full h-[100px] md:h-[160px] object-cover rounded' />
       </Link>
       <Link
         to={`${PATH.BLOG_DETAIL_WITHOUT_ID}/${generateNameId({ name: data.name_vi, id: data._id })}`}
-        className='text-[#333333] font-semibold line-clamp-2 block mt-2'
+        className='text-[#333333] font-semibold line-clamp-2 block mt-2 text-sm md:text-base'
       >
         {data.name_vi}
       </Link>
