@@ -250,9 +250,11 @@ const Create = () => {
 
   return (
     <Fragment>
-      <Back />
       <div className='bg-white rounded-lg shadow-sm p-6'>
-        <h2 className='text-2xl font-semibold mb-6'>{!isUpdateMode ? 'Tạo sản phẩm mới' : 'Cập nhật sản phẩm'}</h2>
+        <div className='mb-6 flex justify-between items-center'>
+          <h2 className='text-2xl font-bold'>{!isUpdateMode ? 'Tạo sản phẩm mới' : 'Cập nhật sản phẩm'}</h2>
+          <Back />
+        </div>
         <form onSubmit={onSubmit} encType='multipart/form-data'>
           <div className='grid grid-cols-12 gap-10'>
             <div className='col-span-8'>

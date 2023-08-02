@@ -16,8 +16,6 @@ const Dashboard = () => {
     [getQuantityPerCollectionQuery.data?.data.data]
   );
 
-  console.log(quantityPerCollection);
-
   return (
     <Fragment>
       {quantityPerCollection && (

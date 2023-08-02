@@ -41,7 +41,7 @@ const Table = ({
       {/* Hiển thị khi có dữ liệu */}
       {initialData && initialData.length > 0 && !isLoading && (
         <div>
-          <div className={`bg-white rounded-tl-lg rounded-tr-lg shadow-sm ${classNameWrapper || ''}`}>
+          <div className={`bg-white rounded-tl-lg rounded-tr-lg ${classNameWrapper || ''}`}>
             {/* Table head */}
             <div className='grid grid-cols-12 gap-6 font-medium py-3 px-8 border-b text-sm'>
               {columns.map((column, index) => (
@@ -90,7 +90,13 @@ const Table = ({
                     classNameWrapper='mr-2'
                   />
                 )}
-                {pagination && <Pagination pageSize={pagination.pageSize as number} />}
+                {pagination && (
+                  <Pagination
+                    pageSize={pagination.pageSize}
+                    classNameItem='w-8 h-8 flex justify-center items-center text-black rounded text-sm font-semibold'
+                    classNameItemActive='bg-black text-white'
+                  />
+                )}
               </div>
             </div>
           </div>

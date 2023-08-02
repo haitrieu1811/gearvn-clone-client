@@ -7,10 +7,15 @@ import moment from 'moment';
 import { ChangeEvent, useContext, useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import brandApi from 'src/apis/brand.api';
+import categoryApi from 'src/apis/category.api';
 
 import productApi from 'src/apis/product.api';
 import Checkbox from 'src/components/Checkbox';
+import Filter from 'src/components/Filter';
+import { PlusIcon } from 'src/components/Icons';
 import Modal from 'src/components/Modal';
+import Sort from 'src/components/Sort';
 import Table from 'src/components/Table';
 import TableAction from 'src/components/Table/TableAction';
 import PATH from 'src/constants/path';
@@ -31,7 +36,11 @@ const List = () => {
   const queryConfig: QueryConfig = omitBy(
     {
       page: queryParams.page || 1,
-      limit: queryParams.limit || 10
+      limit: queryParams.limit || 10,
+      sortBy: queryParams.sortBy,
+      orderBy: queryParams.orderBy,
+      category: queryParams.category,
+      brand: queryParams.brand
     },
     isUndefined
   );
@@ -54,6 +63,10 @@ const List = () => {
   const products = useMemo(
     () => getProductsQuery.data?.data.data.products,
     [getProductsQuery.data?.data.data.products]
+  );
+  const total = useMemo(
+    () => getProductsQuery.data?.data.data.pagination.total,
+    [getProductsQuery.data?.data.data.pagination.total]
   );
   const pageSize = useMemo(
     () => getProductsQuery.data?.data.data.pagination.page_size,
@@ -106,29 +119,83 @@ const List = () => {
     else deleteProductMutation.mutate(checkedProducts.map((product) => product._id));
   };
 
+  const getBrandsQuery = useQuery({
+    queryKey: ['brands'],
+    queryFn: () => brandApi.getList()
+  });
+
+  const getCategoriesQuery = useQuery({
+    queryKey: ['categories'],
+    queryFn: () => categoryApi.getList()
+  });
+
+  const brands = useMemo(() => getBrandsQuery.data?.data.data.brands, [getBrandsQuery.data?.data.data.brands]);
+  const categories = useMemo(
+    () => getCategoriesQuery.data?.data.data.categories,
+    [getCategoriesQuery.data?.data.data.categories]
+  );
+
   return (
     <div>
-      <div className='flex justify-between items-center mb-4 bg-white py-3 px-4 rounded-lg shadow-sm'>
+      <div className='p-6 flex justify-between items-center'>
         <div>
-          {/* <div className='relative'>
-            <input
-              type='text'
-              placeholder='Tìm kiếm'
-              className='border rounded py-[6px] px-3 text-sm outline-none w-[180px] pr-11 bg-slate-100'
-            />
-            <button className='absolute top-1/2 -translate-y-1/2 right-0 h-full w-10 flex justify-center items-center'>
-              <SearchIcon className='w-4 h-4' />
-            </button>
-          </div> */}
+          <h2 className='text-2xl font-bold'>Danh sách sản phẩm</h2>
+          <div className='text-slate-500 text-sm mt-1'>(Có {total} sản phẩm)</div>
         </div>
         <Link
           to={PATH.DASHBOARD_PRODUCT_CREATE}
-          className='px-2 py-[6px] rounded bg-blue-600 flex justify-center items-center'
+          className='bg-blue-500 text-white text-sm rounded p-2 flex items-center'
         >
-          <span className='text-white text-sm font-medium'>Tạo mới</span>
+          <PlusIcon className='w-4 h-4 mr-2 stroke-[3]' />
+          Tạo mới
         </Link>
       </div>
-
+      <div className='p-6 bg-white rounded flex justify-between items-center'>
+        <div className='flex items-center'>
+          {categories && (
+            <Filter
+              queryName='category'
+              label='Danh mục sản phẩm'
+              data={categories.map((category) => ({
+                value: category._id,
+                text: category.name_vi
+              }))}
+            />
+          )}
+          <div className='mx-1' />
+          {brands && brands.length > 0 && (
+            <Filter
+              queryName='brand'
+              label='Nhãn hiệu'
+              data={brands.map((brand) => ({
+                value: brand._id,
+                text: brand.name
+              }))}
+            />
+          )}
+        </div>
+        <div>
+          <Sort
+            data={[
+              {
+                orderBy: 'desc',
+                sortBy: 'created_at',
+                name: 'Nổi bật'
+              },
+              {
+                orderBy: 'desc',
+                sortBy: 'price_after_discount',
+                name: 'Giá giảm dần'
+              },
+              {
+                orderBy: 'asc',
+                sortBy: 'price_after_discount',
+                name: 'Giá tăng dần'
+              }
+            ]}
+          />
+        </div>
+      </div>
       <Table
         initialData={products || []}
         checkedData={checkedProducts}

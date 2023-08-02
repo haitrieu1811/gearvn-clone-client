@@ -8,7 +8,7 @@ const Back = () => {
   };
 
   return (
-    <button className='flex justify-center items-center mb-4 p-2 rounded hover:bg-slate-200' onClick={handleBack}>
+    <button className='flex justify-center items-center mb-4 p-2 rounded hover:bg-slate-50' onClick={handleBack}>
       <ChevronLeftIcon className='w-4 h-4 stroke-blue-600' />
       <span className='text-sm font-semibold text-blue-600 ml-2'>Quay lại</span>
     </button>

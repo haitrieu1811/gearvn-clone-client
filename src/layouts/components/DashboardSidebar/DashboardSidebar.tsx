@@ -1,6 +1,5 @@
 import { Link } from 'react-router-dom';
 
-import logo from 'src/assets/images/logo-red.svg';
 import {
   ChartPieIcon,
   FlagIcon,
@@ -12,13 +11,14 @@ import {
 } from 'src/components/Icons';
 import PATH from 'src/constants/path';
 import DashboardItem from './DashboardItem';
+import logo from 'src/assets/images/logo-red.svg';
 
 const DashboardSidebar = () => {
   return (
-    <aside className='w-[240px] bg-white fixed top-0 bottom-0 py-10 shadow-sm'>
-      <div className='px-6'>
+    <aside className='w-[240px] bg-white fixed z-[9999] top-0 bottom-0 pb-10'>
+      <div className='px-6 pt-6'>
         <Link to={PATH.HOME}>
-          <img src={logo} alt='Logo' className='w-[160px]' />
+          <img src={logo} alt='Logo' className='w-[150px]' />
         </Link>
       </div>
       <div className='py-5 px-6 pl-0 border-b'>
