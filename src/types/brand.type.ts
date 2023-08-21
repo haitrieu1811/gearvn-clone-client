@@ -1,4 +1,4 @@
-import { SuccessResponse, Pagination, OnlyMessageResponse } from './utils.type';
+import { Pagination, SuccessResponse } from './utils.type';
 
 export interface Brand {
   _id: string;

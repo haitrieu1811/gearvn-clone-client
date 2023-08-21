@@ -12,8 +12,8 @@ import {
   ScreenIcon
 } from 'src/components/Icons';
 import PATH from 'src/constants/path';
-import MenuLink from './MenuLink';
-import { MEGA_MENU_DATA } from './constants';
+import MegaMenuLink from '../MegaMenuLink';
+import { MENU_DATA } from 'src/constants/header';
 
 export interface MegaMenuItem {
   heading: string;
@@ -41,67 +41,67 @@ const MegaMenu = () => {
       <div className='relative z-10'>
         {/* Sidebar */}
         <div className='w-[216px] bg-white rounded'>
-          <MenuLink
+          <MegaMenuLink
             to={PATH.PRODUCT}
             icon={<LaptopIcon />}
             name='Laptop'
-            onMouseEnter={() => onMouseEnter(MEGA_MENU_DATA.LAPTOP)}
+            onMouseEnter={() => onMouseEnter(MENU_DATA.LAPTOP)}
             onMouseLeave={onMouseLeave}
           />
-          <MenuLink
+          <MegaMenuLink
             to={PATH.PRODUCT}
             icon={<LaptopIcon />}
             name='Laptop Gaming'
-            onMouseEnter={() => onMouseEnter(MEGA_MENU_DATA.PC_GAMING)}
+            onMouseEnter={() => onMouseEnter(MENU_DATA.PC_GAMING)}
             onMouseLeave={onMouseLeave}
           />
-          <MenuLink
+          <MegaMenuLink
             to={PATH.HOME}
             icon={<PcIcon />}
             name='PC Gaming'
-            onMouseEnter={() => onMouseEnter(MEGA_MENU_DATA.LAPTOP)}
+            onMouseEnter={() => onMouseEnter(MENU_DATA.LAPTOP)}
             onMouseLeave={onMouseLeave}
           />
-          <MenuLink
+          <MegaMenuLink
             to={PATH.HOME}
             icon={<ScreenIcon />}
             name='Màn hình'
-            onMouseEnter={() => onMouseEnter(MEGA_MENU_DATA.PC_GAMING)}
+            onMouseEnter={() => onMouseEnter(MENU_DATA.PC_GAMING)}
             onMouseLeave={onMouseLeave}
           />
-          <MenuLink
+          <MegaMenuLink
             to={PATH.HOME}
             icon={<KeyboardIcon />}
             name='Bàn phím'
-            onMouseEnter={() => onMouseEnter(MEGA_MENU_DATA.LAPTOP)}
+            onMouseEnter={() => onMouseEnter(MENU_DATA.LAPTOP)}
             onMouseLeave={onMouseLeave}
           />
-          <MenuLink
+          <MegaMenuLink
             to={PATH.HOME}
             icon={<MouseIcon />}
             name='Chuột'
-            onMouseEnter={() => onMouseEnter(MEGA_MENU_DATA.PC_GAMING)}
+            onMouseEnter={() => onMouseEnter(MENU_DATA.PC_GAMING)}
             onMouseLeave={onMouseLeave}
           />
-          <MenuLink
+          <MegaMenuLink
             to={PATH.HOME}
             icon={<HeadphoneIcon />}
             name='Tai Nghe - Loa'
-            onMouseEnter={() => onMouseEnter(MEGA_MENU_DATA.LAPTOP)}
+            onMouseEnter={() => onMouseEnter(MENU_DATA.LAPTOP)}
             onMouseLeave={onMouseLeave}
           />
-          <MenuLink
+          <MegaMenuLink
             to={PATH.HOME}
             icon={<ChairIcon />}
             name='Ghế - Bàn'
-            onMouseEnter={() => onMouseEnter(MEGA_MENU_DATA.PC_GAMING)}
+            onMouseEnter={() => onMouseEnter(MENU_DATA.PC_GAMING)}
             onMouseLeave={onMouseLeave}
           />
-          <MenuLink
+          <MegaMenuLink
             to={PATH.HOME}
             icon={<AccessoryIcon />}
             name='Phụ kiện'
-            onMouseEnter={() => onMouseEnter(MEGA_MENU_DATA.LAPTOP)}
+            onMouseEnter={() => onMouseEnter(MENU_DATA.LAPTOP)}
             onMouseLeave={onMouseLeave}
           />
         </div>

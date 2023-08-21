@@ -103,7 +103,7 @@ const CreateAddress = ({ onSuccess, currentId = null }: CreateAddressProps) => {
   return (
     <form onSubmit={onSubmit}>
       <div className='px-3'>
-        <h3 className='font-medium mb-2'>Địa chỉ</h3>
+        <h3 className='text-sm md:text-base font-medium mb-2'>Địa chỉ</h3>
         <div className='grid grid-cols-12 gap-3 mb-4'>
           <div className='col-span-6'>
             <Input
@@ -142,7 +142,7 @@ const CreateAddress = ({ onSuccess, currentId = null }: CreateAddressProps) => {
             />
           </div>
         </div>
-        <h3 className='font-medium mb-2'>Loại địa chỉ</h3>
+        <h3 className='text-sm md:text-base font-medium mb-2'>Loại địa chỉ</h3>
         <div className='mt-4 flex'>
           <div>
             <input
@@ -155,7 +155,7 @@ const CreateAddress = ({ onSuccess, currentId = null }: CreateAddressProps) => {
             />
             <label
               htmlFor='office'
-              className='border border-[#cfcfcf] rounded py-2 px-4 text-base cursor-pointer text-slate-700 peer-checked:border-primary peer-checked:bg-primary/10 peer-checked:text-primary peer-checked:font-medium'
+              className='border border-[#cfcfcf] rounded py-[6px] md:py-2 px-3 md:px-4 text-sm md:text-base cursor-pointer text-slate-700 peer-checked:border-primary peer-checked:bg-primary/10 peer-checked:text-primary peer-checked:font-medium'
             >
               Văn phòng
             </label>
@@ -171,7 +171,7 @@ const CreateAddress = ({ onSuccess, currentId = null }: CreateAddressProps) => {
             />
             <label
               htmlFor='home'
-              className='border border-[#cfcfcf] rounded py-2 px-4 text-base cursor-pointer text-slate-700 peer-checked:border-primary peer-checked:bg-primary/10 peer-checked:text-primary peer-checked:font-medium'
+              className='border border-[#cfcfcf] rounded py-[6px] md:py-2 px-3 md:px-4 text-sm md:text-base cursor-pointer text-slate-700 peer-checked:border-primary peer-checked:bg-primary/10 peer-checked:text-primary peer-checked:font-medium'
             >
               Nhà riêng
             </label>

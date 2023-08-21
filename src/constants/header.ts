@@ -1,7 +1,7 @@
-import { MegaMenuItem } from './MegaMenu';
+import { MegaMenuItem } from 'src/components/MegaMenu/MegaMenu';
 import PATH from 'src/constants/path';
 
-export const MEGA_MENU_DATA: { [key: string]: MegaMenuItem[] } = {
+export const MENU_DATA: { [key: string]: MegaMenuItem[] } = {
   LAPTOP: [
     {
       heading: 'Thương hiệu',

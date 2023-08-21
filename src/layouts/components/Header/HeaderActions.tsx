@@ -21,7 +21,7 @@ const HeaderActions = ({ cartSize }: { cartSize: number }) => {
           textBelow='đơn hàng'
         />
       </Link>
-      <Link to={PATH.CART}>
+      <Link to={PATH.CART_LIST}>
         <HeaderAction icon={<Cart cartSize={cartSize} />} textAbove='Giỏ' textBelow='hàng' />
       </Link>
     </div>

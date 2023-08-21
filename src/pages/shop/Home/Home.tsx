@@ -1,17 +1,17 @@
 import { useQuery } from '@tanstack/react-query';
 import { useMemo } from 'react';
-import { Link } from 'react-router-dom';
 import { useMediaQuery } from 'react-responsive';
+import { Link } from 'react-router-dom';
 
 import blogApi from 'src/apis/blog.api';
 import productApi from 'src/apis/product.api';
 import BlogVertical from 'src/components/BlogVertical';
 import Carousel from 'src/components/Carousel';
 import Loading from 'src/components/Loading';
-import PATH from 'src/constants/path';
-import MegaMenu from 'src/layouts/components/Header/MegaMenu';
-import ProductSection from './ProductSection';
+import MegaMenu from 'src/components/MegaMenu';
 import CONFIG from 'src/constants/config';
+import PATH from 'src/constants/path';
+import ProductSection from './ProductSection';
 
 const Home = () => {
   const isTablet = useMediaQuery({ maxWidth: CONFIG.TABLET_SCREEN_SIZE });

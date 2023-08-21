@@ -16,6 +16,10 @@ const PATH = {
   ACCOUNT_VIEWED_PRODUCT: '/account/viewed-product',
   ACCOUNT_ADDRESS: '/account/address',
   CART: '/cart',
+  CART_LIST: '/cart/list',
+  CART_CHECKOUT_INFO: '/cart/checkout-info',
+  CART_CHECKOUT_PROCESS: '/cart/checkout-process',
+  CART_CHECKOUT_SUCCESS: '/cart/checkout-success',
   SEARCH: '/search',
 
   DASHBOARD: '/dashboard',

@@ -1,17 +1,9 @@
 import { Link } from 'react-router-dom';
 
-import {
-  ChartPieIcon,
-  FlagIcon,
-  ItemIcon,
-  LogoutIcon,
-  NewspaperIcon,
-  ShoppingBagIcon,
-  UserIcon
-} from 'src/components/Icons';
+import logo from 'src/assets/images/logo-red.svg';
+import { FlagIcon, ItemIcon, LogoutIcon, NewspaperIcon, ShoppingBagIcon, UserIcon } from 'src/components/Icons';
 import PATH from 'src/constants/path';
 import DashboardItem from './DashboardItem';
-import logo from 'src/assets/images/logo-red.svg';
 
 const DashboardSidebar = () => {
   return (
@@ -22,12 +14,12 @@ const DashboardSidebar = () => {
         </Link>
       </div>
       <div className='py-5 px-6 pl-0 border-b'>
-        <DashboardItem
+        {/* <DashboardItem
           path={PATH.DASHBOARD}
           icon={<ChartPieIcon className='w-4 h-4 stroke-black' />}
           name='Dashboard'
           end
-        />
+        /> */}
         <DashboardItem
           path={PATH.DASHBOARD_USER}
           icon={<UserIcon className='w-4 h-4 stroke-black' />}

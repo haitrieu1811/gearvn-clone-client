@@ -9,19 +9,30 @@ import { BarIcon } from 'src/components/Icons';
 import PATH from 'src/constants/path';
 import Account from './Account';
 import HeaderActions from './HeaderActions';
-import MegaMenu from './MegaMenu';
+import MegaMenu from 'src/components/MegaMenu';
 import Search from './Search';
 import CONFIG from 'src/constants/config';
 import logoMobile from 'src/assets/images/logo-mobile.svg';
 import Cart from './Cart';
 import purchaseApi from 'src/apis/purchase.api';
+import Drawer from 'src/components/Drawer';
+import MobileMenu from 'src/components/MobileMenu';
 
 const Header = () => {
-  const [showMenu, setShowMenu] = useState<boolean>(false);
   const isTablet = useMediaQuery({ maxWidth: CONFIG.TABLET_SCREEN_SIZE });
+  const [showMegaMenu, setShowMegaMenu] = useState<boolean>(false);
+  const [showMobileMenu, setShowMobileMenu] = useState<boolean>(false);
 
-  const toggleMenu = () => {
-    setShowMenu((prevState) => !prevState);
+  const toggleMegaMenu = () => {
+    setShowMegaMenu((prevState) => !prevState);
+  };
+
+  const handleShowMobileMenu = () => {
+    setShowMobileMenu(true);
+  };
+
+  const handleCloseMobileMenu = () => {
+    setShowMobileMenu(false);
   };
 
   // Lấy số lượng sản phẩm trong giỏ hàng
@@ -50,7 +61,7 @@ const Header = () => {
               {/* Danh mục */}
               <div
                 className='ml-4 h-[42px] bg-[#BE1529] px-2 flex items-center justify-center rounded cursor-pointer select-none'
-                onClick={toggleMenu}
+                onClick={toggleMegaMenu}
               >
                 <BarIcon className='fill-white' />
                 <span className='text-white text-[13px] ml-3 font-semibold'>Danh mục</span>
@@ -63,42 +74,45 @@ const Header = () => {
               <Account />
             </nav>
           </div>
-
           {/* Mega menu */}
           <div
             className={classNames('absolute top-full left-0 w-full duration-200', {
-              'opacity-0 pointer-events-none': !showMenu,
-              'opacity-100 pointer-events-auto': showMenu
+              'opacity-0 pointer-events-none': !showMegaMenu,
+              'opacity-100 pointer-events-auto': showMegaMenu
             })}
           >
             {/* Mask */}
-            <div onClick={toggleMenu} className='absolute left-0 right-0 w-full h-screen bg-black/50' />
+            <div onClick={toggleMegaMenu} className='absolute left-0 right-0 w-full h-screen bg-black/50' />
             <div className='container mt-[15px]'>
               <MegaMenu />
             </div>
           </div>
         </header>
       )}
-
       {/* Header của mobile và tablet */}
       {isTablet && (
-        <header className='sticky top-0 left-0 right-0 z-[99999]'>
-          <nav className='bg-primary p-2 flex'>
-            <button className='ml-2'>
-              <BarIcon className='w-[22px] h-9 fill-white' />
-            </button>
-            <Link to={PATH.HOME} className='ml-4 mr-2'>
-              <img src={logoMobile} alt='Logo mobile' />
-            </Link>
-            <Search />
-            <Link
-              to={PATH.CART}
-              className='w-9 h-9 bg-[#BE1529] flex justify-center items-center rounded flex-shrink-0 ml-2'
-            >
-              <Cart cartSize={cartSize || 0} />
-            </Link>
-          </nav>
-        </header>
+        <Fragment>
+          <header className='sticky top-0 left-0 right-0 z-[99999]'>
+            <nav className='bg-primary p-2 flex'>
+              <button className='ml-2' onClick={handleShowMobileMenu}>
+                <BarIcon className='w-[22px] h-9 fill-white' />
+              </button>
+              <Link to={PATH.HOME} className='ml-4 mr-2'>
+                <img src={logoMobile} alt='Logo mobile' />
+              </Link>
+              <Search />
+              <Link
+                to={PATH.CART}
+                className='w-9 h-9 bg-[#BE1529] flex justify-center items-center rounded flex-shrink-0 ml-2'
+              >
+                <Cart cartSize={cartSize || 0} />
+              </Link>
+            </nav>
+            <Drawer isShow={showMobileMenu} onCancel={handleCloseMobileMenu}>
+              <MobileMenu onCancel={handleCloseMobileMenu} />
+            </Drawer>
+          </header>
+        </Fragment>
       )}
     </Fragment>
   );

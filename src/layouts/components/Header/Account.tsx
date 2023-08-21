@@ -52,7 +52,7 @@ const Account = () => {
               </span>
             </Link>
             {profile?.role !== UserRole.Customer && (
-              <Link to={PATH.DASHBOARD} className='px-5 py-3 flex hover:underline'>
+              <Link to={PATH.DASHBOARD_PRODUCT} className='px-5 py-3 flex hover:underline'>
                 <ChartPieIcon className='w-5 h-5' />
                 <span className='ml-4 text-sm'>Dashboard</span>
               </Link>

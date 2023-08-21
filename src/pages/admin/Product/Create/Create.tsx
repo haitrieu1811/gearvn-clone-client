@@ -15,7 +15,7 @@ import Button from 'src/components/Button';
 import { CloseIcon, CloudArrowUpIcon, PhotoIcon } from 'src/components/Icons';
 import Input from 'src/components/Input';
 import InputFile from 'src/components/InputFile';
-import TextEditor from 'src/components/TextEditor/TextEditor';
+import TextEditor from 'src/components/TextEditor';
 import PATH from 'src/constants/path';
 import { CreateAndUpdateProductBody } from 'src/types/product.type';
 import { ErrorResponse } from 'src/types/utils.type';

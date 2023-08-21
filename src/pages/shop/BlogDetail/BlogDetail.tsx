@@ -36,7 +36,7 @@ const BlogDetail = () => {
       {blog && (
         <div className='md:px-[80px] lg:px-[220px] my-2 md:py-4'>
           <img src={getImageUrl(blog.thumbnail)} alt={blog.name_vi} className='w-full object-contain rounded mb-4' />
-          <h1 className='text-[28px] font-semibold mb-4'>{blog.name_vi}</h1>
+          <h1 className='text-xl md:text-[28px] font-semibold mb-4'>{blog.name_vi}</h1>
           <div className='flex items-center mb-4'>
             <span className='flex items-center'>
               <ClockIcon className='w-4 h-4' />

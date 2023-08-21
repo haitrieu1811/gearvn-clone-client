@@ -1,4 +1,5 @@
 import classNames from 'classnames';
+import PropTypes from 'prop-types';
 import { ReactNode } from 'react';
 import { createPortal } from 'react-dom';
 
@@ -10,28 +11,33 @@ interface DrawerProps {
 
 const Drawer = ({ isShow, children, onCancel }: DrawerProps) => {
   return createPortal(
-    <div className='fixed inset-0 z-[9999999999] pointer-events-none'>
+    <div
+      onClick={onCancel}
+      className={classNames('fixed inset-0 z-[999999] bg-black/50 duration-[400ms]', {
+        'opacity-0 pointer-events-none': !isShow,
+        'opacity-1 pointer-events-auto': isShow
+      })}
+    >
       <div
-        tabIndex={0}
-        aria-hidden='true'
-        role='button'
-        className={classNames('fixed inset-0 bg-black/50', {
-          'opacity-0 pointer-events-none': !isShow,
-          'opacity-100 pointer-events-auto': isShow
-        })}
-        onClick={onCancel}
-      />
-      <div
-        className={classNames('bg-white absolute top-0 bottom-0 duration-300 max-w-[80%]', {
-          'left-0': isShow,
-          '-left-full': !isShow
-        })}
+        onClick={(e) => e.stopPropagation()}
+        className={classNames(
+          'bg-white fixed top-0 left-0 bottom-0 duration-[400ms] max-w-[80%] max-h-full overflow-y-auto',
+          {
+            'opacity-0 -translate-x-full': !isShow,
+            'opacity-1 translate-x-0': isShow
+          }
+        )}
       >
         {children}
       </div>
     </div>,
     document.body
   );
+};
+
+Drawer.propTypes = {
+  isShow: PropTypes.bool.isRequired,
+  onCancel: PropTypes.func.isRequired
 };
 
 export default Drawer;

@@ -87,7 +87,7 @@ const Search = () => {
           <div className='text-sm text-center text-[#111111] py-4'>Không có sản phẩm nào...</div>
         )}
         {/* Loading */}
-        {getProductsQuery.isLoading && <Loading className='w-6 h-6' />}
+        {getProductsQuery.isFetching && <Loading className='w-6 h-6' />}
       </div>
     </Wrapper>
   );

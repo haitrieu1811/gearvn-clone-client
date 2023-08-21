@@ -34,7 +34,7 @@ const DashboardLayout = ({ children }: { children: ReactNode }) => {
               <img
                 src={profile.avatar ? getImageUrl(profile.avatar) : fallbackAvatar}
                 alt={profile.fullName}
-                className='w-8 h-8 rounded-full object-cover flex-shrink-0'
+                className='w-8 h-8 rounded object-cover flex-shrink-0'
               />
               <div className='ml-2'>
                 <div className='text-sm font-semibold'>{profile.fullName}</div>
@@ -43,7 +43,7 @@ const DashboardLayout = ({ children }: { children: ReactNode }) => {
             </div>
           </Tippy>
         )}
-        <button className='bg-slate-50 w-8 h-8 rounded-full flex justify-center items-center mr-4 relative'>
+        <button className='bg-slate-50 w-8 h-8 rounded flex justify-center items-center mr-4 relative'>
           <BellIcon className='w-5 h-5 fill-none' />
           <span className='absolute top-0 right-0  bg-red-500 text-[9px] text-white font-bold rounded-full w-4 h-4 flex justify-center items-center'>
             2

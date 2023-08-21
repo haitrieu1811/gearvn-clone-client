@@ -62,7 +62,7 @@ const List = () => {
 
   useEffect(() => {
     if (brands) {
-      setExtendedBrands((prevState) =>
+      setExtendedBrands(() =>
         brands.map((brand) => ({
           ...brand,
           checked: false

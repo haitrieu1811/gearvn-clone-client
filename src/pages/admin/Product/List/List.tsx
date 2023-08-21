@@ -13,13 +13,14 @@ import categoryApi from 'src/apis/category.api';
 import productApi from 'src/apis/product.api';
 import Checkbox from 'src/components/Checkbox';
 import Filter from 'src/components/Filter';
-import { PlusIcon } from 'src/components/Icons';
+import { LoadingIcon, PlusIcon } from 'src/components/Icons';
 import Modal from 'src/components/Modal';
 import Sort from 'src/components/Sort';
 import Table from 'src/components/Table';
 import TableAction from 'src/components/Table/TableAction';
 import PATH from 'src/constants/path';
 import { AppContext } from 'src/contexts/app.context';
+import useDebounce from 'src/hooks/useDebounce';
 import UseQueryParams from 'src/hooks/useQueryParams';
 import { GetProductsRequestParams } from 'src/types/product.type';
 import { formatCurrency } from 'src/utils/utils';
@@ -31,6 +32,8 @@ type QueryConfig = {
 const List = () => {
   const [currentId, setCurrentId] = useState<string | null>(null);
   const [isOpenModal, setIsOpenModal] = useState<boolean>(false);
+  const [keywordSearch, setKeywordSearch] = useState<string>('');
+  const keywordSearchDebounce = useDebounce(keywordSearch, 1000);
   const { extendedProducts, setExtendedProducts } = useContext(AppContext);
   const queryParams: QueryConfig = UseQueryParams();
   const queryConfig: QueryConfig = omitBy(
@@ -40,7 +43,8 @@ const List = () => {
       sortBy: queryParams.sortBy,
       orderBy: queryParams.orderBy,
       category: queryParams.category,
-      brand: queryParams.brand
+      brand: queryParams.brand,
+      name: keywordSearchDebounce
     },
     isUndefined
   );
@@ -150,8 +154,17 @@ const List = () => {
           Tạo mới
         </Link>
       </div>
-      <div className='p-6 bg-white rounded flex justify-between items-center'>
-        <div className='flex items-center'>
+      <div className='p-4 mb-4 bg-white rounded shadow-sm flex justify-between items-center'>
+        <div className='flex'>
+          <div className='mr-2 relative'>
+            <input
+              type='text'
+              className='border border-[#cfcfcf] rounded outline-none pl-3 pr-5 text-sm h-full'
+              placeholder='Từ khóa tìm kiếm'
+              onChange={(e) => setKeywordSearch(e.target.value)}
+            />
+            {getProductsQuery.isFetching && <LoadingIcon className='w-4 h-4 stroke-[2] absolute top-1/3 right-2' />}
+          </div>
           {categories && (
             <Filter
               queryName='category'

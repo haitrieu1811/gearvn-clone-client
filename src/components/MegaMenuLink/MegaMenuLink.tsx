@@ -12,7 +12,7 @@ interface MenuLinkProps {
   onMouseLeave: () => void;
 }
 
-const MenuLink = ({ to, icon, name, onMouseEnter, onMouseLeave }: MenuLinkProps) => {
+const MegaMenuLink = ({ to, icon, name, onMouseEnter, onMouseLeave }: MenuLinkProps) => {
   return (
     <Link
       to={to}
@@ -29,9 +29,9 @@ const MenuLink = ({ to, icon, name, onMouseEnter, onMouseLeave }: MenuLinkProps)
   );
 };
 
-MenuLink.propTypes = {
+MegaMenuLink.propTypes = {
   to: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired
 };
 
-export default MenuLink;
+export default MegaMenuLink;

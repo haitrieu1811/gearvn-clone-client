@@ -3,7 +3,7 @@ import { useMutation, useQuery } from '@tanstack/react-query';
 import isEmpty from 'lodash/isEmpty';
 import { Fragment, useEffect, useMemo } from 'react';
 import { useForm } from 'react-hook-form';
-import { useMatch, useNavigate, useParams } from 'react-router-dom';
+import { useMatch, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
 import categoryApi from 'src/apis/category.api';
@@ -18,7 +18,6 @@ import { isEntityError } from 'src/utils/utils';
 type FormData = CreateCategorySchema;
 
 const Create = () => {
-  const navigate = useNavigate();
   const match = useMatch(PATH.DASHBOARD_CATEGORY_UPDATE);
   const isUpdateMode = Boolean(match);
   const { category_id } = useParams();
@@ -90,10 +89,6 @@ const Create = () => {
       console.log('updateCategoryMutation');
     }
   });
-
-  const handleBack = () => {
-    navigate(-1);
-  };
 
   return (
     <Fragment>

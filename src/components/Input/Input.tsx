@@ -43,7 +43,7 @@ const Input = ({
         {!openEye && rest.type === 'password' && <EyeCloseIcon onClick={toggleEye} />}
         <input {...rest} type={handleType()} className={classNameInput} {...registerResult} />
       </div>
-      <div className={classNameError}>{errorMessage}</div>
+      {errorMessage && <div className={classNameError}>{errorMessage}</div>}
     </div>
   );
 };

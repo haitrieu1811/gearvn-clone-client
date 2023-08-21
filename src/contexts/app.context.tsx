@@ -24,7 +24,7 @@ interface ExtendedBlog extends BlogListItem {
   checked: boolean;
 }
 
-interface ExtendedPurchase extends Purchase {
+export interface ExtendedPurchase extends Purchase {
   checked: boolean;
   disabled: boolean;
 }

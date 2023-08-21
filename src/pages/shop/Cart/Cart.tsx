@@ -1,99 +1,60 @@
-import { useMutation, useQuery } from '@tanstack/react-query';
-import { produce } from 'immer';
-import keyBy from 'lodash/keyBy';
-import { ChangeEvent, Fragment, useContext, useEffect, useMemo } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { createContext, useContext, useMemo } from 'react';
+import { Link, Outlet, useMatch, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
+import { useMutation, useQuery } from '@tanstack/react-query';
 import purchaseApi from 'src/apis/purchase.api';
-import Button from 'src/components/Button';
-import CartItem from 'src/components/CartItem';
-import { ChevronLeftIcon } from 'src/components/Icons';
-import Loading from 'src/components/Loading';
+import { CheckoutIcon, CheckoutSuccessIcon, ChevronLeftIcon, InCartIcon, InfoCheckoutIcon } from 'src/components/Icons';
 import PATH from 'src/constants/path';
-import { AppContext } from 'src/contexts/app.context';
-import { formatCurrency } from 'src/utils/utils';
+import { AppContext, ExtendedPurchase } from 'src/contexts/app.context';
+import { Purchase } from 'src/types/purchase.type';
+import { Address } from 'src/types/user.type';
+
+interface CartContext {
+  total: number;
+  cartList: Purchase[];
+  checkedCartList: ExtendedPurchase[];
+  address?: Address;
+  isLoadingGetCartList: boolean;
+  refetchCartList: () => void;
+  checkout: () => void;
+}
+
+const initCartContext: CartContext = {
+  total: 0,
+  cartList: [],
+  checkedCartList: [],
+  address: undefined,
+  isLoadingGetCartList: false,
+  refetchCartList: () => null,
+  checkout: () => null
+};
+
+export const CartContext = createContext<CartContext>(initCartContext);
 
 const Cart = () => {
-  const location = useLocation();
+  const navigate = useNavigate();
+  const isMatch = useMatch(PATH.CART_LIST);
+  const isCartListPage = Boolean(isMatch);
+
+  const { extendedCartList, profile } = useContext(AppContext);
 
   const getCartListQuery = useQuery({
     queryKey: ['cart_list'],
     queryFn: () => purchaseApi.getCart()
   });
 
-  const { extendedCartList, setExtendedCartList, profile } = useContext(AppContext);
-
-  const cartList = useMemo(
-    () => getCartListQuery.data?.data.data.cart_list,
-    [getCartListQuery.data?.data.data.cart_list]
-  );
   const checkedCartList = useMemo(() => extendedCartList.filter((cartItem) => cartItem.checked), [extendedCartList]);
   const total = useMemo(
     () =>
       checkedCartList?.reduce((acc, cartItem) => acc + cartItem.buy_count * cartItem.product.price_after_discount, 0),
     [checkedCartList]
   );
+  const cartList = useMemo(
+    () => getCartListQuery.data?.data.data.cart_list,
+    [getCartListQuery.data?.data.data.cart_list]
+  );
   const address = useMemo(() => profile?.addresses.find((address) => address.isDefault), [profile]);
-
-  // Đặt giá trị cho cart list mở rộng
-  useEffect(() => {
-    if (cartList) {
-      setExtendedCartList((prevState) => {
-        const extendedCartListObj = keyBy(prevState, '_id');
-        return cartList.map((cartItem) => {
-          const isBuyNow = location.state && (location.state as { cartItemId: string }).cartItemId === cartItem._id;
-          return {
-            ...cartItem,
-            checked: Boolean(extendedCartListObj[cartItem._id]?.checked) || isBuyNow,
-            disabled: false
-          };
-        });
-      });
-    }
-  }, [cartList]);
-
-  useEffect(() => {
-    return () => {
-      history.replaceState(null, '');
-    };
-  }, []);
-
-  const updatePurchaseMutation = useMutation({
-    mutationFn: purchaseApi.update,
-    onSuccess: () => {
-      getCartListQuery.refetch();
-    }
-  });
-
-  // Thay đổi số lượng
-  const handleChangeQuantity = ({ cartItemIndex, value }: { cartItemIndex: number; value: number }) => {
-    const cartItem = extendedCartList[cartItemIndex];
-    setExtendedCartList(
-      produce((draft) => {
-        draft[cartItemIndex].disabled = true;
-      })
-    );
-    updatePurchaseMutation.mutate({ purchaseId: cartItem._id, buyCount: value });
-  };
-
-  // Nhập số lượng
-  const handleTypeQuantity = ({ cartItemIndex, value }: { cartItemIndex: number; value: number }) => {
-    setExtendedCartList(
-      produce((draft) => {
-        draft[cartItemIndex].buy_count = value;
-      })
-    );
-  };
-
-  // Check một sản phẩm
-  const handleCheck = ({ cartItemIndex, e }: { cartItemIndex: number; e: ChangeEvent<HTMLInputElement> }) => {
-    setExtendedCartList(
-      produce((draft) => {
-        draft[cartItemIndex].checked = e.target.checked;
-      })
-    );
-  };
 
   // Thanh toán
   const checkoutMutation = useMutation({
@@ -103,6 +64,7 @@ const Cart = () => {
       getCartListQuery.refetch();
     }
   });
+
   const checkout = () => {
     if (address) {
       const purchaseIds = checkedCartList.map((purchase) => purchase._id);
@@ -113,72 +75,68 @@ const Cart = () => {
   };
 
   return (
-    <div className='mb-2 md:mb-4'>
-      <div className='md:container flex justify-center'>
-        <div className='w-[600px]'>
-          <Link to={PATH.HOME} className='flex items-center text-[#1982F9] p-4'>
-            <ChevronLeftIcon className='w-3 h-3 md:w-4 md:h-4' />{' '}
-            <span className='font-medium ml-[5px] text-sm md:text-base'>Mua thêm sản phẩm khác</span>
-          </Link>
-          <div className='rounded bg-white shadow-sm'>
-            {/* Giỏ hàng */}
-            {extendedCartList && extendedCartList.length > 0 && !getCartListQuery.isLoading && (
-              <Fragment>
-                {/* Danh sách sản phẩm mua */}
-                <div className='p-2 pb-0'>
-                  {extendedCartList.map((cartItem, index) => (
-                    <CartItem
-                      key={cartItem._id}
-                      index={index}
-                      data={cartItem}
-                      handleChangeQuantity={handleChangeQuantity}
-                      handleTypeQuantity={handleTypeQuantity}
-                      handleCheck={handleCheck}
-                      disabled={cartItem.disabled}
-                      checked={cartItem.checked}
-                    />
-                  ))}
-                </div>
-                {/* Thông tin thanh toán */}
-                <div className='px-4 py-6 md:p-6 sticky bottom-0 bg-white border-t border-[#cfcfcf]'>
-                  <div className='flex justify-between items-center mb-2'>
-                    <div className='text-sm md:text-base font-semibold'>Phí vận chuyển:</div>
-                    <div className='text-sm md:text-base font-semibold'>Miễn phí</div>
+    <CartContext.Provider
+      value={{
+        total,
+        cartList: cartList || [],
+        isLoadingGetCartList: getCartListQuery.isLoading,
+        checkedCartList,
+        address,
+        refetchCartList: getCartListQuery.refetch,
+        checkout
+      }}
+    >
+      <div className='mb-2 md:mb-4'>
+        <div className='md:container flex justify-center'>
+          <div className='w-[600px]'>
+            {isCartListPage && (
+              <Link to={PATH.HOME} className='flex items-center text-[#1982F9] p-4'>
+                <ChevronLeftIcon className='w-3 h-3 md:w-4 md:h-4' />{' '}
+                <span className='font-medium ml-[5px] text-sm md:text-base'>Mua thêm sản phẩm khác</span>
+              </Link>
+            )}
+
+            {!isCartListPage && (
+              <button className='flex items-center text-[#1982F9] p-4' onClick={() => navigate(-1)}>
+                <ChevronLeftIcon className='w-3 h-3 md:w-4 md:h-4' />{' '}
+                <span className='font-medium ml-[5px] text-sm md:text-base'>Trở về</span>
+              </button>
+            )}
+
+            <div className='rounded bg-white shadow-sm'>
+              {/* Tiến trình mua hàng */}
+              <div className='p-2'>
+                <div className='bg-[#FFEDED] px-[14px] pt-5 pb-4 flex'>
+                  <div className='flex justify-center items-center flex-col flex-1'>
+                    <InCartIcon className='w-7 h-7' />
+                    <p className='text-primary mt-1'>Giỏ hàng</p>
                   </div>
-                  <div className='flex justify-between items-center mb-6'>
-                    <div className='text-base md:text-lg font-semibold'>Tổng tiền:</div>
-                    <div className='text-lg md:text-2xl text-primary font-semibold'>
-                      {formatCurrency(total as number)}₫
+                  <div className='flex justify-center items-center flex-col flex-1'>
+                    <div className='relative before:absolute before:top-1/2 before:right-full before:-translate-y-1/2 before:w-[110px] before:h-[2px] before:border-t before:border-dashed before:border-[#6b6868]'>
+                      <InfoCheckoutIcon className='w-7 h-7' />
                     </div>
+                    <p className='text-[##535353] mt-1'>Thông tin đặt hàng</p>
                   </div>
-                  <Button
-                    disabled={checkedCartList.length <= 0}
-                    isLoading={checkoutMutation.isLoading}
-                    onClick={checkout}
-                  >
-                    Đặt hàng ngay
-                  </Button>
+                  <div className='flex justify-center items-center flex-col flex-1'>
+                    <div className='relative before:absolute before:top-1/2 before:right-full before:-translate-y-1/2 before:w-[110px] before:h-[2px] before:border-t before:border-dashed before:border-[#6b6868]'>
+                      <CheckoutIcon className='w-7 h-7' />
+                    </div>
+                    <p className='text-[##535353] mt-1'>Thanh toán</p>
+                  </div>
+                  <div className='flex justify-center items-center flex-col flex-1'>
+                    <div className='relative before:absolute before:top-1/2 before:right-full before:-translate-y-1/2 before:w-[110px] before:h-[2px] before:border-t before:border-dashed before:border-[#6b6868]'>
+                      <CheckoutSuccessIcon className='w-7 h-7' />
+                    </div>
+                    <p className='text-[##535353] mt-1'>Hoàn tất</p>
+                  </div>
                 </div>
-              </Fragment>
-            )}
-            {/* Giỏ hàng trống */}
-            {extendedCartList && extendedCartList.length <= 0 && !getCartListQuery.isLoading && (
-              <div className='flex flex-col items-center py-6'>
-                <div className='text-sm text-center'>Giỏ hàng của bạn đang trống</div>
-                <Link
-                  to={PATH.PRODUCT}
-                  className='py-2 px-6 border border-[#1982F9] rounded my-4 text-[#1982F9] uppercase text-sm font-semibold'
-                >
-                  Tiếp tục mua hàng
-                </Link>
               </div>
-            )}
-            {/* Tải trang */}
-            {getCartListQuery.isLoading && <Loading />}
+              <Outlet />
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </CartContext.Provider>
   );
 };
 

@@ -35,6 +35,10 @@ import Register from 'src/pages/shop/Register/Register';
 import OrderDetail from 'src/pages/shop/Account/OrderDetail';
 import Search from 'src/pages/shop/Search';
 import Product from 'src/pages/shop/Product';
+import CartList from 'src/pages/shop/Cart/CartList';
+import CheckoutInfo from 'src/pages/shop/Cart/CheckoutInfo';
+import CheckoutProcess from 'src/pages/shop/Cart/CheckoutProcess';
+import CheckoutSuccess from 'src/pages/shop/Cart/CheckoutSuccess';
 
 const ProtectedRoute = () => {
   const { isAuthenticated } = useContext(AppContext);
@@ -156,7 +160,25 @@ const useElement = () => {
             <MainLayout>
               <Cart />
             </MainLayout>
-          )
+          ),
+          children: [
+            {
+              path: PATH.CART_LIST,
+              element: <CartList />
+            },
+            {
+              path: PATH.CART_CHECKOUT_INFO,
+              element: <CheckoutInfo />
+            },
+            {
+              path: PATH.CART_CHECKOUT_PROCESS,
+              element: <CheckoutProcess />
+            },
+            {
+              path: PATH.CART_CHECKOUT_SUCCESS,
+              element: <CheckoutSuccess />
+            }
+          ]
         }
       ]
     },

@@ -4,6 +4,7 @@ import Loading from 'src/components/Loading';
 import Pagination from 'src/components/Pagination';
 import Select from 'src/components/Select';
 import { OptionsSelect } from 'src/components/Select/Select';
+import { EmptyImage } from '../Icons';
 
 interface TableProps {
   columns: number[];
@@ -41,7 +42,7 @@ const Table = ({
       {/* Hiển thị khi có dữ liệu */}
       {initialData && initialData.length > 0 && !isLoading && (
         <div>
-          <div className={`bg-white rounded-tl-lg rounded-tr-lg ${classNameWrapper || ''}`}>
+          <div className={`bg-white shadow-sm rounded-tl rounded-tr ${classNameWrapper || ''}`}>
             {/* Table head */}
             <div className='grid grid-cols-12 gap-6 font-medium py-3 px-8 border-b text-sm'>
               {columns.map((column, index) => (
@@ -103,7 +104,12 @@ const Table = ({
         </div>
       )}
       {/* Hiển thị khi không có dữ liệu */}
-      {initialData && initialData.length <= 0 && !isLoading && <div className='font-medium'>Chưa có bản ghi nào</div>}
+      {initialData && initialData.length <= 0 && !isLoading && (
+        <div className='py-[100px] bg-white shadow-sm flex justify-between items-center flex-col'>
+          <EmptyImage />
+          <p className='mt-6 text-center text-lg font-medium'>Không có bản ghi nào</p>
+        </div>
+      )}
       {/* Loading */}
       {isLoading && <Loading />}
     </Fragment>
