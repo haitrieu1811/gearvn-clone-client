@@ -1,9 +1,21 @@
-import { Link } from 'react-router-dom';
+import { useContext, useMemo } from 'react';
+import { Link, useLocation } from 'react-router-dom';
+import { useFormContext } from 'react-hook-form';
 
 import { ShoppingBagCheckIcon } from 'src/components/Icons';
 import PATH from 'src/constants/path';
+import { AppContext } from 'src/contexts/app.context';
+import { PaymentOrderSchema } from 'src/utils/rules';
+import { CartContext } from '../Cart';
+import { formatCurrency } from 'src/utils/utils';
 
 const CheckoutSuccess = () => {
+  const location = useLocation();
+  const { getValues } = useFormContext<PaymentOrderSchema>();
+  const { profile } = useContext(AppContext);
+  const { total } = useContext(CartContext);
+  const orderId = useMemo(() => (location?.state as { order_id: string })?.order_id, [location?.state?.order_id]);
+
   return (
     <div className='px-16 py-6'>
       <div className='flex items-center justify-center text-lg text-[#1E9800] p-[14px] mb-6 bg-[#D5F7E0] rounded'>
@@ -17,7 +29,7 @@ const CheckoutSuccess = () => {
       {/* Thông tin đơn mua */}
       <div className='bg-[#ececec] mb-6 pb-4'>
         <div className='p-4 flex justify-between items-center border-b border-b-[#CFCFCF]'>
-          <div>ĐƠN HÀNG #116414</div>
+          <div className='uppercase'>ĐƠN HÀNG {`#${orderId.slice(-6)}`}</div>
           <Link to={PATH.ACCOUNT_ORDER} className='text-[#1982F9]'>
             Quản lý đơn hàng
           </Link>
@@ -25,23 +37,25 @@ const CheckoutSuccess = () => {
         <div className='p-4'>
           <div className='flex'>
             <div className='font-semibold basis-[40%]'>Khách hàng</div>
-            <div className='flex-1'>a</div>
+            <div className='flex-1'>{getValues('customer_name')}</div>
           </div>
           <div className='mt-4 flex'>
             <div className='font-semibold basis-[40%]'>Số điện thoại</div>
-            <div className='flex-1'>0775936841</div>
+            <div className='flex-1'>{getValues('customer_phone')}</div>
           </div>
           <div className='mt-4 flex'>
             <div className='font-semibold basis-[40%]'>Email</div>
-            <div className='flex-1'>haitrieu2525@gmail.com</div>
+            <div className='flex-1'>{profile?.email}</div>
           </div>
           <div className='mt-4 flex'>
             <div className='font-semibold basis-[40%]'>Giao đến</div>
-            <div className='flex-1'>132, Xã Rạch Chèo, Huyện Phú Tân, Cà Mau, Huyện Phú Tân, Cà Mau</div>
+            <div className='flex-1'>
+              {getValues('street')}, {getValues('ward')}, {getValues('district')}, {getValues('province')}
+            </div>
           </div>
           <div className='mt-4 flex'>
             <div className='font-semibold basis-[40%]'>Tổng tiền</div>
-            <div className='flex-1 text-primary font-semibold'>40.000₫</div>
+            <div className='flex-1 text-primary font-semibold'>{formatCurrency(total)}₫</div>
           </div>
           <div className='mt-4 flex'>
             <div className='font-semibold basis-[40%]'>Hình thức thanh toán</div>
@@ -52,9 +66,12 @@ const CheckoutSuccess = () => {
           Đơn hàng chưa được thanh toán
         </div>
       </div>
-      <div className='mt-4 p-3 rounded text-[#1982f9] font-semibold border border-[#1982f9] text-lg flex justify-center items-center hover:bg-[#1982f9] hover:text-white duration-300'>
+      <Link
+        to={PATH.HOME}
+        className='mt-4 p-3 rounded text-[#1982f9] font-semibold border border-[#1982f9] text-lg flex justify-center items-center hover:bg-[#1982f9] hover:text-white duration-300'
+      >
         Tiếp tục mua hàng
-      </div>
+      </Link>
     </div>
   );
 };

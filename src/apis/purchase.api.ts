@@ -1,5 +1,4 @@
-import { AddToCartResposne, GetCartResponse } from 'src/types/purchase.type';
-import { Address } from 'src/types/user.type';
+import { AddToCartResposne, CheckoutReqBody, CheckoutResponse, GetCartResponse } from 'src/types/purchase.type';
 import { OnlyMessageResponse } from 'src/types/utils.type';
 import http from 'src/utils/http';
 
@@ -19,15 +18,8 @@ const purchaseApi = {
   deleteAll() {
     return http.delete<OnlyMessageResponse>('/purchases/delete-all');
   },
-  checkout({ purchaseIds, address }: { purchaseIds: string[]; address: Address }) {
-    const { province, district, ward, street } = address;
-    return http.post<OnlyMessageResponse>('/purchases/checkout', {
-      purchase_ids: purchaseIds,
-      province,
-      district,
-      ward,
-      street
-    });
+  checkout(body: CheckoutReqBody) {
+    return http.post<CheckoutResponse>('/purchases/checkout', body);
   }
 };
 

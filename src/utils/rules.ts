@@ -86,6 +86,19 @@ export const blogSchema = yup.object({
   content_en: yup.string().required('Nội dung tiếng Anh bài viết không được để trống').trim()
 });
 
+export const orderSchema = yup.object({
+  customer_gender: yup.string().required('Hãy chọn giới tính'),
+  customer_name: userSchema.fields.fullName as yup.StringSchema<string | undefined, yup.AnyObject, undefined, ''>,
+  customer_phone: userSchema.fields.phoneNumber as yup.StringSchema<string | undefined, yup.AnyObject, undefined, ''>,
+  receive_method: yup.number().required('Hãy chọn phương thức nhận hàng'),
+  province: addressSchema.fields.province as yup.StringSchema<string | undefined, yup.AnyObject, undefined, ''>,
+  district: addressSchema.fields.district as yup.StringSchema<string | undefined, yup.AnyObject, undefined, ''>,
+  ward: addressSchema.fields.ward as yup.StringSchema<string | undefined, yup.AnyObject, undefined, ''>,
+  street: addressSchema.fields.street as yup.StringSchema<string | undefined, yup.AnyObject, undefined, ''>,
+  payment_method: yup.number().required('Hãy chọn phương thức thanh toán'),
+  note: yup.string().max(250, 'Ghi chú dài tối đa 250 kí tự')
+});
+
 export const registerSchema = userSchema.pick(['email', 'password', 'confirm_password']);
 export const loginSchema = userSchema.pick(['email', 'password']);
 export const createCategorySchema = categorySchema.pick(['name_vi', 'name_en']);
@@ -104,6 +117,18 @@ export const createProductSchema = productSchema.pick([
 export const createBlogSchema = blogSchema.pick(['name_vi', 'name_en', 'content_vi', 'content_en']);
 export const updateMeSchema = userSchema.pick(['fullName', 'phoneNumber', 'gender', 'date_of_birth']);
 export const addAddressSchema = addressSchema.pick(['province', 'district', 'ward', 'street', 'type']);
+export const paymentOrderSchema = orderSchema.pick([
+  'district',
+  'customer_name',
+  'customer_phone',
+  'note',
+  'payment_method',
+  'customer_gender',
+  'province',
+  'receive_method',
+  'street',
+  'ward'
+]);
 
 export type RegisterSchema = yup.InferType<typeof registerSchema>;
 export type LoginSchema = yup.InferType<typeof loginSchema>;
@@ -113,3 +138,4 @@ export type CreateProductSchema = yup.InferType<typeof createProductSchema>;
 export type CreateBlogSchema = yup.InferType<typeof createBlogSchema>;
 export type UpdateMeSchema = yup.InferType<typeof updateMeSchema>;
 export type AddAddressSchema = yup.InferType<typeof addAddressSchema>;
+export type PaymentOrderSchema = yup.InferType<typeof paymentOrderSchema>;

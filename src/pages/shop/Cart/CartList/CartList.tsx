@@ -109,13 +109,10 @@ const CartList = () => {
               <div className='text-base md:text-lg font-semibold'>Tổng tiền:</div>
               <div className='text-lg md:text-2xl text-primary font-semibold'>{formatCurrency(total as number)}₫</div>
             </div>
-            {/* <Button disabled={checkedCartList.length <= 0} isLoading={checkoutMutation.isLoading} onClick={checkout}>
-              Đặt hàng ngay
-            </Button> */}
             <Link
               to={PATH.CART_CHECKOUT_INFO}
               className={classNames('', {
-                'pointer-events-none opacity-50': checkedCartList.length <= 0
+                'pointer-events-none opacity-70': checkedCartList.length <= 0
               })}
             >
               <Button>Đặt hàng ngay</Button>
