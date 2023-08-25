@@ -76,7 +76,8 @@ export const productSchema = yup.object({
   description: yup.string().required('Mô tả sản phẩm không được để trống'),
   brand_id: yup.string().required('Hãy chọn một danh mục'),
   category_id: yup.string().required('Hãy chọn một danh mục'),
-  specifications: yup.string().required('Thông số kỹ thuật không được để trống')
+  specifications: yup.string().required('Thông số kỹ thuật không được để trống'),
+  available_count: yup.number().required('Số lượng sản phẩm không được để trống')
 });
 
 export const blogSchema = yup.object({
@@ -112,7 +113,8 @@ export const createProductSchema = productSchema.pick([
   'name_vi',
   'price',
   'price_after_discount',
-  'specifications'
+  'specifications',
+  'available_count'
 ]);
 export const createBlogSchema = blogSchema.pick(['name_vi', 'name_en', 'content_vi', 'content_en']);
 export const updateMeSchema = userSchema.pick(['fullName', 'phoneNumber', 'gender', 'date_of_birth']);

@@ -35,6 +35,7 @@ const ProductDetail = () => {
 
   // Thêm vào lịch sử xem sản phẩm
   const addViewedProductMutation = useMutation(userApi.addViewedProduct);
+
   useEffect(() => {
     if (isMounted && productId) {
       addViewedProductMutation.mutateAsync({ product_id: productId });
@@ -131,12 +132,14 @@ const ProductDetail = () => {
                   <div className='font-medium mr-6 text-sm md:text-base'>Số lượng:</div>
                   <QuantityController
                     value={buyCount}
-                    max={100}
+                    max={product.available_count}
                     onType={handleChangeBuyCount}
                     onDecrease={handleChangeBuyCount}
                     onIncrease={handleChangeBuyCount}
                   />
-                  <div className='ml-6 text-slate-500 text-xs md:text-base'>100 sản phẩm có sẵn</div>
+                  <div className='ml-6 text-slate-500 text-xs md:text-base'>
+                    {product.available_count} sản phẩm có sẵn
+                  </div>
                 </div>
                 <div className='flex mt-4'>
                   <button
@@ -234,7 +237,7 @@ const ProductDetail = () => {
             </div>
           </Fragment>
         )}
-        {/* Loading */}
+        {/* Tải trang */}
         {getProductQuery.isLoading && (
           <div className='container'>
             <Loading />

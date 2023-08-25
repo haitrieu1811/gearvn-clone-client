@@ -25,6 +25,7 @@ export interface Product {
   price_after_discount: number;
   created_at: string;
   updated_at: string;
+  available_count: number;
 
   brand?: Brand;
   category?: Category;
@@ -59,6 +60,7 @@ export interface CreateAndUpdateProductBody {
   brand_id: string;
   category_id: string;
   specifications: string;
+  available_count: number;
 }
 
 // Response

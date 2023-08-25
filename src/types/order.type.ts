@@ -1,8 +1,11 @@
-import { OrderStatus } from 'src/constants/enum';
+import { OrderStatus, PaymentMethod, ReceiveMethod } from 'src/constants/enum';
 import { Pagination, SuccessResponse } from './utils.type';
+import { PaginationQuery } from './commons.type';
 
 interface PurchaseInOrder {
   _id: string;
+  unit_price: number;
+  unit_price_after_discount: number;
   buy_count: number;
   product: {
     _id: string;
@@ -19,39 +22,39 @@ interface PurchaseInOrder {
 export interface Order {
   _id: string;
   status: number;
+  total_amount: number;
   purchases: PurchaseInOrder[];
   created_at: string;
   updated_at: string;
 }
 
-interface Contact {
+interface OrderDetail {
+  _id: string;
+  customer_gender: number;
+  customer_name: string;
+  customer_phone: string;
   province: string;
   district: string;
   ward: string;
   street: string;
-  phone_number: string;
-  customer_name: string;
-}
-
-interface OrderDetail {
-  _id: string;
+  note: string;
+  transport_fee: number;
   status: OrderStatus;
-  total_buy_count: number;
   total_amount: number;
+  total_amount_reduced: number;
+  total_items: number;
+  receive_method: ReceiveMethod;
+  payment_method: PaymentMethod;
   purchases: PurchaseInOrder[];
-  contact: Contact;
   created_at: string;
   updated_at: string;
 }
 
 // Request
-export interface GetOrderListRequestBody {
-  page?: string;
-  limit?: string;
+export interface GetOrderListRequestBody extends PaginationQuery {
   status?: string;
 }
 
-// Response
 export type GetOrderListResponse = SuccessResponse<{
   orders_size: number;
   orders: Order[];

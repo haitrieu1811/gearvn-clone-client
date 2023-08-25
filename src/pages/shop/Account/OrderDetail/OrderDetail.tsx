@@ -48,12 +48,12 @@ const OrderDetail = () => {
                 <div className='flex mb-4 text-xs md:text-base'>
                   <span className='w-1/3'>Người nhận:</span>
                   <span className='flex-1'>
-                    {order.contact.customer_name} - {order.contact.phone_number}
+                    {order.customer_name} - {order.customer_phone}
                   </span>
                 </div>
                 <div className='flex mb-4 text-xs md:text-base'>
                   <span className='w-1/3'>Địa chỉ nhận hàng:</span>
-                  <span className='capitalize flex-1'>{`${order.contact.street}, ${order.contact.ward}, ${order.contact.district}, ${order.contact.province}`}</span>
+                  <span className='capitalize flex-1'>{`${order.street}, ${order.ward}, ${order.district}, ${order.province}`}</span>
                 </div>
                 <div className='flex text-xs md:text-base'>
                   <span className='w-1/3'>Thời gian nhận hàng:</span>

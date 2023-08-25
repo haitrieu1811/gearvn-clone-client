@@ -22,8 +22,6 @@ import { ErrorResponse } from 'src/types/utils.type';
 import { CreateProductSchema, createProductSchema } from 'src/utils/rules';
 import { getImageUrl, htmlToMarkdown, isEntityError } from 'src/utils/utils';
 
-type FormData = CreateProductSchema;
-
 const Create = () => {
   const { product_id } = useParams();
   const match = useMatch(PATH.DASHBOARD_PRODUCT_UPDATE);
@@ -61,7 +59,7 @@ const Create = () => {
     setValue,
     reset,
     formState: { errors }
-  } = useForm<FormData>({
+  } = useForm<CreateProductSchema>({
     resolver: yupResolver(createProductSchema),
     defaultValues: {
       brand_id: '',
@@ -72,7 +70,8 @@ const Create = () => {
       name_vi: '',
       price: '',
       price_after_discount: '',
-      specifications: ''
+      specifications: '',
+      available_count: 0
     }
   });
 
@@ -100,7 +99,8 @@ const Create = () => {
         price_after_discount,
         specifications,
         category_id,
-        brand_id
+        brand_id,
+        available_count
       } = product;
       setValue('brand_id', brand_id as string);
       setValue('category_id', category_id as string);
@@ -111,6 +111,7 @@ const Create = () => {
       setValue('general_info', general_info);
       setValue('specifications', specifications || '');
       setValue('description', description);
+      setValue('available_count', available_count);
 
       // Giúp hiển thị text ở TextEditor chứ không có giá trị về mặc dữ liệu
       setGeneralInfo(htmlToMarkdown(general_info));
@@ -145,12 +146,12 @@ const Create = () => {
       setDescription('');
     },
     onError: (error) => {
-      if (isEntityError<ErrorResponse<{ [key in keyof FormData]: string }>>(error)) {
+      if (isEntityError<ErrorResponse<{ [key in keyof CreateProductSchema]: string }>>(error)) {
         const formError = error.response?.data.data;
         if (!isEmpty(formError)) {
           Object.keys(formError).forEach((key) => {
-            setError(key as keyof FormData, {
-              message: formError[key as keyof FormData]
+            setError(key as keyof CreateProductSchema, {
+              message: formError[key as keyof CreateProductSchema]
             });
           });
         }
@@ -290,7 +291,7 @@ const Create = () => {
               </div>
               <div className='grid grid-cols-12 gap-6 mt-6'>
                 {/* Giá gốc */}
-                <div className='col-span-6'>
+                <div className='col-span-4'>
                   <label htmlFor='price' className='font-medium text-sm mb-2 ml-1 block'>
                     Giá gốc:
                   </label>
@@ -304,7 +305,7 @@ const Create = () => {
                   />
                 </div>
                 {/* Giá khuyến mãi */}
-                <div className='col-span-6'>
+                <div className='col-span-4'>
                   <label htmlFor='price_after_discount' className='font-medium text-sm mb-2 ml-1 block'>
                     Giá khuyến mãi:
                   </label>
@@ -315,6 +316,20 @@ const Create = () => {
                     name='price_after_discount'
                     register={register}
                     errorMessage={errors.price_after_discount?.message}
+                  />
+                </div>
+                {/* Số lượng sản phẩm có sẵn */}
+                <div className='col-span-4'>
+                  <label htmlFor='available_count' className='font-medium text-sm mb-2 ml-1 block'>
+                    Số lượng:
+                  </label>
+                  <Input
+                    type='text'
+                    placeholder='Số lượng sản phẩm có sẵn'
+                    id='available_count'
+                    name='available_count'
+                    register={register}
+                    errorMessage={errors.available_count?.message}
                   />
                 </div>
               </div>

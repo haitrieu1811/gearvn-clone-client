@@ -1,13 +1,13 @@
 import { useContext, useMemo } from 'react';
-import { Link, useLocation } from 'react-router-dom';
 import { useFormContext } from 'react-hook-form';
+import { Link, useLocation } from 'react-router-dom';
 
 import { ShoppingBagCheckIcon } from 'src/components/Icons';
 import PATH from 'src/constants/path';
 import { AppContext } from 'src/contexts/app.context';
 import { PaymentOrderSchema } from 'src/utils/rules';
-import { CartContext } from '../Cart';
 import { formatCurrency } from 'src/utils/utils';
+import { CartContext } from '../Cart';
 
 const CheckoutSuccess = () => {
   const location = useLocation();
@@ -29,7 +29,7 @@ const CheckoutSuccess = () => {
       {/* Thông tin đơn mua */}
       <div className='bg-[#ececec] mb-6 pb-4'>
         <div className='p-4 flex justify-between items-center border-b border-b-[#CFCFCF]'>
-          <div className='uppercase'>ĐƠN HÀNG {`#${orderId.slice(-6)}`}</div>
+          <div className='uppercase'>ĐƠN HÀNG {`#${orderId?.slice(-6)}`}</div>
           <Link to={PATH.ACCOUNT_ORDER} className='text-[#1982F9]'>
             Quản lý đơn hàng
           </Link>

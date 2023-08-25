@@ -3,6 +3,8 @@ import { SuccessResponse } from './utils.type';
 
 export interface Purchase {
   _id: string;
+  unit_price: number;
+  unit_price_after_discount: number;
   buy_count: number;
   status: PurchaseStatus;
   created_at: string;

@@ -1,6 +1,7 @@
 import axios, { AxiosInstance, InternalAxiosRequestConfig } from 'axios';
 
 import { URL_LOGIN, URL_LOGOUT, URL_REFRESH_TOKEN, URL_REGISTER } from 'src/apis/auth.api';
+import { URL_UPDATE_ME } from 'src/apis/user.api';
 import CONFIG from 'src/constants/config';
 import { AuthResponse, RefreshTokenResponse } from 'src/types/auth.type';
 import { User } from 'src/types/user.type';
@@ -13,7 +14,6 @@ import {
   setRefreshTokenToLS
 } from './auth';
 import { isExpiredTokenError, isUnauthorizedError } from './utils';
-import { URL_USER_ADDRESS, URL_UPDATE_ME } from 'src/apis/user.api';
 
 class Http {
   instance: AxiosInstance;
@@ -50,7 +50,7 @@ class Http {
     this.instance.interceptors.response.use(
       (response) => {
         const { url } = response.config;
-        if (url === URL_LOGIN || url === URL_REGISTER || url === URL_UPDATE_ME || url?.includes(URL_USER_ADDRESS)) {
+        if (url === URL_LOGIN || url === URL_REGISTER || url === URL_UPDATE_ME) {
           if (
             (response.data as AuthResponse).data.access_token &&
             (response.data as AuthResponse).data.refresh_token &&

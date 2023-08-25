@@ -1,22 +1,31 @@
-import { useMutation } from '@tanstack/react-query';
-import { useContext, useMemo, useState } from 'react';
+import { useMutation, useQuery } from '@tanstack/react-query';
+import { isAxiosError } from 'axios';
+import { useMemo, useState } from 'react';
 import { toast } from 'react-toastify';
+import addressApi from 'src/apis/address.api';
 
-import userApi from 'src/apis/user.api';
 import CreateAddress from 'src/components/CreateAddress';
 import { PlusIcon } from 'src/components/Icons';
 import Modal from 'src/components/Modal';
-import { AppContext } from 'src/contexts/app.context';
+import { OnlyMessageResponse } from 'src/types/utils.type';
 
 const Address = () => {
   const [addModalOpen, setAddModalOpen] = useState<boolean>(false);
   const [deleteConfirmModalOpen, setDeleteConfirmModalOpen] = useState<boolean>(false);
   const [currentId, setCurrentId] = useState<string | null>(null);
   const [isUpdateMode, setIsUpdateMode] = useState<boolean>(false);
-  const { profile, setProfile } = useContext(AppContext);
 
-  const addresses = useMemo(() => profile?.addresses, [profile]);
-  const defaultAddress = useMemo(() => addresses?.find((address) => address.isDefault), [profile]);
+  // Lấy danh sách địa chỉ
+  const getAddressesQuery = useQuery({
+    queryKey: ['addresses'],
+    queryFn: () => addressApi.getAddresses()
+  });
+
+  // Danh sách địa chỉ
+  const addresses = useMemo(
+    () => getAddressesQuery.data?.data.data.addresses,
+    [getAddressesQuery.data?.data.data.addresses]
+  );
 
   // Bắt đầu thêm
   const startAdd = () => {
@@ -56,29 +65,32 @@ const Address = () => {
 
   // Xóa địa chỉ
   const deleteAddressMutation = useMutation({
-    mutationFn: userApi.deleteAddress,
+    mutationFn: addressApi.deleteAddress,
     onSuccess: (data) => {
       toast.success(data.data.message);
-      setProfile(data.data.data.user);
+      getAddressesQuery.refetch();
+      stopDelete();
+    },
+    onError: (error) => {
+      if (isAxiosError<OnlyMessageResponse>(error)) toast.error(error.response?.data.message);
       stopDelete();
     }
   });
+
+  // Xử lý xóa địa chỉ
   const handleDeleteAddress = () => {
-    if (currentId && currentId !== defaultAddress?._id) {
-      deleteAddressMutation.mutate(currentId);
-    } else {
-      toast.error('Không thể xóa địa chỉ mặc định');
-      stopDelete();
-    }
+    if (currentId) deleteAddressMutation.mutate(currentId);
   };
 
-  // Đặt địa chỉ thành mặc định
+  // Thiết lập địa chỉ mặc định
   const setDefaultAddressMutation = useMutation({
-    mutationFn: userApi.setDefaultAddress,
-    onSuccess: (data) => {
-      setProfile(data.data.data.user);
+    mutationFn: addressApi.setDefaultAddress,
+    onSuccess: () => {
+      getAddressesQuery.refetch();
     }
   });
+
+  // Xử lý đặt địa chỉ thành mặc định
   const setDefaultAddress = (addressId: string) => {
     setDefaultAddressMutation.mutate(addressId);
   };
@@ -100,7 +112,7 @@ const Address = () => {
           {addresses.map((address) => (
             <div key={address._id} className='py-3 border-b border-[#cfcfcf] flex justify-between items-center'>
               <div className='flex items-center'>
-                {address.isDefault ? (
+                {address.is_default ? (
                   <span className='py-1 px-2 whitespace-nowrap text-xs md:text-sm border border-primary rounded text-primary mr-4'>
                     Mặc định
                   </span>
@@ -139,7 +151,20 @@ const Address = () => {
         cancelButton={false}
         okButton={false}
       >
-        <CreateAddress onSuccess={isUpdateMode ? stopUpdate : stopAdd} currentId={isUpdateMode ? currentId : null} />
+        <CreateAddress
+          onSuccess={
+            isUpdateMode
+              ? () => {
+                  stopUpdate();
+                  getAddressesQuery.refetch();
+                }
+              : () => {
+                  stopAdd();
+                  getAddressesQuery.refetch();
+                }
+          }
+          currentId={isUpdateMode ? currentId : null}
+        />
       </Modal>
       <Modal isVisible={deleteConfirmModalOpen} onCancel={stopDelete} onOk={handleDeleteAddress}>
         Bạn có chắc muốn xóa địa chỉ này

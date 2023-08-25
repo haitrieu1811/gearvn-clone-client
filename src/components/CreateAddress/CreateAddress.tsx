@@ -1,12 +1,11 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useMutation, useQuery } from '@tanstack/react-query';
-import { useContext, useEffect, useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 
-import userApi from 'src/apis/user.api';
+import addressApi from 'src/apis/address.api';
 import { AddressType } from 'src/constants/enum';
-import { AppContext } from 'src/contexts/app.context';
 import { OnlyMessageResponse } from 'src/types/utils.type';
 import { AddAddressSchema, addAddressSchema } from 'src/utils/rules';
 import { isAxiosError } from 'src/utils/utils';
@@ -21,17 +20,17 @@ interface CreateAddressProps {
 }
 
 const CreateAddress = ({ onSuccess, currentId = null }: CreateAddressProps) => {
-  const { profile, setProfile } = useContext(AppContext);
-
+  // Lấy địa chỉ
   const getAddressQuery = useQuery({
     queryKey: ['address', currentId],
-    queryFn: () => userApi.getAddress(currentId as string),
+    queryFn: () => addressApi.getAddress(currentId as string),
     enabled: Boolean(currentId)
   });
 
+  // Địa chỉ
   const address = useMemo(() => getAddressQuery.data?.data.data.address, [getAddressQuery.data?.data.data.address]);
-  const isDefault = useMemo(() => profile && profile?.addresses.length === 0, [profile]);
 
+  // Form
   const {
     handleSubmit,
     register,
@@ -43,6 +42,7 @@ const CreateAddress = ({ onSuccess, currentId = null }: CreateAddressProps) => {
     resolver: yupResolver(addAddressSchema)
   });
 
+  // Set giá trị cho form
   useEffect(() => {
     if (address) {
       setValue('district', address.district);
@@ -53,16 +53,16 @@ const CreateAddress = ({ onSuccess, currentId = null }: CreateAddressProps) => {
     }
   }, [address, setValue]);
 
+  // Loại địa chỉ
   const type = watch('type');
 
   // Thêm địa chỉ
   const addAddressMutation = useMutation({
-    mutationFn: userApi.addAddress,
+    mutationFn: addressApi.addAddress,
     onSuccess: (data) => {
       toast.success(data.data.message);
-      reset();
       onSuccess && onSuccess();
-      setProfile(data.data.data.user);
+      reset();
     },
     onError: (error) => {
       if (isAxiosError<OnlyMessageResponse>(error)) {
@@ -73,28 +73,22 @@ const CreateAddress = ({ onSuccess, currentId = null }: CreateAddressProps) => {
 
   // Cập nhật địa chỉ
   const updateAddressMutation = useMutation({
-    mutationFn: userApi.updateAddress,
+    mutationFn: addressApi.updateAddress,
     onSuccess: (data) => {
       toast.success(data.data.message);
-      setProfile(data.data.data.user);
       onSuccess && onSuccess();
     }
   });
 
+  // Submit
   const onSubmit = handleSubmit((data) => {
     if (!Boolean(currentId)) {
-      addAddressMutation.mutate({
-        ...data,
-        isDefault: isDefault as boolean
-      });
+      addAddressMutation.mutate(data);
     } else {
       if (address) {
         updateAddressMutation.mutate({
-          body: {
-            ...data,
-            isDefault: address.isDefault
-          },
-          addressId: address._id
+          body: data,
+          address_id: address._id
         });
       }
     }

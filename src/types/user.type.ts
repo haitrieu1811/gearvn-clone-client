@@ -9,7 +9,9 @@ export interface Address {
   ward: string;
   street: string;
   type: AddressType;
-  isDefault: boolean;
+  is_default: boolean;
+  created_at: string;
+  updated_at: string;
 }
 
 export interface ViewedProduct {
@@ -67,7 +69,6 @@ export interface AddAddressRequestBody {
   ward: string;
   street: string;
   type: AddressType;
-  isDefault: boolean;
 }
 
 export interface UpdateAddressRequestBody {
@@ -76,7 +77,6 @@ export interface UpdateAddressRequestBody {
   ward: string;
   street: string;
   type: AddressType;
-  isDefault: boolean;
 }
 
 // Response
@@ -95,3 +95,7 @@ export type GetViewedProductsResponse = SuccessResponse<{
 }>;
 
 export type GetQuantityPerCollectionResponse = SuccessResponse<QuantityPerCollection>;
+
+export type GetAddressesListResponse = SuccessResponse<{
+  addresses: Address[];
+}>;

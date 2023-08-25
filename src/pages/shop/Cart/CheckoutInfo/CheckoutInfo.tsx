@@ -26,14 +26,9 @@ const CheckoutInfo = () => {
   const gender = watch('customer_gender');
   const receiveMethod = watch('receive_method');
 
-  const nextStep = handleSubmit(
-    () => {
-      navigate(PATH.CART_CHECKOUT_PROCESS);
-    },
-    (errors) => {
-      console.log(errors);
-    }
-  );
+  const nextStep = handleSubmit(() => {
+    navigate(PATH.CART_CHECKOUT_PROCESS);
+  });
 
   return (
     <div className='p-6'>

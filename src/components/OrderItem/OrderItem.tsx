@@ -20,10 +20,6 @@ export const orderStatusName = {
 
 const OrderItem = ({ data }: OrderItemProps) => {
   const purchases = useMemo(() => data.purchases, [data]);
-  const total_amount = useMemo(
-    () => purchases.reduce((acc, purchase) => acc + purchase.product.price_after_discount * purchase.buy_count, 0),
-    [data]
-  );
 
   return (
     <div className='px-2 md:px-6 py-4 mt-2 md:mt-4 bg-white rounded shadow-sm'>
@@ -64,10 +60,10 @@ const OrderItem = ({ data }: OrderItemProps) => {
           </div>
           <div className='text-right ml-2'>
             <div className='text-[#111111] text-sm md:text-base'>
-              {formatCurrency(purchase.product.price_after_discount * purchase.buy_count)}₫
+              {formatCurrency(purchase.unit_price_after_discount * purchase.buy_count)}₫
             </div>
             <div className='text-[12px] md:text-sm text-[#111111] line-through'>
-              {formatCurrency(purchase.product.price * purchase.buy_count)}₫
+              {formatCurrency(purchase.unit_price * purchase.buy_count)}₫
             </div>
           </div>
         </div>
@@ -76,7 +72,7 @@ const OrderItem = ({ data }: OrderItemProps) => {
       <div className='flex flex-col items-end pt-4 border-t border-t-[#cfcfcf]'>
         <div className='mb-2'>
           <span className='text-[#111111] text-sm md:text-base'>Tổng tiền:</span>{' '}
-          <span className='text-primary text-sm md:text-base font-semibold'>{formatCurrency(total_amount)}₫</span>
+          <span className='text-primary text-sm md:text-base font-semibold'>{formatCurrency(data.total_amount)}₫</span>
         </div>
         <Link
           to={`${PATH.ACCOUNT_ORDER_DETAIL_WITHOUT_ID}/${data._id}`}
