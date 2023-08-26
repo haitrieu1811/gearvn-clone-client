@@ -31,6 +31,7 @@ const CartItem = ({
   const queryClient = useQueryClient();
   const checkBoxRef = useRef<HTMLInputElement>(null);
 
+  // Xóa sản phẩm khỏi giỏ hàng
   const deletePurchaseMutation = useMutation({
     mutationFn: purchaseApi.delete,
     onSuccess: (data) => {
@@ -39,10 +40,12 @@ const CartItem = ({
     }
   });
 
+  // Xóa sản phẩm khỏi giỏ hàng
   const handleDelete = (purchaseId: string) => {
     deletePurchaseMutation.mutate([purchaseId]);
   };
 
+  // Chọn sản phẩm để mua
   const chooseToBuy = () => {
     if (checkBoxRef) {
       checkBoxRef.current?.click();

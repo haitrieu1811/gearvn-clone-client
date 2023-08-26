@@ -1,7 +1,6 @@
 import axios, { AxiosInstance, InternalAxiosRequestConfig } from 'axios';
 
 import { URL_LOGIN, URL_LOGOUT, URL_REFRESH_TOKEN, URL_REGISTER } from 'src/apis/auth.api';
-import { URL_UPDATE_ME } from 'src/apis/user.api';
 import CONFIG from 'src/constants/config';
 import { AuthResponse, RefreshTokenResponse } from 'src/types/auth.type';
 import { User } from 'src/types/user.type';
@@ -50,19 +49,13 @@ class Http {
     this.instance.interceptors.response.use(
       (response) => {
         const { url } = response.config;
-        if (url === URL_LOGIN || url === URL_REGISTER || url === URL_UPDATE_ME) {
-          if (
-            (response.data as AuthResponse).data.access_token &&
-            (response.data as AuthResponse).data.refresh_token &&
-            (response.data as AuthResponse).data.user
-          ) {
-            this.accessToken = (response.data as AuthResponse).data.access_token;
-            this.refreshToken = (response.data as AuthResponse).data.refresh_token;
-            this.profile = (response.data as AuthResponse).data.user;
-            setAccessTokenToLS(this.accessToken);
-            setRefreshTokenToLS(this.refreshToken);
-            setProfileToLS(this.profile);
-          }
+        if (url === URL_LOGIN || url === URL_REGISTER) {
+          this.accessToken = (response.data as AuthResponse).data.access_token;
+          this.refreshToken = (response.data as AuthResponse).data.refresh_token;
+          this.profile = (response.data as AuthResponse).data.user;
+          setAccessTokenToLS(this.accessToken);
+          setRefreshTokenToLS(this.refreshToken);
+          setProfileToLS(this.profile);
         } else if (url === URL_LOGOUT) {
           clearAuthFromLS();
         }

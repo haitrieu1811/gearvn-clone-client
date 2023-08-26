@@ -26,8 +26,6 @@ const CartList = () => {
         const extendedCartListObj = keyBy(prevState, '_id');
         return cartList.map((cartItem) => {
           const isBuyNow = location.state && (location.state as { cartItemId: string }).cartItemId === cartItem._id;
-          console.log('>>> location.state', location.state);
-          console.log('>>> isBuyNow', isBuyNow);
           return {
             ...cartItem,
             checked: Boolean(extendedCartListObj[cartItem._id]?.checked) || isBuyNow,
@@ -44,6 +42,7 @@ const CartList = () => {
     };
   }, []);
 
+  // Cập nhật số lượng
   const updatePurchaseMutation = useMutation({
     mutationFn: purchaseApi.update,
     onSuccess: () => {

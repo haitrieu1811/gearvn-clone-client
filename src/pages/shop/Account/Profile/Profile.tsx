@@ -19,6 +19,7 @@ import { ErrorResponse } from 'src/types/utils.type';
 import { UpdateMeSchema, updateMeSchema } from 'src/utils/rules';
 import { isEntityError } from 'src/utils/utils';
 import { AccountContext } from '../Account';
+import { setProfileToLS } from 'src/utils/auth';
 
 type FormData = UpdateMeSchema;
 
@@ -61,6 +62,7 @@ const Profile = () => {
       getMeQuery && getMeQuery.refetch();
       setProfile(data.data.data.user);
       setAvatarFile(null);
+      setProfileToLS(data.data.data.user);
     },
     onError: (error) => {
       if (isEntityError<ErrorResponse<{ [key in keyof FormData]: string }>>(error)) {

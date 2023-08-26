@@ -4,6 +4,7 @@ import { createContext, useContext, useEffect, useMemo } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { Link, Outlet, useMatch, useNavigate } from 'react-router-dom';
 
+import addressApi from 'src/apis/address.api';
 import purchaseApi from 'src/apis/purchase.api';
 import { ChevronLeftIcon } from 'src/components/Icons';
 import { Gender, PaymentMethod, ReceiveMethod } from 'src/constants/enum';
@@ -39,44 +40,74 @@ const Cart = () => {
   const isCartListPage = Boolean(useMatch(PATH.CART_LIST));
   const { extendedCartList, profile } = useContext(AppContext);
 
+  // Lấy danh sách sản phẩm trong giỏ hàng
   const getCartListQuery = useQuery({
     queryKey: ['cart_list'],
     queryFn: () => purchaseApi.getCart()
   });
 
+  const getAddressesQuery = useQuery({
+    queryKey: ['addresses'],
+    queryFn: () => addressApi.getAddresses()
+  });
+
+  // Lấy danh sách sản phẩm đã chọn trong giỏ hàng
   const checkedCartList = useMemo(() => extendedCartList.filter((cartItem) => cartItem.checked), [extendedCartList]);
+
+  // Tính tổng tiền
   const total = useMemo(
     () =>
       checkedCartList?.reduce((acc, cartItem) => acc + cartItem.buy_count * cartItem.product.price_after_discount, 0),
     [checkedCartList]
   );
+
+  // Lấy danh sách sản phẩm trong giỏ hàng
   const cartList = useMemo(
     () => getCartListQuery.data?.data.data.cart_list,
     [getCartListQuery.data?.data.data.cart_list]
   );
-  const address = useMemo(() => profile?.addresses.find((address) => address.isDefault), [profile]);
 
+  // Lấy danh sách địa chỉ
+  const addresses = useMemo(
+    () => getAddressesQuery.data?.data.data.addresses,
+    [getAddressesQuery.data?.data.data.addresses]
+  );
+
+  // Lấy địa chỉ mặc định
+  const address = useMemo(() => addresses?.find((address) => address.is_default), [addresses]);
+
+  // Nếu không có sản phẩm nào trong giỏ hàng thì chuyển về trang danh sách sản phẩm
   useEffect(() => {
     if (total <= 0) {
       navigate(PATH.CART_LIST);
     }
   }, [total]);
 
+  // Form
   const methods = useForm<PaymentOrderSchema>({
     defaultValues: {
       customer_gender: profile?.gender ? String(profile?.gender) : String(Gender.Male),
       customer_name: profile?.fullName ? profile?.fullName : '',
       customer_phone: profile?.phoneNumber,
-      province: address?.province,
-      district: address?.district,
-      ward: address?.ward,
-      street: address?.street,
+      province: '',
+      district: '',
+      ward: '',
+      street: '',
       receive_method: ReceiveMethod.AtHome,
       note: '',
       payment_method: PaymentMethod.Cash
     },
     resolver: yupResolver(paymentOrderSchema as any)
   });
+
+  useEffect(() => {
+    if (address) {
+      methods.setValue('province', address.province);
+      methods.setValue('district', address.district);
+      methods.setValue('ward', address.ward);
+      methods.setValue('street', address.street);
+    }
+  }, [address]);
 
   return (
     <FormProvider {...methods}>
