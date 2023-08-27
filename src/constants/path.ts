@@ -24,6 +24,7 @@ const PATH = {
   FORGOT_PASSWORD: '/forgot-password',
   VERIFY_RESET_PASSWORD_TOKEN: '/verify-reset-password-token',
   RESET_PASSWORD: '/reset-password',
+  VERIFY_EMAIL: '/verify-email',
 
   DASHBOARD: '/dashboard',
   DASHBOARD_USER: '/dashboard/user',

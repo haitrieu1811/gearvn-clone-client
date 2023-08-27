@@ -36,6 +36,7 @@ const Account = () => {
     queryFn: () => userApi.getMe()
   });
 
+  // Thông tin tài khoản
   const me = useMemo(() => getMeQuery.data?.data.data.user, [getMeQuery.data?.data.data.user]);
 
   return (

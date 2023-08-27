@@ -6,20 +6,23 @@ import omitBy from 'lodash/omitBy';
 import { useContext, useEffect } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
+import classNames from 'classnames';
 
 import mediaApi from 'src/apis/media.api';
 import userApi from 'src/apis/user.api';
+import Alert from 'src/components/Alert';
 import Button from 'src/components/Button';
 import DateSelect from 'src/components/DateSelect';
 import Input from 'src/components/Input';
 import Loading from 'src/components/Loading';
-import { Gender } from 'src/constants/enum';
+import { Gender, UserVerifyStatus } from 'src/constants/enum';
 import { AppContext } from 'src/contexts/app.context';
 import { ErrorResponse } from 'src/types/utils.type';
+import { setProfileToLS } from 'src/utils/auth';
 import { UpdateMeSchema, updateMeSchema } from 'src/utils/rules';
 import { isEntityError } from 'src/utils/utils';
 import { AccountContext } from '../Account';
-import { setProfileToLS } from 'src/utils/auth';
+import FloatLoading from 'src/components/FloatLoading/FloatLoading';
 
 type FormData = UpdateMeSchema;
 
@@ -27,6 +30,19 @@ const Profile = () => {
   const { setProfile } = useContext(AppContext);
   const { avatarFile, setAvatarFile, me, getMeQuery } = useContext(AccountContext);
 
+  // Gửi lại email xác thực
+  const resendVerifyEmailMutation = useMutation({
+    mutationFn: userApi.resendVerifyEmail,
+    onSuccess: (data) => {
+      toast.success(data.data.message);
+    }
+  });
+
+  const resendVerifyEmail = () => {
+    resendVerifyEmailMutation.mutate();
+  };
+
+  // Form
   const {
     control,
     register,
@@ -108,6 +124,21 @@ const Profile = () => {
       {me && getMeQuery && !getMeQuery.isLoading && (
         <form onSubmit={onSubmit}>
           <h2 className='py-4 px-2 md:px-6 text-xl md:text-2xl font-semibold'>Thông tin tài khoản</h2>
+          <Alert isVisible={me.verify === UserVerifyStatus.Unverified}>
+            Tài khoản của bạn chưa được xác thực vui lòng kiểm tra email để xác thực tài khoản. Nếu bạn chưa nhận được
+            email xác thực, vui lòng{' '}
+            <button
+              type='button'
+              className={classNames('font-bold', {
+                'pointer-events-none': resendVerifyEmailMutation.isLoading
+              })}
+              onClick={resendVerifyEmail}
+            >
+              nhận lại email xác thực
+            </button>
+            .
+          </Alert>
+          <FloatLoading isLoading={resendVerifyEmailMutation.isLoading} />
           <div className='px-2 md:px-4 py-4 lg:pl-6 lg:pr-[290px]'>
             {/* Họ tên */}
             <div className='grid grid-cols-12 gap-2 md:gap-6'>

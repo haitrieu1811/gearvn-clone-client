@@ -15,7 +15,7 @@ const VerifyResetPasswordToken = () => {
   const [message, setMessage] = useState('');
 
   // Xác thực token
-  const verifyResetPasswordTokenMutation = useMutation({
+  const verifyForgotPasswordTokenMutation = useMutation({
     mutationFn: userApi.verifyForgotPasswordToken,
     onSuccess: () => {
       navigate(PATH.RESET_PASSWORD, { state: { token } });
@@ -29,14 +29,12 @@ const VerifyResetPasswordToken = () => {
 
   // Xác thực token khi component mount
   useEffect(() => {
-    if (token) verifyResetPasswordTokenMutation.mutate({ forgot_password_token: token });
+    if (token) verifyForgotPasswordTokenMutation.mutate({ forgot_password_token: token });
   }, [token]);
 
   return (
-    <div>
-      <div className='container py-[100px] my-4 flex justify-center items-center bg-white rounded-sm shadow-sm'>
-        <span className='text-xl font-medium uppercase'>{message}</span>
-      </div>
+    <div className='container py-[100px] my-4 flex justify-center items-center bg-white rounded-sm shadow-sm'>
+      <span className='text-xl font-medium uppercase'>{message}</span>
     </div>
   );
 };

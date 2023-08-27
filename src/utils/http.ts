@@ -2,7 +2,7 @@ import axios, { AxiosError, AxiosInstance, InternalAxiosRequestConfig } from 'ax
 import { toast } from 'react-toastify';
 
 import { URL_LOGIN, URL_LOGOUT, URL_REFRESH_TOKEN, URL_REGISTER } from 'src/apis/auth.api';
-import { URL_RESET_PASSWORD } from 'src/apis/user.api';
+import { URL_RESET_PASSWORD, URL_VERIFY_EMAIL } from 'src/apis/user.api';
 import CONFIG from 'src/constants/config';
 import { HttpStatusCode } from 'src/constants/enum';
 import { AuthResponse, RefreshTokenResponse } from 'src/types/auth.type';
@@ -40,6 +40,7 @@ class Http {
     // Thêm một interceptor trước khi request được gửi đi
     this.instance.interceptors.request.use(
       (config) => {
+        // Thêm access token vào header nếu có
         if (this.accessToken && config.headers) {
           config.headers.Authorization = `Bearer ${this.accessToken}`;
         }
@@ -55,7 +56,7 @@ class Http {
       (response) => {
         const { url } = response.config;
         // Lưu thông tin user vào localStorage khi đăng nhập, đăng ký hoặc reset password
-        if (url === URL_LOGIN || url === URL_REGISTER || url === URL_RESET_PASSWORD) {
+        if (url === URL_LOGIN || url === URL_REGISTER || url === URL_VERIFY_EMAIL || url === URL_RESET_PASSWORD) {
           this.accessToken = (response.data as AuthResponse).data.access_token;
           this.refreshToken = (response.data as AuthResponse).data.refresh_token;
           this.profile = (response.data as AuthResponse).data.user;

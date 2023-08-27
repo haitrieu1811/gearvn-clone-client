@@ -1,11 +1,12 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { isAxiosError } from 'axios';
-import { useMemo, useState } from 'react';
+import { Fragment, useMemo, useState } from 'react';
 import { toast } from 'react-toastify';
 import addressApi from 'src/apis/address.api';
 
+import Alert from 'src/components/Alert';
 import CreateAddress from 'src/components/CreateAddress';
-import { PlusIcon } from 'src/components/Icons';
+import { EmptyImage, PlusIcon } from 'src/components/Icons';
 import Modal from 'src/components/Modal';
 import { OnlyMessageResponse } from 'src/types/utils.type';
 
@@ -107,43 +108,55 @@ const Address = () => {
           <span className='text-xs md:text-sm text-white'>Thêm địa chỉ mới</span>
         </button>
       </div>
-      {addresses && addresses.length > 0 && (
-        <div className='px-2 md:px-6 py-4'>
-          {addresses.map((address) => (
-            <div key={address._id} className='py-3 border-b border-[#cfcfcf] flex justify-between items-center'>
-              <div className='flex items-center'>
-                {address.is_default ? (
-                  <span className='py-1 px-2 whitespace-nowrap text-xs md:text-sm border border-primary rounded text-primary mr-4'>
-                    Mặc định
-                  </span>
-                ) : (
-                  <button
-                    className='mr-4 whitespace-nowrap text-xs md:text-sm border border-[#cfcfcf] rounded py-1 px-1 md:px-2 text-slate-500'
-                    onClick={() => setDefaultAddress(address._id)}
-                  >
-                    Thiết lập mặc định
+      {/* Khi đã có địa chỉ */}
+      {addresses && addresses.length > 0 && !getAddressesQuery.isLoading && (
+        <Fragment>
+          <div className='px-2 md:px-6 py-4'>
+            {addresses.map((address) => (
+              <div key={address._id} className='py-3 border-b border-[#cfcfcf] flex justify-between items-center'>
+                <div className='flex items-center'>
+                  {address.is_default ? (
+                    <span className='py-1 px-2 whitespace-nowrap text-xs md:text-sm border border-primary rounded text-primary mr-4'>
+                      Mặc định
+                    </span>
+                  ) : (
+                    <button
+                      className='mr-4 whitespace-nowrap text-xs md:text-sm border border-[#cfcfcf] rounded py-1 px-1 md:px-2 text-slate-500'
+                      onClick={() => setDefaultAddress(address._id)}
+                    >
+                      Thiết lập mặc định
+                    </button>
+                  )}
+                  <div className='text-slate-700 capitalize text-xs md:text-base'>
+                    {address.street}, {address.ward}, {address.district}, {address.province}
+                  </div>
+                </div>
+                <div className='flex items-center ml-2 md:ml-4'>
+                  <button className='text-xs font-semibold text-[#005EC9]' onClick={() => startUpdate(address._id)}>
+                    Sửa
                   </button>
-                )}
-                <div className='text-slate-700 capitalize text-xs md:text-base'>
-                  {address.street}, {address.ward}, {address.district}, {address.province}
+                  <div className='h-4 w-[1px] bg-slate-300 mx-1' />
+                  <button className='text-xs font-semibold text-primary' onClick={() => startDelete(address._id)}>
+                    Xóa
+                  </button>
                 </div>
               </div>
-              <div className='flex items-center ml-2 md:ml-4'>
-                <button className='text-xs font-semibold text-[#005EC9]' onClick={() => startUpdate(address._id)}>
-                  Sửa
-                </button>
-                <div className='h-4 w-[1px] bg-slate-300 mx-1' />
-                <button className='text-xs font-semibold text-primary' onClick={() => startDelete(address._id)}>
-                  Xóa
-                </button>
-              </div>
-            </div>
-          ))}
+            ))}
+          </div>
+          <Alert>
+            Nếu địa chỉ nhận hàng chưa chính xác, vui lòng kiểm tra và cập nhật. Mỗi tài khoản chỉ được tạo tối đa 3 địa
+            chỉ
+          </Alert>
+        </Fragment>
+      )}
+      {/* Khi chưa có địa chỉ nào */}
+      {addresses && addresses.length <= 0 && !getAddressesQuery.isLoading && (
+        <div className='flex justify-center items-center flex-col mt-10'>
+          <EmptyImage />
+          <p className='text-center mt-4'>Chưa có địa chỉ nào</p>
         </div>
       )}
-      <div className='px-4 py-2 bg-yellow-100 text-xs md:text-sm font-medium inline-block mx-2 md:mx-6 rounded'>
-        Nếu địa chỉ nhận hàng chưa chính xác, vui lòng kiểm tra và cập nhật. Mỗi tài khoản chỉ được tạo tối đa 3 địa chỉ
-      </div>
+
       <Modal
         name={!isUpdateMode ? 'Thêm địa chỉ' : 'Cập nhật địa chỉ'}
         isVisible={addModalOpen}

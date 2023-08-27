@@ -15,7 +15,8 @@ const Loading = ({ className = 'w-8 h-8 md:w-12 md:h-12', classNameWrapper }: Lo
 };
 
 Loading.propTypes = {
-  className: PropTypes.string
+  className: PropTypes.string,
+  classNameWrapper: PropTypes.string
 };
 
 export default Loading;

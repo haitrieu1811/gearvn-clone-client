@@ -41,7 +41,8 @@ import ProductDetail from 'src/pages/shop/ProductDetail';
 import Register from 'src/pages/shop/Register/Register';
 import ResetPassword from 'src/pages/shop/ResetPassword';
 import Search from 'src/pages/shop/Search';
-import VerifyResetPasswordToken from 'src/pages/shop/VerifyResetPasswordToken';
+import VerifyEmail from 'src/pages/shop/VerifyEmail';
+import VerifyResetPasswordToken from 'src/pages/shop/VerifyForgotPasswordToken';
 
 const ProtectedRoute = () => {
   const { isAuthenticated } = useContext(AppContext);
@@ -119,6 +120,14 @@ const useElement = () => {
       element: (
         <MainLayout>
           <Search />
+        </MainLayout>
+      )
+    },
+    {
+      path: PATH.VERIFY_EMAIL,
+      element: (
+        <MainLayout>
+          <VerifyEmail />
         </MainLayout>
       )
     },
