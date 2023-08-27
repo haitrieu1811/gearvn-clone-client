@@ -12,6 +12,9 @@ import http from 'src/utils/http';
 
 export const URL_USERS_LIST = '/users/list';
 export const URL_UPDATE_ME = '/users/me';
+export const URL_FORGOT_PASSWORD = '/users/forgot-password';
+export const URL_VERIFY_FORGOT_PASSWORD_TOKEN = '/users/verify-forgot-password-token';
+export const URL_RESET_PASSWORD = '/users/reset-password';
 
 const userApi = {
   getList(params: GetUsersParams) {
@@ -31,6 +34,15 @@ const userApi = {
   },
   getQuantityPerCollection() {
     return http.get<GetQuantityPerCollectionResponse>('/users/quantity-per-collection');
+  },
+  forgotPassword(body: { email: string }) {
+    return http.post<OnlyMessageResponse>(URL_FORGOT_PASSWORD, body);
+  },
+  verifyForgotPasswordToken(body: { forgot_password_token: string }) {
+    return http.post<OnlyMessageResponse>(URL_VERIFY_FORGOT_PASSWORD_TOKEN, body);
+  },
+  resetPassword(body: { forgot_password_token: string; password: string; confirm_password: string }) {
+    return http.put<AuthResponse>(URL_RESET_PASSWORD, body);
   }
 };
 

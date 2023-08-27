@@ -131,6 +131,8 @@ export const paymentOrderSchema = orderSchema.pick([
   'street',
   'ward'
 ]);
+export const forgotPasswordSchema = userSchema.pick(['email']);
+export const resetPasswordSchema = userSchema.pick(['password', 'confirm_password']);
 
 export type RegisterSchema = yup.InferType<typeof registerSchema>;
 export type LoginSchema = yup.InferType<typeof loginSchema>;
@@ -141,3 +143,5 @@ export type CreateBlogSchema = yup.InferType<typeof createBlogSchema>;
 export type UpdateMeSchema = yup.InferType<typeof updateMeSchema>;
 export type AddAddressSchema = yup.InferType<typeof addAddressSchema>;
 export type PaymentOrderSchema = yup.InferType<typeof paymentOrderSchema>;
+export type ForgotPasswordSchema = yup.InferType<typeof forgotPasswordSchema>;
+export type ResetPasswordSchema = yup.InferType<typeof resetPasswordSchema>;

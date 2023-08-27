@@ -22,23 +22,26 @@ import DashboardUser from 'src/pages/admin/User';
 import Account from 'src/pages/shop/Account';
 import AccountAddress from 'src/pages/shop/Account/Address';
 import AccountHistoryOrder from 'src/pages/shop/Account/HistoryOrder';
+import OrderDetail from 'src/pages/shop/Account/OrderDetail';
 import AccountProfile from 'src/pages/shop/Account/Profile';
 import AccountViewedProduct from 'src/pages/shop/Account/ViewedProduct';
 import Blog from 'src/pages/shop/Blog';
 import BlogDetail from 'src/pages/shop/BlogDetail';
 import Cart from 'src/pages/shop/Cart';
-import Home from 'src/pages/shop/Home/Home';
-import Login from 'src/pages/shop/Login/Login';
-import NotFound from 'src/pages/shop/NotFound/NotFound';
-import ProductDetail from 'src/pages/shop/ProductDetail';
-import Register from 'src/pages/shop/Register/Register';
-import OrderDetail from 'src/pages/shop/Account/OrderDetail';
-import Search from 'src/pages/shop/Search';
-import Product from 'src/pages/shop/Product';
 import CartList from 'src/pages/shop/Cart/CartList';
 import CheckoutInfo from 'src/pages/shop/Cart/CheckoutInfo';
 import CheckoutProcess from 'src/pages/shop/Cart/CheckoutProcess';
 import CheckoutSuccess from 'src/pages/shop/Cart/CheckoutSuccess';
+import ForgotPassword from 'src/pages/shop/ForgotPassword';
+import Home from 'src/pages/shop/Home/Home';
+import Login from 'src/pages/shop/Login/Login';
+import NotFound from 'src/pages/shop/NotFound/NotFound';
+import Product from 'src/pages/shop/Product';
+import ProductDetail from 'src/pages/shop/ProductDetail';
+import Register from 'src/pages/shop/Register/Register';
+import ResetPassword from 'src/pages/shop/ResetPassword';
+import Search from 'src/pages/shop/Search';
+import VerifyResetPasswordToken from 'src/pages/shop/VerifyResetPasswordToken';
 
 const ProtectedRoute = () => {
   const { isAuthenticated } = useContext(AppContext);
@@ -201,6 +204,30 @@ const useElement = () => {
             <AuthLayout>
               <Register />
             </AuthLayout>
+          )
+        },
+        {
+          path: PATH.FORGOT_PASSWORD,
+          element: (
+            <MainLayout>
+              <ForgotPassword />
+            </MainLayout>
+          )
+        },
+        {
+          path: PATH.RESET_PASSWORD,
+          element: (
+            <MainLayout>
+              <ResetPassword />
+            </MainLayout>
+          )
+        },
+        {
+          path: PATH.VERIFY_RESET_PASSWORD_TOKEN,
+          element: (
+            <MainLayout>
+              <VerifyResetPasswordToken />
+            </MainLayout>
           )
         }
       ]

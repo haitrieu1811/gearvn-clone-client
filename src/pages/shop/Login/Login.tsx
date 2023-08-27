@@ -30,6 +30,7 @@ const Login = () => {
     resolver: yupResolver(loginSchema)
   });
 
+  // Đăng nhập
   const loginMutation = useMutation({
     mutationFn: authApi.login,
     onSuccess: (data) => {
@@ -52,6 +53,7 @@ const Login = () => {
     }
   });
 
+  // Xử lý submit
   const onSubmit = handleSubmit((data) => {
     loginMutation.mutate(data);
   });
@@ -78,6 +80,11 @@ const Login = () => {
                 errorMessage={errors.password?.message}
                 classNameWrapper='mt-4'
               />
+              <p className='text-right mt-4'>
+                <Link to={PATH.FORGOT_PASSWORD} className='italic text-[15px] text-slate-500'>
+                  Quên mật khẩu?
+                </Link>
+              </p>
               <Button classNameWrapper='mt-4' isLoading={loginMutation.isLoading}>
                 {t('register_login.login')}
               </Button>

@@ -36,6 +36,7 @@ const CartList = () => {
     }
   }, [cartList]);
 
+  // Xóa location state khi component unmount
   useEffect(() => {
     return () => {
       history.replaceState(null, '');

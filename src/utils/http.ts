@@ -1,7 +1,10 @@
-import axios, { AxiosInstance, InternalAxiosRequestConfig } from 'axios';
+import axios, { AxiosError, AxiosInstance, InternalAxiosRequestConfig } from 'axios';
+import { toast } from 'react-toastify';
 
 import { URL_LOGIN, URL_LOGOUT, URL_REFRESH_TOKEN, URL_REGISTER } from 'src/apis/auth.api';
+import { URL_RESET_PASSWORD } from 'src/apis/user.api';
 import CONFIG from 'src/constants/config';
+import { HttpStatusCode } from 'src/constants/enum';
 import { AuthResponse, RefreshTokenResponse } from 'src/types/auth.type';
 import { User } from 'src/types/user.type';
 import {
@@ -34,6 +37,7 @@ class Http {
       }
     });
 
+    // Thêm một interceptor trước khi request được gửi đi
     this.instance.interceptors.request.use(
       (config) => {
         if (this.accessToken && config.headers) {
@@ -46,10 +50,12 @@ class Http {
       }
     );
 
+    // Thêm một interceptor trước khi response được trả về
     this.instance.interceptors.response.use(
       (response) => {
         const { url } = response.config;
-        if (url === URL_LOGIN || url === URL_REGISTER) {
+        // Lưu thông tin user vào localStorage khi đăng nhập, đăng ký hoặc reset password
+        if (url === URL_LOGIN || url === URL_REGISTER || url === URL_RESET_PASSWORD) {
           this.accessToken = (response.data as AuthResponse).data.access_token;
           this.refreshToken = (response.data as AuthResponse).data.refresh_token;
           this.profile = (response.data as AuthResponse).data.user;
@@ -61,8 +67,16 @@ class Http {
         }
         return response;
       },
-      async (error) => {
-        // Xử lý lỗi 401
+      async (error: AxiosError) => {
+        // Thông báo lỗi nếu không phải lỗi 422 (Lỗi validate) hoặc 401 (Sai, thiếu hoặc hết hạn access token)
+        if (
+          ![HttpStatusCode.UnprocessableEntity, HttpStatusCode.Unauthorized].includes(error.response?.status as number)
+        ) {
+          const data: any | undefined = error.response?.data;
+          const message = data?.message || error.message;
+          toast.error(message);
+        }
+        // Xử lý lỗi 401 (Sai, thiếu hoặc hết hạn access token)
         if (isUnauthorizedError(error)) {
           const config = error.response?.config || ({ headers: {} } as InternalAxiosRequestConfig);
           const { url } = config;
@@ -97,6 +111,7 @@ class Http {
     );
   }
 
+  // Xử lý refresh token
   private handleRefreshToken = async () => {
     return this.instance
       .post<RefreshTokenResponse>(URL_REFRESH_TOKEN, { refresh_token: this.refreshToken })

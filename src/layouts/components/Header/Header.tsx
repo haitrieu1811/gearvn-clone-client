@@ -1,36 +1,41 @@
-import { Fragment, useState, useMemo } from 'react';
-import { Link } from 'react-router-dom';
-import classNames from 'classnames';
-import { useMediaQuery } from 'react-responsive';
 import { useQuery } from '@tanstack/react-query';
+import classNames from 'classnames';
+import { Fragment, useContext, useMemo, useState } from 'react';
+import { useMediaQuery } from 'react-responsive';
+import { Link } from 'react-router-dom';
 
-import logo from 'src/assets/images/logo-white.svg';
-import { BarIcon } from 'src/components/Icons';
-import PATH from 'src/constants/path';
-import Account from './Account';
-import HeaderActions from './HeaderActions';
-import MegaMenu from 'src/components/MegaMenu';
-import Search from './Search';
-import CONFIG from 'src/constants/config';
-import logoMobile from 'src/assets/images/logo-mobile.svg';
-import Cart from './Cart';
 import purchaseApi from 'src/apis/purchase.api';
+import logoMobile from 'src/assets/images/logo-mobile.svg';
+import logo from 'src/assets/images/logo-white.svg';
 import Drawer from 'src/components/Drawer';
+import { BarIcon } from 'src/components/Icons';
+import MegaMenu from 'src/components/MegaMenu';
 import MobileMenu from 'src/components/MobileMenu';
+import CONFIG from 'src/constants/config';
+import PATH from 'src/constants/path';
+import { AppContext } from 'src/contexts/app.context';
+import Account from './Account';
+import Cart from './Cart';
+import HeaderActions from './HeaderActions';
+import Search from './Search';
 
 const Header = () => {
   const isTablet = useMediaQuery({ maxWidth: CONFIG.TABLET_SCREEN_SIZE });
   const [showMegaMenu, setShowMegaMenu] = useState<boolean>(false);
   const [showMobileMenu, setShowMobileMenu] = useState<boolean>(false);
+  const { isAuthenticated } = useContext(AppContext);
 
+  // Ẩn hiện mega menu
   const toggleMegaMenu = () => {
     setShowMegaMenu((prevState) => !prevState);
   };
 
+  // Ẩn hiện mobile menu
   const handleShowMobileMenu = () => {
     setShowMobileMenu(true);
   };
 
+  // Ẩn mobile menu
   const handleCloseMobileMenu = () => {
     setShowMobileMenu(false);
   };
@@ -38,7 +43,8 @@ const Header = () => {
   // Lấy số lượng sản phẩm trong giỏ hàng
   const getCartListQuery = useQuery({
     queryKey: ['cart_list'],
-    queryFn: () => purchaseApi.getCart()
+    queryFn: () => purchaseApi.getCart(),
+    enabled: isAuthenticated
   });
 
   // Số lượng sản phẩm trong giỏ hàng

@@ -21,6 +21,9 @@ const PATH = {
   CART_CHECKOUT_PROCESS: '/cart/checkout-process',
   CART_CHECKOUT_SUCCESS: '/cart/checkout-success',
   SEARCH: '/search',
+  FORGOT_PASSWORD: '/forgot-password',
+  VERIFY_RESET_PASSWORD_TOKEN: '/verify-reset-password-token',
+  RESET_PASSWORD: '/reset-password',
 
   DASHBOARD: '/dashboard',
   DASHBOARD_USER: '/dashboard/user',
