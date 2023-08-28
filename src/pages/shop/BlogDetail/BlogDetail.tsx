@@ -27,7 +27,9 @@ const BlogDetail = () => {
     queryFn: () => blogApi.getList({ limit: '6' })
   });
 
+  // Lấy thông tin blog
   const blog = useMemo(() => getBlogQuery.data?.data.data.blog, [getBlogQuery.data?.data.data.blog]);
+  // Danh sách blog khác
   const orderBlogs = useMemo(() => getBlogsQuery.data?.data.data.blogs, [getBlogsQuery.data?.data.data.blogs]);
 
   return (
@@ -36,7 +38,7 @@ const BlogDetail = () => {
       {blog && (
         <div className='md:px-[80px] lg:px-[220px] my-2 md:py-4'>
           <img src={getImageUrl(blog.thumbnail)} alt={blog.name_vi} className='w-full object-contain rounded mb-4' />
-          <h1 className='text-xl md:text-[28px] font-semibold mb-4'>{blog.name_vi}</h1>
+          <h1 className='text-xl md:text-[28px] font-semibold mb-4 leading-normal'>{blog.name_vi}</h1>
           <div className='flex items-center mb-4'>
             <span className='flex items-center'>
               <ClockIcon className='w-4 h-4' />
@@ -55,7 +57,6 @@ const BlogDetail = () => {
           </div>
         </div>
       )}
-
       {/* Danh sách blog khác */}
       {orderBlogs && orderBlogs.length > 0 && (
         <div className='md:px-[40px] lg:px-[110px] mt-12'>
@@ -69,7 +70,6 @@ const BlogDetail = () => {
           </div>
         </div>
       )}
-
       {/* Loading */}
       {getBlogQuery.isLoading && <Loading />}
     </div>

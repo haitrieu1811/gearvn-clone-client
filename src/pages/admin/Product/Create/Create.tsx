@@ -12,6 +12,7 @@ import mediaApi from 'src/apis/media.api';
 import productApi from 'src/apis/product.api';
 import Back from 'src/components/Back';
 import Button from 'src/components/Button';
+import FloatLoading from 'src/components/FloatLoading';
 import { CloseIcon, CloudArrowUpIcon, PhotoIcon } from 'src/components/Icons';
 import Input from 'src/components/Input';
 import InputFile from 'src/components/InputFile';
@@ -466,7 +467,10 @@ const Create = () => {
                   />
                 )}
                 <InputFile onChange={handleThumbnailChange} name='thumbnail'>
-                  <button className='bg-slate-50 border rounded-sm w-full py-2 text-sm font-medium flex justify-center items-center'>
+                  <button
+                    type='button'
+                    className='bg-slate-50 border rounded-sm w-full py-2 text-sm font-medium flex justify-center items-center'
+                  >
                     <PhotoIcon className='w-4 h-4 mr-2' />
                     <span>{!isUpdateMode ? 'Tải ảnh đại diện sản phẩm' : 'Cập nhật ảnh đại diện mới'}</span>
                   </button>
@@ -509,7 +513,10 @@ const Create = () => {
                   </div>
                 )}
                 <InputFile name='images' onChange={handleImagesChange} multiple>
-                  <button className='bg-slate-50 border rounded-sm w-full py-2 text-sm font-medium flex justify-center items-center'>
+                  <button
+                    type='button'
+                    className='bg-slate-50 border rounded-sm w-full py-2 text-sm font-medium flex justify-center items-center'
+                  >
                     <PhotoIcon className='w-4 h-4 mr-2' />
                     <span>{!isUpdateMode ? 'Tải lên các hình ảnh của sản phẩm' : 'Thêm hình ảnh sản phẩm'}</span>
                   </button>
@@ -518,12 +525,18 @@ const Create = () => {
             </div>
           </div>
           <div className='py-6 sticky bottom-0 bg-white'>
-            <Button isLoading={!isUpdateMode ? createProductMutation.isLoading : updateProductMutation.isLoading}>
-              {!isUpdateMode ? 'Tạo sản phẩm' : 'Cập nhật sản phẩm'}
-            </Button>
+            <Button>{!isUpdateMode ? 'Tạo sản phẩm' : 'Cập nhật sản phẩm'}</Button>
           </div>
         </form>
       </div>
+      <FloatLoading
+        isLoading={
+          uploadImageMutation.isLoading ||
+          createProductMutation.isLoading ||
+          uploadImageMutation.isLoading ||
+          updateProductMutation.isLoading
+        }
+      />
     </Fragment>
   );
 };

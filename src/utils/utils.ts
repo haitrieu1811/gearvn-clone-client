@@ -1,7 +1,6 @@
 import axios, { AxiosError } from 'axios';
 import turndown from 'turndown';
 
-import CONFIG from 'src/constants/config';
 import HTTP_STATUS from 'src/constants/httpStatus';
 import { ErrorResponse } from 'src/types/utils.type';
 
@@ -26,7 +25,7 @@ export const formatCurrency = (currency: number) => {
 };
 
 export const getImageUrl = (name: string) => {
-  return `${CONFIG.BASE_URL}/static/image/${name}`;
+  return `https://gearvn-clone-ap-southeast-1.s3.ap-southeast-1.amazonaws.com/images/${name}`;
 };
 
 export const rateSale = (originalPrice: number, salePrice: number) => {

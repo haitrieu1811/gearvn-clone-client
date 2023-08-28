@@ -16,6 +16,7 @@ import {
   setRefreshTokenToLS
 } from './auth';
 import { isExpiredTokenError, isUnauthorizedError } from './utils';
+import { ErrorResponse } from 'src/types/utils.type';
 
 class Http {
   instance: AxiosInstance;
@@ -43,6 +44,7 @@ class Http {
         // Thêm access token vào header nếu có
         if (this.accessToken && config.headers) {
           config.headers.Authorization = `Bearer ${this.accessToken}`;
+          return config;
         }
         return config;
       },
@@ -64,10 +66,13 @@ class Http {
           setRefreshTokenToLS(this.refreshToken);
           setProfileToLS(this.profile);
         } else if (url === URL_LOGOUT) {
+          this.accessToken = '';
+          this.refreshToken = '';
           clearAuthFromLS();
         }
         return response;
       },
+
       async (error: AxiosError) => {
         // Thông báo lỗi nếu không phải lỗi 422 (Lỗi validate) hoặc 401 (Sai, thiếu hoặc hết hạn access token)
         if (
@@ -78,7 +83,7 @@ class Http {
           toast.error(message);
         }
         // Xử lý lỗi 401 (Sai, thiếu hoặc hết hạn access token)
-        if (isUnauthorizedError(error)) {
+        if (isUnauthorizedError<ErrorResponse<{ name: string; message: string }>>(error)) {
           const config = error.response?.config || ({ headers: {} } as InternalAxiosRequestConfig);
           const { url } = config;
           // Xử lý khi hết hạn token
@@ -106,6 +111,7 @@ class Http {
           this.accessToken = '';
           this.refreshToken = '';
           this.profile = null;
+          toast.error(error.response?.data.data?.message || error.response?.data.message);
         }
         return Promise.reject(error);
       }
@@ -117,9 +123,8 @@ class Http {
     return this.instance
       .post<RefreshTokenResponse>(URL_REFRESH_TOKEN, { refresh_token: this.refreshToken })
       .then((res) => {
-        const { access_token, refresh_token } = res.data.data;
+        const { access_token } = res.data.data;
         setAccessTokenToLS(access_token);
-        setRefreshTokenToLS(refresh_token);
         this.accessToken = access_token;
         return access_token;
       })

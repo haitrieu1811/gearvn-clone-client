@@ -17,6 +17,7 @@ import TextEditor from 'src/components/TextEditor';
 import PATH from 'src/constants/path';
 import { ErrorResponse } from 'src/types/utils.type';
 import { CreateBlogSchema, createBlogSchema } from 'src/utils/rules';
+import FloatLoading from 'src/components/FloatLoading';
 import { getImageUrl, htmlToMarkdown, isEntityError } from 'src/utils/utils';
 
 type FormData = CreateBlogSchema;
@@ -29,6 +30,7 @@ const Create = () => {
   const [contentVi, setContentVi] = useState<string>('');
   const [contentEn, setContentEn] = useState<string>('');
 
+  // Form
   const {
     register,
     control,
@@ -47,6 +49,7 @@ const Create = () => {
     }
   });
 
+  // Lấy thông tin blog cũ
   const getBlogQuery = useQuery({
     queryKey: ['blog', blog_id],
     queryFn: () => blogApi.getDetail(blog_id as string),
@@ -100,15 +103,20 @@ const Create = () => {
     }
   });
 
+  // Upload ảnh
   const uploadImageMutation = useMutation(mediaApi.uploadImage);
 
+  // Xử lý khi thay đổi thumbnail
   const handleThumbnailChange = (files?: File[]) => {
     setThumbnailFile(files || null);
   };
 
+  // Lấy thông tin blog cũ
   const blog = useMemo(() => getBlogQuery.data?.data.data.blog, [getBlogQuery.data?.data.data.blog]);
+  // Ảnh đại diện
   const previewThumbnail = useMemo(() => (thumbnailFile ? URL.createObjectURL(thumbnailFile[0]) : ''), [thumbnailFile]);
 
+  // Set giá trị cho form
   useEffect(() => {
     if (blog) {
       setValue('name_vi', blog.name_vi);
@@ -120,11 +128,13 @@ const Create = () => {
     }
   }, [blog]);
 
+  // Xử lý khi thay đổi nội dung
   const changeContentVi = ({ html, text }: { html: string; text: string }) => {
     setValue('content_vi', html);
     setContentVi(text);
   };
 
+  // Xử lý khi thay đổi nội dung
   const changeContentEn = ({ html, text }: { html: string; text: string }) => {
     setValue('content_en', html);
     setContentEn(text);
@@ -236,7 +246,10 @@ const Create = () => {
                   />
                 )}
                 <InputFile onChange={handleThumbnailChange} name='thumbnail'>
-                  <button className='bg-slate-50 border rounded-sm w-full py-2 text-sm font-medium flex justify-center items-center'>
+                  <button
+                    type='button'
+                    className='bg-slate-50 border rounded-sm w-full py-2 text-sm font-medium flex justify-center items-center'
+                  >
                     <PhotoIcon className='w-4 h-4 mr-2' />
                     <span>{!isUpdateMode ? 'Tải ảnh đại diện bài viết' : 'Cập nhật ảnh đại diện mới'}</span>
                   </button>
@@ -245,12 +258,13 @@ const Create = () => {
             </div>
           </div>
           <div className='py-6 sticky bottom-0 bg-white'>
-            <Button isLoading={!isUpdateMode ? createBlogMutation.isLoading : updateBlogMutation.isLoading}>
-              {!isUpdateMode ? 'Tạo bài viết' : 'Cập nhật bài viết'}
-            </Button>
+            <Button>{!isUpdateMode ? 'Tạo bài viết' : 'Cập nhật bài viết'}</Button>
           </div>
         </form>
       </div>
+      <FloatLoading
+        isLoading={createBlogMutation.isLoading || updateBlogMutation.isLoading || uploadImageMutation.isLoading}
+      />
     </Fragment>
   );
 };

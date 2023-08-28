@@ -7,7 +7,7 @@ interface CheckboxProps extends InputHTMLAttributes<HTMLInputElement> {
 }
 
 const Checkbox = ({
-  className = 'relative border border-[#cfcfcf] rounded-sm w-4 h-4 flex justify-center items-center',
+  className = 'relative border-[2px] border-[#cfcfcf] rounded-sm w-4 h-4 flex justify-center items-center',
   classNameIcon = 'w-4 h-4 stroke-primary absolute opacity-0 pointer-events-none peer-checked:opacity-100',
   ...rest
 }: CheckboxProps) => {

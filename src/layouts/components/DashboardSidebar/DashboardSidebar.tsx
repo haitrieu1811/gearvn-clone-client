@@ -7,7 +7,7 @@ import DashboardItem from './DashboardItem';
 
 const DashboardSidebar = () => {
   return (
-    <aside className='w-[240px] bg-white fixed z-[9999] top-0 bottom-0 pb-10'>
+    <aside className='w-[240px] bg-white fixed z-[999] top-0 bottom-0 pb-10'>
       <div className='px-6 pt-6'>
         <Link to={PATH.HOME}>
           <img src={logo} alt='Logo' className='w-[150px]' />

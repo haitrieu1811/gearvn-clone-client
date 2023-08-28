@@ -9,5 +9,4 @@ export type AuthResponse = SuccessResponse<{
 
 export type RefreshTokenResponse = SuccessResponse<{
   access_token: string;
-  refresh_token: string;
 }>;
