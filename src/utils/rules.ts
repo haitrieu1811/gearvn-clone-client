@@ -77,7 +77,7 @@ export const productSchema = yup.object({
   brand_id: yup.string().required('Hãy chọn một danh mục'),
   category_id: yup.string().required('Hãy chọn một danh mục'),
   specifications: yup.string().required('Thông số kỹ thuật không được để trống'),
-  available_count: yup.number().required('Số lượng sản phẩm không được để trống')
+  available_count: yup.string().required('Số lượng sản phẩm không được để trống')
 });
 
 export const blogSchema = yup.object({

@@ -128,33 +128,51 @@ const ProductDetail = () => {
                     </span>
                   )}
                 </div>
-                <div className='my-8 flex items-center'>
-                  <div className='font-medium mr-6 text-sm md:text-base'>Số lượng:</div>
-                  <QuantityController
-                    value={buyCount}
-                    max={product.available_count}
-                    onType={handleChangeBuyCount}
-                    onDecrease={handleChangeBuyCount}
-                    onIncrease={handleChangeBuyCount}
-                  />
-                  <div className='ml-6 text-slate-500 text-xs md:text-base'>
-                    {product.available_count} sản phẩm có sẵn
+                {/* Nếu còn sản phẩm */}
+                {product.available_count > 0 && (
+                  <Fragment>
+                    {/* Số lượng mua */}
+                    <div className='my-8 flex items-center'>
+                      <div className='font-medium mr-6 text-sm md:text-base'>Số lượng:</div>
+                      <QuantityController
+                        value={buyCount}
+                        max={product.available_count}
+                        onType={handleChangeBuyCount}
+                        onDecrease={handleChangeBuyCount}
+                        onIncrease={handleChangeBuyCount}
+                      />
+                      <div className='ml-6 text-slate-500 text-xs md:text-base'>
+                        {product.available_count} sản phẩm có sẵn
+                      </div>
+                    </div>
+                    {/* Thêm vào giỏ hàng, mua ngay */}
+                    <div className='flex mt-4'>
+                      <button
+                        onClick={addToCart}
+                        className='border border-primary rounded text-primary text-base md:text-lg px-2 md:px-6 py-2 bg-primary/10 hover:opacity-80 flex-1 lg:flex-none'
+                      >
+                        Thêm vào giỏ hàng
+                      </button>
+                      <button
+                        onClick={buyNow}
+                        className='border border-primary rounded text-white text-base md:text-lg px-2 md:px-6 py-2 bg-primary ml-2 md:ml-4 hover:opacity-80 flex-1 lg:flex-none'
+                      >
+                        Mua ngay
+                      </button>
+                    </div>
+                  </Fragment>
+                )}
+                {/* Hết sản phẩm */}
+                {product.available_count <= 0 && (
+                  <div className='mt-4'>
+                    <button
+                      type='button'
+                      className='w-[400px] h-[50px] flex justify-center items-center bg-[#BCBEC2] text-white text-lg font-semibold uppercase rounded'
+                    >
+                      Hết hàng
+                    </button>
                   </div>
-                </div>
-                <div className='flex mt-4'>
-                  <button
-                    onClick={addToCart}
-                    className='border border-primary rounded text-primary text-base md:text-lg px-2 md:px-6 py-2 bg-primary/10 hover:opacity-80 flex-1 lg:flex-none'
-                  >
-                    Thêm vào giỏ hàng
-                  </button>
-                  <button
-                    onClick={buyNow}
-                    className='border border-primary rounded text-white text-base md:text-lg px-2 md:px-6 py-2 bg-primary ml-2 md:ml-4 hover:opacity-80 flex-1 lg:flex-none'
-                  >
-                    Mua ngay
-                  </button>
-                </div>
+                )}
                 <div
                   className='mt-6 text-[#333333] leading-loose'
                   dangerouslySetInnerHTML={{

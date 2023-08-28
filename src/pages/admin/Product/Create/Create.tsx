@@ -22,6 +22,8 @@ import { ErrorResponse } from 'src/types/utils.type';
 import { CreateProductSchema, createProductSchema } from 'src/utils/rules';
 import { getImageUrl, htmlToMarkdown, isEntityError } from 'src/utils/utils';
 
+type FormData = CreateProductSchema;
+
 const Create = () => {
   const { product_id } = useParams();
   const match = useMatch(PATH.DASHBOARD_PRODUCT_UPDATE);
@@ -51,6 +53,7 @@ const Create = () => {
     enabled: Boolean(product_id)
   });
 
+  // Form
   const {
     handleSubmit,
     control,
@@ -59,7 +62,7 @@ const Create = () => {
     setValue,
     reset,
     formState: { errors }
-  } = useForm<CreateProductSchema>({
+  } = useForm<FormData>({
     resolver: yupResolver(createProductSchema),
     defaultValues: {
       brand_id: '',
@@ -71,17 +74,22 @@ const Create = () => {
       price: '',
       price_after_discount: '',
       specifications: '',
-      available_count: 0
+      available_count: ''
     }
   });
 
+  // Lấy thông tin chi tiết sản phẩm
   const product = useMemo(
     () => getProductDetailQuery.data?.data.data.product,
     [getProductDetailQuery.data?.data.data.product]
   );
+  // Ảnh đại diện sản phẩm
   const previewThumbnail = useMemo(() => (thumbnailFile ? URL.createObjectURL(thumbnailFile[0]) : ''), [thumbnailFile]);
+  // Danh sách hình ảnh sản phẩm
   const previewImages = useMemo(() => imagesFile?.map((file) => (file ? URL.createObjectURL(file) : '')), [imagesFile]);
+  // Lấy danh sách nhãn hiệu sản phẩm
   const brands = useMemo(() => getBrandsQuery.data?.data.data.brands, [getBrandsQuery.data?.data.data.brands]);
+  // Lấy danh sách danh mục sản phẩm
   const categories = useMemo(
     () => getCategoriesQuery.data?.data.data.categories,
     [getCategoriesQuery.data?.data.data.categories]
@@ -111,8 +119,7 @@ const Create = () => {
       setValue('general_info', general_info);
       setValue('specifications', specifications || '');
       setValue('description', description);
-      setValue('available_count', available_count);
-
+      setValue('available_count', String(available_count));
       // Giúp hiển thị text ở TextEditor chứ không có giá trị về mặc dữ liệu
       setGeneralInfo(htmlToMarkdown(general_info));
       setSpecifications(htmlToMarkdown(specifications || ''));
@@ -167,6 +174,18 @@ const Create = () => {
       getProductDetailQuery.refetch();
       setThumbnailFile(null);
       setImagesFile(null);
+    },
+    onError: (error) => {
+      if (isEntityError<ErrorResponse<FormData>>(error)) {
+        const formError = error.response?.data.data;
+        if (!isEmpty(formError)) {
+          Object.keys(formError).forEach((key) => {
+            setError(key as keyof FormData, {
+              message: formError[key as keyof FormData]
+            });
+          });
+        }
+      }
     }
   });
 
@@ -230,10 +249,12 @@ const Create = () => {
         }
       });
     }
+    const { price, price_after_discount, available_count } = data;
     const body: CreateAndUpdateProductBody = {
       ...data,
-      price: Number(data.price),
-      price_after_discount: Number(data.price_after_discount),
+      price: Number(price),
+      price_after_discount: Number(price_after_discount),
+      available_count: Number(available_count),
       thumbnail
     };
     let productId = product_id;
