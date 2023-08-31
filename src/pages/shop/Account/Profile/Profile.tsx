@@ -23,6 +23,7 @@ import { UpdateMeSchema, updateMeSchema } from 'src/utils/rules';
 import { isEntityError } from 'src/utils/utils';
 import { AccountContext } from '../Account';
 import FloatLoading from 'src/components/FloatLoading/FloatLoading';
+import { Helmet } from 'react-helmet-async';
 
 type FormData = UpdateMeSchema;
 
@@ -120,6 +121,25 @@ const Profile = () => {
 
   return (
     <div className='bg-white rounded shadow-sm'>
+      <Helmet>
+        <title>Thông tin tài khoản</title>
+        <meta
+          name='description'
+          content='Mua sắm đồ công nghệ chính hãng với giá tốt nhất tại Gearvn-clone. Chúng tôi cung cấp đa dạng các sản phẩm công nghệ từ các thương hiệu nổi tiếng như Apple, Samsung, Huawei, Xiaomi,...'
+        />
+        <meta property='og:title' content='Thông tin tài khoản' />
+        <meta
+          property='og:description'
+          content='Mua sắm đồ công nghệ chính hãng với giá tốt nhất tại Gearvn-clone. Chúng tôi cung cấp đa dạng các sản phẩm công nghệ từ các thương hiệu nổi tiếng như Apple, Samsung, Huawei, Xiaomi,...'
+        />
+        <meta
+          property='og:image'
+          content='https://gearvn-clone-ap-southeast-1.s3.ap-southeast-1.amazonaws.com/images/af998ec412e68932c8a77ba00.jpg'
+        />
+        <meta property='og:url' content={window.location.href} />
+        <meta property='og:site_name' content='Thông tin tài khoản' />
+        <meta property='og:type' content='website' />
+      </Helmet>
       {/* Thông tin tài khoản */}
       {me && getMeQuery && !getMeQuery.isLoading && (
         <form onSubmit={onSubmit}>

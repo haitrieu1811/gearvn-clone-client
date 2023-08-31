@@ -2,6 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import isUndefined from 'lodash/isUndefined';
 import omitBy from 'lodash/omitBy';
 import { Fragment, useMemo } from 'react';
+import { Helmet } from 'react-helmet-async';
 
 import brandApi from 'src/apis/brand.api';
 import categoryApi from 'src/apis/category.api';
@@ -64,6 +65,25 @@ const Product = () => {
 
   return (
     <div className='lg:container'>
+      <Helmet>
+        <title>Danh sách sản phẩm</title>
+        <meta
+          name='description'
+          content='Mua sắm đồ công nghệ chính hãng với giá tốt nhất tại Gearvn-clone. Chúng tôi cung cấp đa dạng các sản phẩm công nghệ từ các thương hiệu nổi tiếng như Apple, Samsung, Huawei, Xiaomi,...'
+        />
+        <meta property='og:title' content='Danh sách sản phẩm' />
+        <meta
+          property='og:description'
+          content='Mua sắm đồ công nghệ chính hãng với giá tốt nhất tại Gearvn-clone. Chúng tôi cung cấp đa dạng các sản phẩm công nghệ từ các thương hiệu nổi tiếng như Apple, Samsung, Huawei, Xiaomi,...'
+        />
+        <meta
+          property='og:image'
+          content='https://gearvn-clone-ap-southeast-1.s3.ap-southeast-1.amazonaws.com/images/af998ec412e68932c8a77ba00.jpg'
+        />
+        <meta property='og:url' content={window.location.href} />
+        <meta property='og:site_name' content='Danh sách sản phẩm' />
+        <meta property='og:type' content='website' />
+      </Helmet>
       <div className='bg-white my-2 lg:my-4 rounded shadow-sm pb-10 px-3'>
         {/* Bộ lọc sản phẩm */}
         <div className='py-6 px-3 flex'>

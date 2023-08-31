@@ -1,6 +1,7 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { isAxiosError } from 'axios';
 import { Fragment, useMemo, useState } from 'react';
+import { Helmet } from 'react-helmet-async';
 import { toast } from 'react-toastify';
 import addressApi from 'src/apis/address.api';
 
@@ -98,6 +99,21 @@ const Address = () => {
 
   return (
     <div className='bg-white rounded shadow-sm pb-10'>
+      <Helmet>
+        <title>Danh sách địa chỉ</title>
+        <meta
+          name='description'
+          content='Danh sách địa chỉ nhận hàng của bạn. Bạn có thể thêm, sửa, xóa địa chỉ tại đây'
+        />
+        <meta property='og:title' content='Danh sách địa chỉ nhận hàng của bạn' />
+        <meta
+          property='og:description'
+          content='Danh sách địa chỉ nhận hàng của bạn. Bạn có thể thêm, sửa, xóa địa chỉ tại đây'
+        />
+        <meta property='og:url' content={window.location.href} />
+        <meta property='og:site_name' content='Danh sách địa chỉ nhận hàng' />
+        <meta property='og:type' content='website' />
+      </Helmet>
       <div className='py-4 px-4 md:px-6 flex justify-between items-center'>
         <h2 className='text-xl md:text-2xl font-semibold'>Sổ địa chỉ</h2>
         <button
@@ -156,7 +172,6 @@ const Address = () => {
           <p className='text-center mt-4'>Chưa có địa chỉ nào</p>
         </div>
       )}
-
       <Modal
         name={!isUpdateMode ? 'Thêm địa chỉ' : 'Cập nhật địa chỉ'}
         isVisible={addModalOpen}

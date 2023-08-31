@@ -2,6 +2,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useMutation } from '@tanstack/react-query';
 import isEmpty from 'lodash/isEmpty';
 import { Fragment, useEffect } from 'react';
+import { Helmet } from 'react-helmet-async';
 import { useForm } from 'react-hook-form';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
@@ -88,6 +89,25 @@ const ResetPassword = () => {
     <Fragment>
       {location.state && location.state.token && (
         <div className='container bg-white shadow-sm rounded-sm my-3'>
+          <Helmet>
+            <title>Khôi phục mật khẩu</title>
+            <meta
+              name='description'
+              content='Mua sắm đồ công nghệ chính hãng với giá tốt nhất tại Gearvn-clone. Chúng tôi cung cấp đa dạng các sản phẩm công nghệ từ các thương hiệu nổi tiếng như Apple, Samsung, Huawei, Xiaomi,...'
+            />
+            <meta property='og:title' content='Khôi phục mật khẩu' />
+            <meta
+              property='og:description'
+              content='Mua sắm đồ công nghệ chính hãng với giá tốt nhất tại Gearvn-clone. Chúng tôi cung cấp đa dạng các sản phẩm công nghệ từ các thương hiệu nổi tiếng như Apple, Samsung, Huawei, Xiaomi,...'
+            />
+            <meta
+              property='og:image'
+              content='https://gearvn-clone-ap-southeast-1.s3.ap-southeast-1.amazonaws.com/images/af998ec412e68932c8a77ba00.jpg'
+            />
+            <meta property='og:url' content={window.location.href} />
+            <meta property='og:site_name' content='Khôi phục mật khẩu' />
+            <meta property='og:type' content='website' />
+          </Helmet>
           <div className='flex justify-center items-center py-10'>
             <div className='w-[450px] max-w-[90%]'>
               <form onSubmit={onSubmit}>

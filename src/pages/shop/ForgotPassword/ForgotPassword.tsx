@@ -12,6 +12,7 @@ import { ForgotPasswordSchema, forgotPasswordSchema } from 'src/utils/rules';
 import userApi from 'src/apis/user.api';
 import { isEntityError } from 'src/utils/utils';
 import { ErrorResponse } from 'src/types/utils.type';
+import { Helmet } from 'react-helmet-async';
 
 type FormData = ForgotPasswordSchema;
 
@@ -58,29 +59,46 @@ const ForgotPassword = () => {
   });
 
   return (
-    <div>
-      <div className='container bg-white shadow-sm rounded-sm my-3'>
-        <div className='flex justify-center items-center py-10'>
-          <div className='w-[450px] max-w-[90%]'>
-            <form onSubmit={onSubmit}>
-              <h1 className='font-semibold text-2xl mb-6'>Quên mật khẩu</h1>
-              <Input
-                type='text'
-                placeholder='Email'
-                classNameWrapper='mb-4'
-                name='email'
-                register={register}
-                errorMessage={errors.email?.message}
-              />
-              <Button isLoading={forgotPasswordMutation.isLoading}>Khôi phục</Button>
-              <p className='text-center mt-6'>
-                <span className='text-slate-500'>Bạn đã nhớ mật khẩu?</span>{' '}
-                <Link to={PATH.LOGIN} className='text-blue-600'>
-                  Trở về đăng nhập
-                </Link>
-              </p>
-            </form>
-          </div>
+    <div className='container bg-white shadow-sm rounded-sm my-3'>
+      <Helmet>
+        <title>Quên mật khẩu</title>
+        <meta
+          name='description'
+          content='Mua sắm đồ công nghệ chính hãng với giá tốt nhất tại Gearvn-clone. Chúng tôi cung cấp đa dạng các sản phẩm công nghệ từ các thương hiệu nổi tiếng như Apple, Samsung, Huawei, Xiaomi,...'
+        />
+        <meta property='og:title' content='Quên mật khẩu' />
+        <meta
+          property='og:description'
+          content='Mua sắm đồ công nghệ chính hãng với giá tốt nhất tại Gearvn-clone. Chúng tôi cung cấp đa dạng các sản phẩm công nghệ từ các thương hiệu nổi tiếng như Apple, Samsung, Huawei, Xiaomi,...'
+        />
+        <meta
+          property='og:image'
+          content='https://gearvn-clone-ap-southeast-1.s3.ap-southeast-1.amazonaws.com/images/af998ec412e68932c8a77ba00.jpg'
+        />
+        <meta property='og:url' content={window.location.href} />
+        <meta property='og:site_name' content='Quên mật khẩu' />
+        <meta property='og:type' content='website' />
+      </Helmet>
+      <div className='flex justify-center items-center py-10'>
+        <div className='w-[450px] max-w-[90%]'>
+          <form onSubmit={onSubmit}>
+            <h1 className='font-semibold text-2xl mb-6'>Quên mật khẩu</h1>
+            <Input
+              type='text'
+              placeholder='Email'
+              classNameWrapper='mb-4'
+              name='email'
+              register={register}
+              errorMessage={errors.email?.message}
+            />
+            <Button isLoading={forgotPasswordMutation.isLoading}>Khôi phục</Button>
+            <p className='text-center mt-6'>
+              <span className='text-slate-500'>Bạn đã nhớ mật khẩu?</span>{' '}
+              <Link to={PATH.LOGIN} className='text-blue-600'>
+                Trở về đăng nhập
+              </Link>
+            </p>
+          </form>
         </div>
       </div>
     </div>

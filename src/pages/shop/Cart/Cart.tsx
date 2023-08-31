@@ -14,6 +14,7 @@ import { Purchase } from 'src/types/purchase.type';
 import { Address } from 'src/types/user.type';
 import { PaymentOrderSchema, paymentOrderSchema } from 'src/utils/rules';
 import PaymentProgress from './PaymentProgress/PaymentProgress';
+import { Helmet } from 'react-helmet-async';
 
 interface CartContext {
   total: number;
@@ -111,6 +112,25 @@ const Cart = () => {
 
   return (
     <FormProvider {...methods}>
+      <Helmet>
+        <title>Giỏ hàng của bạn</title>
+        <meta
+          name='description'
+          content='Mua sắm đồ công nghệ chính hãng với giá tốt nhất tại Gearvn-clone. Chúng tôi cung cấp đa dạng các sản phẩm công nghệ từ các thương hiệu nổi tiếng như Apple, Samsung, Huawei, Xiaomi,...'
+        />
+        <meta property='og:title' content='Giỏ hàng của bạn' />
+        <meta
+          property='og:description'
+          content='Mua sắm đồ công nghệ chính hãng với giá tốt nhất tại Gearvn-clone. Chúng tôi cung cấp đa dạng các sản phẩm công nghệ từ các thương hiệu nổi tiếng như Apple, Samsung, Huawei, Xiaomi,...'
+        />
+        <meta
+          property='og:image'
+          content='https://gearvn-clone-ap-southeast-1.s3.ap-southeast-1.amazonaws.com/images/af998ec412e68932c8a77ba00.jpg'
+        />
+        <meta property='og:url' content={window.location.href} />
+        <meta property='og:site_name' content='Giỏ hàng của bạn' />
+        <meta property='og:type' content='website' />
+      </Helmet>
       <CartContext.Provider
         value={{
           total,

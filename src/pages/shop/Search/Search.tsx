@@ -1,7 +1,8 @@
 import { useQuery } from '@tanstack/react-query';
 import isUndefined from 'lodash/isUndefined';
 import omitBy from 'lodash/omitBy';
-import { FormEvent, useMemo, useState } from 'react';
+import { FormEvent, Fragment, useMemo, useState } from 'react';
+import { Helmet } from 'react-helmet-async';
 import { createSearchParams, useNavigate } from 'react-router-dom';
 
 import productApi from 'src/apis/product.api';
@@ -64,10 +65,28 @@ const Search = () => {
   };
 
   return (
-    <div>
+    <Fragment>
+      <Helmet>
+        <title>Tìm kiếm sản phẩm</title>
+        <meta
+          name='description'
+          content='Mua sắm đồ công nghệ chính hãng với giá tốt nhất tại Gearvn-clone. Chúng tôi cung cấp đa dạng các sản phẩm công nghệ từ các thương hiệu nổi tiếng như Apple, Samsung, Huawei, Xiaomi,...'
+        />
+        <meta property='og:title' content='Tìm kiếm sản phẩm' />
+        <meta
+          property='og:description'
+          content='Mua sắm đồ công nghệ chính hãng với giá tốt nhất tại Gearvn-clone. Chúng tôi cung cấp đa dạng các sản phẩm công nghệ từ các thương hiệu nổi tiếng như Apple, Samsung, Huawei, Xiaomi,...'
+        />
+        <meta
+          property='og:image'
+          content='https://gearvn-clone-ap-southeast-1.s3.ap-southeast-1.amazonaws.com/images/af998ec412e68932c8a77ba00.jpg'
+        />
+        <meta property='og:url' content={window.location.href} />
+        <meta property='og:site_name' content='Tìm kiếm sản phẩm' />
+        <meta property='og:type' content='website' />
+      </Helmet>
       <div className='px-2 lg:container bg-white my-2 md:my-4 rounded shadow-sm py-6'>
         <h1 className='uppercase text-2xl font-semibold text-[#333333] text-center mb-6'>Tìm kiếm</h1>
-
         {/* Hiển thị khi có dữ liệu */}
         {products && products.length > 0 && !getProductsQuery.isLoading && (
           <div>
@@ -91,7 +110,6 @@ const Search = () => {
             </div>
           </div>
         )}
-
         {/* Hiển thị khi không có dữ liệu */}
         {products && products.length <= 0 && !getProductsQuery.isLoading && (
           <div className='flex flex-col justify-center items-center'>
@@ -115,11 +133,10 @@ const Search = () => {
             </form>
           </div>
         )}
-
         {/* Loading */}
         {getProductsQuery.isLoading && <Loading />}
       </div>
-    </div>
+    </Fragment>
   );
 };
 

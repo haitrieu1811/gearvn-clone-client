@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { useMemo } from 'react';
+import { Helmet } from 'react-helmet-async';
 import { useMediaQuery } from 'react-responsive';
 import { Link } from 'react-router-dom';
 
@@ -46,6 +47,25 @@ const Home = () => {
 
   return (
     <div className='my-2 lg:my-3'>
+      <Helmet>
+        <title>Trang chủ</title>
+        <meta
+          name='description'
+          content='Mua sắm đồ công nghệ chính hãng với giá tốt nhất tại Gearvn-clone. Chúng tôi cung cấp đa dạng các sản phẩm công nghệ từ các thương hiệu nổi tiếng như Apple, Samsung, Huawei, Xiaomi,...'
+        />
+        <meta property='og:title' content='Gearvn clone | Trang chủ' />
+        <meta
+          property='og:description'
+          content='Mua sắm đồ công nghệ chính hãng với giá tốt nhất tại Gearvn-clone. Chúng tôi cung cấp đa dạng các sản phẩm công nghệ từ các thương hiệu nổi tiếng như Apple, Samsung, Huawei, Xiaomi,...'
+        />
+        <meta
+          property='og:image'
+          content='https://gearvn-clone-ap-southeast-1.s3.ap-southeast-1.amazonaws.com/images/af998ec412e68932c8a77ba00.jpg'
+        />
+        <meta property='og:url' content={window.location.href} />
+        <meta property='og:site_name' content='Trang chủ' />
+        <meta property='og:type' content='website' />
+      </Helmet>
       {/* Mega menu, carousel */}
       <div className='px-2 lg:container'>
         <div className='flex'>

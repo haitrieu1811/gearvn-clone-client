@@ -1,11 +1,11 @@
 import classNames from 'classnames';
-import { ReactNode } from 'react';
 import PropTypes from 'prop-types';
+import { ReactNode } from 'react';
 
 const Wrapper = ({ children, arrow }: { children: ReactNode; arrow?: boolean }) => {
   return (
     <div
-      className={classNames('bg-white rounded-sm shadow-sm', {
+      className={classNames('bg-white rounded-sm shadow-lg', {
         'relative before:absolute before:right-6 before:bottom-full before:border-[10px] before:border-transparent before:border-b-white':
           arrow
       })}

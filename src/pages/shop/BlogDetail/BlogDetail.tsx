@@ -1,7 +1,9 @@
 import { useQuery } from '@tanstack/react-query';
 import DOMPurify from 'dompurify';
+import { convert } from 'html-to-text';
 import moment from 'moment';
 import { useMemo } from 'react';
+import { Helmet } from 'react-helmet-async';
 import { useParams } from 'react-router-dom';
 
 import blogApi from 'src/apis/blog.api';
@@ -37,6 +39,30 @@ const BlogDetail = () => {
       {/* Chi tiết blog */}
       {blog && (
         <div className='md:px-[80px] lg:px-[220px] my-2 md:py-4'>
+          <Helmet>
+            <title>{blog.name_vi}</title>
+            <meta
+              name='description'
+              content={convert(blog.content_vi, {
+                limits: {
+                  maxInputLength: 150
+                }
+              })}
+            />
+            <meta property='og:title' content={blog.name_vi} />
+            <meta
+              property='og:description'
+              content={convert(blog.content_vi, {
+                limits: {
+                  maxInputLength: 150
+                }
+              })}
+            />
+            <meta property='og:image' content={getImageUrl(blog.thumbnail)} />
+            <meta property='og:url' content={window.location.href} />
+            <meta property='og:site_name' content={blog.name_vi} />
+            <meta property='og:type' content='website' />
+          </Helmet>
           <img src={getImageUrl(blog.thumbnail)} alt={blog.name_vi} className='w-full object-contain rounded mb-4' />
           <h1 className='text-xl md:text-[28px] font-semibold mb-4 leading-normal'>{blog.name_vi}</h1>
           <div className='flex items-center mb-4'>

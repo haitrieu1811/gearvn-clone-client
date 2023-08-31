@@ -7,6 +7,7 @@ import CONFIG from 'src/constants/config';
 import { HttpStatusCode } from 'src/constants/enum';
 import { AuthResponse, RefreshTokenResponse } from 'src/types/auth.type';
 import { User } from 'src/types/user.type';
+import { ErrorResponse } from 'src/types/utils.type';
 import {
   clearAuthFromLS,
   getAccessTokenFromLS,
@@ -16,7 +17,6 @@ import {
   setRefreshTokenToLS
 } from './auth';
 import { isExpiredTokenError, isUnauthorizedError } from './utils';
-import { ErrorResponse } from 'src/types/utils.type';
 
 class Http {
   instance: AxiosInstance;
@@ -123,9 +123,11 @@ class Http {
     return this.instance
       .post<RefreshTokenResponse>(URL_REFRESH_TOKEN, { refresh_token: this.refreshToken })
       .then((res) => {
-        const { access_token } = res.data.data;
+        const { access_token, refresh_token } = res.data.data;
         setAccessTokenToLS(access_token);
+        setRefreshTokenToLS(refresh_token);
         this.accessToken = access_token;
+        this.refreshToken = refresh_token;
         return access_token;
       })
       .catch((error) => {

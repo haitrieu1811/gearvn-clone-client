@@ -5,6 +5,8 @@ import { Fragment, useContext, useEffect, useMemo, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import blogApi from 'src/apis/blog.api';
+import { Helmet } from 'react-helmet-async';
+import { convert } from 'html-to-text';
 
 import productApi from 'src/apis/product.api';
 import purchaseApi from 'src/apis/purchase.api';
@@ -110,6 +112,30 @@ const ProductDetail = () => {
         {/* Thông tin chi tiết sản phẩm */}
         {product && !getProductQuery.isLoading && (
           <Fragment>
+            <Helmet>
+              <title>{product.name_vi}</title>
+              <meta
+                name='description'
+                content={convert(product.description, {
+                  limits: {
+                    maxInputLength: 150
+                  }
+                })}
+              />
+              <meta property='og:title' content={product.name_vi} />
+              <meta
+                property='og:description'
+                content={convert(product.description, {
+                  limits: {
+                    maxInputLength: 150
+                  }
+                })}
+              />
+              <meta property='og:image' content={getImageUrl(product.thumbnail)} />
+              <meta property='og:url' content={window.location.href} />
+              <meta property='og:site_name' content={product.name_vi} />
+              <meta property='og:type' content='website' />
+            </Helmet>
             <div className='flex bg-white rounded flex-wrap lg:flex-nowrap'>
               {/* Hình ảnh sản phẩm */}
               <div className='px-2 lg:p-6 w-full lg:w-[420px]'>
@@ -237,7 +263,10 @@ const ProductDetail = () => {
                     {blogs.map((blog) => (
                       <div key={blog._id} className='flex mb-4'>
                         <Link
-                          to={`${PATH.BLOG_DETAIL_WITHOUT_ID}/${generateNameId({ name: blog.name_vi, id: blog._id })}`}
+                          to={`${PATH.BLOG_DETAIL_WITHOUT_ID}/${generateNameId({
+                            name: blog.name_vi,
+                            id: blog._id
+                          })}`}
                           className='flex-shrink-0'
                         >
                           <img
@@ -247,7 +276,10 @@ const ProductDetail = () => {
                           />
                         </Link>
                         <Link
-                          to={`${PATH.BLOG_DETAIL_WITHOUT_ID}/${generateNameId({ name: blog.name_vi, id: blog._id })}`}
+                          to={`${PATH.BLOG_DETAIL_WITHOUT_ID}/${generateNameId({
+                            name: blog.name_vi,
+                            id: blog._id
+                          })}`}
                           className='flex-1 ml-4 line-clamp-2 text-sm md:text-base'
                         >
                           {blog.name_vi}

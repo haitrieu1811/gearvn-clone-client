@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { Fragment, useMemo } from 'react';
+import { Helmet } from 'react-helmet-async';
 import { Link } from 'react-router-dom';
 
 import userApi from 'src/apis/user.api';
@@ -21,6 +22,25 @@ const ViewedProduct = () => {
 
   return (
     <div className='bg-white rounded shadow-sm'>
+      <Helmet>
+        <title>Sản phẩm đã xem</title>
+        <meta
+          name='description'
+          content='Mua sắm đồ công nghệ chính hãng với giá tốt nhất tại Gearvn-clone. Chúng tôi cung cấp đa dạng các sản phẩm công nghệ từ các thương hiệu nổi tiếng như Apple, Samsung, Huawei, Xiaomi,...'
+        />
+        <meta property='og:title' content='Sản phẩm đã xem' />
+        <meta
+          property='og:description'
+          content='Mua sắm đồ công nghệ chính hãng với giá tốt nhất tại Gearvn-clone. Chúng tôi cung cấp đa dạng các sản phẩm công nghệ từ các thương hiệu nổi tiếng như Apple, Samsung, Huawei, Xiaomi,...'
+        />
+        <meta
+          property='og:image'
+          content='https://gearvn-clone-ap-southeast-1.s3.ap-southeast-1.amazonaws.com/images/af998ec412e68932c8a77ba00.jpg'
+        />
+        <meta property='og:url' content={window.location.href} />
+        <meta property='og:site_name' content='Sản phẩm đã xem' />
+        <meta property='og:type' content='website' />
+      </Helmet>
       {/* Hiển thị khi có dữ liệu */}
       {viewedProducts && viewedProducts.length > 0 && !getViewedProductsQuery.isLoading && (
         <Fragment>

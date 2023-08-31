@@ -3,6 +3,7 @@ import classNames from 'classnames';
 import isUndefined from 'lodash/isUndefined';
 import omitBy from 'lodash/omitBy';
 import { Fragment, useMemo } from 'react';
+import { Helmet } from 'react-helmet-async';
 import { Link, createSearchParams, useLocation, useNavigate } from 'react-router-dom';
 
 import orderApi from 'src/apis/order.api';
@@ -69,6 +70,15 @@ const HistoryOrder = () => {
 
   return (
     <Fragment>
+      <Helmet>
+        <title>Quản lý đơn hàng</title>
+        <meta name='description' content='Quản lý đơn hàng của bạn trên website của chúng tôi.' />
+        <meta property='og:title' content='Quản lý đơn hàng' />
+        <meta property='og:description' content='Quản lý đơn hàng của bạn trên website của chúng tôi.' />
+        <meta property='og:url' content={window.location.href} />
+        <meta property='og:site_name' content='Quản lý đơn hàng' />
+        <meta property='og:type' content='website' />
+      </Helmet>
       <div className='bg-white rounded-tl rounded-tr shadow-sm'>
         <h2 className='py-4 px-2 md:px-6 text-xl md:text-2xl font-semibold'>Quản lý đơn hàng</h2>
         {/* Nav links */}
@@ -107,7 +117,6 @@ const HistoryOrder = () => {
           orders.length > 0 &&
           !getOrdersQuery.isLoading &&
           orders.map((order) => <OrderItem key={order._id} data={order} />)}
-
         {getOrdersQuery.isLoading && <Loading />}
       </div>
       {/* Hiển thị khi không có đơn hàng nào */}

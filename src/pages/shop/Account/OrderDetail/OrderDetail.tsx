@@ -10,6 +10,7 @@ import PATH from 'src/constants/path';
 import { formatCurrency, generateNameId, getImageUrl } from 'src/utils/utils';
 import Loading from 'src/components/Loading';
 import { OrderStatus } from 'src/constants/enum';
+import { Helmet } from 'react-helmet-async';
 
 const OrderDetail = () => {
   const navigate = useNavigate();
@@ -28,6 +29,25 @@ const OrderDetail = () => {
       {/* Thông tin đơn hàng */}
       {order && !getOrderDetailQuery.isLoading && (
         <Fragment>
+          <Helmet>
+            <title>Chi tiết đơn hàng #{order._id.slice(-6)}</title>
+            <meta
+              name='description'
+              content='Mua sắm đồ công nghệ chính hãng với giá tốt nhất tại Gearvn-clone. Chúng tôi cung cấp đa dạng các sản phẩm công nghệ từ các thương hiệu nổi tiếng như Apple, Samsung, Huawei, Xiaomi,...'
+            />
+            <meta property='og:title' content={`Chi tiết đơn hàng #${order._id.slice(-6)}`} />
+            <meta
+              property='og:description'
+              content='Mua sắm đồ công nghệ chính hãng với giá tốt nhất tại Gearvn-clone. Chúng tôi cung cấp đa dạng các sản phẩm công nghệ từ các thương hiệu nổi tiếng như Apple, Samsung, Huawei, Xiaomi,...'
+            />
+            <meta
+              property='og:image'
+              content='https://gearvn-clone-ap-southeast-1.s3.ap-southeast-1.amazonaws.com/images/af998ec412e68932c8a77ba00.jpg'
+            />
+            <meta property='og:url' content={window.location.href} />
+            <meta property='og:site_name' content={`Chi tiết đơn hàng #${order._id.slice(-6)}`} />
+            <meta property='og:type' content='website' />
+          </Helmet>
           <div className='py-4 px-2 md:px-6 flex flex-wrap md:flex-nowrap justify-between items-center'>
             <h2 className='text-base md:text-2xl w-full md:w-auto text-center md:text-left'>
               <span className='font-semibold'>Chi tiết đơn hàng {`#${order._id.slice(-6)}`} -</span>{' '}
