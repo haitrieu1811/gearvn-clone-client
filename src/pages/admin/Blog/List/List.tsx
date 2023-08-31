@@ -10,6 +10,7 @@ import { toast } from 'react-toastify';
 
 import blogApi from 'src/apis/blog.api';
 import Checkbox from 'src/components/Checkbox';
+import { PlusIcon } from 'src/components/Icons';
 import Modal from 'src/components/Modal';
 import Table from 'src/components/Table';
 import TableAction from 'src/components/Table/TableAction';
@@ -49,6 +50,10 @@ const List = () => {
   const pageSize = useMemo(
     () => getBlogsQuery.data?.data.data.pagination.page_size,
     [getBlogsQuery.data?.data.data.pagination.page_size]
+  );
+  const total = useMemo(
+    () => getBlogsQuery.data?.data.data.pagination.total,
+    [getBlogsQuery.data?.data.data.pagination.total]
   );
 
   useEffect(() => {
@@ -110,43 +115,72 @@ const List = () => {
 
   return (
     <Fragment>
-      <div>
-        <div className='flex justify-between items-center mb-4 bg-white py-3 px-4 rounded-lg shadow-sm'>
-          <div></div>
-          <Link
-            to={PATH.DASHBOARD_BLOG_CREATE}
-            className='px-2 py-[6px] rounded bg-blue-600 flex justify-center items-center'
-          >
-            <span className='text-white text-sm font-medium'>Tạo mới</span>
-          </Link>
+      <div className='px-8 py-3 mb-4 flex justify-between items-center bg-white'>
+        <div className='flex items-center'>
+          <h2 className='text-2xl font-bold mr-4'>Danh sách blog</h2>
+          <div className='text-slate-500 text-sm'>(Có {total} blog)</div>
         </div>
+        <Link to={PATH.DASHBOARD_BLOG_CREATE} className='bg-blue-700 text-white text-sm rounded p-2 flex items-center'>
+          <PlusIcon className='w-4 h-4 mr-2 stroke-[3]' />
+          Tạo mới
+        </Link>
       </div>
+
       <Table
-        initialData={blogs || []}
-        checkedData={checkedBlogs}
-        columns={[1, 5, 2, 2, 2]}
-        head={[
-          <Checkbox checked={isAllChecked} onChange={handleCheckAll} />,
-          'Tên bài viết',
-          'Tạo lúc',
-          'Cập nhật',
-          'Thao tác'
+        data={extendedBlogs}
+        columns={[
+          {
+            field: 'checkbox',
+            headerName: <Checkbox checked={isAllChecked} onChange={handleCheckAll} />,
+            width: 5
+          },
+          {
+            field: 'blogName',
+            headerName: 'Tên bài viết',
+            width: 65
+          },
+          {
+            field: 'createdAt',
+            headerName: 'Tạo lúc',
+            width: 10
+          },
+          {
+            field: 'updatedAt',
+            headerName: 'Cập nhật',
+            width: 10
+          },
+          {
+            field: 'actions',
+            headerName: 'Thao tác',
+            width: 10
+          }
         ]}
-        body={extendedBlogs.map((blog, index) => [
-          <Checkbox checked={blog.checked} onChange={handleCheck(index)} />,
-          blog.name_vi,
-          moment(blog.created_at).fromNow(),
-          moment(blog.updated_at).fromNow(),
-          <TableAction
-            editPath={`${PATH.DASHBOARD_BLOG_UPDATE_WITHOUT_ID}/${blog._id}`}
-            deleteMethod={() => startDelete(blog._id)}
-          />
-        ])}
-        pagination={{
-          pageSize: pageSize || 0
-        }}
-        startDelete={startDelete}
+        rows={extendedBlogs.map((blog, index) => ({
+          checkbox: <Checkbox checked={blog.checked} onChange={handleCheck(index)} />,
+          blogName: blog.name_vi,
+          createdAt: moment(blog.created_at).fromNow(),
+          updatedAt: moment(blog.updated_at).fromNow(),
+          actions: (
+            <TableAction
+              editPath={`${PATH.DASHBOARD_BLOG_UPDATE_WITHOUT_ID}/${blog._id}`}
+              deleteMethod={() => startDelete(blog._id)}
+            />
+          )
+        }))}
+        pageSize={pageSize || 0}
         isLoading={getBlogsQuery.isLoading}
+        tableFootLeft={
+          <Fragment>
+            {checkedBlogs.length > 0 && (
+              <button
+                className='font-medium text-sm text-white bg-red-600/90 rounded py-1 px-4 mr-4 hover:bg-red-600'
+                onClick={() => startDelete()}
+              >
+                Xóa {checkedBlogs.length} mục đã chọn
+              </button>
+            )}
+          </Fragment>
+        }
       />
       <Modal isVisible={modalOpen} onCancel={stopDelete} onOk={handleDelete}>
         {currentId

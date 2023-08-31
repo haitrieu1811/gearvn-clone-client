@@ -34,6 +34,8 @@ const AccountSidebar = () => {
       setProfile(null);
     }
   });
+
+  // Đăng xuất
   const logout = () => {
     logoutMutation.mutate();
   };

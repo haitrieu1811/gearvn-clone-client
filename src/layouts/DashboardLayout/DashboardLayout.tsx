@@ -34,7 +34,7 @@ const DashboardLayout = ({ children }: { children: ReactNode }) => {
               <img
                 src={profile.avatar ? getImageUrl(profile.avatar) : fallbackAvatar}
                 alt={profile.fullName}
-                className='w-8 h-8 rounded object-cover flex-shrink-0'
+                className='w-9 h-9 rounded-full object-cover flex-shrink-0'
               />
               <div className='ml-2'>
                 <div className='text-sm font-semibold'>{profile.fullName}</div>

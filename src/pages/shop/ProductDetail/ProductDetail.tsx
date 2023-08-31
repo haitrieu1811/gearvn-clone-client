@@ -1,7 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import classNames from 'classnames';
 import DOMPurify from 'dompurify';
-import { Fragment, useEffect, useMemo, useState } from 'react';
+import { Fragment, useContext, useEffect, useMemo, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import blogApi from 'src/apis/blog.api';
@@ -15,17 +15,19 @@ import QuantityController from 'src/components/QuantityController';
 import PATH from 'src/constants/path';
 import { formatCurrency, generateNameId, getIdFromNameId, getImageUrl, rateSale } from 'src/utils/utils';
 import SliderImages from './SliderImages';
+import { AppContext } from 'src/contexts/app.context';
 
 const ProductDetail = () => {
-  const queryClient = useQueryClient();
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
   const { name_id } = useParams();
   const productId = getIdFromNameId(name_id as string);
-
   const [isMounted, setIsMounted] = useState(false);
   const [buyCount, setBuyCount] = useState<number>(1);
   const [readMore, setReadMore] = useState<boolean>(false);
+  const { isAuthenticated } = useContext(AppContext);
 
+  // Đánh dấu đã mount component
   useEffect(() => {
     setIsMounted(true);
     return () => {
@@ -36,8 +38,9 @@ const ProductDetail = () => {
   // Thêm vào lịch sử xem sản phẩm
   const addViewedProductMutation = useMutation(userApi.addViewedProduct);
 
+  // Thêm vào lịch sử xem sản phẩm
   useEffect(() => {
-    if (isMounted && productId) {
+    if (isMounted && productId && isAuthenticated) {
       addViewedProductMutation.mutateAsync({ product_id: productId });
     }
   }, [isMounted, productId]);
@@ -49,6 +52,7 @@ const ProductDetail = () => {
     enabled: Boolean(productId)
   });
 
+  // Thông tin sản phẩm
   const product = useMemo(() => getProductQuery.data?.data.data.product, [getProductQuery.data?.data.data.product]);
 
   // Thay đổi số lượng mua
@@ -97,6 +101,7 @@ const ProductDetail = () => {
     queryFn: () => blogApi.getList({ limit: '5' })
   });
 
+  // Danh sách blog
   const blogs = useMemo(() => getBlogsQuery.data?.data.data.blogs, [getBlogsQuery.data?.data.data.blogs]);
 
   return (

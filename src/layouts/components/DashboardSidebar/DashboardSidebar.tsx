@@ -1,7 +1,15 @@
 import { Link } from 'react-router-dom';
 
 import logo from 'src/assets/images/logo-red.svg';
-import { FlagIcon, ItemIcon, LogoutIcon, NewspaperIcon, ShoppingBagIcon, UserIcon } from 'src/components/Icons';
+import {
+  CheckoutIcon,
+  FlagIcon,
+  ItemIcon,
+  LogoutIcon,
+  NewspaperIcon,
+  ShoppingBagIcon,
+  UserIcon
+} from 'src/components/Icons';
 import PATH from 'src/constants/path';
 import DashboardItem from './DashboardItem';
 
@@ -44,6 +52,11 @@ const DashboardSidebar = () => {
           path={PATH.DASHBOARD_BLOG}
           icon={<NewspaperIcon className='w-4 h-4 stroke-black' />}
           name='Blog'
+        />
+        <DashboardItem
+          path={PATH.DASHBOARD_ORDER}
+          icon={<CheckoutIcon className='w-4 h-4 stroke-black' />}
+          name='Đơn hàng'
         />
       </div>
       <div className='py-5 px-6 pl-0'>

@@ -16,6 +16,7 @@ import FloatLoading from 'src/components/FloatLoading';
 import { CloseIcon, CloudArrowUpIcon, PhotoIcon } from 'src/components/Icons';
 import Input from 'src/components/Input';
 import InputFile from 'src/components/InputFile';
+import Loading from 'src/components/Loading';
 import TextEditor from 'src/components/TextEditor';
 import PATH from 'src/constants/path';
 import { CreateAndUpdateProductBody } from 'src/types/product.type';
@@ -278,12 +279,14 @@ const Create = () => {
           <h2 className='text-2xl font-bold'>{!isUpdateMode ? 'Tạo sản phẩm mới' : 'Cập nhật sản phẩm'}</h2>
           <Back />
         </div>
-        <form onSubmit={onSubmit} encType='multipart/form-data'>
-          <div className='grid grid-cols-12 gap-10'>
-            <div className='col-span-8'>
-              <div className='grid grid-cols-12 gap-6 mt-6'>
+        {/* Khi có dữ liệu hoặc ở chế độ tạo */}
+        {(!isUpdateMode || (product && !getProductDetailQuery.isLoading)) && (
+          <form onSubmit={onSubmit} encType='multipart/form-data'>
+            <div className='grid grid-cols-12 gap-10'>
+              {/* Thông tin sản phẩm */}
+              <div className='col-span-8'>
                 {/* Tên tiếng Việt */}
-                <div className='col-span-6'>
+                <div>
                   <label htmlFor='name_vi' className='font-medium text-sm mb-2 ml-1 block'>
                     Tên tiếng Việt:
                   </label>
@@ -297,7 +300,7 @@ const Create = () => {
                   />
                 </div>
                 {/* Tên tiếng Anh */}
-                <div className='col-span-6'>
+                <div className='mt-6'>
                   <label htmlFor='name_en' className='font-medium text-sm mb-2 ml-1 block'>
                     Tên tiếng Anh:
                   </label>
@@ -310,10 +313,8 @@ const Create = () => {
                     errorMessage={errors.name_en?.message}
                   />
                 </div>
-              </div>
-              <div className='grid grid-cols-12 gap-6 mt-6'>
                 {/* Giá gốc */}
-                <div className='col-span-4'>
+                <div className='mt-6'>
                   <label htmlFor='price' className='font-medium text-sm mb-2 ml-1 block'>
                     Giá gốc:
                   </label>
@@ -327,7 +328,7 @@ const Create = () => {
                   />
                 </div>
                 {/* Giá khuyến mãi */}
-                <div className='col-span-4'>
+                <div className='mt-6'>
                   <label htmlFor='price_after_discount' className='font-medium text-sm mb-2 ml-1 block'>
                     Giá khuyến mãi:
                   </label>
@@ -341,7 +342,7 @@ const Create = () => {
                   />
                 </div>
                 {/* Số lượng sản phẩm có sẵn */}
-                <div className='col-span-4'>
+                <div className='mt-6'>
                   <label htmlFor='available_count' className='font-medium text-sm mb-2 ml-1 block'>
                     Số lượng:
                   </label>
@@ -354,10 +355,8 @@ const Create = () => {
                     errorMessage={errors.available_count?.message}
                   />
                 </div>
-              </div>
-              <div className='grid grid-cols-12 gap-6 mt-6'>
                 {/* Nhãn hiệu */}
-                <div className='col-span-6'>
+                <div className='mt-6'>
                   <label className='font-medium text-sm mb-2 ml-1 block'>Nhãn hiệu:</label>
                   {brands && brands.length > 0 && (
                     <Fragment>
@@ -380,7 +379,7 @@ const Create = () => {
                   )}
                 </div>
                 {/* Danh mục */}
-                <div className='col-span-6'>
+                <div className='mt-6'>
                   <label className='font-medium text-sm mb-2 ml-1 block'>Danh mục:</label>
                   {categories && categories.length > 0 && (
                     <Fragment>
@@ -402,132 +401,135 @@ const Create = () => {
                     </Fragment>
                   )}
                 </div>
-              </div>
-              {/* Thông tin chung */}
-              <div className='mt-6'>
-                <label className='font-medium text-sm mb-3 ml-1 block'>Thông tin chung:</label>
-                <Controller
-                  control={control}
-                  name='general_info'
-                  render={({ field }) => (
-                    <TextEditor
-                      name={field.name}
-                      value={generalInfo}
-                      onChange={changeGeneralInfo}
-                      errorMessage={errors.general_info?.message}
-                    />
-                  )}
-                />
-              </div>
-              {/* Thông số kỹ thuật */}
-              <div className='mt-6'>
-                <label className='font-medium text-sm mb-3 ml-1 block'>Thông số kỹ thuật:</label>
-                <Controller
-                  control={control}
-                  name='specifications'
-                  render={({ field }) => (
-                    <TextEditor
-                      name={field.name}
-                      value={specifications}
-                      onChange={changeSpecifications}
-                      errorMessage={errors.specifications?.message}
-                    />
-                  )}
-                />
-              </div>
-              {/* Mô tả */}
-              <div className='mt-6'>
-                <label className='font-medium text-sm mb-3 ml-1 block'>Mô tả:</label>
-                <Controller
-                  control={control}
-                  name='description'
-                  render={({ field }) => (
-                    <TextEditor
-                      name={field.name}
-                      value={description}
-                      onChange={changeDescription}
-                      errorMessage={errors.description?.message}
-                    />
-                  )}
-                />
-              </div>
-            </div>
-            <div className='col-span-4'>
-              {/* Thumbnail */}
-              <div className=''>
-                {!previewThumbnail && !product?.thumbnail ? (
-                  <div className='flex justify-center items-center min-h-[240px] mb-3 rounded bg-slate-100'>
-                    <CloudArrowUpIcon className='w-10 h-10' />
-                  </div>
-                ) : (
-                  <img
-                    src={previewThumbnail || getImageUrl(product?.thumbnail as string)}
-                    alt='Thumbnail'
-                    className='w-full max-h-[240px] mb-3 rounded object-cover'
-                  />
-                )}
-                <InputFile onChange={handleThumbnailChange} name='thumbnail'>
-                  <button
-                    type='button'
-                    className='bg-slate-50 border rounded-sm w-full py-2 text-sm font-medium flex justify-center items-center'
-                  >
-                    <PhotoIcon className='w-4 h-4 mr-2' />
-                    <span>{!isUpdateMode ? 'Tải ảnh đại diện sản phẩm' : 'Cập nhật ảnh đại diện mới'}</span>
-                  </button>
-                </InputFile>
-              </div>
-              {/* Images */}
-              <div className='mt-10'>
-                {!Boolean(previewImages) && !Boolean(product?.images) ? (
-                  <div className='flex justify-center items-center min-h-[240px] mb-3 rounded bg-slate-100'>
-                    <CloudArrowUpIcon className='w-10 h-10' />
-                  </div>
-                ) : (
-                  <div className='grid grid-cols-12 mb-3 gap-2'>
-                    {product?.images?.map((image, index) => (
-                      <div key={index} className='col-span-4 relative group'>
-                        <img
-                          src={getImageUrl(image.name)}
-                          alt='Thumbnail'
-                          className='w-full h-[80px] rounded object-cover'
-                        />
-                        <div
-                          className='absolute inset-0 bg-black/20 flex justify-center items-center cursor-pointer opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto duration-200'
-                          tabIndex={0}
-                          aria-hidden='true'
-                          role='button'
-                          onClick={() => handleDeleteImage(image._id)}
-                        >
-                          <CloseIcon className='w-10 h-10 stroke-white' />
-                        </div>
-                      </div>
-                    ))}
-                    {previewImages?.map((image, index) => (
-                      <img
-                        key={index}
-                        src={image}
-                        alt='Thumbnail'
-                        className='col-span-4 w-full h-[80px] rounded object-cover'
+                {/* Thông tin chung */}
+                <div className='mt-6'>
+                  <label className='font-medium text-sm mb-3 ml-1 block'>Thông tin chung:</label>
+                  <Controller
+                    control={control}
+                    name='general_info'
+                    render={({ field }) => (
+                      <TextEditor
+                        name={field.name}
+                        value={generalInfo}
+                        onChange={changeGeneralInfo}
+                        errorMessage={errors.general_info?.message}
                       />
-                    ))}
-                  </div>
-                )}
-                <InputFile name='images' onChange={handleImagesChange} multiple>
-                  <button
-                    type='button'
-                    className='bg-slate-50 border rounded-sm w-full py-2 text-sm font-medium flex justify-center items-center'
-                  >
-                    <PhotoIcon className='w-4 h-4 mr-2' />
-                    <span>{!isUpdateMode ? 'Tải lên các hình ảnh của sản phẩm' : 'Thêm hình ảnh sản phẩm'}</span>
-                  </button>
-                </InputFile>
+                    )}
+                  />
+                </div>
+                {/* Thông số kỹ thuật */}
+                <div className='mt-6'>
+                  <label className='font-medium text-sm mb-3 ml-1 block'>Thông số kỹ thuật:</label>
+                  <Controller
+                    control={control}
+                    name='specifications'
+                    render={({ field }) => (
+                      <TextEditor
+                        name={field.name}
+                        value={specifications}
+                        onChange={changeSpecifications}
+                        errorMessage={errors.specifications?.message}
+                      />
+                    )}
+                  />
+                </div>
+                {/* Mô tả */}
+                <div className='mt-6'>
+                  <label className='font-medium text-sm mb-3 ml-1 block'>Mô tả:</label>
+                  <Controller
+                    control={control}
+                    name='description'
+                    render={({ field }) => (
+                      <TextEditor
+                        name={field.name}
+                        value={description}
+                        onChange={changeDescription}
+                        errorMessage={errors.description?.message}
+                      />
+                    )}
+                  />
+                </div>
+              </div>
+              {/* Hình ảnh sản phẩm */}
+              <div className='col-span-4'>
+                {/* Thumbnail */}
+                <div className=''>
+                  {!previewThumbnail && !product?.thumbnail ? (
+                    <div className='flex justify-center items-center min-h-[240px] mb-3 rounded bg-slate-100'>
+                      <CloudArrowUpIcon className='w-10 h-10' />
+                    </div>
+                  ) : (
+                    <img
+                      src={previewThumbnail || getImageUrl(product?.thumbnail as string)}
+                      alt='Thumbnail'
+                      className='w-full max-h-[240px] mb-3 rounded object-contain'
+                    />
+                  )}
+                  <InputFile onChange={handleThumbnailChange} name='thumbnail'>
+                    <button
+                      type='button'
+                      className='bg-slate-50 border rounded-sm w-full py-2 text-sm font-medium flex justify-center items-center'
+                    >
+                      <PhotoIcon className='w-4 h-4 mr-2' />
+                      <span>{!isUpdateMode ? 'Tải ảnh đại diện sản phẩm' : 'Cập nhật ảnh đại diện mới'}</span>
+                    </button>
+                  </InputFile>
+                </div>
+                {/* Images */}
+                <div className='mt-10'>
+                  {!Boolean(previewImages) && !Boolean(product?.images) ? (
+                    <div className='flex justify-center items-center min-h-[240px] mb-3 rounded bg-slate-100'>
+                      <CloudArrowUpIcon className='w-10 h-10' />
+                    </div>
+                  ) : (
+                    <div className='grid grid-cols-12 mb-3 gap-2'>
+                      {product?.images?.map((image, index) => (
+                        <div key={index} className='col-span-3 relative group'>
+                          <img
+                            src={getImageUrl(image.name)}
+                            alt='Thumbnail'
+                            className='w-full h-[80px] rounded object-contain'
+                          />
+                          <div
+                            className='absolute inset-0 bg-black/20 flex justify-center items-center cursor-pointer opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto duration-200'
+                            tabIndex={0}
+                            aria-hidden='true'
+                            role='button'
+                            onClick={() => handleDeleteImage(image._id)}
+                          >
+                            <CloseIcon className='w-10 h-10 stroke-white' />
+                          </div>
+                        </div>
+                      ))}
+                      {previewImages?.map((image, index) => (
+                        <img
+                          key={index}
+                          src={image}
+                          alt='Thumbnail'
+                          className='col-span-4 w-full h-[80px] rounded object-cover'
+                        />
+                      ))}
+                    </div>
+                  )}
+                  <InputFile name='images' onChange={handleImagesChange} multiple>
+                    <button
+                      type='button'
+                      className='bg-slate-50 border rounded-sm w-full py-2 text-sm font-medium flex justify-center items-center'
+                    >
+                      <PhotoIcon className='w-4 h-4 mr-2' />
+                      <span>{!isUpdateMode ? 'Tải lên các hình ảnh của sản phẩm' : 'Thêm hình ảnh sản phẩm'}</span>
+                    </button>
+                  </InputFile>
+                </div>
               </div>
             </div>
-          </div>
-          <div className='py-6 sticky bottom-0 bg-white'>
-            <Button>{!isUpdateMode ? 'Tạo sản phẩm' : 'Cập nhật sản phẩm'}</Button>
-          </div>
-        </form>
+            <div className='py-6 sticky bottom-0 bg-white'>
+              <Button>{!isUpdateMode ? 'Tạo sản phẩm' : 'Cập nhật sản phẩm'}</Button>
+            </div>
+          </form>
+        )}
+        {/* Tải trang */}
+        {getProductDetailQuery.isLoading && isUpdateMode && <Loading />}
       </div>
       <FloatLoading
         isLoading={

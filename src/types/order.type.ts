@@ -2,6 +2,7 @@ import { OrderStatus, PaymentMethod, ReceiveMethod } from 'src/constants/enum';
 import { Pagination, SuccessResponse } from './utils.type';
 import { PaginationQuery } from './commons.type';
 
+// Request Type
 interface PurchaseInOrder {
   _id: string;
   unit_price: number;
@@ -22,6 +23,13 @@ interface PurchaseInOrder {
 export interface Order {
   _id: string;
   status: number;
+  customer_name?: string;
+  customer_phone?: string;
+  province?: string;
+  district?: string;
+  ward?: string;
+  street?: string;
+  note?: string;
   total_amount: number;
   purchases: PurchaseInOrder[];
   created_at: string;
@@ -50,13 +58,12 @@ interface OrderDetail {
   updated_at: string;
 }
 
-// Request
-export interface GetOrderListRequestBody extends PaginationQuery {
+export interface GetOrderListRequestParams extends PaginationQuery {
   status?: string;
 }
 
+// Response Type
 export type GetOrderListResponse = SuccessResponse<{
-  orders_size: number;
   orders: Order[];
   pagination: Pagination;
 }>;

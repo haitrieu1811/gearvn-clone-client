@@ -12,11 +12,11 @@ import OrderItem from 'src/components/OrderItem';
 import { OrderStatus } from 'src/constants/enum';
 import PATH from 'src/constants/path';
 import UseQueryParams from 'src/hooks/useQueryParams';
-import { GetOrderListRequestBody } from 'src/types/order.type';
+import { GetOrderListRequestParams } from 'src/types/order.type';
 import { NAV_LINKS } from './constants';
 
 type QueryConfig = {
-  [key in keyof GetOrderListRequestBody]: string;
+  [key in keyof GetOrderListRequestParams]: string;
 };
 
 const HistoryOrder = () => {

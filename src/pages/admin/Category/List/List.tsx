@@ -5,7 +5,7 @@ import keyBy from 'lodash/keyBy';
 import omitBy from 'lodash/omitBy';
 import moment from 'moment';
 import { ChangeEvent, Fragment, useContext, useEffect, useMemo, useState } from 'react';
-import { Link, createSearchParams, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
 import categoryApi from 'src/apis/category.api';
@@ -18,20 +18,15 @@ import PATH from 'src/constants/path';
 import { AppContext } from 'src/contexts/app.context';
 import UseQueryParams from 'src/hooks/useQueryParams';
 import { GetCategoriesRequestParams } from 'src/types/category.type';
-import { LIMIT_OPTIONS } from './constants';
 
 type QueryConfig = {
   [key in keyof GetCategoriesRequestParams]: string;
 };
 
 const List = () => {
-  const navigate = useNavigate();
-
   const [modalVisible, setModalVisible] = useState<boolean>(false);
   const [currentId, setCurrentId] = useState<string | null>(null);
-
   const { extendedCategories, setExtendedCategories } = useContext(AppContext);
-
   const queryParams: QueryConfig = UseQueryParams();
   const queryConfig: QueryConfig = omitBy(
     {
@@ -41,12 +36,14 @@ const List = () => {
     isUndefined
   );
 
+  // Lấy danh sách danh mục
   const getCategoriesQuery = useQuery({
     queryKey: ['categories', queryConfig],
     queryFn: () => categoryApi.getList(queryConfig),
     keepPreviousData: true
   });
 
+  // Xóa danh mục
   const deleteCategoryMutation = useMutation({
     mutationFn: categoryApi.delete,
     onSuccess: (data) => {
@@ -56,20 +53,22 @@ const List = () => {
     }
   });
 
+  // Danh sách danh mục
   const categories = useMemo(
     () => getCategoriesQuery.data?.data.data.categories,
     [getCategoriesQuery.data?.data.data.categories]
   );
-  const pageSize = useMemo(
-    () => getCategoriesQuery.data?.data.data.pagination.page_size,
-    [getCategoriesQuery.data?.data.data.pagination.page_size]
-  );
-  const isAllChecked = extendedCategories.every((category) => category.checked);
+  // Tổng số trang
+  const pageSize = getCategoriesQuery.data?.data.data.pagination.page_size;
+  // Kiểm tra tất cả danh mục đã được chọn hay chưa
+  const isAllChecked = useMemo(() => extendedCategories.every((category) => category.checked), [extendedCategories]);
+  // Danh sách danh mục đã chọn
   const checkedCategories = useMemo(
     () => extendedCategories.filter((category) => category.checked),
     [extendedCategories]
   );
 
+  // Cập nhật danh sách danh mục
   useEffect(() => {
     if (categories) {
       setExtendedCategories((prevState) => {
@@ -82,33 +81,26 @@ const List = () => {
     }
   }, [categories]);
 
+  // Bắt đầu xóa
   const startDelete = (categoryId?: string) => {
     setModalVisible(true);
     categoryId && setCurrentId(categoryId);
   };
 
+  // Dừng xóa
   const stopDelete = () => {
     setModalVisible(false);
     setCurrentId(null);
   };
 
+  // Xác nhận xóa
   const handleDelete = () => {
     if (currentId) deleteCategoryMutation.mutate([currentId]);
     else deleteCategoryMutation.mutate(checkedCategories.map((category) => category._id));
   };
 
-  const handleChangeLimit = (selectValue: string) => {
-    navigate({
-      pathname: PATH.DASHBOARD_CATEGORY,
-      search: createSearchParams({
-        ...queryConfig,
-        limit: selectValue.toString(),
-        page: '1'
-      }).toString()
-    });
-  };
-
-  const handleCheck = (index: number) => (e: ChangeEvent<HTMLInputElement>) => {
+  // Check 1 danh mục
+  const handleCheckOne = (index: number) => (e: ChangeEvent<HTMLInputElement>) => {
     setExtendedCategories(
       produce((draft) => {
         draft[index].checked = e.target.checked;
@@ -116,6 +108,7 @@ const List = () => {
     );
   };
 
+  // Check tất cả danh mục
   const handleCheckAll = () => {
     setExtendedCategories((prevState) =>
       prevState.map((category) => ({
@@ -149,37 +142,58 @@ const List = () => {
       </div>
 
       <Table
-        initialData={categories || []}
-        checkedData={checkedCategories}
-        columns={[1, 3, 3, 2, 2, 1]}
-        head={[
-          <Checkbox checked={isAllChecked} onChange={handleCheckAll} />,
-          'Tên tiếng Việt',
-          'Tên tiếng Anh',
-          'Thời gian tạo',
-          'Cập nhật',
-          'Thao tác'
+        data={extendedCategories}
+        columns={[
+          {
+            field: 'checkbox',
+            headerName: <Checkbox checked={isAllChecked} onChange={handleCheckAll} />,
+            width: 5
+          },
+          {
+            field: 'nameVi',
+            headerName: 'Danh mục',
+            width: 30
+          },
+          {
+            field: 'createdAt',
+            headerName: 'Thời gian tạo',
+            width: 25
+          },
+          {
+            field: 'updatedAt',
+            headerName: 'Cập nhật',
+            width: 25
+          },
+          {
+            field: 'actions',
+            headerName: 'Thao tác',
+            width: 15
+          }
         ]}
-        body={extendedCategories.map((item, index) => [
-          <Checkbox checked={item.checked} onChange={handleCheck(index)} />,
-          item.name_vi,
-          item.name_en,
-          moment(item.created_at).fromNow(),
-          moment(item.updated_at).fromNow(),
-          <TableAction
-            editPath={`${PATH.DASHBOARD_CATEGORY_UPDATE_WITHOUT_ID}/${item._id}`}
-            deleteMethod={() => startDelete(item._id)}
-          />
-        ])}
-        selectLimit={{
-          defaultValue: '10',
-          handleChangeLimit,
-          options: LIMIT_OPTIONS
-        }}
-        pagination={{
-          pageSize: pageSize || 10
-        }}
-        startDelete={startDelete}
+        rows={extendedCategories.map((category, index) => ({
+          checkbox: <Checkbox checked={category.checked} onChange={handleCheckOne(index)} />,
+          nameVi: category.name_vi,
+          nameEn: category.name_en,
+          createdAt: moment(category.created_at).fromNow(),
+          updatedAt: moment(category.updated_at).fromNow(),
+          actions: (
+            <TableAction
+              editPath={`${PATH.DASHBOARD_CATEGORY_UPDATE_WITHOUT_ID}/${category._id}`}
+              deleteMethod={() => startDelete(category._id)}
+            />
+          )
+        }))}
+        pageSize={pageSize || 0}
+        tableFootLeft={
+          checkedCategories.length > 0 && (
+            <button
+              className='font-medium text-sm text-white bg-red-600/90 rounded py-1 px-4 mr-4 hover:bg-red-600'
+              onClick={() => startDelete()}
+            >
+              Xóa {checkedCategories.length} mục đã chọn
+            </button>
+          )
+        }
         isLoading={getCategoriesQuery.isLoading}
       />
       <Modal isVisible={modalVisible} onOk={handleDelete} onCancel={stopDelete}>

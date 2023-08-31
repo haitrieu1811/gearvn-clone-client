@@ -16,9 +16,11 @@ import DashboardBrand from 'src/pages/admin/Brand/List';
 import DashboardCategoryCreate from 'src/pages/admin/Category/Create';
 import DashboardCategory from 'src/pages/admin/Category/List';
 import Dashboard from 'src/pages/admin/Dashboard/Dashboard';
+import DashboardOrderDetail from 'src/pages/admin/Order/OrderDetail';
+import DashboardOrderList from 'src/pages/admin/Order/OrderList';
 import DashboardProductCreate from 'src/pages/admin/Product/Create';
 import DashboardProduct from 'src/pages/admin/Product/List';
-import DashboardUser from 'src/pages/admin/User';
+import DashboardUser from 'src/pages/admin/User/List';
 import Account from 'src/pages/shop/Account';
 import AccountAddress from 'src/pages/shop/Account/Address';
 import AccountHistoryOrder from 'src/pages/shop/Account/HistoryOrder';
@@ -355,6 +357,22 @@ const useElement = () => {
           element: (
             <DashboardLayout>
               <DashboardBlogCreate />
+            </DashboardLayout>
+          )
+        },
+        {
+          path: PATH.DASHBOARD_ORDER,
+          element: (
+            <DashboardLayout>
+              <DashboardOrderList />
+            </DashboardLayout>
+          )
+        },
+        {
+          path: PATH.DASHBOARD_ORDER_DETAIL,
+          element: (
+            <DashboardLayout>
+              <DashboardOrderDetail />
             </DashboardLayout>
           )
         }

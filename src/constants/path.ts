@@ -44,6 +44,9 @@ const PATH = {
   DASHBOARD_BLOG_CREATE: '/dashboard/blog/create',
   DASHBOARD_BLOG_UPDATE: '/dashboard/blog/update/:blog_id',
   DASHBOARD_BLOG_UPDATE_WITHOUT_ID: '/dashboard/blog/update',
+  DASHBOARD_ORDER: '/dashboard/order',
+  DASHBOARD_ORDER_DETAIL: '/dashboard/order/:order_id',
+  DASHBOARD_ORDER_DETAIL_WITHOUT_ID: '/dashboard/order',
   NOT_FOUND: '*'
 } as const;
 

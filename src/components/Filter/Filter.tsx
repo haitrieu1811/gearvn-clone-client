@@ -17,9 +17,17 @@ interface FilterProps {
   data: FilterItem[];
   label: string;
   queryName: string;
+  parentClassName?: string;
+  childrenClassName?: string;
 }
 
-const Filter = ({ data, label, queryName }: FilterProps) => {
+const Filter = ({
+  data,
+  label,
+  queryName,
+  parentClassName = 'px-[10px] py-[6px] md:py-2 border flex justify-between items-center rounded',
+  childrenClassName = 'border text-xs md:text-sm rounded p-[6px] md:p-2 ml-2 mt-2'
+}: FilterProps) => {
   const navigate = useNavigate();
   const location = useLocation();
   const queryParams = UseQueryParams();
@@ -82,7 +90,7 @@ const Filter = ({ data, label, queryName }: FilterProps) => {
           {data.map((item) => (
             <button
               key={item.value}
-              className={classNames('border text-xs md:text-sm rounded p-[6px] md:p-2 ml-2 mt-2', {
+              className={classNames(childrenClassName, {
                 'border-[#1982F9] text-[#1982F9]': choosenValue.includes(item.value),
                 'border-[#cfcfcf] hover:border-[#1982F9] hover:text-[#1982F9]': !choosenValue.includes(item.value)
               })}
@@ -130,7 +138,7 @@ const Filter = ({ data, label, queryName }: FilterProps) => {
       onHide={onHide}
     >
       <button
-        className={classNames('px-[10px] py-[6px] md:py-2 border flex justify-between items-center rounded', {
+        className={classNames(parentClassName, {
           'border-[#1982F9]': isActive,
           'border-[#cfcfcf]': !isActive
         })}

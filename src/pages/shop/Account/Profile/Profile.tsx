@@ -95,7 +95,7 @@ const Profile = () => {
   });
 
   // Upload hình ảnh
-  const updateImageMutation = useMutation(mediaApi.uploadImage);
+  const uploadImageMutation = useMutation(mediaApi.uploadImage);
 
   // Submit form
   const onSubmit = handleSubmit(async (data) => {
@@ -103,7 +103,7 @@ const Profile = () => {
     if (avatarFile) {
       const form = new FormData();
       form.append('image', avatarFile[0]);
-      const res = await updateImageMutation.mutateAsync(form);
+      const res = await uploadImageMutation.mutateAsync(form);
       avatar = res.data.data.medias[0].name;
     }
     const body = omitBy(
@@ -229,7 +229,7 @@ const Profile = () => {
               <div className='col-span-4 flex items-center justify-end'></div>
               <div className='col-span-12 md:col-span-8'>
                 <div className='w-[120px] h-[28px] md:w-[150px] md:h-[38px] text-xs md:text-sm'>
-                  <Button isLoading={updateMeMutation.isLoading}>Lưu thay đổi</Button>
+                  <Button isLoading={updateMeMutation.isLoading || uploadImageMutation.isLoading}>Lưu thay đổi</Button>
                 </div>
               </div>
             </div>
