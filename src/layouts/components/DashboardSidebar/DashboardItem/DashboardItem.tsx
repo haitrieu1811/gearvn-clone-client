@@ -23,7 +23,7 @@ const DashboardItem = ({ name, path, icon, end }: DashboardItemProps) => {
       }
     >
       {icon}
-      <span className='text-[15px] capitalize font-medium ml-3'>{name}</span>
+      <span className='text-sm capitalize font-medium ml-3'>{name}</span>
     </NavLink>
   );
 };

@@ -1,19 +1,13 @@
-import { MediaType } from 'src/constants/enum';
 import { Category } from './category.type';
 import { Pagination, SuccessResponse } from './utils.type';
 
 interface Brand {
   _id: string;
   name: string;
-  created_at: string;
-  updated_at: string;
 }
 interface Image {
   _id: string;
   name: string;
-  type: MediaType;
-  created_at: string;
-  updated_at: string;
 }
 
 export interface Product {
@@ -23,19 +17,50 @@ export interface Product {
   thumbnail: string;
   price: number;
   price_after_discount: number;
+  available_count: number;
+  rating_score: number;
+  rating_count: number;
+  rating_five_count: number;
+  rating_four_count: number;
+  rating_three_count: number;
+  rating_two_count: number;
+  rating_one_count: number;
   created_at: string;
   updated_at: string;
-  available_count: number;
 
   brand?: Brand;
   category?: Category;
   specifications?: string;
   general_info: string;
   description: string;
-  brand_id?: string;
-  category_id?: string;
-  user_id?: string;
   images?: Image[];
+}
+
+export interface ProductReview {
+  _id: string;
+  rating: number;
+  comment: string;
+  author: {
+    _id: string;
+    email: string;
+    fullName: string;
+    avatar: string;
+  };
+  created_at: string;
+  updated_at: string;
+}
+
+export interface ProductReviewReply {
+  _id: string;
+  comment: string;
+  author: {
+    _id: string;
+    email: string;
+    fullName: string;
+    avatar: string;
+  };
+  created_at: string;
+  updated_at: string;
 }
 
 // Request
@@ -63,6 +88,12 @@ export interface CreateAndUpdateProductBody {
   available_count: number;
 }
 
+export interface AddReviewRequestBody {
+  comment?: string;
+  rating?: number;
+  parent_id?: string;
+}
+
 // Response
 export type GetProductsResponse = SuccessResponse<{
   products: Product[];
@@ -75,4 +106,14 @@ export type GetProductDetailResponse = SuccessResponse<{
 
 export type CreateProductResponse = SuccessResponse<{
   insertedId: string;
+}>;
+
+export type GetReviewsResponse = SuccessResponse<{
+  reviews: ProductReview[];
+  pagination: Pagination;
+}>;
+
+export type GetReviewRepliesResponse = SuccessResponse<{
+  product_review_replies: ProductReviewReply[];
+  pagination: Pagination;
 }>;

@@ -1,5 +1,6 @@
 import classNames from 'classnames';
 import { Fragment, useEffect, useMemo, useRef, useState } from 'react';
+import PropTypes from 'prop-types';
 
 import { ArrowLeftIcon, ArrowRightIcon } from 'src/components/Icons';
 import { Product } from 'src/types/product.type';
@@ -124,6 +125,10 @@ const SliderImages = ({ product }: SliderImagesProps) => {
       )}
     </Fragment>
   );
+};
+
+SliderImages.propTypes = {
+  product: PropTypes.object.isRequired
 };
 
 export default SliderImages;

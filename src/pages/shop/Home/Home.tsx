@@ -78,13 +78,13 @@ const Home = () => {
               <div className='grid grid-cols-12'>
                 <Link to={PATH.HOME} className='col-span-6 lg:col-span-12 -ml-3 lg:ml-0'>
                   <img
-                    src='https://file.hstatic.net/200000722513/file/banner_slider_-_right_1_04cb85fcde584ec0a0818d9e5e212282.png'
+                    src='https://file.hstatic.net/200000722513/file/banner_slider_-_bottom_1_5b6a8d4aa5b643a0b47e4afcc53f9592.png'
                     alt=''
                   />
                 </Link>
                 <Link to={PATH.HOME} className='col-span-6 lg:col-span-12 block lg:mt-2'>
                   <img
-                    src='https://file.hstatic.net/200000722513/file/banner_slider_-_right_2_5f844c8513ea42628d4e5e49c7a28d70.png'
+                    src='https://file.hstatic.net/200000722513/file/banner_slider_-_bottom_2_174ef77e3cab47abbc01abb351de4f25.png'
                     alt=''
                   />
                 </Link>

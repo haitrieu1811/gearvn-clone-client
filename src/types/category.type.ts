@@ -4,8 +4,6 @@ export interface Category {
   _id: string;
   name_vi: string;
   name_en: string;
-  created_at: string;
-  updated_at: string;
 }
 
 export interface CreateCategoryBody {

@@ -19,6 +19,13 @@ const Carousel = () => {
     >
       <SwiperSlide>
         <img
+          src='https://file.hstatic.net/200000722513/file/pc-gaming-slider_aae89bcd58c84899b447b67357feb719.png'
+          alt=''
+          className='rounded'
+        />
+      </SwiperSlide>
+      <SwiperSlide>
+        <img
           src='https://theme.hstatic.net/1000026716/1000440777/14/slideshow_5.jpg?v=36861'
           alt=''
           className='rounded'

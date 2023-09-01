@@ -1,23 +1,25 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import classNames from 'classnames';
 import DOMPurify from 'dompurify';
+import { convert } from 'html-to-text';
 import { Fragment, useContext, useEffect, useMemo, useState } from 'react';
+import { Helmet } from 'react-helmet-async';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import blogApi from 'src/apis/blog.api';
-import { Helmet } from 'react-helmet-async';
-import { convert } from 'html-to-text';
 
+import blogApi from 'src/apis/blog.api';
 import productApi from 'src/apis/product.api';
 import purchaseApi from 'src/apis/purchase.api';
 import userApi from 'src/apis/user.api';
-import { ChevronDownIcon } from 'src/components/Icons';
+import { ChevronDownIcon, SendReviewIcon } from 'src/components/Icons';
 import Loading from 'src/components/Loading';
+import ProductRating from 'src/components/ProductRating';
+import ProductReviews from 'src/components/ProductReviews';
 import QuantityController from 'src/components/QuantityController';
 import PATH from 'src/constants/path';
+import { AppContext } from 'src/contexts/app.context';
 import { formatCurrency, generateNameId, getIdFromNameId, getImageUrl, rateSale } from 'src/utils/utils';
 import SliderImages from './SliderImages';
-import { AppContext } from 'src/contexts/app.context';
 
 const ProductDetail = () => {
   const navigate = useNavigate();
@@ -289,6 +291,39 @@ const ProductDetail = () => {
                   </div>
                 </div>
               )}
+            </div>
+            {/* Đánh giá và nhận xét */}
+            <div className='bg-white rounded-sm mt-4'>
+              <div className='p-6'>
+                <h2 className='text-2xl font-semibold text-[#333333]'>Đánh giá & Nhận xét {product.name_vi}</h2>
+              </div>
+              <div className='pl-6 pr-6 pb-6'>
+                {/* Chỉ số đánh giá */}
+                <div className='flex justify-center items-center pb-6 mb-6 border-b'>
+                  <ProductRating
+                    ratingCount={product.rating_count}
+                    ratingScore={product.rating_score}
+                    data={[
+                      product.rating_five_count,
+                      product.rating_four_count,
+                      product.rating_three_count,
+                      product.rating_two_count,
+                      product.rating_one_count
+                    ]}
+                  />
+                </div>
+                {/* Danh sách đánh giá */}
+                <div className='w-2/3'>
+                  <ProductReviews productId={productId} />
+                </div>
+                {/* Thêm đánh giá */}
+                <div className='mt-4'>
+                  <button className='bg-[#1982F9] rounded flex items-center justify-center w-[400px] max-w-full h-10'>
+                    <SendReviewIcon className='w-[18px] h-[18px] mr-3' />
+                    <span className='text-sm text-white font-medium'>Gửi đánh giá của bạn</span>
+                  </button>
+                </div>
+              </div>
             </div>
           </Fragment>
         )}
