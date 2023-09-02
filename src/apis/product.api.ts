@@ -5,7 +5,7 @@ import {
   GetProductDetailResponse,
   GetProductsRequestParams,
   GetProductsResponse,
-  GetReviewRepliesResponse,
+  GetReviewDetailResponse,
   GetReviewsResponse
 } from 'src/types/product.type';
 import { OnlyMessageResponse } from 'src/types/utils.type';
@@ -41,16 +41,16 @@ const productApi = {
     return http.delete<OnlyMessageResponse>(`/products/image/${mediaId}`);
   },
   // Thêm đánh giá cho sản phẩm
-  addReview(productId: string, body: AddReviewRequestBody) {
+  addReview({ productId, body }: { productId: string; body: AddReviewRequestBody }) {
     return http.post<OnlyMessageResponse>(`/products/${productId}/reviews/`, body);
   },
   // Lấy danh sách đánh giá của sản phẩm
   getReviews(productId: string) {
     return http.get<GetReviewsResponse>(`/products/${productId}/reviews`);
   },
-  // Lấy danh sách phản hồi của đánh giá
-  getReviewReplies(reviewId: string) {
-    return http.get<GetReviewRepliesResponse>(`/products/reviews/${reviewId}/replies`);
+  // Lấy chi tiết đánh giá của sản phẩm
+  getReviewDetail(productId: string) {
+    return http.get<GetReviewDetailResponse>(`/products/${productId}/reviews/detail`);
   }
 };
 

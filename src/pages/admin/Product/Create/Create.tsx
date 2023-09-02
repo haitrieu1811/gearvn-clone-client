@@ -108,12 +108,12 @@ const Create = () => {
         price,
         price_after_discount,
         specifications,
-        category_id,
-        brand_id,
+        category,
+        brand,
         available_count
       } = product;
-      setValue('brand_id', brand_id as string);
-      setValue('category_id', category_id as string);
+      setValue('brand_id', brand?._id as string);
+      setValue('category_id', category?._id as string);
       setValue('name_en', name_en as string);
       setValue('name_vi', name_vi);
       setValue('price', String(price));

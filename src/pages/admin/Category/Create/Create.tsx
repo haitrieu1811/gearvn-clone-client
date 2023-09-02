@@ -75,8 +75,8 @@ const Create = () => {
 
   const updateCategoryMutation = useMutation({
     mutationFn: categoryApi.update,
-    onSuccess: () => {
-      toast.success('Cập nhật danh mục thành công');
+    onSuccess: (data) => {
+      toast.success(data.data.message);
       getCategoryQuery.refetch();
     }
   });
@@ -86,7 +86,6 @@ const Create = () => {
       createCategoryMutation.mutate(data);
     } else {
       updateCategoryMutation.mutate({ body: data, categoryId: category_id as string });
-      console.log('updateCategoryMutation');
     }
   });
 

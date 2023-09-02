@@ -1243,3 +1243,31 @@ export const SendReviewIcon = ({ className }: IconProps) => (
     />
   </svg>
 );
+
+export const UploadIcon = ({ className }: IconProps) => (
+  <svg
+    xmlns='http://www.w3.org/2000/svg'
+    version='1.1'
+    xmlnsXlink='http://www.w3.org/1999/xlink'
+    x={0}
+    y={0}
+    viewBox='0 0 64 64'
+    xmlSpace='preserve'
+    className={className}
+  >
+    <g>
+      <g id='Layer_51' data-name='Layer 51'>
+        <path
+          d='m57.47 38.6a2 2 0 0 0 -2 2v6.83a6.07 6.07 0 0 1 -6.07 6.07h-34.8a6.07 6.07 0 0 1 -6.07-6.07v-6.83a2 2 0 1 0 -4 0v6.83a10.08 10.08 0 0 0 10.07 10.07h34.8a10.08 10.08 0 0 0 10.07-10.07v-6.83a2 2 0 0 0 -2-2z'
+          fill='#000000'
+          data-original='#000000'
+        />
+        <path
+          d='m22 21.3 8-8v29.7a2 2 0 0 0 4 0v-29.67l8 8a2 2 0 0 0 2.83-2.83l-11.41-11.41a2.16 2.16 0 0 0 -1-.55 2.06 2.06 0 0 0 -1.81.55l-11.41 11.38a2 2 0 0 0 2.8 2.83z'
+          fill='#000000'
+          data-original='#000000'
+        />
+      </g>
+    </g>
+  </svg>
+);

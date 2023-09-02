@@ -11,11 +11,12 @@ import blogApi from 'src/apis/blog.api';
 import productApi from 'src/apis/product.api';
 import purchaseApi from 'src/apis/purchase.api';
 import userApi from 'src/apis/user.api';
-import { ChevronDownIcon, SendReviewIcon } from 'src/components/Icons';
+import { ChevronDownIcon } from 'src/components/Icons';
 import Loading from 'src/components/Loading';
 import ProductRating from 'src/components/ProductRating';
 import ProductReviews from 'src/components/ProductReviews';
 import QuantityController from 'src/components/QuantityController';
+import SendReview from 'src/components/SendReview';
 import PATH from 'src/constants/path';
 import { AppContext } from 'src/contexts/app.context';
 import { formatCurrency, generateNameId, getIdFromNameId, getImageUrl, rateSale } from 'src/utils/utils';
@@ -318,10 +319,7 @@ const ProductDetail = () => {
                 </div>
                 {/* Thêm đánh giá */}
                 <div className='mt-4'>
-                  <button className='bg-[#1982F9] rounded flex items-center justify-center w-[400px] max-w-full h-10'>
-                    <SendReviewIcon className='w-[18px] h-[18px] mr-3' />
-                    <span className='text-sm text-white font-medium'>Gửi đánh giá của bạn</span>
-                  </button>
+                  <SendReview product={product} />
                 </div>
               </div>
             </div>

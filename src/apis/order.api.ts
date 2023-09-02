@@ -25,7 +25,7 @@ const orderApi = {
     return http.get<GetQuantityOrderResponse>('/orders/quantity');
   },
   // Cập nhật trạng thái đơn hàng
-  updateStatus(orderId: string, status: number) {
+  updateStatus({ orderId, status }: { orderId: string; status: number }) {
     return http.put<OnlyMessageResponse>(`/orders/update-status/${orderId}`, { status });
   },
   // Xóa đơn hàng

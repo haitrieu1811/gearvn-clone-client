@@ -44,7 +44,6 @@ class Http {
         // Thêm access token vào header nếu có
         if (this.accessToken && config.headers) {
           config.headers.Authorization = `Bearer ${this.accessToken}`;
-          return config;
         }
         return config;
       },

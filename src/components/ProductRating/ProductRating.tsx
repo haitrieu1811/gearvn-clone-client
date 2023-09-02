@@ -15,11 +15,16 @@ const ProductRating = ({ ratingScore, ratingCount, data }: ProductRatingProps) =
       <div className='flex items-center flex-col px-12'>
         <div className='text-[36px] font-semibold text-primary mb-[10px]'>{ratingScore || 0}/5</div>
         <div className='flex items-center'>
-          {Array(5)
-            .fill(0)
-            .map((_, index) => (
-              <StarIcon key={index} className='text-[#fdd835] w-4 h-4' />
-            ))}
+          {/* Khi có nhận xét thì cho hiện sao vàng */}
+          {ratingCount > 0 &&
+            Array(5)
+              .fill(0)
+              .map((_, index) => <StarIcon key={index} className='text-[#fdd835] w-4 h-4' />)}
+          {/* Khi không có đánh giá nào thì cho hiện sao xám */}
+          {ratingCount <= 0 &&
+            Array(5)
+              .fill(0)
+              .map((_, index) => <StarIcon key={index} className='fill-none stroke-slate-400/60 w-4 h-4' />)}
         </div>
         <div className='mt-2 text-sm'>
           <span className='font-bold'>({ratingCount})</span> đánh giá & nhận xét

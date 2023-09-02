@@ -46,6 +46,7 @@ export interface ProductReview {
     fullName: string;
     avatar: string;
   };
+  replies: ProductReviewReply[];
   created_at: string;
   updated_at: string;
 }
@@ -59,6 +60,14 @@ export interface ProductReviewReply {
     fullName: string;
     avatar: string;
   };
+  created_at: string;
+  updated_at: string;
+}
+
+export interface ProductReviewDetail {
+  _id: string;
+  rating: number;
+  comment: string;
   created_at: string;
   updated_at: string;
 }
@@ -92,6 +101,7 @@ export interface AddReviewRequestBody {
   comment?: string;
   rating?: number;
   parent_id?: string;
+  images?: string[];
 }
 
 // Response
@@ -113,7 +123,6 @@ export type GetReviewsResponse = SuccessResponse<{
   pagination: Pagination;
 }>;
 
-export type GetReviewRepliesResponse = SuccessResponse<{
-  product_review_replies: ProductReviewReply[];
-  pagination: Pagination;
+export type GetReviewDetailResponse = SuccessResponse<{
+  review: ProductReviewDetail;
 }>;

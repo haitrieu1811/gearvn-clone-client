@@ -55,7 +55,7 @@ const OrderDetail = () => {
 
   // Cập nhật trạng thái đơn hàng
   const updateStatusMutation = useMutation({
-    mutationFn: () => orderApi.updateStatus(order_id as string, currentStatus as number),
+    mutationFn: orderApi.updateStatus,
     onSuccess: (data) => {
       toast.success(data.data.message);
       getOrderDetailQuery.refetch();
@@ -64,8 +64,8 @@ const OrderDetail = () => {
 
   // Cập nhật trạng thái đơn hàng
   const updateStatus = () => {
-    if (currentStatus || order_id) {
-      updateStatusMutation.mutate();
+    if (currentStatus && order_id) {
+      updateStatusMutation.mutate({ orderId: order_id, status: currentStatus });
       setIsUpdateStatus(false);
     }
   };
