@@ -21,9 +21,9 @@ const BlogVertical = ({ data }: BlogVerticalProps) => {
       </Link>
       <Link
         to={`${PATH.BLOG_DETAIL_WITHOUT_ID}/${generateNameId({ name: data.name_vi, id: data._id })}`}
-        className='text-[#333333] font-semibold line-clamp-2 block mt-2 text-sm md:text-base'
+        className='text-[#333333] block mt-2'
       >
-        {data.name_vi}
+        <span className='line-clamp-2 font-semibold text-sm md:text-base'>{data.name_vi}</span>
       </Link>
     </div>
   );

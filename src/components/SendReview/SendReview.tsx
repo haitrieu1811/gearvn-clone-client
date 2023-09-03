@@ -4,6 +4,7 @@ import { Fragment, useContext, useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import PropTypes from 'prop-types';
+import { useMediaQuery } from 'react-responsive';
 
 import productApi from 'src/apis/product.api';
 import PATH from 'src/constants/path';
@@ -13,6 +14,9 @@ import { getImageUrl } from 'src/utils/utils';
 import Button from '../Button';
 import { CloseIcon, SendReviewIcon, StarIcon, UploadIcon } from '../Icons';
 import Modal from '../Modal';
+import InputFile from '../InputFile';
+import mediaApi from 'src/apis/media.api';
+import CONFIG from 'src/constants/config';
 
 interface SendReviewProps {
   product: Product;
@@ -21,11 +25,14 @@ interface SendReviewProps {
 const SendReview = ({ product }: SendReviewProps) => {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
+  const isTablet = useMediaQuery({ maxWidth: CONFIG.TABLET_SCREEN_SIZE });
+
   const [isVisible, setIsVisible] = useState<boolean>(false);
   const [comment, setComment] = useState<string>('');
   const [currentStart, setCurrentStart] = useState<number | null>(null);
   const [reaction, setReaction] = useState<string>('');
   const [selected, setSelected] = useState<boolean>(false);
+  const [images, setImages] = useState<File[]>([]);
   const { isAuthenticated } = useContext(AppContext);
 
   // Lấy chi tiết đánh giá
@@ -39,6 +46,8 @@ const SendReview = ({ product }: SendReviewProps) => {
     () => getReviewDetailQuery.data?.data.data.review,
     [getReviewDetailQuery.data?.data.data.review]
   );
+  // Danh sách hình ảnh đính kèm của đánh giá hiện tại (nếu có)
+  const defaultImages = useMemo(() => review?.images || [], [review?.images]);
 
   // Điền dữ liệu vào form khi đã đánh giá
   useEffect(() => {
@@ -94,28 +103,70 @@ const SendReview = ({ product }: SendReviewProps) => {
     }
   }, [currentStart]);
 
+  // Thay đổi hình ảnh đính kèm
+  const handleChangeImages = (files?: File[]) => {
+    files && setImages((prevState) => [...prevState, ...files]);
+  };
+
+  // Xem trước hình ảnh đính kèm
+  const reviewImages = useMemo(() => images.map((image) => URL.createObjectURL(image)), [images]);
+
+  // Hủy hình ảnh đính kèm
+  const cancelImage = (index: number) => {
+    setImages((prevState) => prevState.filter((_, i) => i !== index));
+  };
+
+  // Upload hình ảnh đính kèm
+  const uploadImageMutation = useMutation(mediaApi.uploadImage);
+
   // Gửi đánh giá
   const addReviewMutation = useMutation({
     mutationFn: productApi.addReview,
     onSuccess: (data) => {
       closeModal();
       toast.success(data.data.message);
-
+      setImages([]);
+      setComment('');
+      setCurrentStart(null);
+      setSelected(false);
       queryClient.invalidateQueries(['getReviews', product._id]);
       queryClient.invalidateQueries(['product', product._id]);
+      queryClient.invalidateQueries(['getReviewDetail', product._id]);
     }
   });
 
   // Gửi đánh giá
-  const handleSendReview = () => {
-    if (!currentStart) return;
+  const handleSendReview = async () => {
+    let imagesData: string[] | undefined = undefined;
+    if (!currentStart || [...defaultImages, ...images].length > 5) return;
+    if (defaultImages.length <= 4 && images.length > 0) {
+      const formData = new FormData();
+      images.forEach((image) => formData.append('image', image));
+      const { data: mediasData } = await uploadImageMutation.mutateAsync(formData);
+      imagesData = mediasData.data.medias.map((media) => media.name);
+    }
     addReviewMutation.mutate({
       productId: product._id,
       body: {
         comment: comment || undefined,
-        rating: currentStart
+        rating: currentStart,
+        images: imagesData
       }
     });
+  };
+
+  // Xóa hình ảnh đính kèm
+  const deleteReviewImageMutation = useMutation({
+    mutationFn: productApi.deleteReviewImage,
+    onSuccess: () => {
+      queryClient.invalidateQueries(['getReviewDetail', product._id]);
+      queryClient.invalidateQueries(['getReviews', product._id]);
+    }
+  });
+
+  const handleDeleteReviewImage = async (imageId: string) => {
+    if (!review) return;
+    deleteReviewImageMutation.mutate({ reviewId: review._id, imageId });
   };
 
   return (
@@ -130,23 +181,25 @@ const SendReview = ({ product }: SendReviewProps) => {
 
       <Modal isVisible={isVisible} modalHeader={false} cancelButton={false} okButton={false} onCancel={closeModal}>
         <div className='flex'>
-          <div className='w-[340px] bg-primary p-4'>
-            <img src={getImageUrl(product.thumbnail)} alt={product.name_vi} className='w-full' />
-            <div className='mt-4 mb-[10px] text-sm text-white font-semibold text-center'>{product.name_vi}</div>
-          </div>
+          {!isTablet && (
+            <div className='w-[340px] bg-primary p-4'>
+              <img src={getImageUrl(product.thumbnail)} alt={product.name_vi} className='w-full' />
+              <div className='mt-4 mb-[10px] text-sm text-white font-semibold text-center'>{product.name_vi}</div>
+            </div>
+          )}
           <div className='w-[800px]'>
             <div className='flex justify-between items-center p-4 border-b'>
-              <h3>
+              <h3 className='line-clamp-1 md:line-clamp-none'>
                 Đánh giá của bạn về: <strong className='font-bold'>{product.name_vi}</strong>
               </h3>
-              <button onClick={closeModal}>
+              <button onClick={closeModal} className='ml-3'>
                 <CloseIcon className='w-6 h-6' />
               </button>
             </div>
-            <div className='p-4 flex justify-between items-center border-b'>
-              <div className='flex items-center'>
+            <div className='relative p-4 flex justify-between items-center border-b'>
+              <div className='flex-col md:flex-row flex items-center'>
                 <div className='text-[13px] font-bold'>Mức độ đánh giá *</div>
-                <div className='flex mx-4' onMouseLeave={handleLeaveRating}>
+                <div className='flex md:mx-4' onMouseLeave={handleLeaveRating}>
                   {Array(5)
                     .fill(0)
                     .map((_, index) => {
@@ -170,12 +223,15 @@ const SendReview = ({ product }: SendReviewProps) => {
                       );
                     })}
                 </div>
-                <div className='text-xs'>{reaction || 'Click vào để review!'}</div>
+                {!isTablet && <div className='text-xs'>{reaction || 'Click vào để review!'}</div>}
               </div>
               <div
-                className={classNames('flex items-center border rounded-full px-2 py-1', {
-                  'opacity-0': selected
-                })}
+                className={classNames(
+                  'absolute md:relative top-3 right-3 md:top-0 md:right-0 flex items-center border rounded-full px-2 py-1 bg-white',
+                  {
+                    'opacity-0': selected
+                  }
+                )}
               >
                 <span className='text-xs text-primary'>Vui lòng chọn mức độ đánh giá</span>
                 <span className='w-5 h-5 bg-primary rounded-full inline-flex justify-center items-center ml-[5px]'>
@@ -191,19 +247,56 @@ const SendReview = ({ product }: SendReviewProps) => {
                   placeholder='Ví dụ: Tôi đã mua sản phẩm cách đây 1 tháng và rất hài lòng về nó ...'
                   value={comment}
                   onChange={(e) => setComment(e.target.value)}
-                ></textarea>
+                />
               </div>
             </div>
             <div className='p-4'>
-              <button className='flex justify-center items-center flex-col w-20 h-20 border border-dashed border-[#333333] rounded'>
-                <UploadIcon className='w-7 h-7 mb-[5px]' />
-                <span className='text-xs capitalize'>Gửi ảnh</span>
-              </button>
+              <div className='flex flex-wrap'>
+                <InputFile multiple={true} onChange={handleChangeImages}>
+                  <button className='flex justify-center items-center flex-col w-20 h-20 border border-dashed border-[#333333] rounded'>
+                    <UploadIcon className='w-7 h-7 mb-[5px]' />
+                    <span className='text-xs capitalize'>Gửi ảnh</span>
+                  </button>
+                </InputFile>
+                {/* Danh sách hình ảnh */}
+                <div className='flex w-full lg:w-auto'>
+                  {[...defaultImages, ...reviewImages].map((image, index) => {
+                    const isDefault = typeof image !== 'string';
+                    return (
+                      <div
+                        key={index}
+                        className='relative w-1/5 lg:w-20 lg:h-20 flex justify-center items-center px-[6px] py-2 lg:py-5 bg-[#00000033] first:ml-0 lg:first:ml-2 ml-2 rounded'
+                      >
+                        <img
+                          src={isDefault ? getImageUrl(image.name) : image}
+                          alt={product.name_vi}
+                          className='w-full md:w-[85%] object-contain'
+                        />
+                        <button
+                          onClick={() =>
+                            isDefault ? handleDeleteReviewImage(image._id) : cancelImage(index - defaultImages.length)
+                          }
+                          className='absolute top-1 right-1 w-4 h-4 border border-white rounded-full flex justify-center items-center z-10'
+                        >
+                          <CloseIcon className='w-3 h-3 stroke-white' />
+                        </button>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+              <div
+                className={classNames('text-[#dc3545] mt-[10px] text-sm pointer-events-none', {
+                  'opacity-0': [...defaultImages, ...images].length <= 5
+                })}
+              >
+                Chỉ được gửi tối đa 5 hình ảnh
+              </div>
             </div>
             <div className='p-4 flex justify-end'>
               <Button
                 onClick={handleSendReview}
-                isLoading={addReviewMutation.isLoading}
+                isLoading={addReviewMutation.isLoading || uploadImageMutation.isLoading}
                 className='px-7 py-[10px] flex items-center justify-center rounded bg-primary text-white font-medium text-sm hover:bg-primary/90'
               >
                 Gửi đánh giá

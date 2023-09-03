@@ -3,6 +3,7 @@ import moment from 'moment';
 import { Fragment, useMemo } from 'react';
 
 import productApi from 'src/apis/product.api';
+import { getImageUrl } from 'src/utils/utils';
 import { StarIcon } from '../Icons';
 import Loading from '../Loading';
 
@@ -41,6 +42,16 @@ const ProductReviews = ({ productId }: ProductReviewsProps) => {
               </div>
               <div className='flex-1 pl-4'>
                 <div className='text-sm mb-4'>{review.comment}</div>
+                {/* Hỉnh ảnh */}
+                <div className='mb-4 flex'>
+                  {review.images.map((image) => (
+                    <img
+                      key={image._id}
+                      src={getImageUrl(image.name)}
+                      className='w-14 h-14 object-cover mr-1 rounded'
+                    />
+                  ))}
+                </div>
                 {/* Trả lời */}
                 {review.replies.map((reply) => (
                   <div key={reply._id} className='px-4 py-3 bg-[#ececec] rounded mb-4 last:mb-0'>

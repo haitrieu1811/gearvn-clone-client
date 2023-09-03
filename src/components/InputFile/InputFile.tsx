@@ -34,11 +34,9 @@ const InputFile = ({
     const filesFromLocal = e.target.files;
     const _filesFromLocal = toArray(filesFromLocal);
     const isSizeValid = _filesFromLocal.every((file) => file.size < maxFileSize);
-    if (!isSizeValid) {
-      toast.error(`Dung lượng file tối đa ${maxFileSize / 1024}KB`);
-    } else {
-      onChange && onChange(_filesFromLocal);
-    }
+    const isValidFiles = _filesFromLocal.filter((file) => file.size < maxFileSize);
+    if (!isSizeValid) toast.error(`Dung lượng file tối đa ${maxFileSize / 1024}KB`);
+    onChange && onChange(isValidFiles);
   };
 
   return (

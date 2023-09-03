@@ -183,13 +183,13 @@ const ProductDetail = () => {
                     <div className='flex mt-4'>
                       <button
                         onClick={addToCart}
-                        className='border border-primary rounded text-primary text-base md:text-lg px-2 md:px-6 py-2 bg-primary/10 hover:opacity-80 flex-1 lg:flex-none'
+                        className='border border-primary rounded text-primary text-base md:text-lg px-2 md:px-6 py-2 bg-primary/10 hover:opacity-90 flex-1 lg:flex-none'
                       >
                         Thêm vào giỏ hàng
                       </button>
                       <button
                         onClick={buyNow}
-                        className='border border-primary rounded text-white text-base md:text-lg px-2 md:px-6 py-2 bg-primary ml-2 md:ml-4 hover:opacity-80 flex-1 lg:flex-none'
+                        className='border border-primary rounded text-white text-base md:text-lg px-2 md:px-6 py-2 bg-primary ml-2 md:ml-4 hover:opacity-90 flex-1 lg:flex-none'
                       >
                         Mua ngay
                       </button>

@@ -51,6 +51,9 @@ const productApi = {
   // Lấy chi tiết đánh giá của sản phẩm
   getReviewDetail(productId: string) {
     return http.get<GetReviewDetailResponse>(`/products/${productId}/reviews/detail`);
+  },
+  deleteReviewImage({ reviewId, imageId }: { reviewId: string; imageId: string }) {
+    return http.delete(`/products/reviews/${reviewId}/images/${imageId}`);
   }
 };
 

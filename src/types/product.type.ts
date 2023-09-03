@@ -46,6 +46,7 @@ export interface ProductReview {
     fullName: string;
     avatar: string;
   };
+  images: Image[];
   replies: ProductReviewReply[];
   created_at: string;
   updated_at: string;
@@ -68,6 +69,7 @@ export interface ProductReviewDetail {
   _id: string;
   rating: number;
   comment: string;
+  images: Image[];
   created_at: string;
   updated_at: string;
 }

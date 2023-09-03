@@ -4,6 +4,7 @@ import http from 'src/utils/http';
 const URL_UPLOAD_IMAGE = '/medias/upload-image';
 
 const mediaApi = {
+  // Tải ảnh lên server
   uploadImage(body: FormData) {
     return http.post<UploadMediaResponse>(URL_UPLOAD_IMAGE, body, {
       headers: {
