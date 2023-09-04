@@ -26,7 +26,7 @@ const App = () => {
       </Helmet>
       {element}
       <ReactQueryDevtools />
-      <ToastContainer autoClose={1500} position='top-center' style={{ zIndex: 999999999999 }} />
+      <ToastContainer autoClose={3000} position='bottom-right' style={{ zIndex: 999999999999 }} />
     </Fragment>
   );
 };

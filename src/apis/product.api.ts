@@ -36,10 +36,6 @@ const productApi = {
   addImage({ productId, body }: { productId: string; body: { images: string[] } }) {
     return http.post<OnlyMessageResponse>(`/products/image/${productId}`, body);
   },
-  // Xóa ảnh của sản phẩm
-  deleteImage(mediaId: string) {
-    return http.delete<OnlyMessageResponse>(`/products/image/${mediaId}`);
-  },
   // Thêm đánh giá cho sản phẩm
   addReview({ productId, body }: { productId: string; body: AddReviewRequestBody }) {
     return http.post<OnlyMessageResponse>(`/products/${productId}/reviews/`, body);
@@ -52,8 +48,13 @@ const productApi = {
   getReviewDetail(productId: string) {
     return http.get<GetReviewDetailResponse>(`/products/${productId}/reviews/detail`);
   },
+  // Xóa hình ảnh đính kèm của đánh giá sản phẩm
   deleteReviewImage({ reviewId, imageId }: { reviewId: string; imageId: string }) {
     return http.delete(`/products/reviews/${reviewId}/images/${imageId}`);
+  },
+  // Xóa đánh giá của sản phẩm
+  deleteReview(reviewId: string) {
+    return http.delete<OnlyMessageResponse>(`/products/reviews/${reviewId}`);
   }
 };
 

@@ -196,7 +196,7 @@ const Create = () => {
 
   // Phương thức xóa hình ảnh sản phẩm
   const deleteImageMutation = useMutation({
-    mutationFn: productApi.deleteImage,
+    mutationFn: mediaApi.deleteMedia,
     onSuccess: (data) => {
       toast.success(data.data.message);
       getProductDetailQuery.refetch();
@@ -205,7 +205,7 @@ const Create = () => {
 
   // Tiến hành xóa hình ảnh sản phẩm
   const handleDeleteImage = (mediaId: string) => {
-    deleteImageMutation.mutate(mediaId);
+    deleteImageMutation.mutate([mediaId]);
   };
 
   // Cập nhật giá trị thông tin chung

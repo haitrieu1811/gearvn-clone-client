@@ -14,7 +14,7 @@ import userApi from 'src/apis/user.api';
 import { ChevronDownIcon } from 'src/components/Icons';
 import Loading from 'src/components/Loading';
 import ProductRating from 'src/components/ProductRating';
-import ProductReviews from 'src/components/ProductReviews';
+import ProductReviewList from 'src/components/ProductReviewList';
 import QuantityController from 'src/components/QuantityController';
 import SendReview from 'src/components/SendReview';
 import PATH from 'src/constants/path';
@@ -283,9 +283,9 @@ const ProductDetail = () => {
                             name: blog.name_vi,
                             id: blog._id
                           })}`}
-                          className='flex-1 ml-4 line-clamp-2 text-sm md:text-base'
+                          className='flex-1 ml-4'
                         >
-                          {blog.name_vi}
+                          <span className='line-clamp-2 text-sm md:text-base'>{blog.name_vi}</span>
                         </Link>
                       </div>
                     ))}
@@ -295,12 +295,14 @@ const ProductDetail = () => {
             </div>
             {/* Đánh giá và nhận xét */}
             <div className='bg-white rounded-sm mt-4'>
-              <div className='p-6'>
-                <h2 className='text-2xl font-semibold text-[#333333]'>Đánh giá & Nhận xét {product.name_vi}</h2>
+              <div className='p-[10px] lg:p-6'>
+                <h2 className='text-base lg:text-2xl font-semibold text-[#333333]'>
+                  Đánh giá & Nhận xét {product.name_vi}
+                </h2>
               </div>
-              <div className='pl-6 pr-6 pb-6'>
+              <div className='px-[10px] pb-[10px] lg:px-6 lg:pb-6'>
                 {/* Chỉ số đánh giá */}
-                <div className='flex justify-center items-center pb-6 mb-6 border-b'>
+                <div className='pb-6 mb-6 border-b'>
                   <ProductRating
                     ratingCount={product.rating_count}
                     ratingScore={product.rating_score}
@@ -314,8 +316,8 @@ const ProductDetail = () => {
                   />
                 </div>
                 {/* Danh sách đánh giá */}
-                <div className='w-2/3'>
-                  <ProductReviews productId={productId} />
+                <div className='w-full md:w-2/3'>
+                  <ProductReviewList productId={productId} />
                 </div>
                 {/* Thêm đánh giá */}
                 <div className='mt-4'>

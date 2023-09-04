@@ -253,24 +253,24 @@ const SendReview = ({ product }: SendReviewProps) => {
             <div className='p-4'>
               <div className='flex flex-wrap'>
                 <InputFile multiple={true} onChange={handleChangeImages}>
-                  <button className='flex justify-center items-center flex-col w-20 h-20 border border-dashed border-[#333333] rounded'>
+                  <button className='flex justify-center items-center flex-col w-20 h-20 mr-2 mb-2 border border-dashed border-[#333333] rounded'>
                     <UploadIcon className='w-7 h-7 mb-[5px]' />
                     <span className='text-xs capitalize'>Gửi ảnh</span>
                   </button>
                 </InputFile>
                 {/* Danh sách hình ảnh */}
-                <div className='flex w-full lg:w-auto'>
+                <div className='flex flex-wrap w-full md:w-auto lg:mt-0'>
                   {[...defaultImages, ...reviewImages].map((image, index) => {
                     const isDefault = typeof image !== 'string';
                     return (
                       <div
                         key={index}
-                        className='relative w-1/5 lg:w-20 lg:h-20 flex justify-center items-center px-[6px] py-2 lg:py-5 bg-[#00000033] first:ml-0 lg:first:ml-2 ml-2 rounded'
+                        className='relative w-20 h-20 flex justify-center items-center px-[6px] py-2 lg:py-5 bg-[#00000033] mr-2 mt-2 md:mt-0 rounded'
                       >
                         <img
                           src={isDefault ? getImageUrl(image.name) : image}
                           alt={product.name_vi}
-                          className='w-full md:w-[85%] object-contain'
+                          className='w-[85%] object-contain'
                         />
                         <button
                           onClick={() =>

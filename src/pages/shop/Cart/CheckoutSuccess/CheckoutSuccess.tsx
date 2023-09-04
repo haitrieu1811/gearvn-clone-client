@@ -17,7 +17,7 @@ const CheckoutSuccess = () => {
   const orderId = useMemo(() => (location?.state as { order_id: string })?.order_id, [location?.state?.order_id]);
 
   return (
-    <div className='px-16 py-6'>
+    <div className='px-6 md:px-16 py-6'>
       <div className='flex items-center justify-center text-lg text-[#1E9800] p-[14px] mb-6 bg-[#D5F7E0] rounded'>
         <ShoppingBagCheckIcon />
         <span className='ml-1 font-semibold'>Đặt hàng thành công</span>
