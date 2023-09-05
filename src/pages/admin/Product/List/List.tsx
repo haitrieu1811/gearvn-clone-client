@@ -5,17 +5,11 @@ import keyBy from 'lodash/keyBy';
 import omitBy from 'lodash/omitBy';
 import moment from 'moment';
 import { ChangeEvent, Fragment, useContext, useEffect, useMemo, useState } from 'react';
-import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
-import brandApi from 'src/apis/brand.api';
-import categoryApi from 'src/apis/category.api';
 import productApi from 'src/apis/product.api';
 import Checkbox from 'src/components/Checkbox';
-import Filter from 'src/components/Filter';
-import { PlusIcon } from 'src/components/Icons';
 import Modal from 'src/components/Modal/Modal';
-import Sort from 'src/components/Sort';
 import Table from 'src/components/Table';
 import TableAction from 'src/components/Table/TableAction';
 import PATH from 'src/constants/path';
@@ -39,7 +33,7 @@ const List = () => {
   const queryConfig: QueryConfig = omitBy(
     {
       page: queryParams.page || 1,
-      limit: queryParams.limit || 10,
+      limit: queryParams.limit || 20,
       sortBy: queryParams.sortBy,
       orderBy: queryParams.orderBy,
       category: queryParams.category,
@@ -118,26 +112,6 @@ const List = () => {
     );
   };
 
-  // Lấy danh sách nhãn hiệu
-  const getBrandsQuery = useQuery({
-    queryKey: ['brands'],
-    queryFn: () => brandApi.getList()
-  });
-
-  // Lấy danh sách danh mục
-  const getCategoriesQuery = useQuery({
-    queryKey: ['categories'],
-    queryFn: () => categoryApi.getList()
-  });
-
-  // Danh sách nhãn hiệu
-  const brands = useMemo(() => getBrandsQuery.data?.data.data.brands, [getBrandsQuery.data?.data.data.brands]);
-  // Danh sách danh mục
-  const categories = useMemo(
-    () => getCategoriesQuery.data?.data.data.categories,
-    [getCategoriesQuery.data?.data.data.categories]
-  );
-
   // Bắt đầu xóa
   const startDelete = (productId?: string) => {
     setIsOpenModal(true);
@@ -158,20 +132,7 @@ const List = () => {
 
   return (
     <Fragment>
-      <div className='px-8 py-3 mb-4 flex justify-between items-center bg-white'>
-        <div className='flex items-center'>
-          <h2 className='text-2xl font-bold mr-4'>Danh sách sản phẩm</h2>
-          <div className='text-slate-500 text-sm'>(Có {total} sản phẩm)</div>
-        </div>
-        <Link
-          to={PATH.DASHBOARD_PRODUCT_CREATE}
-          className='bg-blue-700 text-white text-sm rounded p-2 flex items-center'
-        >
-          <PlusIcon className='w-4 h-4 mr-2 stroke-[3]' />
-          Tạo mới
-        </Link>
-      </div>
-      <div className='p-4 pb-10 bg-white rounded flex justify-between items-center'>
+      {/* <div className='p-4 pb-10 bg-white rounded flex justify-between items-center'>
         <div className='flex'>
           <div className='mr-2 relative'>
             <input
@@ -224,9 +185,12 @@ const List = () => {
             ]}
           />
         </div>
-      </div>
+      </div> */}
       <Table
+        tableName='Danh sách sản phẩm'
+        addNewPath={PATH.DASHBOARD_PRODUCT_CREATE}
         data={extendedProducts}
+        totalRows={total || 0}
         columns={[
           {
             field: 'checkbox',
@@ -294,6 +258,7 @@ const List = () => {
         }
         pageSize={pageSize || 0}
         isLoading={getProductsQuery.isLoading}
+        onSearch={(value) => setKeywordSearch(value)}
         tableFootLeft={
           checkedProducts.length > 0 && (
             <button

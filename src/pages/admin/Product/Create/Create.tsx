@@ -10,7 +10,6 @@ import brandApi from 'src/apis/brand.api';
 import categoryApi from 'src/apis/category.api';
 import mediaApi from 'src/apis/media.api';
 import productApi from 'src/apis/product.api';
-import Back from 'src/components/Back';
 import Button from 'src/components/Button';
 import FloatLoading from 'src/components/FloatLoading';
 import { CloseIcon, CloudArrowUpIcon, PhotoIcon } from 'src/components/Icons';
@@ -33,7 +32,6 @@ const Create = () => {
   const [thumbnailFile, setThumbnailFile] = useState<File[] | null>(null);
   const [imagesFile, setImagesFile] = useState<File[] | null>(null);
   const [generalInfo, setGeneralInfo] = useState<string>('');
-  const [specifications, setSpecifications] = useState<string>('');
   const [description, setDescription] = useState<string>('');
 
   // Lấy danh sách nhãn hiệu sản phẩm
@@ -75,7 +73,6 @@ const Create = () => {
       name_vi: '',
       price: '',
       price_after_discount: '',
-      specifications: '',
       available_count: ''
     }
   });
@@ -107,7 +104,6 @@ const Create = () => {
         description,
         price,
         price_after_discount,
-        specifications,
         category,
         brand,
         available_count
@@ -119,12 +115,10 @@ const Create = () => {
       setValue('price', String(price));
       setValue('price_after_discount', String(price_after_discount));
       setValue('general_info', general_info);
-      setValue('specifications', specifications || '');
       setValue('description', description);
       setValue('available_count', String(available_count));
       // Giúp hiển thị text ở TextEditor chứ không có giá trị về mặc dữ liệu
       setGeneralInfo(htmlToMarkdown(general_info));
-      setSpecifications(htmlToMarkdown(specifications || ''));
       setDescription(htmlToMarkdown(description));
     }
   }, [product, setValue]);
@@ -151,7 +145,6 @@ const Create = () => {
       setThumbnailFile(null);
       setImagesFile(null);
       setGeneralInfo('');
-      setSpecifications('');
       setDescription('');
     },
     onError: (error) => {
@@ -214,12 +207,6 @@ const Create = () => {
     setGeneralInfo(text);
   };
 
-  // Cập nhật giá trị thông số kỹ thuật
-  const changeSpecifications = ({ html, text }: { html: string; text: string }) => {
-    setValue('specifications', html);
-    setSpecifications(text);
-  };
-
   // Cập nhật giá trị mô tả
   const changeDescription = ({ html, text }: { html: string; text: string }) => {
     setValue('description', html);
@@ -275,10 +262,7 @@ const Create = () => {
   return (
     <Fragment>
       <div className='bg-white rounded-lg shadow-sm p-6'>
-        <div className='mb-6 flex justify-between items-center'>
-          <h2 className='text-2xl font-bold'>{!isUpdateMode ? 'Tạo sản phẩm mới' : 'Cập nhật sản phẩm'}</h2>
-          <Back />
-        </div>
+        <h2 className='text-2xl font-bold mb-6'>{!isUpdateMode ? 'Tạo sản phẩm mới' : 'Cập nhật sản phẩm'}</h2>
         {/* Khi có dữ liệu hoặc ở chế độ tạo */}
         {(!isUpdateMode || (product && !getProductDetailQuery.isLoading)) && (
           <form onSubmit={onSubmit} encType='multipart/form-data'>
@@ -413,22 +397,6 @@ const Create = () => {
                         value={generalInfo}
                         onChange={changeGeneralInfo}
                         errorMessage={errors.general_info?.message}
-                      />
-                    )}
-                  />
-                </div>
-                {/* Thông số kỹ thuật */}
-                <div className='mt-6'>
-                  <label className='font-medium text-sm mb-3 ml-1 block'>Thông số kỹ thuật:</label>
-                  <Controller
-                    control={control}
-                    name='specifications'
-                    render={({ field }) => (
-                      <TextEditor
-                        name={field.name}
-                        value={specifications}
-                        onChange={changeSpecifications}
-                        errorMessage={errors.specifications?.message}
                       />
                     )}
                   />

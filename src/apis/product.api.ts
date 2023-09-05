@@ -38,23 +38,23 @@ const productApi = {
   },
   // Thêm đánh giá cho sản phẩm
   addReview({ productId, body }: { productId: string; body: AddReviewRequestBody }) {
-    return http.post<OnlyMessageResponse>(`/products/${productId}/reviews/`, body);
+    return http.post<OnlyMessageResponse>(`/reviews/product/${productId}`, body);
   },
   // Lấy danh sách đánh giá của sản phẩm
   getReviews(productId: string) {
-    return http.get<GetReviewsResponse>(`/products/${productId}/reviews`);
+    return http.get<GetReviewsResponse>(`/reviews/product/${productId}`);
   },
   // Lấy chi tiết đánh giá của sản phẩm
   getReviewDetail(productId: string) {
-    return http.get<GetReviewDetailResponse>(`/products/${productId}/reviews/detail`);
+    return http.get<GetReviewDetailResponse>(`/reviews/detail/product/${productId}`);
   },
   // Xóa hình ảnh đính kèm của đánh giá sản phẩm
   deleteReviewImage({ reviewId, imageId }: { reviewId: string; imageId: string }) {
-    return http.delete(`/products/reviews/${reviewId}/images/${imageId}`);
+    return http.delete(`/reviews/${reviewId}/image/${imageId}`);
   },
   // Xóa đánh giá của sản phẩm
   deleteReview(reviewId: string) {
-    return http.delete<OnlyMessageResponse>(`/products/reviews/${reviewId}`);
+    return http.delete<OnlyMessageResponse>(`/reviews/${reviewId}`);
   }
 };
 

@@ -30,7 +30,6 @@ export interface Product {
 
   brand?: Brand;
   category?: Category;
-  specifications?: string;
   general_info: string;
   description: string;
   images?: Image[];
@@ -95,7 +94,6 @@ export interface CreateAndUpdateProductBody {
   description: string;
   brand_id: string;
   category_id: string;
-  specifications: string;
   available_count: number;
 }
 

@@ -164,6 +164,7 @@ const SendReview = ({ product }: SendReviewProps) => {
     }
   });
 
+  // Xử lý xóa hình ảnh đính kèm
   const handleDeleteReviewImage = async (imageId: string) => {
     if (!review) return;
     deleteReviewImageMutation.mutate({ reviewId: review._id, imageId });

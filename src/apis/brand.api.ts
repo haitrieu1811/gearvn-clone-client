@@ -8,27 +8,26 @@ import {
 import { OnlyMessageResponse } from 'src/types/utils.type';
 import http from 'src/utils/http';
 
-const URL_GET_BRANDS = '/products/brand';
-const URL_GET_BRAND = '/products/brand';
-const URL_CREATE_BRAND = '/products/brand';
-const URL_UPDATE_BRAND = '/products/brand';
-const URL_DELETE_BRAND = '/products/brand';
-
 const brandApi = {
+  // Lấy danh sách thương hiệu
   getList(params?: GetBrandsRequestParams) {
-    return http.get<GetBrandsResponse>(URL_GET_BRANDS, { params });
+    return http.get<GetBrandsResponse>('/brands', { params });
   },
+  // Lấy thông tin thương hiệu
   getOne(brandId: string) {
-    return http.get<GetBrandResponse>(`${URL_GET_BRAND}/${brandId}`);
+    return http.get<GetBrandResponse>(`/brands/${brandId}`);
   },
+  // Tạo mới thương hiệu
   create(body: CreateBrandRequestBody) {
-    return http.post<OnlyMessageResponse>(URL_CREATE_BRAND, body);
+    return http.post<OnlyMessageResponse>('/brands', body);
   },
+  // Cập nhật thông tin thương hiệu
   update({ body, brandId }: { body: UpdateBrandRequestBody; brandId: string }) {
-    return http.put<OnlyMessageResponse>(`${URL_UPDATE_BRAND}/${brandId}`, body);
+    return http.put<OnlyMessageResponse>(`/brands/${brandId}`, body);
   },
+  // Xóa thương hiệu
   delete(brandIds: string[]) {
-    return http.delete<OnlyMessageResponse>(URL_DELETE_BRAND, { data: { brand_ids: brandIds } });
+    return http.delete<OnlyMessageResponse>('/brands', { data: { brand_ids: brandIds } });
   }
 };
 

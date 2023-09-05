@@ -2,7 +2,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import classNames from 'classnames';
 import DOMPurify from 'dompurify';
 import { convert } from 'html-to-text';
-import { Fragment, useContext, useEffect, useMemo, useState } from 'react';
+import { Fragment, useContext, useEffect, useMemo, useState, useRef } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
@@ -11,7 +11,7 @@ import blogApi from 'src/apis/blog.api';
 import productApi from 'src/apis/product.api';
 import purchaseApi from 'src/apis/purchase.api';
 import userApi from 'src/apis/user.api';
-import { ChevronDownIcon } from 'src/components/Icons';
+import { ChevronDownIcon, StarIcon } from 'src/components/Icons';
 import Loading from 'src/components/Loading';
 import ProductRating from 'src/components/ProductRating';
 import ProductReviewList from 'src/components/ProductReviewList';
@@ -23,14 +23,15 @@ import { formatCurrency, generateNameId, getIdFromNameId, getImageUrl, rateSale 
 import SliderImages from './SliderImages';
 
 const ProductDetail = () => {
-  const navigate = useNavigate();
   const queryClient = useQueryClient();
+  const navigate = useNavigate();
   const { name_id } = useParams();
   const productId = getIdFromNameId(name_id as string);
   const [isMounted, setIsMounted] = useState(false);
   const [buyCount, setBuyCount] = useState<number>(1);
   const [readMore, setReadMore] = useState<boolean>(false);
   const { isAuthenticated } = useContext(AppContext);
+  const reviewsRef = useRef<HTMLDivElement>(null);
 
   // Đánh dấu đã mount component
   useEffect(() => {
@@ -109,6 +110,13 @@ const ProductDetail = () => {
   // Danh sách blog
   const blogs = useMemo(() => getBlogsQuery.data?.data.data.blogs, [getBlogsQuery.data?.data.data.blogs]);
 
+  // Cuộn đến phần đánh giá
+  const handleSeeReviews = () => {
+    if (reviewsRef.current) {
+      reviewsRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   return (
     <div className='my-2 lg:my-4'>
       <div className='lg:container'>
@@ -146,7 +154,16 @@ const ProductDetail = () => {
               </div>
               {/* Thông tin sản phẩm */}
               <div className='flex-1 p-2 py-6 lg:p-6 lg:border-l'>
-                <h1 className='font-semibold text-[20px] md:text-2xl'>{product.name_vi}</h1>
+                <h1 className='font-semibold text-[20px] md:text-2xl mb-2'>{product.name_vi}</h1>
+                <div className='flex items-center mb-4'>
+                  <div className='flex items-center mr-4'>
+                    <span className='text-[#ff8a00] font-semibold mr-[2px]'>{product.rating_score || 0}</span>
+                    <StarIcon className='w-3 h-3 text-[#ff8a00]' />
+                  </div>
+                  <button type='button' className='text-[#1982F9]' onClick={handleSeeReviews}>
+                    Xem đánh giá
+                  </button>
+                </div>
                 <div className='flex items-center mt-4'>
                   <div className='text-primary font-semibold text-[20px] md:text-[32px]'>
                     {formatCurrency(product.price_after_discount)}₫
@@ -294,7 +311,7 @@ const ProductDetail = () => {
               )}
             </div>
             {/* Đánh giá và nhận xét */}
-            <div className='bg-white rounded-sm mt-4'>
+            <div ref={reviewsRef} className='bg-white rounded-sm mt-4'>
               <div className='p-[10px] lg:p-6'>
                 <h2 className='text-base lg:text-2xl font-semibold text-[#333333]'>
                   Đánh giá & Nhận xét {product.name_vi}

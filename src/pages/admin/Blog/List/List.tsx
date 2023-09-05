@@ -5,12 +5,10 @@ import keyBy from 'lodash/keyBy';
 import omitBy from 'lodash/omitBy';
 import moment from 'moment';
 import { ChangeEvent, Fragment, useContext, useEffect, useMemo, useState } from 'react';
-import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
 import blogApi from 'src/apis/blog.api';
 import Checkbox from 'src/components/Checkbox';
-import { PlusIcon } from 'src/components/Icons';
 import Modal from 'src/components/Modal';
 import Table from 'src/components/Table';
 import TableAction from 'src/components/Table/TableAction';
@@ -115,19 +113,10 @@ const List = () => {
 
   return (
     <Fragment>
-      <div className='px-8 py-3 mb-4 flex justify-between items-center bg-white'>
-        <div className='flex items-center'>
-          <h2 className='text-2xl font-bold mr-4'>Danh sách blog</h2>
-          <div className='text-slate-500 text-sm'>(Có {total} blog)</div>
-        </div>
-        <Link to={PATH.DASHBOARD_BLOG_CREATE} className='bg-blue-700 text-white text-sm rounded p-2 flex items-center'>
-          <PlusIcon className='w-4 h-4 mr-2 stroke-[3]' />
-          Tạo mới
-        </Link>
-      </div>
-
       <Table
+        tableName='Danh sách blog'
         data={extendedBlogs}
+        totalRows={total || 0}
         columns={[
           {
             field: 'checkbox',
