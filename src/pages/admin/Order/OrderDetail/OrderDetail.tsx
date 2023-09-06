@@ -10,7 +10,7 @@ import { EmptyImage } from 'src/components/Icons';
 import Loading from 'src/components/Loading';
 import Modal from 'src/components/Modal';
 import { PaymentMethod, ReceiveMethod } from 'src/constants/enum';
-import { formatCurrency, getImageUrl } from 'src/utils/utils';
+import { convertMomentFromNowToVietnamese, formatCurrency, getImageUrl } from 'src/utils/utils';
 import { orderStatus } from '../OrderList/OrderList';
 import { ORDER_PROGRESS } from './constants';
 import classNames from 'classnames';
@@ -103,7 +103,8 @@ const OrderDetail = () => {
                 <div>
                   <h3 className='font-semibold mb-2'>Đặt lúc</h3>
                   <p className='text-slate-700'>
-                    {moment(order.created_at).format('kk:mm, DD.MM.YYYY')} ({moment(order.created_at).fromNow()})
+                    {moment(order.created_at).format('kk:mm, DD.MM.YYYY')} (
+                    {convertMomentFromNowToVietnamese(moment(order.created_at).fromNow())})
                   </p>
                 </div>
               </div>
@@ -112,7 +113,8 @@ const OrderDetail = () => {
                 <div>
                   <h3 className='font-semibold mb-2'>Cập nhật</h3>
                   <p className='text-slate-700'>
-                    {moment(order.updated_at).format('kk:mm, DD.MM.YYYY')} ({moment(order.updated_at).fromNow()})
+                    {moment(order.updated_at).format('kk:mm, DD.MM.YYYY')} (
+                    {convertMomentFromNowToVietnamese(moment(order.updated_at).fromNow())})
                   </p>
                 </div>
               </div>

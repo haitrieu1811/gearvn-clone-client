@@ -57,3 +57,19 @@ export const htmlToMarkdown = (html: string) => {
   const turndownService = new turndown();
   return turndownService.turndown(html);
 };
+
+export const convertMomentFromNowToVietnamese = (momentFromNow: string) => {
+  return momentFromNow
+    .replace('a few seconds ago', 'vài giây trước')
+    .replace('seconds ago', 'giây trước')
+    .replace('a minute ago', '1 phút trước')
+    .replace('minutes ago', 'phút trước')
+    .replace('an hour ago', '1 giờ trước')
+    .replace('hours ago', 'giờ trước')
+    .replace('a day ago', '1 ngày trước')
+    .replace('days ago', 'ngày trước')
+    .replace('a month ago', '1 tháng trước')
+    .replace('months ago', 'tháng trước')
+    .replace('a year ago', '1 năm trước')
+    .replace('years ago', 'năm trước');
+};

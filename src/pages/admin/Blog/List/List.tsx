@@ -16,6 +16,7 @@ import PATH from 'src/constants/path';
 import { AppContext } from 'src/contexts/app.context';
 import UseQueryParams from 'src/hooks/useQueryParams';
 import { GetBlogListRequestQuery } from 'src/types/blog.type';
+import { convertMomentFromNowToVietnamese } from 'src/utils/utils';
 
 type QueryConfig = {
   [key in keyof GetBlogListRequestQuery]: string;
@@ -147,8 +148,8 @@ const List = () => {
         rows={extendedBlogs.map((blog, index) => ({
           checkbox: <Checkbox checked={blog.checked} onChange={handleCheck(index)} />,
           blogName: blog.name_vi,
-          createdAt: moment(blog.created_at).fromNow(),
-          updatedAt: moment(blog.updated_at).fromNow(),
+          createdAt: convertMomentFromNowToVietnamese(moment(blog.created_at).fromNow()),
+          updatedAt: convertMomentFromNowToVietnamese(moment(blog.updated_at).fromNow()),
           actions: (
             <TableAction
               editPath={`${PATH.DASHBOARD_BLOG_UPDATE_WITHOUT_ID}/${blog._id}`}

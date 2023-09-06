@@ -7,6 +7,9 @@ import { Brand } from 'src/types/brand.type';
 import { Product } from 'src/types/product.type';
 import { BlogListItem } from 'src/types/blog.type';
 import { Purchase } from 'src/types/purchase.type';
+import { useMutation } from '@tanstack/react-query';
+import notificationApi from 'src/apis/notification.api';
+import { AddNotificationRequestBody } from 'src/types/notification.type';
 
 interface ExtendedCategory extends Category {
   checked: boolean;
@@ -45,6 +48,7 @@ interface AppContextType {
   setExtendedBlogs: Dispatch<SetStateAction<ExtendedBlog[]>>;
   extendedCartList: ExtendedPurchase[];
   setExtendedCartList: Dispatch<SetStateAction<ExtendedPurchase[]>>;
+  handleAddNotification: ({ title, content, type, path }: AddNotificationRequestBody) => void;
 }
 
 const initialContext = {
@@ -62,7 +66,8 @@ const initialContext = {
   extendedBlogs: [],
   setExtendedBlogs: () => null,
   extendedCartList: [],
-  setExtendedCartList: () => null
+  setExtendedCartList: () => null,
+  handleAddNotification: () => null
 };
 
 export const AppContext = createContext<AppContextType>(initialContext);
@@ -81,25 +86,40 @@ const AppProvider = ({ children }: { children: ReactNode }) => {
     setProfile(null);
   };
 
-  const VALUES = {
-    isAuthenticated,
-    setIsAuthenticated,
-    profile,
-    setProfile,
-    reset,
-    extendedCategories,
-    setExtendedCategories,
-    extendedBrands,
-    setExtendedBrands,
-    extendedProducts,
-    setExtendedProducts,
-    extendedBlogs,
-    setExtendedBlogs,
-    extendedCartList,
-    setExtendedCartList
+  // Mutation thêm thông báo
+  const addNotificationMutation = useMutation({
+    mutationFn: notificationApi.addNotification
+  });
+
+  // Xử lý thêm thông báo
+  const handleAddNotification = ({ title, content, type, path }: AddNotificationRequestBody) => {
+    addNotificationMutation.mutate({ title, content, type, path });
   };
 
-  return <AppContext.Provider value={VALUES}>{children}</AppContext.Provider>;
+  return (
+    <AppContext.Provider
+      value={{
+        isAuthenticated,
+        setIsAuthenticated,
+        profile,
+        setProfile,
+        reset,
+        extendedCategories,
+        setExtendedCategories,
+        extendedBrands,
+        setExtendedBrands,
+        extendedProducts,
+        setExtendedProducts,
+        extendedBlogs,
+        setExtendedBlogs,
+        extendedCartList,
+        setExtendedCartList,
+        handleAddNotification
+      }}
+    >
+      {children}
+    </AppContext.Provider>
+  );
 };
 
 export default AppProvider;

@@ -14,6 +14,7 @@ import { OrderStatus } from 'src/constants/enum';
 import PATH from 'src/constants/path';
 import UseQueryParams from 'src/hooks/useQueryParams';
 import { GetOrderListRequestParams } from 'src/types/order.type';
+import { convertMomentFromNowToVietnamese } from 'src/utils/utils';
 
 type QueryConfig = {
   [key in keyof GetOrderListRequestParams]: string;
@@ -92,6 +93,8 @@ const OrderList = () => {
       </div>
 
       <Table
+        totalRows={total || 0}
+        tableName='Danh sách đơn hàng'
         data={orders || []}
         columns={[
           {
@@ -141,7 +144,7 @@ const OrderList = () => {
             ),
             note: order.note || '',
             status: orderStatus[order.status as OrderStatus],
-            createdAt: moment(order.created_at).format('kk:mm, DD.MM.YYYY'),
+            createdAt: convertMomentFromNowToVietnamese(moment(order.created_at).fromNow()),
             actions: (
               <div className='flex items-center'>
                 <Link to={`${PATH.DASHBOARD_ORDER_DETAIL_WITHOUT_ID}/${order._id}`} className='text-blue-500'>

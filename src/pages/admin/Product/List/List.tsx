@@ -17,7 +17,7 @@ import { AppContext } from 'src/contexts/app.context';
 import useDebounce from 'src/hooks/useDebounce';
 import UseQueryParams from 'src/hooks/useQueryParams';
 import { GetProductsRequestParams } from 'src/types/product.type';
-import { formatCurrency } from 'src/utils/utils';
+import { convertMomentFromNowToVietnamese, formatCurrency } from 'src/utils/utils';
 
 type QueryConfig = {
   [key in keyof GetProductsRequestParams]: string;
@@ -132,60 +132,6 @@ const List = () => {
 
   return (
     <Fragment>
-      {/* <div className='p-4 pb-10 bg-white rounded flex justify-between items-center'>
-        <div className='flex'>
-          <div className='mr-2 relative'>
-            <input
-              type='text'
-              className='border border-[#cfcfcf] rounded outline-none pl-3 pr-5 text-sm h-full'
-              placeholder='Từ khóa tìm kiếm'
-              onChange={(e) => setKeywordSearch(e.target.value)}
-            />
-          </div>
-          {categories && (
-            <Filter
-              queryName='category'
-              label='Danh mục sản phẩm'
-              data={categories.map((category) => ({
-                value: category._id,
-                text: category.name_vi
-              }))}
-            />
-          )}
-          <div className='mx-1' />
-          {brands && brands.length > 0 && (
-            <Filter
-              queryName='brand'
-              label='Nhãn hiệu'
-              data={brands.map((brand) => ({
-                value: brand._id,
-                text: brand.name
-              }))}
-            />
-          )}
-        </div>
-        <div>
-          <Sort
-            data={[
-              {
-                orderBy: 'desc',
-                sortBy: 'created_at',
-                name: 'Nổi bật'
-              },
-              {
-                orderBy: 'desc',
-                sortBy: 'price_after_discount',
-                name: 'Giá giảm dần'
-              },
-              {
-                orderBy: 'asc',
-                sortBy: 'price_after_discount',
-                name: 'Giá tăng dần'
-              }
-            ]}
-          />
-        </div>
-      </div> */}
       <Table
         tableName='Danh sách sản phẩm'
         addNewPath={PATH.DASHBOARD_PRODUCT_CREATE}
@@ -246,8 +192,8 @@ const List = () => {
             priceAfterDiscount: formatCurrency(product.price_after_discount),
             category: product.category?.name_vi as string,
             brand: product.brand?.name as string,
-            createdAt: moment(product.created_at).fromNow(),
-            updatedAt: moment(product.updated_at).fromNow(),
+            createdAt: convertMomentFromNowToVietnamese(moment(product.created_at).fromNow()),
+            updatedAt: convertMomentFromNowToVietnamese(moment(product.updated_at).fromNow()),
             actions: (
               <TableAction
                 editPath={`${PATH.DASHBOARD_PRODUCT_UPDATE_WITHOUT_ID}/${product._id}`}

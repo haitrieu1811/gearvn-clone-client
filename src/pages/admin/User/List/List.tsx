@@ -15,7 +15,7 @@ import { Gender, UserRole, UserStatus } from 'src/constants/enum';
 import PATH from 'src/constants/path';
 import UseQueryParams from 'src/hooks/useQueryParams';
 import { GetUsersParams } from 'src/types/user.type';
-import { getImageUrl } from 'src/utils/utils';
+import { convertMomentFromNowToVietnamese, getImageUrl } from 'src/utils/utils';
 import { GENDERS, ROLES } from './constants';
 
 export type QueryConfig = {
@@ -87,6 +87,7 @@ const List = () => {
       </div>
 
       <Table
+        totalRows={getUsersQuery.data?.data.data.pagination.total || 0}
         data={users || []}
         columns={[
           {
@@ -141,8 +142,8 @@ const List = () => {
             gender: genders[user.gender],
             type: user.role === UserRole.Customer ? 'Khách hàng' : 'Nhân viên',
             status: user.status === UserStatus.Active ? 'Hoạt động' : 'Đã khóa',
-            createdAt: moment(user.created_at).fromNow(),
-            updatedAt: moment(user.updated_at).fromNow(),
+            createdAt: convertMomentFromNowToVietnamese(moment(user.created_at).fromNow()),
+            updatedAt: convertMomentFromNowToVietnamese(moment(user.updated_at).fromNow()),
             actions: (
               <TableAction
                 editPath={`${PATH.DASHBOARD_PRODUCT_UPDATE_WITHOUT_ID}/${user._id}`}

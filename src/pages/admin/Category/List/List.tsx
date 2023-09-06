@@ -18,6 +18,7 @@ import PATH from 'src/constants/path';
 import { AppContext } from 'src/contexts/app.context';
 import UseQueryParams from 'src/hooks/useQueryParams';
 import { GetCategoriesRequestParams } from 'src/types/category.type';
+import { convertMomentFromNowToVietnamese } from 'src/utils/utils';
 
 type QueryConfig = {
   [key in keyof GetCategoriesRequestParams]: string;
@@ -142,6 +143,7 @@ const List = () => {
       </div>
 
       <Table
+        totalRows={getCategoriesQuery.data?.data.data.pagination.total || 0}
         data={extendedCategories}
         columns={[
           {
@@ -174,8 +176,8 @@ const List = () => {
           checkbox: <Checkbox checked={category.checked} onChange={handleCheckOne(index)} />,
           nameVi: category.name_vi,
           nameEn: category.name_en,
-          createdAt: moment(category.created_at).fromNow(),
-          updatedAt: moment(category.updated_at).fromNow(),
+          createdAt: convertMomentFromNowToVietnamese(moment(category.created_at).fromNow()),
+          updatedAt: convertMomentFromNowToVietnamese(moment(category.updated_at).fromNow()),
           actions: (
             <TableAction
               editPath={`${PATH.DASHBOARD_CATEGORY_UPDATE_WITHOUT_ID}/${category._id}`}

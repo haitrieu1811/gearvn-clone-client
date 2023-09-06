@@ -1,22 +1,23 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import classNames from 'classnames';
+import PropTypes from 'prop-types';
 import { Fragment, useContext, useEffect, useMemo, useState } from 'react';
+import { useMediaQuery } from 'react-responsive';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import PropTypes from 'prop-types';
-import { useMediaQuery } from 'react-responsive';
 
+import mediaApi from 'src/apis/media.api';
 import productApi from 'src/apis/product.api';
+import CONFIG from 'src/constants/config';
+import { NotificationType } from 'src/constants/enum';
 import PATH from 'src/constants/path';
 import { AppContext } from 'src/contexts/app.context';
 import { Product } from 'src/types/product.type';
 import { getImageUrl } from 'src/utils/utils';
 import Button from '../Button';
 import { CloseIcon, SendReviewIcon, StarIcon, UploadIcon } from '../Icons';
-import Modal from '../Modal';
 import InputFile from '../InputFile';
-import mediaApi from 'src/apis/media.api';
-import CONFIG from 'src/constants/config';
+import Modal from '../Modal';
 
 interface SendReviewProps {
   product: Product;
@@ -33,7 +34,7 @@ const SendReview = ({ product }: SendReviewProps) => {
   const [reaction, setReaction] = useState<string>('');
   const [selected, setSelected] = useState<boolean>(false);
   const [images, setImages] = useState<File[]>([]);
-  const { isAuthenticated } = useContext(AppContext);
+  const { isAuthenticated, profile, handleAddNotification } = useContext(AppContext);
 
   // Lấy chi tiết đánh giá
   const getReviewDetailQuery = useQuery({
@@ -119,7 +120,7 @@ const SendReview = ({ product }: SendReviewProps) => {
   // Upload hình ảnh đính kèm
   const uploadImageMutation = useMutation(mediaApi.uploadImage);
 
-  // Gửi đánh giá
+  // Mutation gửi đánh giá
   const addReviewMutation = useMutation({
     mutationFn: productApi.addReview,
     onSuccess: (data) => {
@@ -129,6 +130,12 @@ const SendReview = ({ product }: SendReviewProps) => {
       setComment('');
       setCurrentStart(null);
       setSelected(false);
+      handleAddNotification({
+        title: 'Đánh giá sản phẩm',
+        content: `<strong classname='font-semibold'>${profile?.fullName}</strong> vừa đánh giá sản phẩm <strong>${product.name_vi}</strong> của bạn`,
+        type: NotificationType.NewReview,
+        path: window.location.href
+      });
       queryClient.invalidateQueries(['getReviews', product._id]);
       queryClient.invalidateQueries(['product', product._id]);
       queryClient.invalidateQueries(['getReviewDetail', product._id]);

@@ -38,6 +38,7 @@
     "react-responsive": "^9.0.2",
     "react-router-dom": "^6.14.1",
     "react-toastify": "^9.1.3",
+    "socket.io-client": "^4.7.2",
     "swiper": "^10.0.4",
     "turndown": "^7.1.2",
     "yup": "^1.2.0"

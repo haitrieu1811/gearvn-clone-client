@@ -129,7 +129,7 @@ const Table = ({
                 <tr>
                   {columns.map((column, index) => (
                     <td key={index} width={`${column.width}%`}>
-                      <section className='text-sm font-semibold px-6 py-3'>{column.headerName}</section>
+                      <section className='text-sm font-semibold px-2 py-3'>{column.headerName}</section>
                     </td>
                   ))}
                 </tr>
@@ -139,7 +139,7 @@ const Table = ({
                   <tr key={index} className='border-t hover:bg-slate-50 hover:cursor-pointer'>
                     {columns.map((column, _index) => (
                       <td key={_index}>
-                        <section className='text-sm text-slate-600 px-6 py-3'>
+                        <section className='text-sm text-slate-600 px-2 py-3'>
                           <span className='line-clamp-1'>{row[column.field]}</span>
                         </section>
                       </td>

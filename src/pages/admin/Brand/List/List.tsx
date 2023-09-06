@@ -17,6 +17,7 @@ import PATH from 'src/constants/path';
 import { AppContext } from 'src/contexts/app.context';
 import UseQueryParams from 'src/hooks/useQueryParams';
 import { GetBrandsRequestParams } from 'src/types/brand.type';
+import { convertMomentFromNowToVietnamese } from 'src/utils/utils';
 
 type QueryConfig = {
   [key in keyof GetBrandsRequestParams]: string;
@@ -129,6 +130,7 @@ const List = () => {
         </Link>
       </div>
       <Table
+        totalRows={getBrandsQuery.data?.data.data.pagination.total || 0}
         data={extendedBrands}
         columns={[
           {
@@ -160,8 +162,8 @@ const List = () => {
         rows={extendedBrands.map((brand, index) => ({
           checkbox: <Checkbox checked={brand.checked} onChange={handleCheckOne(index)} />,
           name: brand.name,
-          createdAt: moment(brand.created_at).fromNow(),
-          updatedAt: moment(brand.updated_at).fromNow(),
+          createdAt: convertMomentFromNowToVietnamese(moment(brand.created_at).fromNow()),
+          updatedAt: convertMomentFromNowToVietnamese(moment(brand.updated_at).fromNow()),
           actions: (
             <TableAction
               editPath={`${PATH.DASHBOARD_BRAND_UPDATE_WITHOUT_ID}/${brand._id}`}

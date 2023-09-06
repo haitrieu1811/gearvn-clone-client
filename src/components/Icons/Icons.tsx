@@ -705,13 +705,8 @@ export const LogoutFillIcon = ({ className }: IconProps) => (
   </svg>
 );
 
-export const EmptyImage = () => (
-  <svg
-    viewBox='0 0 132 170'
-    fill='none'
-    xmlns='http://www.w3.org/2000/svg'
-    className='w-[66px] h-[85px] md:w-[132px] md:h-[170px]'
-  >
+export const EmptyImage = ({ className = 'w-[66px] h-[85px] md:w-[132px] md:h-[170px]' }: IconProps) => (
+  <svg viewBox='0 0 132 170' fill='none' xmlns='http://www.w3.org/2000/svg' className={className}>
     <g clipPath='url(#clip0_6133_13905)'>
       <path
         d='M125.486 120.371H113.585V91.6562H132V113.845C132 117.451 129.086 120.371 125.486 120.371Z'

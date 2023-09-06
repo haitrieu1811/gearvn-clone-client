@@ -4,7 +4,6 @@ import { Link } from 'react-router-dom';
 
 import fallbackAvatar from 'src/assets/images/fallback-avatar.jpg';
 import Back from 'src/components/Back';
-import { BellIcon } from 'src/components/Icons';
 import Notification from 'src/components/Notification';
 import PATH from 'src/constants/path';
 import { AppContext } from 'src/contexts/app.context';
@@ -51,14 +50,7 @@ const DashboardLayout = ({ children }: { children: ReactNode }) => {
                 </div>
               </Tippy>
             )}
-            <Tippy interactive trigger='click' placement='bottom-end' offset={[0, 10]} render={() => <Notification />}>
-              <button className='bg-slate-50 w-8 h-8 rounded flex justify-center items-center mr-4 relative'>
-                <BellIcon className='w-5 h-5 fill-none' />
-                <span className='absolute top-0 right-0  bg-red-500 text-[9px] text-white font-bold rounded-full w-4 h-4 flex justify-center items-center'>
-                  2
-                </span>
-              </button>
-            </Tippy>
+            <Notification />
           </div>
         </header>
         <div className='min-h-screen p-4 pb-0'>
