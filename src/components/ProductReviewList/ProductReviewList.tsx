@@ -68,6 +68,7 @@ const ProductReviewList = ({ productId }: ProductReviewListProps) => {
         !getReviewsQuery.isLoading &&
         reviews.map((review) => (
           <ProductReviewItem
+            key={review._id}
             review={review}
             currentReview={currentReview}
             startReply={startReply}

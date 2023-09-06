@@ -3,7 +3,6 @@ import { toast } from 'react-toastify';
 
 import { URL_LOGIN, URL_LOGOUT, URL_REFRESH_TOKEN, URL_REGISTER } from 'src/apis/auth.api';
 import { URL_RESET_PASSWORD, URL_VERIFY_EMAIL } from 'src/apis/user.api';
-import CONFIG from 'src/constants/config';
 import { HttpStatusCode } from 'src/constants/enum';
 import { AuthResponse, RefreshTokenResponse } from 'src/types/auth.type';
 import { User } from 'src/types/user.type';
@@ -31,7 +30,7 @@ class Http {
     this.refreshTokenRequest = null;
     this.profile = null;
     this.instance = axios.create({
-      baseURL: CONFIG.BACKEND_BASE_URL,
+      baseURL: import.meta.env.VITE_API_URL,
       timeout: 10000,
       headers: {
         'Content-Type': 'application/json'

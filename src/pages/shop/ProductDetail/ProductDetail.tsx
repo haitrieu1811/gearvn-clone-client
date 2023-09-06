@@ -21,6 +21,7 @@ import PATH from 'src/constants/path';
 import { AppContext } from 'src/contexts/app.context';
 import { formatCurrency, generateNameId, getIdFromNameId, getImageUrl, rateSale } from 'src/utils/utils';
 import SliderImages from './SliderImages';
+import socket from 'src/utils/socket';
 
 const ProductDetail = () => {
   const queryClient = useQueryClient();
@@ -32,6 +33,23 @@ const ProductDetail = () => {
   const [readMore, setReadMore] = useState<boolean>(false);
   const { isAuthenticated } = useContext(AppContext);
   const reviewsRef = useRef<HTMLDivElement>(null);
+
+  // Kết nối socket
+  useEffect(() => {
+    // Ngắt kết nối
+    socket.on('disconnect', (reason) => {
+      console.log(reason);
+    });
+
+    // Lỗi
+    socket.on('connect_error', (error) => {
+      console.log(error);
+    });
+
+    return () => {
+      socket.disconnect();
+    };
+  }, []);
 
   // Đánh dấu đã mount component
   useEffect(() => {
