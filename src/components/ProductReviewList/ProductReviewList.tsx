@@ -1,10 +1,11 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
 import PropTypes from 'prop-types';
-import { ChangeEvent, FormEvent, Fragment, useMemo, useState } from 'react';
+import { ChangeEvent, FormEvent, Fragment, useEffect, useMemo, useState } from 'react';
 
 import productApi from 'src/apis/product.api';
 import Loading from '../Loading';
 import ProductReviewItem from '../ProductReviewItem';
+import socket from 'src/utils/socket';
 
 interface ProductReviewListProps {
   productId: string;
@@ -13,6 +14,13 @@ interface ProductReviewListProps {
 const ProductReviewList = ({ productId }: ProductReviewListProps) => {
   const [currentReview, setCurrentReview] = useState<string | null>(null);
   const [commentReply, setCommentReply] = useState<string>('');
+
+  // Kết nối socket
+  useEffect(() => {
+    socket.on('receive_product_review', () => {
+      getReviewsQuery.refetch();
+    });
+  }, []);
 
   // Lấy danh sách đánh giá sản phẩm
   const getReviewsQuery = useQuery({

@@ -1,14 +1,15 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
-import classNames from 'classnames';
-import moment from 'moment';
-import { useMemo } from 'react';
 import Tippy from '@tippyjs/react/headless';
+import classNames from 'classnames';
 import DOMPurify from 'dompurify';
+import moment from 'moment';
+import { useEffect, useMemo } from 'react';
+import { Link } from 'react-router-dom';
 
 import notificationApi from 'src/apis/notification.api';
+import socket from 'src/utils/socket';
 import { convertMomentFromNowToVietnamese, getImageUrl } from 'src/utils/utils';
 import { BellIcon, EllipsisHorizontalIcon, EmptyImage } from '../Icons';
-import { Link } from 'react-router-dom';
 
 const Notification = () => {
   // Query lấy danh sách thông báo
@@ -16,6 +17,13 @@ const Notification = () => {
     queryKey: ['notifications'],
     queryFn: () => notificationApi.getNotifications()
   });
+
+  // Socket lắng nghe sự kiện có thông báo mới
+  useEffect(() => {
+    socket.on('receive_notification', () => {
+      getNotificationsQuery.refetch();
+    });
+  }, []);
 
   // Danh sách thông báo
   const notifications = useMemo(
@@ -85,7 +93,7 @@ const Notification = () => {
                     alt={notification.sender.fullName}
                     className='w-9 h-9 rounded object-cover'
                   />
-                  <Link to={notification.path} className='flex-1 ml-5' target='_blank'>
+                  <Link to={notification.path} className='flex-1 ml-5'>
                     <div
                       className='text-slate-600 text-sm line-clamp-3'
                       dangerouslySetInnerHTML={{

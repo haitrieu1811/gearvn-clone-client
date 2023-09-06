@@ -13,6 +13,7 @@ import { NotificationType } from 'src/constants/enum';
 import PATH from 'src/constants/path';
 import { AppContext } from 'src/contexts/app.context';
 import { Product } from 'src/types/product.type';
+import socket from 'src/utils/socket';
 import { getImageUrl } from 'src/utils/utils';
 import Button from '../Button';
 import { CloseIcon, SendReviewIcon, StarIcon, UploadIcon } from '../Icons';
@@ -34,7 +35,7 @@ const SendReview = ({ product }: SendReviewProps) => {
   const [reaction, setReaction] = useState<string>('');
   const [selected, setSelected] = useState<boolean>(false);
   const [images, setImages] = useState<File[]>([]);
-  const { isAuthenticated, profile, handleAddNotification } = useContext(AppContext);
+  const { isAuthenticated, profile } = useContext(AppContext);
 
   // Lấy chi tiết đánh giá
   const getReviewDetailQuery = useQuery({
@@ -130,15 +131,18 @@ const SendReview = ({ product }: SendReviewProps) => {
       setComment('');
       setCurrentStart(null);
       setSelected(false);
-      handleAddNotification({
-        title: 'Đánh giá sản phẩm',
-        content: `<strong classname='font-semibold'>${profile?.fullName}</strong> vừa đánh giá sản phẩm <strong>${product.name_vi}</strong> của bạn`,
-        type: NotificationType.NewReview,
-        path: window.location.href
-      });
       queryClient.invalidateQueries(['getReviews', product._id]);
       queryClient.invalidateQueries(['product', product._id]);
       queryClient.invalidateQueries(['getReviewDetail', product._id]);
+      // Gửi thông báo
+      socket.emit('send_product_review', {
+        type: NotificationType.NewReview,
+        title: 'Có đánh giá mới',
+        content: `<strong>${profile?.fullName || ''}</strong> đã đánh giá sản phẩm <strong>${product.name_vi}</strong>`,
+        path: window.location.href,
+        sender_id: profile?._id,
+        receiver_id: product.author._id
+      });
     }
   });
 

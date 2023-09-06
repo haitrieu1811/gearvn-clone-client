@@ -28,6 +28,12 @@ export interface Product {
   created_at: string;
   updated_at: string;
 
+  author: {
+    _id: string;
+    email: string;
+    fullName: string;
+    avatar: string;
+  };
   brand?: Brand;
   category?: Category;
   general_info: string;
@@ -73,7 +79,7 @@ export interface ProductReviewDetail {
   updated_at: string;
 }
 
-// Request
+// Request: Lấy danh sách sản phẩm
 export interface GetProductsRequestParams {
   page?: string;
   limit?: string;
@@ -84,6 +90,7 @@ export interface GetProductsRequestParams {
   orderBy?: string;
 }
 
+// Request: Tạo và cập nhật sản phẩm
 export interface CreateAndUpdateProductBody {
   name_vi: string;
   name_en: string;
@@ -97,6 +104,7 @@ export interface CreateAndUpdateProductBody {
   available_count: number;
 }
 
+// Request: Thêm đánh giá
 export interface AddReviewRequestBody {
   comment?: string;
   rating?: number;
@@ -104,25 +112,29 @@ export interface AddReviewRequestBody {
   images?: string[];
 }
 
-// Response
+// Response: Lấy danh sách sản phẩm
 export type GetProductsResponse = SuccessResponse<{
   products: Product[];
   pagination: Pagination;
 }>;
 
+// Response: Lấy chi tiết sản phẩm
 export type GetProductDetailResponse = SuccessResponse<{
   product: Product;
 }>;
 
+// Response: Tạo sản phẩm
 export type CreateProductResponse = SuccessResponse<{
   insertedId: string;
 }>;
 
+// Response: Lấy danh sách đánh giá
 export type GetReviewsResponse = SuccessResponse<{
   reviews: ProductReview[];
   pagination: Pagination;
 }>;
 
+// Response: Lấy chi tiết đánh giá
 export type GetReviewDetailResponse = SuccessResponse<{
   review: ProductReviewDetail;
 }>;

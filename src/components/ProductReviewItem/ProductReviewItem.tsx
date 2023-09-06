@@ -10,6 +10,7 @@ import { AppContext } from 'src/contexts/app.context';
 import { ProductReview, ProductReviewReply } from 'src/types/product.type';
 import { getImageUrl } from 'src/utils/utils';
 import { EllipsisHorizontalIcon, StarIcon } from '../Icons';
+import socket from 'src/utils/socket';
 
 interface ProductReviewItemProps {
   review: ProductReview;
@@ -59,6 +60,7 @@ const ProductReviewItem = ({
       queryClient.invalidateQueries(['getReviews']);
       queryClient.invalidateQueries(['product']);
       queryClient.invalidateQueries(['getReviewDetail']);
+      socket.emit('delete_product_review');
     }
   });
 
