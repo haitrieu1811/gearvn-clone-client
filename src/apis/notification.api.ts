@@ -1,4 +1,8 @@
-import { AddNotificationRequestBody, GetNotificationsResponse } from 'src/types/notification.type';
+import {
+  AddNotificationRequestBody,
+  GetNotificationsRequestParams,
+  GetNotificationsResponse
+} from 'src/types/notification.type';
 import { OnlyMessageResponse } from 'src/types/utils.type';
 import http from 'src/utils/http';
 
@@ -8,8 +12,8 @@ const notificationApi = {
     return http.post<OnlyMessageResponse>('/notifications', body);
   },
   // Lấy danh sách thông báo
-  getNotifications() {
-    return http.get<GetNotificationsResponse>('/notifications');
+  getNotifications(params?: GetNotificationsRequestParams) {
+    return http.get<GetNotificationsResponse>('/notifications', { params });
   },
   // Xóa thông báo
   deleteNotifications(notificationId?: string) {

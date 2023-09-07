@@ -89,7 +89,7 @@ const ProductReviewItem = ({
           offset={[0, 0]}
           render={() => (
             <div className='bg-white shadow-lg rounded overflow-hidden'>
-              {review.comment.length > 0 && (
+              {review.comment && review.comment.length > 0 && (
                 <button
                   onClick={() => startReply(review._id)}
                   className='w-full pl-4 pr-10 py-2 text-sm text-slate-500 flex items-center border-b hover:bg-slate-100'
@@ -122,7 +122,7 @@ const ProductReviewItem = ({
             ))}
         </div>
         <div className='flex-1 pl-4'>
-          {review.comment.length > 0 && <div className='text-sm mb-2'>{review.comment}</div>}
+          {review.comment && review.comment.length > 0 && <div className='text-sm mb-2'>{review.comment}</div>}
           {/* Hỉnh ảnh */}
           {review.images.length > 0 && (
             <div className='mb-2 flex'>

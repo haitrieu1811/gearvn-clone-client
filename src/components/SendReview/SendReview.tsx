@@ -141,7 +141,8 @@ const SendReview = ({ product }: SendReviewProps) => {
         content: `<strong>${profile?.fullName || ''}</strong> đã đánh giá sản phẩm <strong>${product.name_vi}</strong>`,
         path: window.location.href,
         sender_id: profile?._id,
-        receiver_id: product.author._id
+        receiver_id: product.author._id,
+        sender: profile
       });
     }
   });

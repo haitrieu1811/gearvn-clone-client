@@ -27,6 +27,12 @@ export interface AddNotificationRequestBody {
   path?: string;
 }
 
+// Request: Lấy danh sách thông báo
+export interface GetNotificationsRequestParams {
+  page?: number;
+  limit?: number;
+}
+
 // Response: Lấy danh sách thông báo
 export type GetNotificationsResponse = SuccessResponse<{
   unread_count: number;

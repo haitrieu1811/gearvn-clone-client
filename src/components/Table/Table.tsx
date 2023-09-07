@@ -124,7 +124,7 @@ const Table = ({
         </div>
         {data.length > 0 && !isLoading && (
           <Fragment>
-            <table className='w-full border'>
+            <table className='w-full'>
               <thead>
                 <tr>
                   {columns.map((column, index) => (
