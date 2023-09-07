@@ -13,20 +13,6 @@ import DashboardSidebar from '../components/DashboardSidebar';
 const DashboardLayout = ({ children }: { children: ReactNode }) => {
   const { profile } = useContext(AppContext);
 
-  const renderMenuUser = () => (
-    <div className='bg-white rounded shadow-lg'>
-      <Link
-        to={PATH.ACCOUNT_PROFILE}
-        className='block py-2 pl-5 pr-16 text-sm text-slate-500 hover:bg-slate-50 border-b'
-      >
-        Cập nhật tài khoản
-      </Link>
-      <Link to={PATH.ACCOUNT_PROFILE} className='block py-2 pl-5 pr-16 text-sm text-slate-500 hover:bg-slate-50'>
-        Đăng xuất
-      </Link>
-    </div>
-  );
-
   return (
     <div className='bg-[#f8f8f8] flex'>
       <DashboardSidebar />
@@ -36,7 +22,28 @@ const DashboardLayout = ({ children }: { children: ReactNode }) => {
           <Back />
           <div className='flex items-center'>
             {profile && (
-              <Tippy interactive trigger='click' placement='bottom-end' offset={[0, 5]} render={renderMenuUser}>
+              <Tippy
+                interactive
+                trigger='click'
+                placement='bottom-end'
+                offset={[0, 5]}
+                render={() => (
+                  <div className='bg-white rounded shadow-lg'>
+                    <Link
+                      to={PATH.ACCOUNT_PROFILE}
+                      className='block py-2 pl-5 pr-16 text-sm text-slate-500 hover:bg-slate-50 border-b'
+                    >
+                      Cập nhật tài khoản
+                    </Link>
+                    <Link
+                      to={PATH.ACCOUNT_PROFILE}
+                      className='block py-2 pl-5 pr-16 text-sm text-slate-500 hover:bg-slate-50'
+                    >
+                      Đăng xuất
+                    </Link>
+                  </div>
+                )}
+              >
                 <div className='flex items-center mr-10 cursor-pointer select-none'>
                   <img
                     src={profile.avatar ? getImageUrl(profile.avatar) : fallbackAvatar}

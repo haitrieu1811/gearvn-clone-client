@@ -5,9 +5,10 @@ import { UserRole } from 'src/constants/enum';
 import PATH from 'src/constants/path';
 import { AppContext } from 'src/contexts/app.context';
 
-import AuthLayout from 'src/layouts/AuthLayout/AuthLayout';
-import DashboardLayout from 'src/layouts/DashboardLayout/DashboardLayout';
-import MainLayout from 'src/layouts/MainLayout/MainLayout';
+import AuthLayout from 'src/layouts/AuthLayout';
+import DashboardLayout from 'src/layouts/DashboardLayout';
+import MainLayout from 'src/layouts/MainLayout';
+import ChatLayout from 'src/layouts/ChatLayout';
 
 import DashboardBlogCreate from 'src/pages/admin/Blog/Create';
 import DashboardBlog from 'src/pages/admin/Blog/List';
@@ -45,6 +46,7 @@ import ResetPassword from 'src/pages/shop/ResetPassword';
 import Search from 'src/pages/shop/Search';
 import VerifyEmail from 'src/pages/shop/VerifyEmail';
 import VerifyResetPasswordToken from 'src/pages/shop/VerifyForgotPasswordToken';
+import Chat from 'src/pages/shop/Chat';
 
 const ProtectedRoute = () => {
   const { isAuthenticated } = useContext(AppContext);
@@ -193,6 +195,14 @@ const useElement = () => {
               element: <CheckoutSuccess />
             }
           ]
+        },
+        {
+          path: PATH.CHAT,
+          element: (
+            <ChatLayout>
+              <Chat />
+            </ChatLayout>
+          )
         }
       ]
     },

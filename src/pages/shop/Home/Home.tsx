@@ -48,7 +48,7 @@ const Home = () => {
   return (
     <div className='my-2 lg:my-3'>
       <Helmet>
-        <title>Gearvn clone | Trang chủ</title>
+        <title>Gearvn Clone | Trang chủ</title>
         <meta
           name='description'
           content='Mua sắm đồ công nghệ chính hãng với giá tốt nhất tại Gearvn-clone. Chúng tôi cung cấp đa dạng các sản phẩm công nghệ từ các thương hiệu nổi tiếng như Apple, Samsung, Huawei, Xiaomi,...'
