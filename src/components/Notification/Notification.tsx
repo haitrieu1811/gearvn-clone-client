@@ -3,11 +3,12 @@ import Tippy from '@tippyjs/react/headless';
 import classNames from 'classnames';
 import DOMPurify from 'dompurify';
 import moment from 'moment';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { Link } from 'react-router-dom';
 
 import notificationApi from 'src/apis/notification.api';
+import { AppContext } from 'src/contexts/app.context';
 import { GetNotificationsRequestParams, Notification } from 'src/types/notification.type';
 import socket from 'src/utils/socket';
 import { convertMomentFromNowToVietnamese, getImageUrl } from 'src/utils/utils';
@@ -18,6 +19,7 @@ type QueryConfig = {
 };
 
 const Notification = () => {
+  const { profile } = useContext(AppContext);
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [unreadCount, setUnreadCount] = useState<number>(0);
   const [pagination, setPagination] = useState({
@@ -40,7 +42,7 @@ const Notification = () => {
 
   // Query lấy danh sách thông báo
   const getNotificationsQuery = useQuery({
-    queryKey: ['notifications', queryConfig],
+    queryKey: ['notifications', queryConfig, profile?._id],
     queryFn: () => notificationApi.getNotifications(queryConfig),
     keepPreviousData: true
   });
