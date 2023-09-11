@@ -40,7 +40,8 @@ const SendReview = ({ product }: SendReviewProps) => {
   // Lấy chi tiết đánh giá
   const getReviewDetailQuery = useQuery({
     queryKey: ['getReviewDetail', product._id],
-    queryFn: () => productApi.getReviewDetail(product._id)
+    queryFn: () => productApi.getReviewDetail(product._id),
+    enabled: isAuthenticated
   });
 
   // Chi tiết đánh giá

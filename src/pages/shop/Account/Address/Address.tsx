@@ -148,11 +148,11 @@ const Address = () => {
                   </div>
                 </div>
                 <div className='flex items-center ml-2 md:ml-4'>
-                  <button className='text-xs font-semibold text-[#005EC9]' onClick={() => startUpdate(address._id)}>
+                  <button className='text-sm font-semibold text-[#005EC9]' onClick={() => startUpdate(address._id)}>
                     Sửa
                   </button>
                   <div className='h-4 w-[1px] bg-slate-300 mx-1' />
-                  <button className='text-xs font-semibold text-primary' onClick={() => startDelete(address._id)}>
+                  <button className='text-sm font-semibold text-primary' onClick={() => startDelete(address._id)}>
                     Xóa
                   </button>
                 </div>

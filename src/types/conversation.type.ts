@@ -26,8 +26,12 @@ export interface ConversationReceiver {
   fullName: string;
   avatar: string;
   unread_count: number;
-  last_message: string;
-  updated_at: string;
+  last_message: {
+    _id: string;
+    content: string;
+    created_at: string;
+    updated_at: string;
+  } | null;
 }
 
 // Response: Lấy danh sách tin nhắn

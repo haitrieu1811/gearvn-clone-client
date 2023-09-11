@@ -35,7 +35,6 @@ const Filter = ({
     () => (queryName in queryParams ? queryParams[queryName].split('-') : []),
     [queryParams]
   );
-
   const [isActive, setIsActive] = useState<boolean>(false);
   const [choosenValue, setChoosenValue] = useState<string[]>(defaultValue);
   const isChoosen = useMemo(() => choosenValue.length > 0, [choosenValue]);
@@ -55,7 +54,6 @@ const Filter = ({
     let newChoosenValue: string[];
     if (!choosenValue.includes(value)) newChoosenValue = [...choosenValue, value];
     else newChoosenValue = choosenValue.filter((item) => item !== value);
-
     if (newChoosenValue.length > 0) setChoosenValue(newChoosenValue);
     else handleUnChoose();
   };
@@ -83,59 +81,55 @@ const Filter = ({
     }
   };
 
-  const render = () => {
-    return (
-      <div className='rounded max-w-[500px] shadow-3xl bg-white relative before:absolute before:left-6 before:bottom-full before:border-[11px] before:border-transparent before:border-b-white'>
-        <div className='first:-ml-2 p-4'>
-          {data.map((item) => (
-            <button
-              key={item.value}
-              className={classNames(childrenClassName, {
-                'border-[#1982F9] text-[#1982F9]': choosenValue.includes(item.value),
-                'border-[#cfcfcf] hover:border-[#1982F9] hover:text-[#1982F9]': !choosenValue.includes(item.value)
-              })}
-              onClick={() => handleChoose(item.value)}
-            >
-              {item.text}
-            </button>
-          ))}
-        </div>
-        <div className='border-t p-4 flex justify-center'>
-          <button
-            className={classNames(
-              'py-[6px] px-6 md:px-10 border border-primary rounded text-xs md:text-sm text-primary',
-              {
-                'pointer-events-none': !isChoosen,
-                'opacity-50': !isChoosen
-              }
-            )}
-            onClick={handleUnChoose}
-          >
-            Bỏ chọn
-          </button>
-          <button
-            className={classNames('py-[6px] px-6 md:px-10 rounded text-xs md:text-sm text-white bg-[#1982F9] ml-3', {
-              'pointer-events-none': !isChoosen,
-              'opacity-50': !isChoosen
-            })}
-            onClick={handleSeeResult}
-          >
-            Xem kết quả
-          </button>
-        </div>
-      </div>
-    );
-  };
-
   return (
     <Tippy
-      render={render}
       trigger='click'
       interactive
       placement='bottom-start'
       offset={[0, 11]}
       onShow={onShow}
       onHide={onHide}
+      render={() => (
+        <div className='rounded max-w-[500px] shadow-3xl bg-white relative before:absolute before:left-6 before:bottom-full before:border-[11px] before:border-transparent before:border-b-white'>
+          <div className='first:-ml-2 p-4'>
+            {data.map((item) => (
+              <button
+                key={item.value}
+                className={classNames(childrenClassName, {
+                  'border-[#1982F9] text-[#1982F9]': choosenValue.includes(item.value),
+                  'border-[#cfcfcf] hover:border-[#1982F9] hover:text-[#1982F9]': !choosenValue.includes(item.value)
+                })}
+                onClick={() => handleChoose(item.value)}
+              >
+                {item.text}
+              </button>
+            ))}
+          </div>
+          <div className='border-t p-4 flex justify-center'>
+            <button
+              className={classNames(
+                'py-[6px] px-6 md:px-10 border border-primary rounded text-xs md:text-sm text-primary',
+                {
+                  'pointer-events-none': !isChoosen,
+                  'opacity-50': !isChoosen
+                }
+              )}
+              onClick={handleUnChoose}
+            >
+              Bỏ chọn
+            </button>
+            <button
+              className={classNames('py-[6px] px-6 md:px-10 rounded text-xs md:text-sm text-white bg-[#1982F9] ml-3', {
+                'pointer-events-none': !isChoosen,
+                'opacity-50': !isChoosen
+              })}
+              onClick={handleSeeResult}
+            >
+              Xem kết quả
+            </button>
+          </div>
+        </div>
+      )}
     >
       <button
         className={classNames(parentClassName, {

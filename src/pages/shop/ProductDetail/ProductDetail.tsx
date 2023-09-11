@@ -157,7 +157,9 @@ const ProductDetail = () => {
                 <h1 className='font-semibold text-[20px] md:text-2xl mb-2'>{product.name_vi}</h1>
                 <div className='flex items-center mb-4'>
                   <div className='flex items-center mr-4'>
-                    <span className='text-[#ff8a00] font-semibold mr-[2px]'>{product.rating_score || 0}</span>
+                    <span className='text-[#ff8a00] font-semibold mr-[2px]'>
+                      {product.rating_score ? product.rating_score.toFixed(1) : 0}
+                    </span>
                     <StarIcon className='w-3 h-3 text-[#ff8a00]' />
                   </div>
                   <button type='button' className='text-[#1982F9]' onClick={handleSeeReviews}>

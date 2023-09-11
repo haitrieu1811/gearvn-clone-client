@@ -1,4 +1,4 @@
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
 import classNames from 'classnames';
 import moment from 'moment';
 import { FormEvent, Fragment, useContext, useEffect, useMemo, useState } from 'react';
@@ -6,31 +6,31 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 
 import conversationApi from 'src/apis/conversation.api';
 import { AppContext } from 'src/contexts/app.context';
-import { Conversation } from 'src/types/conversation.type';
+import { Conversation, ConversationReceiver } from 'src/types/conversation.type';
 import socket from 'src/utils/socket';
 import { convertMomentFromNowToVietnamese } from 'src/utils/utils';
-import { ChatIcon, ChevronDownIcon, ConversationIcon, LoadingIcon, SendMessageIcon } from '../Icons';
+import { ChatIcon, ChevronDownIcon, ChevronLeftIcon, ConversationIcon, LoadingIcon, SendMessageIcon } from '../Icons';
 import Image from '../Image';
-
-const CONVERSATION_LIMIT = 20;
 
 const ChatBox = () => {
   const { profile } = useContext(AppContext);
   const [visible, setVisible] = useState<boolean>(false);
-  const [currentReceiverId, setCurrentReceiverId] = useState<string | null>(null);
+  const [currentReceiver, setCurrentReceiver] = useState<ConversationReceiver | null>(null);
   const [conversations, setConversations] = useState<Conversation[]>([]);
   const [message, setMessage] = useState<string>('');
-  const [pagination, setPagination] = useState<{ page: number; pageSize: number }>({
-    page: 1,
-    pageSize: 0
-  });
 
   // Nhận tin nhắn từ socket server và hiển thị lên màn hình
   useEffect(() => {
     socket.on('receive_message', (newConversation) => {
+      getReceiversQuery.refetch();
+      // Nếu đang ở một cuộc trò chuyện khác thì không hiển thị tin nhắn
+      if (newConversation.sender._id !== currentReceiver?._id) return;
       setConversations((prev) => [newConversation, ...prev]);
     });
-  }, []);
+    return () => {
+      socket.off('receive_message');
+    };
+  }, [currentReceiver?._id]);
 
   // Query: Lấy dánh sách người đã nhắn tin với mình
   const getReceiversQuery = useQuery({
@@ -39,72 +39,80 @@ const ChatBox = () => {
   });
 
   // Query: Lấy tin nhắn giữa mình và người nhận
-  const getConversationsQuery = useQuery({
-    queryKey: ['conversations', currentReceiverId, pagination.page],
-    queryFn: () =>
+  const getConversationsQuery = useInfiniteQuery({
+    queryKey: ['conversations', currentReceiver?._id],
+    queryFn: ({ pageParam = 1 }) =>
       conversationApi.getConversations({
-        receiverId: currentReceiverId as string,
-        page: pagination.page,
-        limit: CONVERSATION_LIMIT
+        receiverId: currentReceiver?._id as string,
+        page: pageParam,
+        limit: 20
       }),
-    enabled: !!currentReceiverId,
+    getNextPageParam: (lastPage) => {
+      return lastPage.data.data.pagination.page < lastPage.data.data.pagination.page_size
+        ? lastPage.data.data.pagination.page + 1
+        : undefined;
+    },
+    enabled: !!currentReceiver?._id,
     keepPreviousData: true
   });
 
-  // Mutation: Đọc tin nhắn
-  const readConversationsMutation = useMutation({
-    mutationFn: conversationApi.readConversations,
-    onSuccess: () => {
-      getReceiversQuery.refetch();
+  // Tải tin nhắn giữa mình và người nhận lúc vừa vào cuộc trò chuyện
+  useEffect(() => {
+    if (getConversationsQuery.data) {
+      const conversations = getConversationsQuery.data?.pages.map((page) => page.data.data.conversations).flat();
+      setConversations(conversations);
     }
-  });
+  }, [getConversationsQuery.data]);
 
   // Danh sách người đã nhắn tin với mình
   const receivers = useMemo(
     () => getReceiversQuery.data?.data.data.receivers,
     [getReceiversQuery.data?.data.data.receivers]
   );
+
   // Tổng số lượng tin nhắn chưa đọc
   const totalUnreadCount = useMemo(
     () => receivers?.reduce((acc, receiver) => acc + receiver.unread_count, 0) || 0,
     [receivers]
   );
 
-  // Tải tin nhắn giữa mình và người nhận
-  useEffect(() => {
-    if (getConversationsQuery.data?.data) {
-      const conversations = getConversationsQuery.data?.data.data.conversations;
-      const page = getConversationsQuery.data?.data.data.pagination.page;
-      const pageSize = getConversationsQuery.data?.data.data.pagination.page_size;
-      setConversations((prev) => [...prev, ...conversations]);
-      setPagination({ page, pageSize });
-    }
-  }, [getConversationsQuery.data?.data]);
-
   // Chọn người để chat
-  const handleSelectReceiver = (receiverId: string) => {
-    readConversationsMutation.mutate(receiverId);
-    if (receiverId === currentReceiverId) {
-      setCurrentReceiverId(null);
+  const handleSelectReceiver = (receiver: ConversationReceiver) => {
+    if (receiver._id === currentReceiver?._id) {
+      setConversations([]);
+      setCurrentReceiver(null);
       return;
     }
-    setConversations([]);
-    setPagination((prev) => ({ ...prev, page: 1 }));
-    setCurrentReceiverId(receiverId);
+    setCurrentReceiver(receiver);
   };
 
   // Xử lý gửi tin nhắn
   const handleSendMessage = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!message || !currentReceiverId) return;
-    socket.emit('send_message', { content: message, receiver_id: currentReceiverId, sender_id: profile?._id });
+    if (!message || !currentReceiver || !profile || !receivers) return;
+    const newConversation: Conversation = {
+      _id: new Date().getTime().toString(),
+      content: message,
+      is_read: false,
+      sender: {
+        _id: profile._id,
+        fullName: profile.fullName,
+        avatar: profile.avatar,
+        email: profile.email
+      },
+      receiver: {
+        _id: currentReceiver._id,
+        fullName: currentReceiver.fullName,
+        avatar: currentReceiver.avatar,
+        email: currentReceiver.email
+      },
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString()
+    };
+    socket.emit('send_message', { content: message, receiver_id: currentReceiver._id, sender_id: profile?._id });
+    setConversations((prev) => [newConversation, ...prev]);
     setMessage('');
-  };
-
-  // Tải thêm tin nhắn
-  const fetchMoreConversations = () => {
-    if (pagination.page >= pagination.pageSize) return;
-    setPagination((prev) => ({ ...prev, page: prev.page + 1 }));
+    getReceiversQuery.refetch();
   };
 
   return (
@@ -125,10 +133,27 @@ const ChatBox = () => {
 
       {/* Chatbox */}
       {visible && (
-        <div className='fixed bottom-0 right-2 z-10 shadow-3xl rounded-t-lg overflow-hidden max-w-[95%] w-[640px]'>
+        <div className='fixed bottom-0 right-2 z-10 shadow-3xl rounded-t-lg max-h-[90%] overflow-hidden max-w-[95%] w-[640px] duration-500'>
           <div className='flex justify-between items-center py-2 pl-6 pr-3 border-b bg-white'>
-            <div className='text-primary font-semibold text-lg flex items-center'>
-              Chat {totalUnreadCount > 0 && <span className='text-xs font-normal ml-1'>({totalUnreadCount})</span>}
+            <div className='flex items-center'>
+              {currentReceiver && (
+                <button className='md:hidden py-2 pr-4' onClick={() => setCurrentReceiver(null)}>
+                  <ChevronLeftIcon className='w-4 h-4' />
+                </button>
+              )}
+              <div className='text-primary font-semibold text-lg hidden md:flex items-center'>
+                Chat {totalUnreadCount > 0 && <span className='text-xs font-normal ml-1'>({totalUnreadCount})</span>}
+              </div>
+              {currentReceiver && (
+                <div className='flex md:hidden items-center'>
+                  <Image
+                    src={currentReceiver.avatar}
+                    alt={currentReceiver.fullName}
+                    className='w-8 h-8 rounded-full object-cover'
+                  />
+                  <span className='text-slate-600 text-[15px] ml-3 font-semibold'>{currentReceiver.fullName}</span>
+                </div>
+              )}
             </div>
             <div>
               <button className='py-1 px-2' onClick={() => setVisible(false)}>
@@ -137,32 +162,45 @@ const ChatBox = () => {
             </div>
           </div>
           <div className='bg-white border-slate-900'>
-            <div className='flex'>
+            <div className='flex relative'>
               {/* Danh sách người đã nhắn tin với mình */}
               {receivers && (
-                <div className='w-1/3 border-r h-[500px] max-h-[500px] overflow-y-auto'>
+                <div
+                  className={classNames(
+                    'absolute md:relative bottom-0 top-0 w-full md:w-1/3 bg-white border-r h-[500px] max-h-[500px] overflow-y-auto',
+                    {
+                      'hidden md:block': currentReceiver
+                    }
+                  )}
+                >
                   {receivers.map((receiver) => (
                     <div
                       key={receiver._id}
                       className={classNames('flex py-4 pl-4 pr-6 relative', {
-                        'hover:bg-slate-100': currentReceiverId !== receiver._id,
-                        'bg-slate-100': currentReceiverId === receiver._id
+                        'hover:bg-slate-100': currentReceiver?._id !== receiver._id,
+                        'bg-slate-100': currentReceiver?._id === receiver._id
                       })}
                       aria-hidden='true'
                       role='button'
                       tabIndex={0}
-                      onClick={() => handleSelectReceiver(receiver._id)}
+                      onClick={() => handleSelectReceiver(receiver)}
                     >
-                      <Image src={receiver.avatar} alt='' className='w-9 h-9 rounded object-cover flex-shrink-0' />
+                      <Image
+                        src={receiver.avatar}
+                        alt={receiver.fullName}
+                        className='w-10 h-10 rounded-full object-cover flex-shrink-0'
+                      />
                       <div className='flex-1 ml-3'>
                         <h3 className='font-semibold line-clamp-1 text-sm'>
                           {receiver.fullName || `User#${receiver._id.slice(-4)}`}
                         </h3>
-                        <p className='text-sm text-slate-500 line-clamp-1'>{receiver.last_message}</p>
+                        <p className='text-sm text-slate-400 line-clamp-1'>
+                          {receiver.last_message && receiver.last_message.content}
+                        </p>
                       </div>
                       {receiver.unread_count > 0 && (
-                        <span className='absolute top-3 right-2 w-4 h-4 rounded-full bg-primary text-white text-[8px] flex justify-center items-center font-bold'>
-                          {receiver.unread_count}
+                        <span className='absolute top-3 right-2 w-4 h-4 rounded-full bg-primary text-white text-[8px] flex justify-center items-center font-semibold'>
+                          {receiver.unread_count <= 9 ? receiver.unread_count : '9+'}
                         </span>
                       )}
                     </div>
@@ -172,7 +210,7 @@ const ChatBox = () => {
               {/* Cửa sổ chat */}
               <div className='flex-1 bg-[#f8f8f8]'>
                 {/* Đã chọn người để chat */}
-                {currentReceiverId && (
+                {currentReceiver && (
                   <Fragment>
                     {/* Tin nhắn */}
                     <div
@@ -185,12 +223,11 @@ const ChatBox = () => {
                       <InfiniteScroll
                         className='p-4'
                         dataLength={conversations.length}
-                        next={fetchMoreConversations}
+                        next={getConversationsQuery.fetchNextPage}
                         style={{ display: 'flex', flexDirection: 'column-reverse' }}
-                        inverse={true} //
-                        hasMore={pagination.page < pagination.pageSize}
+                        inverse={true}
+                        hasMore={!!getConversationsQuery.hasNextPage}
                         height={450}
-                        scrollThreshold={1}
                         loader={
                           <div className='flex justify-center pb-4'>
                             <LoadingIcon className='w-6 h-6' />
@@ -198,6 +235,7 @@ const ChatBox = () => {
                         }
                         scrollableTarget='scrollableDiv'
                       >
+                        {/* Đã nhắn tin trước đó */}
                         {conversations.length > 0 &&
                           conversations.map((conversation) => {
                             const isSender = conversation.sender._id === profile?._id;
@@ -222,6 +260,19 @@ const ChatBox = () => {
                               </div>
                             );
                           })}
+
+                        {/* Chưa nhắn tin lần nào */}
+                        {conversations.length <= 0 && !getConversationsQuery.isFetching && (
+                          <div className='h-full flex justify-center items-center flex-col'>
+                            <Image src={currentReceiver.avatar} className='w-20 h-20 rounded-full  object-cover' />
+                            <div className='mt-6 text-slate-600 text-sm'>
+                              Bắt đầu trò chuyện với{' '}
+                              <span className='font-semibold text-black'>
+                                {currentReceiver.fullName || `User#${currentReceiver._id.slice(-4)}`}
+                              </span>
+                            </div>
+                          </div>
+                        )}
                       </InfiniteScroll>
                     </div>
                     {/* Nhập chat */}
@@ -240,18 +291,11 @@ const ChatBox = () => {
                   </Fragment>
                 )}
 
-                {/* Loading */}
-                {/* {currentReceiverId && getConversationsQuery.isLoading && (
-                  <div className='flex justify-center items-center h-full'>
-                    <LoadingIcon className='w-8 h-8' />
-                  </div>
-                )} */}
-
                 {/* Chưa chọn người để chat */}
-                {!currentReceiverId && (
-                  <div className='flex justify-center items-center flex-col h-full'>
-                    <ConversationIcon className='w-28 h-2w-28 stroke-[0.3] stroke-slate-400' />
-                    <div className='text-center text-slate-500 mt-4'>Welcome to Gearvn Clone chat</div>
+                {!currentReceiver?._id && (
+                  <div className='flex justify-center items-center flex-col h-[500px]'>
+                    <ConversationIcon className='w-28 h-2w-28 stroke-[0.5] stroke-slate-500' />
+                    <div className='text-center text-slate-600 mt-4'>Welcome to Gearvn Clone chat</div>
                   </div>
                 )}
               </div>
