@@ -1,4 +1,4 @@
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useInfiniteQuery, useMutation } from '@tanstack/react-query';
 import Tippy from '@tippyjs/react/headless';
 import classNames from 'classnames';
 import DOMPurify from 'dompurify';
@@ -9,28 +9,15 @@ import { Link } from 'react-router-dom';
 
 import notificationApi from 'src/apis/notification.api';
 import { AppContext } from 'src/contexts/app.context';
-import { GetNotificationsRequestParams, Notification } from 'src/types/notification.type';
+import { Notification } from 'src/types/notification.type';
 import socket from 'src/utils/socket';
 import { convertMomentFromNowToVietnamese, getImageUrl } from 'src/utils/utils';
 import { BellIcon, EllipsisHorizontalIcon, EmptyImage, LoadingIcon } from '../Icons';
-
-type QueryConfig = {
-  [key in keyof GetNotificationsRequestParams]: number;
-};
 
 const Notification = () => {
   const { profile } = useContext(AppContext);
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [unreadCount, setUnreadCount] = useState<number>(0);
-  const [pagination, setPagination] = useState({
-    page: 1,
-    page_size: 0
-  });
-
-  const queryConfig: QueryConfig = {
-    page: pagination.page,
-    limit: 10
-  };
 
   // Socket lắng nghe sự kiện có thông báo mới
   useEffect(() => {
@@ -41,23 +28,23 @@ const Notification = () => {
   }, []);
 
   // Query lấy danh sách thông báo
-  const getNotificationsQuery = useQuery({
-    queryKey: ['notifications', queryConfig, profile?._id],
-    queryFn: () => notificationApi.getNotifications(queryConfig),
+  const getNotificationsQuery = useInfiniteQuery({
+    queryKey: ['notifications', profile?._id],
+    queryFn: ({ pageParam }) => notificationApi.getNotifications({ page: pageParam, limit: 20 }),
+    getNextPageParam: (lastPage) => {
+      if (lastPage.data.data.pagination.page >= lastPage.data.data.pagination.page_size) return;
+      return lastPage.data.data.pagination.page + 1;
+    },
     keepPreviousData: true
   });
 
   // Cập nhật lại danh sách thông báo khi có thay đổi về dữ liệu
   useEffect(() => {
-    if (getNotificationsQuery.data?.data.data) {
-      setPagination({
-        page: getNotificationsQuery.data?.data.data.pagination.page,
-        page_size: getNotificationsQuery.data?.data.data.pagination.page_size
-      });
-      setNotifications((prevState) => [...prevState, ...getNotificationsQuery.data?.data.data.notifications]);
-      setUnreadCount(getNotificationsQuery.data?.data.data.unread_count);
+    if (getNotificationsQuery.data) {
+      const notifications = getNotificationsQuery.data.pages.map((page) => page.data.data.notifications).flat();
+      setNotifications(notifications);
     }
-  }, [getNotificationsQuery.data?.data.data]);
+  }, [getNotificationsQuery.data]);
 
   // Mutation đọc thông báo
   const readNotificationMutation = useMutation(notificationApi.readNotifications);
@@ -108,15 +95,6 @@ const Notification = () => {
     });
   };
 
-  // Tải thêm thông báo
-  const fetchMoreNotifications = async () => {
-    if (pagination.page >= pagination.page_size) return;
-    setPagination((prevState) => ({
-      ...prevState,
-      page: prevState.page + 1
-    }));
-  };
-
   return (
     <Tippy
       interactive
@@ -139,8 +117,8 @@ const Notification = () => {
             <div className='pl-1' id='notifications'>
               <InfiniteScroll
                 dataLength={notifications.length}
-                next={fetchMoreNotifications}
-                hasMore={pagination.page < pagination.page_size}
+                next={getNotificationsQuery.fetchNextPage}
+                hasMore={!!getNotificationsQuery.hasNextPage}
                 scrollableTarget='notifications'
                 height={500}
                 scrollThreshold={1}

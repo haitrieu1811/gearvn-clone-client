@@ -25,30 +25,30 @@ interface SendReviewProps {
 }
 
 const SendReview = ({ product }: SendReviewProps) => {
-  const queryClient = useQueryClient();
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
   const isTablet = useMediaQuery({ maxWidth: CONFIG.TABLET_SCREEN_SIZE });
-
+  const { isAuthenticated, profile } = useContext(AppContext);
   const [isVisible, setIsVisible] = useState<boolean>(false);
   const [comment, setComment] = useState<string>('');
-  const [currentStart, setCurrentStart] = useState<number | null>(null);
+  const [currentStar, setCurrentStar] = useState<number | null>(null);
   const [reaction, setReaction] = useState<string>('');
   const [selected, setSelected] = useState<boolean>(false);
   const [images, setImages] = useState<File[]>([]);
-  const { isAuthenticated, profile } = useContext(AppContext);
 
-  // Lấy chi tiết đánh giá
+  // Query: Lấy chi tiết đánh giá
   const getReviewDetailQuery = useQuery({
-    queryKey: ['getReviewDetail', product._id],
+    queryKey: ['review_detail', product._id],
     queryFn: () => productApi.getReviewDetail(product._id),
     enabled: isAuthenticated
   });
 
-  // Chi tiết đánh giá
+  // Thông tin chi tiết đánh giá
   const review = useMemo(
     () => getReviewDetailQuery.data?.data.data.review,
     [getReviewDetailQuery.data?.data.data.review]
   );
+
   // Danh sách hình ảnh đính kèm của đánh giá hiện tại (nếu có)
   const defaultImages = useMemo(() => review?.images || [], [review?.images]);
 
@@ -56,7 +56,7 @@ const SendReview = ({ product }: SendReviewProps) => {
   useEffect(() => {
     if (review) {
       setComment(review.comment);
-      setCurrentStart(review.rating);
+      setCurrentStar(review.rating);
       setSelected(true);
     }
   }, [review]);
@@ -74,17 +74,17 @@ const SendReview = ({ product }: SendReviewProps) => {
 
   // Chọn mức độ đánh giá
   const handleSelectStart = (value: number) => {
-    setCurrentStart(value);
+    setCurrentStar(value);
   };
 
   // Rời chuột khỏi mức độ đánh giá
   const handleLeaveRating = () => {
-    !selected && setCurrentStart(null);
+    !selected && setCurrentStar(null);
   };
 
   // Thay đổi reaction
   useEffect(() => {
-    switch (currentStart) {
+    switch (currentStar) {
       case 1:
         setReaction('Rất không hài lòng');
         break;
@@ -104,7 +104,7 @@ const SendReview = ({ product }: SendReviewProps) => {
         setReaction('');
         break;
     }
-  }, [currentStart]);
+  }, [currentStar]);
 
   // Thay đổi hình ảnh đính kèm
   const handleChangeImages = (files?: File[]) => {
@@ -130,11 +130,11 @@ const SendReview = ({ product }: SendReviewProps) => {
       toast.success(data.data.message);
       setImages([]);
       setComment('');
-      setCurrentStart(null);
+      setCurrentStar(null);
       setSelected(false);
-      queryClient.invalidateQueries(['getReviews', product._id]);
+      queryClient.invalidateQueries(['reviews', product._id]);
       queryClient.invalidateQueries(['product', product._id]);
-      queryClient.invalidateQueries(['getReviewDetail', product._id]);
+      queryClient.invalidateQueries(['review_detail', product._id]);
       // Gửi thông báo
       socket.emit('send_product_review', {
         type: NotificationType.NewReview,
@@ -151,7 +151,7 @@ const SendReview = ({ product }: SendReviewProps) => {
   // Gửi đánh giá
   const handleSendReview = async () => {
     let imagesData: string[] | undefined = undefined;
-    if (!currentStart || [...defaultImages, ...images].length > 5) return;
+    if (!currentStar || [...defaultImages, ...images].length > 5) return;
     if (defaultImages.length <= 4 && images.length > 0) {
       const formData = new FormData();
       images.forEach((image) => formData.append('image', image));
@@ -162,18 +162,18 @@ const SendReview = ({ product }: SendReviewProps) => {
       productId: product._id,
       body: {
         comment: comment || undefined,
-        rating: currentStart,
+        rating: currentStar,
         images: imagesData
       }
     });
   };
 
-  // Xóa hình ảnh đính kèm
+  // Mutation: Xóa hình ảnh đính kèm
   const deleteReviewImageMutation = useMutation({
     mutationFn: productApi.deleteReviewImage,
     onSuccess: () => {
-      queryClient.invalidateQueries(['getReviewDetail', product._id]);
-      queryClient.invalidateQueries(['getReviews', product._id]);
+      queryClient.invalidateQueries(['review_detail', product._id]);
+      queryClient.invalidateQueries(['reviews', product._id]);
     }
   });
 
@@ -218,7 +218,7 @@ const SendReview = ({ product }: SendReviewProps) => {
                     .fill(0)
                     .map((_, index) => {
                       const value = index + 1;
-                      const isActive = currentStart && value <= currentStart;
+                      const isActive = currentStar && value <= currentStar;
                       return (
                         <div
                           key={index}

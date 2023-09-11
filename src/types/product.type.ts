@@ -10,6 +10,13 @@ interface Image {
   name: string;
 }
 
+interface ReviewAuthor {
+  _id: string;
+  email: string;
+  fullName: string;
+  avatar: string;
+}
+
 export interface Product {
   _id: string;
   name_vi: string;
@@ -45,12 +52,7 @@ export interface ProductReview {
   _id: string;
   rating: number;
   comment: string;
-  author: {
-    _id: string;
-    email: string;
-    fullName: string;
-    avatar: string;
-  };
+  author: ReviewAuthor;
   images: Image[];
   replies: ProductReviewReply[];
   created_at: string;
@@ -60,12 +62,8 @@ export interface ProductReview {
 export interface ProductReviewReply {
   _id: string;
   comment: string;
-  author: {
-    _id: string;
-    email: string;
-    fullName: string;
-    avatar: string;
-  };
+  images: Image[];
+  author: ReviewAuthor;
   created_at: string;
   updated_at: string;
 }
