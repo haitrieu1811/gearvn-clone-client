@@ -1,7 +1,7 @@
-import { NavLink } from 'react-router-dom';
 import classNames from 'classnames';
+import { NavLink } from 'react-router-dom';
 
-import { HomeIcon, CategoryIcon, DiscountIcon, UserIcon, HotlineIcon } from 'src/components/Icons';
+import { CategoryIcon, DiscountIcon, HomeIcon, HotlineIcon, UserIcon } from 'src/components/Icons';
 import PATH from 'src/constants/path';
 
 const StickyBottomMenu = () => {

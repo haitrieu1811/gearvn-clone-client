@@ -1,6 +1,7 @@
 import Tippy from '@tippyjs/react/headless';
 import { ReactNode, useContext } from 'react';
 import { Link } from 'react-router-dom';
+import PropTypes from 'prop-types';
 
 import fallbackAvatar from 'src/assets/images/fallback-avatar.jpg';
 import Back from 'src/components/Back';
@@ -66,6 +67,10 @@ const DashboardLayout = ({ children }: { children: ReactNode }) => {
       </div>
     </div>
   );
+};
+
+DashboardLayout.propTypes = {
+  children: PropTypes.node.isRequired
 };
 
 export default DashboardLayout;

@@ -1,4 +1,5 @@
-import { ChangeEvent, InputHTMLAttributes, useState, forwardRef, ForwardedRef } from 'react';
+import { ChangeEvent, ForwardedRef, InputHTMLAttributes, forwardRef, useState } from 'react';
+
 import REGEX from 'src/constants/regex';
 
 export interface InputNumberProps extends InputHTMLAttributes<HTMLInputElement> {

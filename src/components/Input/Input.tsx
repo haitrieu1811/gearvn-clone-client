@@ -53,7 +53,8 @@ Input.propTypes = {
   classNameInput: PropTypes.string,
   classNameError: PropTypes.string,
   errorMessage: PropTypes.string,
-  name: PropTypes.string
+  name: PropTypes.string,
+  register: PropTypes.func
 };
 
 export default Input;

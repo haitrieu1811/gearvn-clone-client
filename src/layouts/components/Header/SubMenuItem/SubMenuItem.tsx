@@ -1,5 +1,5 @@
-import { Fragment, ReactNode } from 'react';
 import PropTypes from 'prop-types';
+import { Fragment, ReactNode } from 'react';
 import { Link } from 'react-router-dom';
 
 import PATH from 'src/constants/path';
@@ -24,8 +24,10 @@ const SubMenuItem = ({ icon, name, separate, to = PATH.HOME }: SubMenuItemProps)
 };
 
 SubMenuItem.propTypes = {
+  icon: PropTypes.node.isRequired,
   name: PropTypes.string.isRequired,
-  separate: PropTypes.bool
+  separate: PropTypes.bool,
+  to: PropTypes.string
 };
 
 export default SubMenuItem;

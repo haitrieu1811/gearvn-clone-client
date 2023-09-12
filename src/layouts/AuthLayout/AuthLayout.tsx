@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import { Fragment, ReactNode } from 'react';
 
 import Footer from '../components/Footer';
@@ -11,6 +12,10 @@ const AuthLayout = ({ children }: { children: ReactNode }) => {
       <Footer />
     </Fragment>
   );
+};
+
+AuthLayout.propTypes = {
+  children: PropTypes.node.isRequired
 };
 
 export default AuthLayout;

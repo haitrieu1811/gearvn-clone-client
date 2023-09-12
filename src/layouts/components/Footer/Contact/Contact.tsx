@@ -2,7 +2,13 @@ import { Fragment } from 'react';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
-const FooterContact = ({ field, to, time }: { field: string; to: string; time?: string }) => {
+interface ContactProps {
+  field: string;
+  to: string;
+  time?: string;
+}
+
+const Contact = ({ field, to, time }: ContactProps) => {
   return (
     <Fragment>
       <span className='text-[#111111] w-[25%]'>{field}</span>
@@ -14,10 +20,10 @@ const FooterContact = ({ field, to, time }: { field: string; to: string; time?: 
   );
 };
 
-FooterContact.propTypes = {
+Contact.propTypes = {
   field: PropTypes.string.isRequired,
   to: PropTypes.string.isRequired,
   time: PropTypes.string
 };
 
-export default FooterContact;
+export default Contact;

@@ -2,6 +2,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { ChangeEvent, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import PropTypes from 'prop-types';
 
 import purchaseApi from 'src/apis/purchase.api';
 import PATH from 'src/constants/path';
@@ -124,6 +125,16 @@ const CartItem = ({
       </div>
     </div>
   );
+};
+
+CartItem.propTypes = {
+  index: PropTypes.number.isRequired,
+  data: PropTypes.object.isRequired,
+  handleChangeQuantity: PropTypes.func.isRequired,
+  handleTypeQuantity: PropTypes.func.isRequired,
+  handleCheck: PropTypes.func.isRequired,
+  disabled: PropTypes.bool.isRequired,
+  checked: PropTypes.bool.isRequired
 };
 
 export default CartItem;

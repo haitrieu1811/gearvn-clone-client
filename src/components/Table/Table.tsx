@@ -2,6 +2,7 @@ import Tippy from '@tippyjs/react/headless';
 import classNames from 'classnames';
 import queryString from 'query-string';
 import { ChangeEvent, Fragment, ReactNode, useState } from 'react';
+import PropTypes from 'prop-types';
 
 import { Link, createSearchParams, useLocation, useNavigate } from 'react-router-dom';
 import Loading from 'src/components/Loading';
@@ -185,6 +186,20 @@ const Table = ({
       {isLoading && <Loading />}
     </Fragment>
   );
+};
+
+Table.propTypes = {
+  data: PropTypes.array.isRequired,
+  columns: PropTypes.array.isRequired,
+  rows: PropTypes.array.isRequired,
+  pageSizeOptions: PropTypes.array,
+  isLoading: PropTypes.bool,
+  pageSize: PropTypes.number.isRequired,
+  tableFootLeft: PropTypes.node,
+  onSearch: PropTypes.func,
+  totalRows: PropTypes.number.isRequired,
+  tableName: PropTypes.string,
+  addNewPath: PropTypes.string
 };
 
 export default Table;

@@ -31,7 +31,10 @@ const MegaMenuLink = ({ to, icon, name, onMouseEnter, onMouseLeave }: MenuLinkPr
 
 MegaMenuLink.propTypes = {
   to: PropTypes.string.isRequired,
-  name: PropTypes.string.isRequired
+  icon: PropTypes.node.isRequired,
+  name: PropTypes.string.isRequired,
+  onMouseEnter: PropTypes.func.isRequired,
+  onMouseLeave: PropTypes.func.isRequired
 };
 
 export default MegaMenuLink;

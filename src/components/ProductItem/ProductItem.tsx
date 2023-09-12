@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import PropTypes from 'prop-types';
 
 import PATH from 'src/constants/path';
 import { Product } from 'src/types/product.type';
@@ -48,6 +49,10 @@ const ProductItem = ({ data }: ProductItemProps) => {
       </div>
     </div>
   );
+};
+
+ProductItem.propTypes = {
+  data: PropTypes.object.isRequired
 };
 
 export default ProductItem;

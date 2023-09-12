@@ -1,4 +1,6 @@
 import { InputHTMLAttributes } from 'react';
+import PropTypes from 'prop-types';
+
 import { TickIcon } from '../Icons';
 
 interface CheckboxProps extends InputHTMLAttributes<HTMLInputElement> {
@@ -17,6 +19,11 @@ const Checkbox = ({
       <TickIcon className={classNameIcon} />
     </div>
   );
+};
+
+Checkbox.propTypes = {
+  className: PropTypes.string,
+  classNameIcon: PropTypes.string
 };
 
 export default Checkbox;

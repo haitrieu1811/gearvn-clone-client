@@ -15,15 +15,15 @@ import CONFIG from 'src/constants/config';
 import PATH from 'src/constants/path';
 import { AppContext } from 'src/contexts/app.context';
 import Account from './Account';
+import HeaderActions from './Actions';
 import Cart from './Cart';
-import HeaderActions from './HeaderActions';
 import Search from './Search';
 
 const Header = () => {
   const isTablet = useMediaQuery({ maxWidth: CONFIG.TABLET_SCREEN_SIZE });
+  const { isAuthenticated } = useContext(AppContext);
   const [showMegaMenu, setShowMegaMenu] = useState<boolean>(false);
   const [showMobileMenu, setShowMobileMenu] = useState<boolean>(false);
-  const { isAuthenticated } = useContext(AppContext);
 
   // Ẩn hiện mega menu
   const toggleMegaMenu = () => {
@@ -97,28 +97,26 @@ const Header = () => {
       )}
       {/* Header của mobile và tablet */}
       {isTablet && (
-        <Fragment>
-          <header className='sticky top-0 left-0 right-0 z-[99999]'>
-            <nav className='bg-primary p-2 flex'>
-              <button className='ml-2' onClick={handleShowMobileMenu}>
-                <BarIcon className='w-[22px] h-9 fill-white' />
-              </button>
-              <Link to={PATH.HOME} className='ml-4 mr-2'>
-                <img src={logoMobile} alt='Logo mobile' />
-              </Link>
-              <Search />
-              <Link
-                to={PATH.CART}
-                className='w-9 h-9 bg-[#BE1529] flex justify-center items-center rounded flex-shrink-0 ml-2'
-              >
-                <Cart cartSize={cartSize || 0} />
-              </Link>
-            </nav>
-            <Drawer isShow={showMobileMenu} onCancel={handleCloseMobileMenu}>
-              <MobileMenu onCancel={handleCloseMobileMenu} />
-            </Drawer>
-          </header>
-        </Fragment>
+        <header className='sticky top-0 left-0 right-0 z-[99999]'>
+          <nav className='bg-primary p-2 flex'>
+            <button className='ml-2' onClick={handleShowMobileMenu}>
+              <BarIcon className='w-[22px] h-9 fill-white' />
+            </button>
+            <Link to={PATH.HOME} className='ml-4 mr-2'>
+              <img src={logoMobile} alt='Logo mobile' />
+            </Link>
+            <Search />
+            <Link
+              to={PATH.CART}
+              className='w-9 h-9 bg-[#BE1529] flex justify-center items-center rounded flex-shrink-0 ml-2'
+            >
+              <Cart cartSize={cartSize || 0} />
+            </Link>
+          </nav>
+          <Drawer isShow={showMobileMenu} onCancel={handleCloseMobileMenu}>
+            <MobileMenu onCancel={handleCloseMobileMenu} />
+          </Drawer>
+        </header>
       )}
     </Fragment>
   );

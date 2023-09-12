@@ -1,13 +1,13 @@
 import { ReactNode } from 'react';
 import PropTypes from 'prop-types';
 
-interface HeaderActionProps {
+interface ActionProps {
   textAbove: string;
   textBelow: string;
   icon: ReactNode;
 }
 
-const HeaderAction = ({ textAbove, textBelow, icon }: HeaderActionProps) => {
+const Action = ({ textAbove, textBelow, icon }: ActionProps) => {
   return (
     <div className='flex items-center ml-7'>
       {icon}
@@ -19,9 +19,10 @@ const HeaderAction = ({ textAbove, textBelow, icon }: HeaderActionProps) => {
   );
 };
 
-HeaderAction.propTypes = {
+Action.propTypes = {
   textAbove: PropTypes.string.isRequired,
-  textBelow: PropTypes.string.isRequired
+  textBelow: PropTypes.string.isRequired,
+  icon: PropTypes.node.isRequired
 };
 
-export default HeaderAction;
+export default Action;

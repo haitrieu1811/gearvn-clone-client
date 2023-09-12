@@ -60,8 +60,10 @@ const InputFile = ({
 };
 
 InputFile.propTypes = {
+  children: PropTypes.node,
   onChange: PropTypes.func,
   name: PropTypes.string,
+  register: PropTypes.func,
   errorMessage: PropTypes.string,
   multiple: PropTypes.bool,
   maxFileSize: PropTypes.number

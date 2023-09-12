@@ -164,7 +164,9 @@ Filter.propTypes = {
     })
   ).isRequired,
   label: PropTypes.string.isRequired,
-  queryName: PropTypes.string.isRequired
+  queryName: PropTypes.string.isRequired,
+  parentClassName: PropTypes.string,
+  childrenClassName: PropTypes.string
 };
 
 export default Filter;

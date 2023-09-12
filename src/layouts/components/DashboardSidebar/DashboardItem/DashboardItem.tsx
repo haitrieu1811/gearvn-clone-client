@@ -1,7 +1,7 @@
-import { NavLink } from 'react-router-dom';
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import { ReactNode } from 'react';
+import { NavLink } from 'react-router-dom';
 
 interface DashboardItemProps {
   name: string;
@@ -31,6 +31,7 @@ const DashboardItem = ({ name, path, icon, end }: DashboardItemProps) => {
 DashboardItem.propTypes = {
   name: PropTypes.string.isRequired,
   path: PropTypes.string.isRequired,
+  icon: PropTypes.node,
   end: PropTypes.bool
 };
 

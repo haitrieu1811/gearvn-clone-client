@@ -1,5 +1,6 @@
 import { useState, ChangeEvent, useEffect } from 'react';
 import { range } from 'lodash';
+import PropTypes from 'prop-types';
 
 interface DateSelectProps {
   onChange?: (date: Date) => void;
@@ -80,6 +81,11 @@ const DateSelect = ({ onChange, value }: DateSelectProps) => {
       </select>
     </div>
   );
+};
+
+DateSelect.propTypes = {
+  onChange: PropTypes.func,
+  value: PropTypes.instanceOf(Date)
 };
 
 export default DateSelect;

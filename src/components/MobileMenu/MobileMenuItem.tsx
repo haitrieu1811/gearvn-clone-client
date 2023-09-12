@@ -1,6 +1,7 @@
 import classNames from 'classnames';
 import { ReactNode } from 'react';
 import { Link } from 'react-router-dom';
+import PropTypes from 'prop-types';
 
 import { MENU_DATA } from 'src/constants/header';
 import PATH from 'src/constants/path';
@@ -87,6 +88,18 @@ const MobileMenuItem = ({
       ))}
     </div>
   );
+};
+
+MobileMenuItem.propTypes = {
+  index: PropTypes.number.isRequired,
+  currParentIndex: PropTypes.number,
+  currChildIndex: PropTypes.number,
+  toggleParent: PropTypes.func.isRequired,
+  toggleChild: PropTypes.func.isRequired,
+  keyOfMenu: PropTypes.oneOf(['LAPTOP', 'PC_GAMING']).isRequired,
+  icon: PropTypes.node.isRequired,
+  name: PropTypes.string.isRequired,
+  parentTo: PropTypes.string.isRequired
 };
 
 export default MobileMenuItem;

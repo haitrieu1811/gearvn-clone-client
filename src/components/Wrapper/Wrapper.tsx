@@ -16,6 +16,7 @@ const Wrapper = ({ children, arrow }: { children: ReactNode; arrow?: boolean }) 
 };
 
 Wrapper.propTypes = {
+  children: PropTypes.node.isRequired,
   arrow: PropTypes.bool
 };
 

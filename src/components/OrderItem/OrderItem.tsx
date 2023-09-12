@@ -1,5 +1,7 @@
 import { useMemo } from 'react';
 import { Link } from 'react-router-dom';
+import PropTypes from 'prop-types';
+
 import { OrderStatus } from 'src/constants/enum';
 import PATH from 'src/constants/path';
 import { Order } from 'src/types/order.type';
@@ -83,6 +85,10 @@ const OrderItem = ({ data }: OrderItemProps) => {
       </div>
     </div>
   );
+};
+
+OrderItem.propTypes = {
+  data: PropTypes.object.isRequired
 };
 
 export default OrderItem;

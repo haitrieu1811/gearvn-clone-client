@@ -1,7 +1,7 @@
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
-import { Link, createSearchParams, useLocation } from 'react-router-dom';
 import queryString from 'query-string';
+import { Link, createSearchParams, useLocation } from 'react-router-dom';
 
 import { ChevronLeftIcon, ChevronRightIcon } from '../Icons';
 
@@ -142,7 +142,13 @@ const Pagination = ({
 };
 
 Pagination.propTypes = {
-  pageSize: PropTypes.number.isRequired
+  pageSize: PropTypes.number.isRequired,
+  classNameWrapper: PropTypes.string,
+  classNameItem: PropTypes.string,
+  classNameItemActive: PropTypes.string,
+  classNameItemUnActive: PropTypes.string,
+  classNamePrevNext: PropTypes.string,
+  classNameDots: PropTypes.string
 };
 
 export default Pagination;

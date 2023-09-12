@@ -2,7 +2,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import classNames from 'classnames';
 import DOMPurify from 'dompurify';
 import { convert } from 'html-to-text';
-import { Fragment, useContext, useEffect, useMemo, useState, useRef } from 'react';
+import { Fragment, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
@@ -14,7 +14,7 @@ import userApi from 'src/apis/user.api';
 import { ChevronDownIcon, StarIcon } from 'src/components/Icons';
 import Loading from 'src/components/Loading';
 import ProductRating from 'src/components/ProductRating';
-import ProductReviewList from 'src/components/ProductReviewList';
+import ProductReviews from 'src/components/ProductReviews';
 import QuantityController from 'src/components/QuantityController';
 import SendReview from 'src/components/SendReview';
 import PATH from 'src/constants/path';
@@ -336,7 +336,7 @@ const ProductDetail = () => {
                 </div>
                 {/* Danh sách đánh giá */}
                 <div className='w-full md:w-2/3'>
-                  <ProductReviewList productId={productId} />
+                  <ProductReviews productId={productId} />
                 </div>
                 {/* Thêm đánh giá */}
                 <div className='mt-4'>

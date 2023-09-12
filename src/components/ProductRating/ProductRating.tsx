@@ -1,5 +1,4 @@
 import PropTypes from 'prop-types';
-
 import { StarIcon } from '../Icons';
 
 interface ProductRatingProps {

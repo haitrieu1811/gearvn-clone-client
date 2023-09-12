@@ -1,4 +1,5 @@
 import MarkdownIt from 'markdown-it';
+import PropTypes from 'prop-types';
 import { Fragment } from 'react';
 import MdEditor from 'react-markdown-editor-lite';
 import 'react-markdown-editor-lite/lib/index.css';
@@ -31,6 +32,14 @@ const TextEditor = ({ onChange, value, name, errorMessage, placeholder }: TextEd
       {errorMessage && <div className='text-sm text-red-500 mt-2'>{errorMessage}</div>}
     </Fragment>
   );
+};
+
+TextEditor.propTypes = {
+  onChange: PropTypes.func,
+  value: PropTypes.string,
+  name: PropTypes.string,
+  errorMessage: PropTypes.string,
+  placeholder: PropTypes.string
 };
 
 export default TextEditor;

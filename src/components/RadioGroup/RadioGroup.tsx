@@ -1,9 +1,9 @@
 import classNames from 'classnames';
+import omit from 'lodash/omit';
 import PropTypes from 'prop-types';
+import queryString from 'query-string';
 import { useState } from 'react';
 import { createSearchParams, useLocation, useNavigate } from 'react-router-dom';
-import queryString from 'query-string';
-import omit from 'lodash/omit';
 
 import { XMarkIcon } from '../Icons';
 

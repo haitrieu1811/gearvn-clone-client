@@ -1,13 +1,18 @@
 import PropTypes from 'prop-types';
 
-import FooterHeading from './FooterHeading';
-import FooterLink from './FooterLink';
+import FooterHeading from '../Heading/Heading';
+import FooterLink from '../Link/Link';
 
 interface LinkItem {
   name: string;
 }
 
-const FooterList = ({ heading, data }: { heading: string; data: LinkItem[] }) => {
+interface ListProps {
+  heading: string;
+  data: LinkItem[];
+}
+
+const List = ({ heading, data }: ListProps) => {
   return (
     <div className='lg:col-span-2 col-span-12 mt-4 lg:mt-0'>
       <FooterHeading name={heading} />
@@ -22,9 +27,9 @@ const FooterList = ({ heading, data }: { heading: string; data: LinkItem[] }) =>
   );
 };
 
-FooterList.propTypes = {
+List.propTypes = {
   heading: PropTypes.string.isRequired,
   data: PropTypes.array.isRequired
 };
 
-export default FooterList;
+export default List;

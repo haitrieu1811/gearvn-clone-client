@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import PropTypes from 'prop-types';
 
 import { CloseIcon, LaptopIcon, PcIcon } from 'src/components/Icons';
 import PATH from 'src/constants/path';
@@ -56,6 +57,10 @@ const MobileMenu = ({ onCancel }: MobileMenuProps) => {
       </div>
     </div>
   );
+};
+
+MobileMenu.propTypes = {
+  onCancel: PropTypes.func.isRequired
 };
 
 export default MobileMenu;

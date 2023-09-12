@@ -1,5 +1,6 @@
 import { useState, ChangeEvent, FocusEvent } from 'react';
 import classNames from 'classnames';
+import PropTypes from 'prop-types';
 
 import InputNumber from '../InputNumber';
 import { InputNumberProps } from '../InputNumber/InputNumber';
@@ -79,6 +80,16 @@ const QuantityController = ({
       </button>
     </div>
   );
+};
+
+QuantityController.propTypes = {
+  value: PropTypes.number,
+  max: PropTypes.number,
+  onDecrease: PropTypes.func,
+  onIncrease: PropTypes.func,
+  onType: PropTypes.func,
+  onFocusOut: PropTypes.func,
+  disabled: PropTypes.bool
 };
 
 export default QuantityController;

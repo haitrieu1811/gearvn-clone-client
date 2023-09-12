@@ -97,7 +97,8 @@ Select.propTypes = {
   label: PropTypes.string,
   onchange: PropTypes.func,
   defaultValue: PropTypes.string,
-  classNameWrapper: PropTypes.string
+  classNameWrapper: PropTypes.string,
+  size: PropTypes.oneOf<SelectSize>(['Small', 'Medium', 'Large', 'ExtraLarge'])
 };
 
 export default Select;

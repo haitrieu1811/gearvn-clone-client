@@ -2,10 +2,10 @@ import { Fragment } from 'react';
 import { useMediaQuery } from 'react-responsive';
 
 import StickyBottomMenu from 'src/components/StickyBottomMenu';
-import FooterContact from './FooterContact';
-import FooterHeading from './FooterHeading';
-import FooterList from './FooterList';
 import CONFIG from 'src/constants/config';
+import FooterContact from './Contact';
+import FooterHeading from './Heading';
+import FooterList from './List';
 
 const Footer = () => {
   const isTablet = useMediaQuery({ maxWidth: CONFIG.TABLET_SCREEN_SIZE });

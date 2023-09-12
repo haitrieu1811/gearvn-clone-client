@@ -36,6 +36,7 @@ const Drawer = ({ isShow, children, onCancel }: DrawerProps) => {
 };
 
 Drawer.propTypes = {
+  children: PropTypes.node.isRequired,
   isShow: PropTypes.bool.isRequired,
   onCancel: PropTypes.func.isRequired
 };

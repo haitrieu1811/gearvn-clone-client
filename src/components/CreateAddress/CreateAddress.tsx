@@ -3,6 +3,7 @@ import { useMutation, useQuery } from '@tanstack/react-query';
 import { useEffect, useMemo } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
+import PropTypes from 'prop-types';
 
 import addressApi from 'src/apis/address.api';
 import { AddressType } from 'src/constants/enum';
@@ -181,6 +182,11 @@ const CreateAddress = ({ onSuccess, currentId = null }: CreateAddressProps) => {
       </div>
     </form>
   );
+};
+
+CreateAddress.propTypes = {
+  onSuccess: PropTypes.func,
+  currentId: PropTypes.string
 };
 
 export default CreateAddress;

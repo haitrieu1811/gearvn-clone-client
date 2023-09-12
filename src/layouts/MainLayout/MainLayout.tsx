@@ -1,5 +1,6 @@
 import { ReactNode, useContext } from 'react';
 import { useMediaQuery } from 'react-responsive';
+import PropTypes from 'prop-types';
 
 import ChatBox from 'src/components/ChatBox';
 import { CoinIcon, CreditCardIcon, ItemIcon, NewspaperIcon, ShieldIcon, VideoIcon } from 'src/components/Icons';
@@ -39,6 +40,10 @@ const MainLayout = ({ children }: { children: ReactNode }) => {
       <Footer />
     </div>
   );
+};
+
+MainLayout.propTypes = {
+  children: PropTypes.node.isRequired
 };
 
 export default MainLayout;

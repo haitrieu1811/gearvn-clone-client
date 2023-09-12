@@ -41,9 +41,11 @@ const Button = ({
 };
 
 Button.propTypes = {
+  children: PropTypes.node.isRequired,
   className: PropTypes.string,
   classNameWrapper: PropTypes.string,
-  isLoading: PropTypes.bool
+  isLoading: PropTypes.bool,
+  disabled: PropTypes.bool
 };
 
 export default Button;
