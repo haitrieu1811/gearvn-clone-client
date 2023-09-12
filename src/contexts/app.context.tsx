@@ -1,15 +1,12 @@
-import { createContext, ReactNode, useState, Dispatch, SetStateAction } from 'react';
+import { Dispatch, ReactNode, SetStateAction, createContext, useState } from 'react';
 
+import { BlogListItem } from 'src/types/blog.type';
+import { Brand } from 'src/types/brand.type';
+import { Category } from 'src/types/category.type';
+import { Product } from 'src/types/product.type';
+import { Purchase } from 'src/types/purchase.type';
 import { User } from 'src/types/user.type';
 import { getAccessTokenFromLS, getProfileFromLS } from 'src/utils/auth';
-import { Category } from 'src/types/category.type';
-import { Brand } from 'src/types/brand.type';
-import { Product } from 'src/types/product.type';
-import { BlogListItem } from 'src/types/blog.type';
-import { Purchase } from 'src/types/purchase.type';
-import { useMutation } from '@tanstack/react-query';
-import notificationApi from 'src/apis/notification.api';
-import { AddNotificationRequestBody } from 'src/types/notification.type';
 
 interface ExtendedCategory extends Category {
   checked: boolean;
@@ -38,6 +35,9 @@ interface AppContextType {
   profile: User | null;
   setProfile: Dispatch<SetStateAction<User | null>>;
   reset: () => void;
+  isOpenChat: boolean;
+  setIsOpenChat: Dispatch<SetStateAction<boolean>>;
+
   extendedCategories: ExtendedCategory[];
   setExtendedCategories: Dispatch<SetStateAction<ExtendedCategory[]>>;
   extendedBrands: ExtendedBrand[];
@@ -48,7 +48,6 @@ interface AppContextType {
   setExtendedBlogs: Dispatch<SetStateAction<ExtendedBlog[]>>;
   extendedCartList: ExtendedPurchase[];
   setExtendedCartList: Dispatch<SetStateAction<ExtendedPurchase[]>>;
-  handleAddNotification: ({ title, content, type, path }: AddNotificationRequestBody) => void;
 }
 
 const initialContext = {
@@ -57,6 +56,9 @@ const initialContext = {
   profile: getProfileFromLS(),
   setProfile: () => null,
   reset: () => null,
+  isOpenChat: false,
+  setIsOpenChat: () => null,
+
   extendedCategories: [],
   setExtendedCategories: () => null,
   extendedBrands: [],
@@ -66,8 +68,7 @@ const initialContext = {
   extendedBlogs: [],
   setExtendedBlogs: () => null,
   extendedCartList: [],
-  setExtendedCartList: () => null,
-  handleAddNotification: () => null
+  setExtendedCartList: () => null
 };
 
 export const AppContext = createContext<AppContextType>(initialContext);
@@ -75,6 +76,8 @@ export const AppContext = createContext<AppContextType>(initialContext);
 const AppProvider = ({ children }: { children: ReactNode }) => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(initialContext.isAuthenticated);
   const [profile, setProfile] = useState<User | null>(initialContext.profile);
+  const [isOpenChat, setIsOpenChat] = useState<boolean>(initialContext.isOpenChat);
+
   const [extendedCategories, setExtendedCategories] = useState<ExtendedCategory[]>(initialContext.extendedCategories);
   const [extendedBrands, setExtendedBrands] = useState<ExtendedBrand[]>(initialContext.extendedBrands);
   const [extendedProducts, setExtendedProducts] = useState<ExtendedProduct[]>(initialContext.extendedProducts);
@@ -86,16 +89,6 @@ const AppProvider = ({ children }: { children: ReactNode }) => {
     setProfile(null);
   };
 
-  // Mutation thêm thông báo
-  const addNotificationMutation = useMutation({
-    mutationFn: notificationApi.addNotification
-  });
-
-  // Xử lý thêm thông báo
-  const handleAddNotification = ({ title, content, type, path }: AddNotificationRequestBody) => {
-    addNotificationMutation.mutate({ title, content, type, path });
-  };
-
   return (
     <AppContext.Provider
       value={{
@@ -104,6 +97,9 @@ const AppProvider = ({ children }: { children: ReactNode }) => {
         profile,
         setProfile,
         reset,
+        isOpenChat,
+        setIsOpenChat,
+
         extendedCategories,
         setExtendedCategories,
         extendedBrands,
@@ -113,8 +109,7 @@ const AppProvider = ({ children }: { children: ReactNode }) => {
         extendedBlogs,
         setExtendedBlogs,
         extendedCartList,
-        setExtendedCartList,
-        handleAddNotification
+        setExtendedCartList
       }}
     >
       {children}

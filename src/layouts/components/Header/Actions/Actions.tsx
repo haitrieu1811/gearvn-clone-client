@@ -1,12 +1,19 @@
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
+import { memo } from 'react';
 
 import { HotlineIcon, LocationIcon, PurchaseIcon } from 'src/components/Icons';
 import PATH from 'src/constants/path';
 import HeaderAction from '../Action';
 import Cart from '../Cart';
 
-const Actions = ({ cartSize }: { cartSize: number }) => {
+interface ActionsProps {
+  cartSize: number;
+}
+
+const Actions = ({ cartSize }: ActionsProps) => {
+  console.log('>>> Actions re-render');
+
   return (
     <div className='flex items-center'>
       <HeaderAction
@@ -33,4 +40,4 @@ Actions.propTypes = {
   cartSize: PropTypes.number.isRequired
 };
 
-export default Actions;
+export default memo(Actions);

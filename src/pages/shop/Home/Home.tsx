@@ -13,36 +13,57 @@ import MegaMenu from 'src/components/MegaMenu';
 import CONFIG from 'src/constants/config';
 import PATH from 'src/constants/path';
 import ProductSection from './ProductSection';
+import { Category } from 'src/types/category.type';
 
 const Home = () => {
   const isTablet = useMediaQuery({ maxWidth: CONFIG.TABLET_SCREEN_SIZE });
 
-  const getKeyboardsQuery = useQuery({
-    queryKey: ['keyboards'],
-    queryFn: () => productApi.getList({ category: '64afcf014a921a14beb05915', limit: '5' })
+  // Query: Lấy danh sách sản phẩm
+  const getProductsQuery = useQuery({
+    queryKey: ['products'],
+    queryFn: () => productApi.getList({ limit: '100' })
   });
 
-  const getLaptopsQuery = useQuery({
-    queryKey: ['laptops'],
-    queryFn: () => productApi.getList({ category: '64afbb1839753e4263bc467e-64bcd8a8ae38e6a282211269', limit: '5' })
-  });
+  // Danh sách sản phẩm
+  const products = useMemo(
+    () => getProductsQuery.data?.data.data.products,
+    [getProductsQuery.data?.data.data.products]
+  );
 
-  const getMousesQuery = useQuery({
-    queryKey: ['mouses'],
-    queryFn: () => productApi.getList({ category: '64b8f36ca692e0ad3a11afcc', limit: '5' })
-  });
+  // Danh sách laptop
+  const laptops = useMemo(
+    () =>
+      products
+        ?.filter((product) =>
+          ['64afbb1839753e4263bc467e', '64bcd8a8ae38e6a282211269'].includes((product.category as Category)._id)
+        )
+        .slice(0, 5) || [],
+    [products]
+  );
 
+  // Danh sách bàn phím
+  const keyboards = useMemo(
+    () =>
+      products?.filter((product) => (product.category as Category)._id === '64afcf014a921a14beb05915').slice(0, 5) ||
+      [],
+    [products]
+  );
+
+  // Danh sách chuột
+  const mouses = useMemo(
+    () =>
+      products?.filter((product) => (product.category as Category)._id === '64b8f36ca692e0ad3a11afcc').slice(0, 5) ||
+      [],
+    [products]
+  );
+
+  // Query: Lấy danh sách blog
   const getBlogsQuery = useQuery({
     queryKey: ['blogs'],
     queryFn: () => blogApi.getList({ limit: '4' })
   });
 
-  const keyboards = useMemo(
-    () => getKeyboardsQuery.data?.data.data.products,
-    [getKeyboardsQuery.data?.data.data.products]
-  );
-  const laptops = useMemo(() => getLaptopsQuery.data?.data.data.products, [getLaptopsQuery.data?.data.data.products]);
-  const mouses = useMemo(() => getMousesQuery.data?.data.data.products, [getMousesQuery.data?.data.data.products]);
+  // Danh sách blog
   const blogs = useMemo(() => getBlogsQuery.data?.data.data.blogs, [getBlogsQuery.data?.data.data.blogs]);
 
   return (
@@ -92,14 +113,13 @@ const Home = () => {
             </div>
           </div>
         </div>
-      </div>
-      {/* Laptop bán chạy */}
-      <div className='lg:container mt-3'>
-        {laptops && laptops.length > 0 && !getLaptopsQuery.isLoading && (
+        {/* Laptop bán chạy */}
+        {laptops.length > 0 && !getProductsQuery.isLoading && (
           <ProductSection
             headingTitle='Laptop bán chạy'
             data={laptops}
             viewAllTo={`${PATH.PRODUCT}?category=64afbb1839753e4263bc467e-64bcd8a8ae38e6a282211269`}
+            className='bg-white rounded shadow-sm mt-3'
             subLinks={[
               {
                 to: `${PATH.PRODUCT}?category=64afbb1839753e4263bc467e-64bcd8a8ae38e6a282211269&brand=64afcf2d4a921a14beb05916`,
@@ -116,15 +136,13 @@ const Home = () => {
             ]}
           />
         )}
-        {getLaptopsQuery.isLoading && <Loading />}
-      </div>
-      {/* Bàn phím bán chạy */}
-      <div className='lg:container mt-3'>
-        {keyboards && keyboards.length > 0 && !getKeyboardsQuery.isLoading && (
+        {/* Bàn phím bán chạy */}
+        {keyboards.length > 0 && !getProductsQuery.isLoading && (
           <ProductSection
             headingTitle='Bàn phím bán chạy'
             data={keyboards}
             viewAllTo={`${PATH.PRODUCT}?category=64afcf014a921a14beb05915`}
+            className='bg-white rounded shadow-sm mt-3'
             subLinks={[
               {
                 to: `${PATH.PRODUCT}?category=64afcf014a921a14beb05915&brand=64b9081ca692e0ad3a11afd6`,
@@ -133,15 +151,13 @@ const Home = () => {
             ]}
           />
         )}
-        {getKeyboardsQuery.isLoading && <Loading />}
-      </div>
-      {/* Chuột bán chạy */}
-      <div className='lg:container mt-3'>
-        {mouses && mouses.length > 0 && !getMousesQuery.isLoading && (
+        {/* Chuột bán chạy */}
+        {mouses.length > 0 && !getProductsQuery.isLoading && (
           <ProductSection
             headingTitle='Chuột bán chạy'
             data={mouses}
             viewAllTo={`${PATH.PRODUCT}?category=64b8f36ca692e0ad3a11afcc`}
+            className='bg-white rounded shadow-sm mt-3'
             subLinks={[
               {
                 to: `${PATH.PRODUCT}?category=64b8f36ca692e0ad3a11afcc&brand=64c3e3eb9267282e701739b6`,
@@ -158,12 +174,9 @@ const Home = () => {
             ]}
           />
         )}
-        {getMousesQuery.isLoading && <Loading />}
-      </div>
-      {/* Tin tức công nghệ */}
-      <div className='lg:container mt-3'>
+        {/* Tin tức công nghệ */}
         {blogs && blogs.length > 0 && !getBlogsQuery.isLoading && (
-          <div className='bg-white rounded shadow-sm'>
+          <div className='bg-white rounded shadow-sm mt-3'>
             <div className='flex justify-between items-center py-3 px-4 md:px-6'>
               <h2 className='text-lg md:text-2xl font-semibold'>Tin tức công nghệ</h2>
               <Link to={PATH.BLOG} className='text-sm md:text-lg text-[#1982F9] hover:text-primary'>
@@ -181,7 +194,18 @@ const Home = () => {
             )}
           </div>
         )}
-        {getBlogsQuery.isLoading && <Loading />}
+        {/* Loading blogs */}
+        {getBlogsQuery.isLoading && (
+          <div className='mt-3'>
+            <Loading />
+          </div>
+        )}
+        {/* Loading sản phẩm */}
+        {getProductsQuery.isLoading && (
+          <div className='mt-3'>
+            <Loading />
+          </div>
+        )}
       </div>
     </div>
   );

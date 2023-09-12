@@ -1,6 +1,15 @@
+import PropTypes from 'prop-types';
+import { memo } from 'react';
+
 import { CartIcon } from 'src/components/Icons';
 
-const Cart = ({ cartSize }: { cartSize: number }) => {
+interface CartProps {
+  cartSize: number;
+}
+
+const Cart = ({ cartSize }: CartProps) => {
+  console.log('>>> Cart re-render');
+
   return (
     <div className='relative'>
       <CartIcon className='w-[18px]' />
@@ -11,4 +20,8 @@ const Cart = ({ cartSize }: { cartSize: number }) => {
   );
 };
 
-export default Cart;
+Cart.propTypes = {
+  cartSize: PropTypes.number.isRequired
+};
+
+export default memo(Cart);

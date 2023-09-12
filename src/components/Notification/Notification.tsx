@@ -42,7 +42,9 @@ const Notification = () => {
   useEffect(() => {
     if (getNotificationsQuery.data) {
       const notifications = getNotificationsQuery.data.pages.map((page) => page.data.data.notifications).flat();
+      const unreadCount = getNotificationsQuery.data.pages[0].data.data.unread_count;
       setNotifications(notifications);
+      setUnreadCount(unreadCount);
     }
   }, [getNotificationsQuery.data]);
 
@@ -95,6 +97,8 @@ const Notification = () => {
     });
   };
 
+  //
+
   return (
     <Tippy
       interactive
@@ -111,7 +115,6 @@ const Notification = () => {
               </button>
             )}
           </div>
-
           {/* Danh sách thông báo */}
           {notifications && notifications.length > 0 && !getNotificationsQuery.isLoading && (
             <div className='pl-1' id='notifications'>

@@ -20,6 +20,7 @@ type QueryConfig = {
 
 const Search = () => {
   const navigate = useNavigate();
+  const [keywordSearch, setKeywordSearch] = useState<string>('');
   const queryParams: QueryConfig = UseQueryParams();
   const queryConfig: QueryConfig = omitBy(
     {
@@ -29,24 +30,26 @@ const Search = () => {
     isUndefined
   );
 
-  const [keywordSearch, setKeywordSearch] = useState<string>('');
-
+  // Query: Lấy danh sách sản phẩm
   const getProductsQuery = useQuery({
     queryKey: ['products', queryConfig],
     queryFn: () => productApi.getList(queryConfig),
     keepPreviousData: true
   });
 
+  // Danh sách sản phẩm
   const products = useMemo(
     () => getProductsQuery.data?.data.data.products,
     [getProductsQuery.data?.data.data.products]
   );
 
+  // Tổng số sản phẩm
   const productsCount = useMemo(
     () => getProductsQuery.data?.data.data.pagination.total,
     [getProductsQuery.data?.data.data.pagination.total]
   );
 
+  // Số trang của danh sách sản phẩm
   const pageSize = useMemo(
     () => getProductsQuery.data?.data.data.pagination.page_size,
     [getProductsQuery.data?.data.data.pagination.page_size]

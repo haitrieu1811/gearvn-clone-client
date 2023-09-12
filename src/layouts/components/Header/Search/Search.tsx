@@ -1,16 +1,15 @@
-import Tippy from '@tippyjs/react/headless';
-import { useState, useMemo, FormEvent } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { Link, useNavigate, createSearchParams } from 'react-router-dom';
+import Tippy from '@tippyjs/react/headless';
+import { FormEvent, memo, useMemo, useState } from 'react';
+import { Link, createSearchParams, useNavigate } from 'react-router-dom';
 
-import { SearchIcon } from 'src/components/Icons';
-import useDebounce from 'src/hooks/useDebounce';
-import Wrapper from 'src/components/Wrapper';
 import productApi from 'src/apis/product.api';
-import { generateNameId } from 'src/utils/utils';
-import { formatCurrency, getImageUrl } from 'src/utils/utils';
-import PATH from 'src/constants/path';
+import { SearchIcon } from 'src/components/Icons';
 import Loading from 'src/components/Loading';
+import Wrapper from 'src/components/Wrapper';
+import PATH from 'src/constants/path';
+import useDebounce from 'src/hooks/useDebounce';
+import { formatCurrency, generateNameId, getImageUrl } from 'src/utils/utils';
 
 const SEARCH_RESULT_LIMIT = 5;
 
@@ -18,17 +17,23 @@ const Search = () => {
   const navigate = useNavigate();
   const [keywordSearch, setKeywordSearch] = useState<string>('');
   const [showSearchResult, setShowSearchResult] = useState<boolean>(false);
-  const KeywordSearchDebounce = useDebounce(keywordSearch, 1500);
+  const keywordSearchDebounce = useDebounce(keywordSearch, 1500);
+  console.log('>>> Search re-render');
 
-  // Kết quả tìm kiếm
+  // Query: Lấy danh sách sản phẩm
   const getProductsQuery = useQuery({
-    queryKey: ['products', KeywordSearchDebounce],
-    queryFn: () => productApi.getList({ name: KeywordSearchDebounce })
+    queryKey: ['products', keywordSearchDebounce],
+    queryFn: () => productApi.getList({ name: keywordSearchDebounce }),
+    enabled: !!keywordSearchDebounce.trim()
   });
+
+  // Kết quả tìm kiếm (danh sách sản phẩm)
   const searchResult = useMemo(
     () => getProductsQuery.data?.data.data.products,
     [getProductsQuery.data?.data.data.products]
   );
+
+  // Tổng số kết quả tìm kiếm
   const searchResultCount = useMemo(
     () => getProductsQuery.data?.data.data.pagination.total,
     [getProductsQuery.data?.data.data.pagination.total]
@@ -107,7 +112,7 @@ const Search = () => {
   return (
     <Tippy
       interactive
-      visible={KeywordSearchDebounce.length > 0 && showSearchResult}
+      visible={keywordSearchDebounce.length > 0 && showSearchResult}
       placement='bottom-end'
       offset={[0, 3]}
       render={renderSearchResult}
@@ -131,4 +136,4 @@ const Search = () => {
   );
 };
 
-export default Search;
+export default memo(Search);

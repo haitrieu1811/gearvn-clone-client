@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import classNames from 'classnames';
-import { Fragment, useContext, useMemo, useState } from 'react';
+import { Fragment, memo, useContext, useMemo, useState } from 'react';
 import { useMediaQuery } from 'react-responsive';
 import { Link } from 'react-router-dom';
 
@@ -40,7 +40,7 @@ const Header = () => {
     setShowMobileMenu(false);
   };
 
-  // Lấy số lượng sản phẩm trong giỏ hàng
+  // Query: Lấy số lượng sản phẩm trong giỏ hàng
   const getCartListQuery = useQuery({
     queryKey: ['cart_list'],
     queryFn: () => purchaseApi.getCart(),
@@ -49,7 +49,7 @@ const Header = () => {
 
   // Số lượng sản phẩm trong giỏ hàng
   const cartSize = useMemo(
-    () => getCartListQuery.data?.data.data.cart_size,
+    () => getCartListQuery.data?.data.data.cart_size || 0,
     [getCartListQuery.data?.data.data.cart_size]
   );
 
@@ -75,7 +75,7 @@ const Header = () => {
               {/* Tìm kiếm */}
               <Search />
               {/* Header actions */}
-              <HeaderActions cartSize={cartSize || 0} />
+              <HeaderActions cartSize={cartSize} />
               {/* Tài khoản */}
               <Account />
             </nav>
@@ -122,4 +122,4 @@ const Header = () => {
   );
 };
 
-export default Header;
+export default memo(Header);

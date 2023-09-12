@@ -1,4 +1,3 @@
-import { NotificationType } from 'src/constants/enum';
 import { Pagination, SuccessResponse } from './utils.type';
 
 // Type: Thông báo
@@ -18,14 +17,6 @@ export interface Notification {
   };
   created_at: string;
   updated_at: string;
-}
-
-// Request: Thêm một thông báo mới đến những người dùng có quyền quản trị
-export interface AddNotificationRequestBody {
-  type: NotificationType;
-  title: string;
-  content: string;
-  path?: string;
 }
 
 // Request: Lấy danh sách thông báo

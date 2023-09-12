@@ -1,16 +1,8 @@
-import {
-  AddNotificationRequestBody,
-  GetNotificationsRequestParams,
-  GetNotificationsResponse
-} from 'src/types/notification.type';
+import { GetNotificationsRequestParams, GetNotificationsResponse } from 'src/types/notification.type';
 import { OnlyMessageResponse } from 'src/types/utils.type';
 import http from 'src/utils/http';
 
 const notificationApi = {
-  // Thêm một thông báo mới đến những người dùng có quyền quản trị
-  addNotification(body: AddNotificationRequestBody) {
-    return http.post<OnlyMessageResponse>('/notifications', body);
-  },
   // Lấy danh sách thông báo
   getNotifications(params?: GetNotificationsRequestParams) {
     return http.get<GetNotificationsResponse>('/notifications', { params });

@@ -9,12 +9,16 @@ import { AppContext } from 'src/contexts/app.context';
 import { Conversation, ConversationReceiver } from 'src/types/conversation.type';
 import socket from 'src/utils/socket';
 import { convertMomentFromNowToVietnamese } from 'src/utils/utils';
-import { ChatIcon, ChevronDownIcon, ChevronLeftIcon, ConversationIcon, LoadingIcon, SendMessageIcon } from '../Icons';
+import { ChevronDownIcon, ChevronLeftIcon, ConversationIcon, LoadingIcon, SendMessageIcon } from '../Icons';
 import Image from '../Image';
 
-const ChatBox = () => {
+interface ChatBoxProps {
+  visible?: boolean;
+  onClose?: () => void;
+}
+
+const ChatBox = ({ visible = true, onClose }: ChatBoxProps) => {
   const { profile } = useContext(AppContext);
-  const [visible, setVisible] = useState<boolean>(false);
   const [currentReceiver, setCurrentReceiver] = useState<ConversationReceiver | null>(null);
   const [conversations, setConversations] = useState<Conversation[]>([]);
   const [message, setMessage] = useState<string>('');
@@ -32,6 +36,11 @@ const ChatBox = () => {
     };
   }, [currentReceiver?._id]);
 
+  // Đóng chat box
+  const handleClose = () => {
+    onClose && onClose();
+  };
+
   // Query: Lấy dánh sách người đã nhắn tin với mình
   const getReceiversQuery = useQuery({
     queryKey: ['conversation_receivers'],
@@ -45,7 +54,7 @@ const ChatBox = () => {
       conversationApi.getConversations({
         receiverId: currentReceiver?._id as string,
         page: pageParam,
-        limit: 20
+        limit: '20'
       }),
     getNextPageParam: (lastPage) => {
       return lastPage.data.data.pagination.page < lastPage.data.data.pagination.page_size
@@ -117,24 +126,10 @@ const ChatBox = () => {
 
   return (
     <Fragment>
-      {/* Nút mở chatbox */}
-      <div
-        onClick={() => setVisible(true)}
-        className='fixed bottom-0 right-5 flex justify-center items-center bg-primary rounded-t px-4 py-2 cursor-pointer select-none z-[1]'
-      >
-        <ChatIcon className='w-6 h-6 text-white' />
-        <span className='text-white text-lg font-semibold ml-3'>Chat</span>
-        {totalUnreadCount > 0 && (
-          <span className='absolute -top-3 -right-3 bg-primary text-white text-xs font-medium w-6 h-6 rounded-full flex justify-center items-center border-[2px]'>
-            {totalUnreadCount <= 9 ? totalUnreadCount : '9+'}
-          </span>
-        )}
-      </div>
-
-      {/* Chatbox */}
       {visible && (
-        <div className='fixed bottom-0 right-2 z-10 shadow-3xl rounded-t-lg max-h-[90%] overflow-hidden max-w-[95%] w-[640px] duration-500'>
-          <div className='flex justify-between items-center py-2 pl-6 pr-3 border-b bg-white'>
+        <div className='bg-white fixed bottom-0 right-0 md:right-2 z-[999999] md:z-[9999] shadow-3xl rounded-t-lg max-h-screen h-[550px] max-w-full w-[640px]'>
+          {/* Heading */}
+          <div className='flex justify-between items-center h-[50px] pl-6 pr-3 border-b'>
             <div className='flex items-center'>
               {currentReceiver && (
                 <button className='md:hidden py-2 pr-4' onClick={() => setCurrentReceiver(null)}>
@@ -155,19 +150,18 @@ const ChatBox = () => {
                 </div>
               )}
             </div>
-            <div>
-              <button className='py-1 px-2' onClick={() => setVisible(false)}>
-                <ChevronDownIcon className='w-4 h-4' />
-              </button>
-            </div>
+            <button className='py-1 px-2' onClick={handleClose}>
+              <ChevronDownIcon className='w-4 h-4' />
+            </button>
           </div>
-          <div className='bg-white border-slate-900'>
+          {/* Body */}
+          <div className='bg-white border-t-slate-900 h-[500px]'>
             <div className='flex relative'>
               {/* Danh sách người đã nhắn tin với mình */}
               {receivers && (
                 <div
                   className={classNames(
-                    'absolute md:relative bottom-0 top-0 w-full md:w-1/3 bg-white border-r h-[500px] max-h-[500px] overflow-y-auto',
+                    'absolute md:relative bottom-0 top-0 w-full md:w-1/3 bg-white border-r-0 md:border-r-slate-900 h-[500px] max-h-[500px] overflow-y-auto',
                     {
                       'hidden md:block': currentReceiver
                     }
@@ -207,6 +201,7 @@ const ChatBox = () => {
                   ))}
                 </div>
               )}
+
               {/* Cửa sổ chat */}
               <div className='flex-1 bg-[#f8f8f8]'>
                 {/* Đã chọn người để chat */}

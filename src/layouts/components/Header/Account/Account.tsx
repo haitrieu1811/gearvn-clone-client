@@ -19,7 +19,8 @@ const Account = () => {
   const renderUserMenu = () => {
     return (
       <Wrapper arrow>
-        {!isAuthenticated ? (
+        {/* Khi chưa đăng nhập */}
+        {!isAuthenticated && (
           <div className='p-5 min-w-[300px]'>
             <div className='flex mb-4'>
               <HandIcon className='w-5 h-5' />
@@ -40,7 +41,10 @@ const Account = () => {
               </Link>
             </div>
           </div>
-        ) : (
+        )}
+
+        {/* Khi đã đăng nhập */}
+        {isAuthenticated && (
           <div className='min-w-[300px]'>
             <Link to={PATH.ACCOUNT_PROFILE} className='px-5 py-4 flex hover:underline border-b'>
               <HandIcon className='w-5 h-5' />
@@ -88,7 +92,7 @@ const Account = () => {
   };
 
   return (
-    <Tippy placement='bottom-end' render={renderUserMenu} offset={[0, 15]} interactive>
+    <Tippy placement='bottom-end' render={renderUserMenu} offset={[0, 15]} interactive={true}>
       <div className='h-[42px] bg-[#BE1529] flex items-center justify-center p-2 rounded cursor-pointer ml-4'>
         <UserIcon className='w-5 h-5 flex-shrink-0 stroke-white' />
         {!isAuthenticated ? (

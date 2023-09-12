@@ -41,7 +41,7 @@ const Modal = ({
     <Fragment>
       {isVisible && (
         <div className='flex justify-center items-center fixed inset-0 z-[99999999] duration-300'>
-          <div className='bg-black/30 fixed inset-0' onClick={handleCancel}></div>
+          <div className='bg-black/30 fixed inset-0' onClick={handleCancel} />
           <div className='bg-white z-10 max-w-[90%] duration-300'>
             {/* Head */}
             {modalHeader && (

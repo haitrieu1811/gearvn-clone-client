@@ -13,11 +13,12 @@ interface ProductSectionProps {
     name: string;
   }[];
   viewAllTo?: string;
+  className?: string;
 }
 
-const ProductSection = ({ headingTitle, data, subLinks, viewAllTo }: ProductSectionProps) => {
+const ProductSection = ({ headingTitle, data, subLinks, viewAllTo, className }: ProductSectionProps) => {
   return (
-    <div className='bg-white rounded shadow-sm'>
+    <div className={className}>
       {/* heading */}
       <div className='overflow-x-auto max-w-full'>
         <div className='py-3 px-2 md:px-6 flex justify-between w-[1200px] lg:w-auto'>
@@ -45,7 +46,6 @@ const ProductSection = ({ headingTitle, data, subLinks, viewAllTo }: ProductSect
           </div>
         </div>
       </div>
-
       {/* Danh sách sản phẩm */}
       {data && data.length > 0 && (
         <div className='grid grid-cols-12 lg:grid-cols-10 gap-2 px-[6px] py-2'>
@@ -69,7 +69,8 @@ ProductSection.propTypes = {
       name: PropTypes.string.isRequired
     })
   ),
-  viewAllTo: PropTypes.string
+  viewAllTo: PropTypes.string,
+  className: PropTypes.string
 };
 
 export default ProductSection;
