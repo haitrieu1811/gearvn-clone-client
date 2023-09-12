@@ -16,6 +16,7 @@ import {
   setRefreshTokenToLS
 } from './auth';
 import { isExpiredTokenError, isUnauthorizedError } from './utils';
+import CONFIG from 'src/constants/config';
 
 class Http {
   instance: AxiosInstance;
@@ -30,7 +31,7 @@ class Http {
     this.refreshTokenRequest = null;
     this.profile = null;
     this.instance = axios.create({
-      baseURL: import.meta.env.VITE_API_URL,
+      baseURL: CONFIG.BACKEND_URL,
       timeout: 10000,
       headers: {
         'Content-Type': 'application/json'

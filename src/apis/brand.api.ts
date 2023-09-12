@@ -1,16 +1,15 @@
 import {
   CreateBrandRequestBody,
   GetBrandResponse,
-  GetBrandsRequestParams,
   GetBrandsResponse,
   UpdateBrandRequestBody
 } from 'src/types/brand.type';
-import { OnlyMessageResponse } from 'src/types/utils.type';
+import { OnlyMessageResponse, PaginationRequestParams } from 'src/types/utils.type';
 import http from 'src/utils/http';
 
 const brandApi = {
   // Lấy danh sách thương hiệu
-  getList(params?: GetBrandsRequestParams) {
+  getList(params?: PaginationRequestParams) {
     return http.get<GetBrandsResponse>('/brands', { params });
   },
   // Lấy thông tin thương hiệu

@@ -1,8 +1,7 @@
 import { OrderStatus, PaymentMethod, ReceiveMethod } from 'src/constants/enum';
-import { Pagination, SuccessResponse } from './utils.type';
-import { PaginationQuery } from './commons.type';
+import { Pagination, PaginationRequestParams, SuccessResponse } from './utils.type';
 
-// Request Type
+// Type: Thông tin sản phẩm mua trong đơn hàng
 interface PurchaseInOrder {
   _id: string;
   unit_price: number;
@@ -20,6 +19,7 @@ interface PurchaseInOrder {
   };
 }
 
+// Type: Đơn hàng
 export interface Order {
   _id: string;
   status: number;
@@ -36,6 +36,7 @@ export interface Order {
   updated_at: string;
 }
 
+// Type: Chi tiết đơn hàng
 interface OrderDetail {
   _id: string;
   customer_gender: number;
@@ -58,16 +59,18 @@ interface OrderDetail {
   updated_at: string;
 }
 
-export interface GetOrderListRequestParams extends PaginationQuery {
+// Request: Lấy danh sách đơn hàng
+export interface GetOrderListRequestParams extends PaginationRequestParams {
   status?: string;
 }
 
-// Response Type
+// Response: Lấy danh sách đơn hàng
 export type GetOrderListResponse = SuccessResponse<{
   orders: Order[];
   pagination: Pagination;
 }>;
 
+// Response: Lấy số lượng đơn hàng theo trạng thái
 export type GetQuantityOrderResponse = SuccessResponse<{
   qty_all: number;
   qty_new: number;
@@ -77,6 +80,7 @@ export type GetQuantityOrderResponse = SuccessResponse<{
   qty_cancelled: number;
 }>;
 
+// Response: Lấy thông tin chi tiết đơn hàng
 export type GetOrderDetailResponse = SuccessResponse<{
   order: OrderDetail;
 }>;

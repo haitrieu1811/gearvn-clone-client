@@ -1,6 +1,7 @@
 import { NotificationType } from 'src/constants/enum';
 import { Pagination, SuccessResponse } from './utils.type';
 
+// Type: Thông báo
 export interface Notification {
   _id: string;
   type: number;

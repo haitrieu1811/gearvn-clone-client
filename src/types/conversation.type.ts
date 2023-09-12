@@ -1,5 +1,6 @@
-import { Pagination, SuccessResponse } from './utils.type';
+import { Pagination, PaginationRequestParams, SuccessResponse } from './utils.type';
 
+// Type: Tin nhắn
 export interface Conversation {
   _id: string;
   content: string;
@@ -20,6 +21,7 @@ export interface Conversation {
   updated_at: string;
 }
 
+// Type: Người nhận tin nhắn
 export interface ConversationReceiver {
   _id: string;
   email: string;
@@ -32,6 +34,11 @@ export interface ConversationReceiver {
     created_at: string;
     updated_at: string;
   } | null;
+}
+
+// Request: Lấy danh sách tin nhắn
+export interface GetConversationsRequestParams extends PaginationRequestParams {
+  receiverId: string;
 }
 
 // Response: Lấy danh sách tin nhắn

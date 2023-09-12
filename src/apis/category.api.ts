@@ -1,22 +1,21 @@
 import {
   CreateCategoryBody,
-  GetCategoriesRequestParams,
   GetCategoriesResponse,
   GetCategoryResponse,
   UpdateCategoryBody,
   UpdateCategoryResponse
 } from 'src/types/category.type';
-import { OnlyMessageResponse } from 'src/types/utils.type';
+import { OnlyMessageResponse, PaginationRequestParams } from 'src/types/utils.type';
 import http from 'src/utils/http';
 
 const categoryApi = {
   // Lấy danh sách danh mục
-  getList(params?: GetCategoriesRequestParams) {
+  getList(params?: PaginationRequestParams) {
     return http.get<GetCategoriesResponse>('/categories', { params });
   },
   // Lấy thông tin danh mục
-  getOne(category_id: string) {
-    return http.get<GetCategoryResponse>(`/categories/${category_id}`);
+  getOne(categoryId: string) {
+    return http.get<GetCategoryResponse>(`/categories/${categoryId}`);
   },
   // Tạo mới danh mục
   create(body: CreateCategoryBody) {
@@ -27,8 +26,8 @@ const categoryApi = {
     return http.patch<UpdateCategoryResponse>(`/categories/${categoryId}`, body);
   },
   // Xóa danh mục
-  delete(category_ids: string[]) {
-    return http.delete<OnlyMessageResponse>('/categories', { data: { category_ids } });
+  delete(categoryIds: string[]) {
+    return http.delete<OnlyMessageResponse>('/categories', { data: { category_ids: categoryIds } });
   }
 };
 

@@ -1,5 +1,6 @@
 import { SuccessResponse } from './utils.type';
 
+// Type: Media
 export interface Media {
   id: string;
   name: string;
@@ -7,6 +8,7 @@ export interface Media {
   type: number;
 }
 
+// Response: Tải lên media mới
 export type UploadMediaResponse = SuccessResponse<{
   medias: Media[];
 }>;

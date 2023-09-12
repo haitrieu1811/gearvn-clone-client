@@ -1,15 +1,19 @@
 import { Category } from './category.type';
 import { Pagination, SuccessResponse } from './utils.type';
 
+// Type: Thương hiệu
 interface Brand {
   _id: string;
   name: string;
 }
+
+// Type: Hình ảnh
 interface Image {
   _id: string;
   name: string;
 }
 
+// Type: Người đánh giá
 interface ReviewAuthor {
   _id: string;
   email: string;
@@ -17,6 +21,7 @@ interface ReviewAuthor {
   avatar: string;
 }
 
+// Type: Sản phẩm
 export interface Product {
   _id: string;
   name_vi: string;
@@ -48,6 +53,7 @@ export interface Product {
   images?: Image[];
 }
 
+// Type: Đánh giá của sản phẩm
 export interface ProductReview {
   _id: string;
   rating: number;
@@ -59,6 +65,7 @@ export interface ProductReview {
   updated_at: string;
 }
 
+// Type: Trả lời đánh giá của sản phẩm
 export interface ProductReviewReply {
   _id: string;
   comment: string;
@@ -68,6 +75,7 @@ export interface ProductReviewReply {
   updated_at: string;
 }
 
+// Type: Chi tiết đánh giá của sản phẩm
 export interface ProductReviewDetail {
   _id: string;
   rating: number;

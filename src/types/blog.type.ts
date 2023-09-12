@@ -1,5 +1,6 @@
 import { Pagination, SuccessResponse } from './utils.type';
 
+// Type: Blog trong danh sách blog
 export interface BlogListItem {
   _id: string;
   thumbnail: string;
@@ -11,6 +12,7 @@ export interface BlogListItem {
   updated_at: string;
 }
 
+// Type: Blog chi tiết
 export interface BlogDetail {
   _id: string;
   thumbnail: string;
@@ -24,12 +26,7 @@ export interface BlogDetail {
   updated_at: string;
 }
 
-// Request
-export interface GetBlogListRequestQuery {
-  page?: string;
-  limit?: string;
-}
-
+// Request: Tạo blog mới
 export interface CreateBlogRequestBody {
   thumbnail: string;
   name_en: string;
@@ -38,6 +35,7 @@ export interface CreateBlogRequestBody {
   content_en: string;
 }
 
+// Request: Cập nhật thông tin blog
 export interface UpdateBlogRequestBody {
   thumbnail?: string;
   name_en?: string;
@@ -46,12 +44,13 @@ export interface UpdateBlogRequestBody {
   content_en?: string;
 }
 
-// Response
+// Response: Lấy danh sách blog
 export type GetBlogListResponse = SuccessResponse<{
   blogs: BlogListItem[];
   pagination: Pagination;
 }>;
 
+// Response: Lấy thông tin chi tiết blog
 export type GetBlogDetailResponse = SuccessResponse<{
   blog: BlogDetail;
 }>;
