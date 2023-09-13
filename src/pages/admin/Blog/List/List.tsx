@@ -15,11 +15,11 @@ import TableAction from 'src/components/Table/TableAction';
 import PATH from 'src/constants/path';
 import { AppContext } from 'src/contexts/app.context';
 import UseQueryParams from 'src/hooks/useQueryParams';
-import { GetBlogListRequestQuery } from 'src/types/blog.type';
+import { PaginationRequestParams } from 'src/types/utils.type';
 import { convertMomentFromNowToVietnamese } from 'src/utils/utils';
 
 type QueryConfig = {
-  [key in keyof GetBlogListRequestQuery]: string;
+  [key in keyof PaginationRequestParams]: string;
 };
 
 const List = () => {
@@ -159,6 +159,7 @@ const List = () => {
         }))}
         pageSize={pageSize || 0}
         isLoading={getBlogsQuery.isLoading}
+        addNewPath={PATH.DASHBOARD_BLOG_CREATE}
         tableFootLeft={
           <Fragment>
             {checkedBlogs.length > 0 && (
@@ -172,10 +173,15 @@ const List = () => {
           </Fragment>
         }
       />
-      <Modal isVisible={modalOpen} onCancel={stopDelete} onOk={handleDelete}>
-        {currentId
-          ? 'Bạn có chắc muốn xóa bài viết này'
-          : `Bạn có chắc muốn xóa ${checkedBlogs.length} bài viết đã chọn`}
+      <Modal name='Xác nhận xóa blog' isVisible={modalOpen} onCancel={stopDelete} onOk={handleDelete}>
+        <div className='text-center leading-loose'>
+          <div>
+            {currentId
+              ? 'Bạn có chắc muốn xóa blog này ?'
+              : `Bạn có chắc muốn xóa ${checkedBlogs.length} blog đã chọn ?`}
+          </div>
+          <div className='font-medium text-red-500 underline'>Blog sẽ bị xóa vĩnh viễn và không thể khôi phục.</div>
+        </div>
       </Modal>
     </Fragment>
   );

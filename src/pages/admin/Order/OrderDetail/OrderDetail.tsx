@@ -4,8 +4,9 @@ import { Fragment, useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
+import classNames from 'classnames';
 import orderApi from 'src/apis/order.api';
-import Back from 'src/components/Back';
+import FloatLoading from 'src/components/FloatLoading';
 import { EmptyImage } from 'src/components/Icons';
 import Loading from 'src/components/Loading';
 import Modal from 'src/components/Modal';
@@ -13,8 +14,6 @@ import { PaymentMethod, ReceiveMethod } from 'src/constants/enum';
 import { convertMomentFromNowToVietnamese, formatCurrency, getImageUrl } from 'src/utils/utils';
 import { orderStatus } from '../OrderList/OrderList';
 import { ORDER_PROGRESS } from './constants';
-import classNames from 'classnames';
-import FloatLoading from 'src/components/FloatLoading';
 
 const paymentMethods = {
   [PaymentMethod.Cash]: 'Tiền mặt',
@@ -73,11 +72,7 @@ const OrderDetail = () => {
   return (
     <Fragment>
       <div className='bg-white p-6'>
-        <div className='flex justify-between items-center'>
-          <h1 className='font-semibold text-2xl mb-6'>Chi tiết đơn hàng #{order?._id.slice(-6)}</h1>
-          <Back />
-        </div>
-
+        <h1 className='font-semibold text-2xl mb-6'>Chi tiết đơn hàng #{order?._id.slice(-6)}</h1>
         {/* Hiển thị khi có dữ liệu */}
         {order && !getOrderDetailQuery.isLoading && (
           <Fragment>

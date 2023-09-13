@@ -173,11 +173,13 @@ const Address = () => {
         </div>
       )}
       <Modal
+        icon={false}
         name={!isUpdateMode ? 'Thêm địa chỉ' : 'Cập nhật địa chỉ'}
         isVisible={addModalOpen}
         onCancel={!isUpdateMode ? stopAdd : stopUpdate}
         cancelButton={false}
         okButton={false}
+        paddingBody={false}
       >
         <CreateAddress
           onSuccess={
@@ -194,8 +196,17 @@ const Address = () => {
           currentId={isUpdateMode ? currentId : null}
         />
       </Modal>
-      <Modal isVisible={deleteConfirmModalOpen} onCancel={stopDelete} onOk={handleDeleteAddress}>
-        Bạn có chắc muốn xóa địa chỉ này
+      <Modal
+        name='Xác nhận xóa địa chỉ'
+        isVisible={deleteConfirmModalOpen}
+        onCancel={stopDelete}
+        onOk={handleDeleteAddress}
+      >
+        <div className='text-center text-slate-600'>
+          <div>Bạn có chắc muốn xóa địa chỉ này</div>
+          <div className='my-2'>khỏi danh sách địa chỉ nhận hàng của bạn ?</div>
+          <div className='font-semibold text-red-500 underline'>Địa chỉ này sẽ bị xóa vĩnh viễn</div>
+        </div>
       </Modal>
     </div>
   );

@@ -1,9 +1,9 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useMutation, useQuery } from '@tanstack/react-query';
+import PropTypes from 'prop-types';
 import { useEffect, useMemo } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
-import PropTypes from 'prop-types';
 
 import addressApi from 'src/apis/address.api';
 import { AddressType } from 'src/constants/enum';
@@ -97,7 +97,7 @@ const CreateAddress = ({ onSuccess, currentId = null }: CreateAddressProps) => {
 
   return (
     <form onSubmit={onSubmit}>
-      <div className='px-3'>
+      <div className='px-6 pb-6 pt-3'>
         <h3 className='text-sm md:text-base font-medium mb-2'>Địa chỉ</h3>
         <div className='grid grid-cols-12 gap-3 mb-4'>
           <div className='col-span-6'>

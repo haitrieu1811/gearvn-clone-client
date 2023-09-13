@@ -8,8 +8,8 @@ import { toast } from 'react-toastify';
 
 import blogApi from 'src/apis/blog.api';
 import mediaApi from 'src/apis/media.api';
-import Back from 'src/components/Back';
 import Button from 'src/components/Button';
+import FloatLoading from 'src/components/FloatLoading';
 import { CloudArrowUpIcon, PhotoIcon } from 'src/components/Icons';
 import Input from 'src/components/Input';
 import InputFile from 'src/components/InputFile';
@@ -17,7 +17,6 @@ import TextEditor from 'src/components/TextEditor';
 import PATH from 'src/constants/path';
 import { ErrorResponse } from 'src/types/utils.type';
 import { CreateBlogSchema, createBlogSchema } from 'src/utils/rules';
-import FloatLoading from 'src/components/FloatLoading';
 import { getImageUrl, htmlToMarkdown, isEntityError } from 'src/utils/utils';
 
 type FormData = CreateBlogSchema;
@@ -162,7 +161,6 @@ const Create = () => {
 
   return (
     <Fragment>
-      <Back />
       <div className='bg-white rounded-lg shadow-sm p-6'>
         <h2 className='text-2xl font-semibold mb-6'>{!isUpdateMode ? 'Tạo bài viết mới' : 'Cập nhật bài viết'}</h2>
         <form onSubmit={onSubmit}>

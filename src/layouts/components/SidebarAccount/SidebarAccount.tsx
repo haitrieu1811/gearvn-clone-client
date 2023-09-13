@@ -1,9 +1,7 @@
-import { useMutation } from '@tanstack/react-query';
 import classNames from 'classnames';
 import { Fragment, useContext, useMemo } from 'react';
 import { NavLink } from 'react-router-dom';
 
-import authApi from 'src/apis/auth.api';
 import {
   DefaultUserIcon,
   EyeFillIcon,
@@ -19,26 +17,12 @@ import { AppContext } from 'src/contexts/app.context';
 import { AccountContext } from 'src/pages/shop/Account/Account';
 import { getImageUrl } from 'src/utils/utils';
 
-const AccountSidebar = () => {
-  const { setIsAuthenticated, setProfile } = useContext(AppContext);
+const SidebarAccount = () => {
+  const { logout } = useContext(AppContext);
   const { avatarFile, setAvatarFile, me } = useContext(AccountContext);
 
   const avatarPreview = useMemo(() => (avatarFile ? URL.createObjectURL(avatarFile[0]) : null), [avatarFile]);
   const avatar = useMemo(() => me?.avatar, [me]);
-
-  // Đăng xuất
-  const logoutMutation = useMutation({
-    mutationFn: authApi.logout,
-    onSuccess: () => {
-      setIsAuthenticated(false);
-      setProfile(null);
-    }
-  });
-
-  // Đăng xuất
-  const logout = () => {
-    logoutMutation.mutate();
-  };
 
   // Xử lý khi đổi ảnh đại diện
   const handleChangeAvatar = (files?: File[]) => {
@@ -131,4 +115,4 @@ const AccountSidebar = () => {
   );
 };
 
-export default AccountSidebar;
+export default SidebarAccount;

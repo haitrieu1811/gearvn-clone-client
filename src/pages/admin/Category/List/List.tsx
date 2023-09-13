@@ -5,23 +5,21 @@ import keyBy from 'lodash/keyBy';
 import omitBy from 'lodash/omitBy';
 import moment from 'moment';
 import { ChangeEvent, Fragment, useContext, useEffect, useMemo, useState } from 'react';
-import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
 import categoryApi from 'src/apis/category.api';
 import Checkbox from 'src/components/Checkbox';
-import { SearchIcon } from 'src/components/Icons';
 import Modal from 'src/components/Modal';
 import Table from 'src/components/Table';
 import TableAction from 'src/components/Table/TableAction';
 import PATH from 'src/constants/path';
 import { AppContext } from 'src/contexts/app.context';
 import UseQueryParams from 'src/hooks/useQueryParams';
-import { GetCategoriesRequestParams } from 'src/types/category.type';
+import { PaginationRequestParams } from 'src/types/utils.type';
 import { convertMomentFromNowToVietnamese } from 'src/utils/utils';
 
 type QueryConfig = {
-  [key in keyof GetCategoriesRequestParams]: string;
+  [key in keyof PaginationRequestParams]: string;
 };
 
 const List = () => {
@@ -37,14 +35,14 @@ const List = () => {
     isUndefined
   );
 
-  // Lấy danh sách danh mục
+  // Query: Lấy danh sách danh mục
   const getCategoriesQuery = useQuery({
     queryKey: ['categories', queryConfig],
     queryFn: () => categoryApi.getList(queryConfig),
     keepPreviousData: true
   });
 
-  // Xóa danh mục
+  // Mutation: Xóa danh mục
   const deleteCategoryMutation = useMutation({
     mutationFn: categoryApi.delete,
     onSuccess: (data) => {
@@ -121,28 +119,8 @@ const List = () => {
 
   return (
     <Fragment>
-      <div className='flex justify-between items-center mb-4 bg-white py-3 px-4 rounded-lg shadow-sm'>
-        <div>
-          <div className='relative'>
-            <input
-              type='text'
-              placeholder='Tìm kiếm'
-              className='border rounded py-[6px] px-3 text-sm outline-none w-[180px] pr-11 bg-slate-100'
-            />
-            <button className='absolute top-1/2 -translate-y-1/2 right-0 h-full w-10 flex justify-center items-center'>
-              <SearchIcon className='w-4 h-4' />
-            </button>
-          </div>
-        </div>
-        <Link
-          to={PATH.DASHBOARD_CATEGORY_CREATE}
-          className='px-2 py-[6px] rounded bg-blue-600 flex justify-center items-center'
-        >
-          <span className='text-white text-sm font-medium'>Tạo mới</span>
-        </Link>
-      </div>
-
       <Table
+        tableName='Danh sách danh mục'
         totalRows={getCategoriesQuery.data?.data.data.pagination.total || 0}
         data={extendedCategories}
         columns={[
@@ -197,11 +175,19 @@ const List = () => {
           )
         }
         isLoading={getCategoriesQuery.isLoading}
+        addNewPath={PATH.DASHBOARD_CATEGORY_CREATE}
       />
-      <Modal isVisible={modalVisible} onOk={handleDelete} onCancel={stopDelete}>
-        {currentId
-          ? 'Bạn có chắc muốn xóa danh mục này'
-          : `Bạn có chắc muốn xóa ${checkedCategories.length} danh mục này`}
+      <Modal name='Xác nhận xóa danh mục sản phẩm' isVisible={modalVisible} onOk={handleDelete} onCancel={stopDelete}>
+        <div className='text-center leading-loose'>
+          <div>
+            {currentId
+              ? 'Bạn có chắc muốn xóa danh mục sản phẩm này ?'
+              : `Bạn có chắc muốn xóa ${checkedCategories.length} danh mục sản phẩm đã chọn ?`}
+          </div>
+          <div className='font-medium text-red-500 underline'>
+            Danh mục sản phẩm và các sản phẩm thuộc danh mục này <br /> sẽ bị xóa vĩnh viễn và không thể khôi phục.
+          </div>
+        </div>
       </Modal>
     </Fragment>
   );

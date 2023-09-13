@@ -1,8 +1,12 @@
-import { Dispatch, ReactNode, SetStateAction, createContext, useState } from 'react';
+import { useMutation, useQuery } from '@tanstack/react-query';
+import { Dispatch, ReactNode, SetStateAction, createContext, useState, useMemo } from 'react';
 
+import authApi from 'src/apis/auth.api';
+import conversationApi from 'src/apis/conversation.api';
 import { BlogListItem } from 'src/types/blog.type';
 import { Brand } from 'src/types/brand.type';
 import { Category } from 'src/types/category.type';
+import { ConversationReceiver } from 'src/types/conversation.type';
 import { Product } from 'src/types/product.type';
 import { Purchase } from 'src/types/purchase.type';
 import { User } from 'src/types/user.type';
@@ -37,6 +41,10 @@ interface AppContextType {
   reset: () => void;
   isOpenChat: boolean;
   setIsOpenChat: Dispatch<SetStateAction<boolean>>;
+  logout: () => void;
+  getConversationReceiversQuery: ReturnType<typeof useQuery> | undefined;
+  conversationReceivers: ConversationReceiver[];
+  conversationUnreadCount: number;
 
   extendedCategories: ExtendedCategory[];
   setExtendedCategories: Dispatch<SetStateAction<ExtendedCategory[]>>;
@@ -58,6 +66,10 @@ const initialContext = {
   reset: () => null,
   isOpenChat: false,
   setIsOpenChat: () => null,
+  logout: () => null,
+  getConversationReceiversQuery: undefined,
+  conversationReceivers: [],
+  conversationUnreadCount: 0,
 
   extendedCategories: [],
   setExtendedCategories: () => null,
@@ -84,10 +96,43 @@ const AppProvider = ({ children }: { children: ReactNode }) => {
   const [extendedBlogs, setExtendedBlogs] = useState<ExtendedBlog[]>(initialContext.extendedBlogs);
   const [extendedCartList, setExtendedCartList] = useState<ExtendedPurchase[]>(initialContext.extendedCartList);
 
+  // Reset auth
   const reset = () => {
     setIsAuthenticated(false);
     setProfile(null);
   };
+
+  // Mutation: Đăng xuất
+  const logoutMutation = useMutation({
+    mutationFn: authApi.logout,
+    onSuccess: () => {
+      setIsAuthenticated(false);
+      setProfile(null);
+    }
+  });
+
+  // Xử lý đăng xuất
+  const logout = () => {
+    logoutMutation.mutate();
+  };
+
+  // Query: Lấy dánh sách người đã nhắn tin với mình
+  const getReceiversQuery = useQuery({
+    queryKey: ['conversation_receivers'],
+    queryFn: () => conversationApi.getReceivers()
+  });
+
+  // Danh sách người đã nhắn tin với mình
+  const conversationReceivers = useMemo(
+    () => getReceiversQuery.data?.data.data.receivers,
+    [getReceiversQuery.data?.data.data.receivers]
+  );
+
+  // Tổng số lượng tin nhắn chưa đọc
+  const conversationUnreadCount = useMemo(
+    () => conversationReceivers?.reduce((acc, receiver) => acc + receiver.unread_count, 0) || 0,
+    [conversationReceivers]
+  );
 
   return (
     <AppContext.Provider
@@ -99,6 +144,10 @@ const AppProvider = ({ children }: { children: ReactNode }) => {
         reset,
         isOpenChat,
         setIsOpenChat,
+        logout,
+        getConversationReceiversQuery: getReceiversQuery,
+        conversationReceivers: conversationReceivers || [],
+        conversationUnreadCount,
 
         extendedCategories,
         setExtendedCategories,

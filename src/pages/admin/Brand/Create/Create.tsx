@@ -7,7 +7,6 @@ import { useMatch, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
 import brandApi from 'src/apis/brand.api';
-import Back from 'src/components/Back';
 import Button from 'src/components/Button';
 import Input from 'src/components/Input';
 import PATH from 'src/constants/path';
@@ -22,14 +21,17 @@ const Create = () => {
   const match = useMatch(PATH.DASHBOARD_BRAND_UPDATE);
   const isUpdateMode = Boolean(match);
 
+  // Query: Lấy thông tin nhãn hiệu
   const getBrandQuery = useQuery({
     queryKey: ['brand', brand_id],
     queryFn: () => brandApi.getOne(brand_id as string),
-    enabled: Boolean(brand_id)
+    enabled: !!brand_id
   });
 
+  // Thông tin nhãn hiệu
   const brand = useMemo(() => getBrandQuery.data?.data.data.brand, [getBrandQuery.data?.data.data.brand]);
 
+  // Form
   const {
     register,
     reset,
@@ -44,12 +46,14 @@ const Create = () => {
     }
   });
 
+  // Set giá trị cho form khi ở chế độ cập nhật
   useEffect(() => {
     if (brand) {
       setValue('name', brand.name);
     }
   }, [brand, setValue]);
 
+  // Mutation: Tạo mới nhãn hiệu
   const createBrandMutation = useMutation({
     mutationFn: brandApi.create,
     onSuccess: () => {
@@ -71,6 +75,7 @@ const Create = () => {
     }
   });
 
+  // Mutation: Cập nhật nhãn hiệu
   const updateBrandMutation = useMutation({
     mutationFn: brandApi.update,
     onSuccess: (data) => {
@@ -91,6 +96,7 @@ const Create = () => {
     }
   });
 
+  // Xử lý submit form
   const onSubmit = handleSubmit((data) => {
     if (!isUpdateMode) {
       createBrandMutation.mutate(data);
@@ -101,7 +107,6 @@ const Create = () => {
 
   return (
     <Fragment>
-      <Back />
       <div className='bg-white rounded-lg p-6 shadow-sm w-1/2'>
         <h2 className='text-2xl font-semibold'>{!isUpdateMode ? 'Tạo mới nhãn hiệu' : 'Cập nhật nhãn hiệu'}</h2>
         <form onSubmit={onSubmit}>

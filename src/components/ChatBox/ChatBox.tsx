@@ -1,7 +1,7 @@
-import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
+import { useInfiniteQuery } from '@tanstack/react-query';
 import classNames from 'classnames';
 import moment from 'moment';
-import { FormEvent, Fragment, useContext, useEffect, useMemo, useState } from 'react';
+import { FormEvent, Fragment, useContext, useEffect, useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 
 import conversationApi from 'src/apis/conversation.api';
@@ -18,7 +18,8 @@ interface ChatBoxProps {
 }
 
 const ChatBox = ({ visible = true, onClose }: ChatBoxProps) => {
-  const { profile } = useContext(AppContext);
+  const { profile, getConversationReceiversQuery, conversationReceivers, conversationUnreadCount } =
+    useContext(AppContext);
   const [currentReceiver, setCurrentReceiver] = useState<ConversationReceiver | null>(null);
   const [conversations, setConversations] = useState<Conversation[]>([]);
   const [message, setMessage] = useState<string>('');
@@ -26,7 +27,7 @@ const ChatBox = ({ visible = true, onClose }: ChatBoxProps) => {
   // Nhận tin nhắn từ socket server và hiển thị lên màn hình
   useEffect(() => {
     socket.on('receive_message', (newConversation) => {
-      getReceiversQuery.refetch();
+      getConversationReceiversQuery?.refetch();
       // Nếu đang ở một cuộc trò chuyện khác thì không hiển thị tin nhắn
       if (newConversation.sender._id !== currentReceiver?._id) return;
       setConversations((prev) => [newConversation, ...prev]);
@@ -40,12 +41,6 @@ const ChatBox = ({ visible = true, onClose }: ChatBoxProps) => {
   const handleClose = () => {
     onClose && onClose();
   };
-
-  // Query: Lấy dánh sách người đã nhắn tin với mình
-  const getReceiversQuery = useQuery({
-    queryKey: ['conversation_receivers'],
-    queryFn: () => conversationApi.getReceivers()
-  });
 
   // Query: Lấy tin nhắn giữa mình và người nhận
   const getConversationsQuery = useInfiniteQuery({
@@ -73,18 +68,6 @@ const ChatBox = ({ visible = true, onClose }: ChatBoxProps) => {
     }
   }, [getConversationsQuery.data]);
 
-  // Danh sách người đã nhắn tin với mình
-  const receivers = useMemo(
-    () => getReceiversQuery.data?.data.data.receivers,
-    [getReceiversQuery.data?.data.data.receivers]
-  );
-
-  // Tổng số lượng tin nhắn chưa đọc
-  const totalUnreadCount = useMemo(
-    () => receivers?.reduce((acc, receiver) => acc + receiver.unread_count, 0) || 0,
-    [receivers]
-  );
-
   // Chọn người để chat
   const handleSelectReceiver = (receiver: ConversationReceiver) => {
     if (receiver._id === currentReceiver?._id) {
@@ -98,7 +81,7 @@ const ChatBox = ({ visible = true, onClose }: ChatBoxProps) => {
   // Xử lý gửi tin nhắn
   const handleSendMessage = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!message || !currentReceiver || !profile || !receivers) return;
+    if (!message || !currentReceiver || !profile || !conversationReceivers) return;
     const newConversation: Conversation = {
       _id: new Date().getTime().toString(),
       content: message,
@@ -118,16 +101,16 @@ const ChatBox = ({ visible = true, onClose }: ChatBoxProps) => {
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString()
     };
-    socket.emit('send_message', { content: message, receiver_id: currentReceiver._id, sender_id: profile?._id });
+    socket.emit('new_message', { content: message, receiver_id: currentReceiver._id, sender_id: profile?._id });
     setConversations((prev) => [newConversation, ...prev]);
     setMessage('');
-    getReceiversQuery.refetch();
+    getConversationReceiversQuery?.refetch();
   };
 
   return (
     <Fragment>
       {visible && (
-        <div className='bg-white fixed bottom-0 right-0 md:right-2 z-[999999] md:z-[9999] shadow-3xl rounded-t-lg max-h-screen h-[550px] max-w-full w-[640px]'>
+        <div className='bg-white fixed bottom-0 right-0 md:right-2 z-[999999] md:z-[99] shadow-3xl rounded-t-lg max-h-screen h-[550px] max-w-full w-[640px]'>
           {/* Heading */}
           <div className='flex justify-between items-center h-[50px] pl-6 pr-3 border-b'>
             <div className='flex items-center'>
@@ -137,7 +120,10 @@ const ChatBox = ({ visible = true, onClose }: ChatBoxProps) => {
                 </button>
               )}
               <div className='text-primary font-semibold text-lg hidden md:flex items-center'>
-                Chat {totalUnreadCount > 0 && <span className='text-xs font-normal ml-1'>({totalUnreadCount})</span>}
+                Chat{' '}
+                {conversationUnreadCount > 0 && (
+                  <span className='text-xs font-normal ml-1'>({conversationUnreadCount})</span>
+                )}
               </div>
               {currentReceiver && (
                 <div className='flex md:hidden items-center'>
@@ -158,7 +144,7 @@ const ChatBox = ({ visible = true, onClose }: ChatBoxProps) => {
           <div className='bg-white border-t-slate-900 h-[500px]'>
             <div className='flex relative'>
               {/* Danh sách người đã nhắn tin với mình */}
-              {receivers && (
+              {conversationReceivers && (
                 <div
                   className={classNames(
                     'absolute md:relative bottom-0 top-0 w-full md:w-1/3 bg-white border-r-0 md:border-r-slate-900 h-[500px] max-h-[500px] overflow-y-auto',
@@ -167,7 +153,7 @@ const ChatBox = ({ visible = true, onClose }: ChatBoxProps) => {
                     }
                   )}
                 >
-                  {receivers.map((receiver) => (
+                  {conversationReceivers.map((receiver) => (
                     <div
                       key={receiver._id}
                       className={classNames('flex py-4 pl-4 pr-6 relative', {

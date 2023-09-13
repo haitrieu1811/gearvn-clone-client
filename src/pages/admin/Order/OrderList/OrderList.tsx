@@ -85,13 +85,6 @@ const OrderList = () => {
 
   return (
     <Fragment>
-      <div className='px-8 py-3 mb-4 flex justify-between items-center bg-white'>
-        <div className='flex items-center'>
-          <h2 className='text-2xl font-bold mr-4'>Danh sách đơn hàng</h2>
-          <div className='text-slate-500 text-sm mt-1'>(Có {total} đơn hàng)</div>
-        </div>
-      </div>
-
       <Table
         totalRows={total || 0}
         tableName='Danh sách đơn hàng'
@@ -161,8 +154,13 @@ const OrderList = () => {
         pageSize={pageSize || 0}
       />
 
-      <Modal isVisible={Boolean(currentId)} onCancel={stopDelete} onOk={handleDelete}>
-        Bạn có chắc chắn muốn xóa đơn hàng này?
+      <Modal name='Xác nhận xóa đơn hàng' isVisible={Boolean(currentId)} onCancel={stopDelete} onOk={handleDelete}>
+        <div className='text-center leading-loose'>
+          <div>Bạn có chắc chắn muốn xóa đơn hàng này?</div>
+          <div className='text-red-500 font-semibold underline'>
+            Thông tin đơn hàng sẽ bị xóa vĩnh viễn <br /> và không thể khôi phục
+          </div>
+        </div>
       </Modal>
     </Fragment>
   );

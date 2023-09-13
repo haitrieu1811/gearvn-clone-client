@@ -95,8 +95,8 @@ const Table = ({
       <div className='bg-white px-4'>
         <div className='flex justify-between items-center mb-3 py-5'>
           <div className='flex items-center'>
-            {tableName && <h2 className='text-2xl font-bold text-slate-900'>{tableName}</h2>}
-            <span className='ml-3 text-slate-500'>({totalRows})</span>
+            {tableName && <h2 className='text-2xl font-semibold text-slate-900'>{tableName}</h2>}
+            <span className='ml-3 text-slate-500'>({totalRows} bản ghi)</span>
           </div>
           <div className='flex'>
             {onSearch && (
@@ -107,7 +107,7 @@ const Table = ({
                 <input
                   type='text'
                   id='search'
-                  className='outline-none border rounded px-3 py-1 text-slate-500 text-sm h-full focus:border-slate-500'
+                  className='outline-none border rounded px-3 py-1 text-slate-500 text-sm h-full'
                   onChange={handleSearch}
                 />
               </div>
@@ -165,7 +165,7 @@ const Table = ({
                 {/* Phân trang */}
                 <Pagination
                   pageSize={pageSize}
-                  classNameItem='w-8 h-8 flex justify-center items-center text-black rounded text-sm font-semibold'
+                  classNameItem='w-8 h-8 flex justify-center items-center text-black rounded-sm text-sm font-semibold'
                   classNameItemActive='bg-slate-900 text-white'
                 />
               </div>

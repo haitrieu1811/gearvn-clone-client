@@ -18,7 +18,6 @@ const Search = () => {
   const [keywordSearch, setKeywordSearch] = useState<string>('');
   const [showSearchResult, setShowSearchResult] = useState<boolean>(false);
   const keywordSearchDebounce = useDebounce(keywordSearch, 1500);
-  console.log('>>> Search re-render');
 
   // Query: Lấy danh sách sản phẩm
   const getProductsQuery = useQuery({

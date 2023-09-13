@@ -7,7 +7,6 @@ import { useMatch, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
 import categoryApi from 'src/apis/category.api';
-import Back from 'src/components/Back';
 import Button from 'src/components/Button';
 import Input from 'src/components/Input';
 import PATH from 'src/constants/path';
@@ -22,14 +21,17 @@ const Create = () => {
   const isUpdateMode = Boolean(match);
   const { category_id } = useParams();
 
+  // Query: lấy thông tin danh mục
   const getCategoryQuery = useQuery({
     queryKey: ['category', category_id],
     queryFn: () => categoryApi.getOne(category_id as string),
-    enabled: Boolean(category_id)
+    enabled: !!category_id
   });
 
+  // Thông tin danh mục
   const category = useMemo(() => getCategoryQuery.data?.data.data.category, [getCategoryQuery.data]);
 
+  // Form
   const {
     register,
     handleSubmit,
@@ -45,6 +47,7 @@ const Create = () => {
     }
   });
 
+  // Set giá trị cho form khi ở chế độ cập nhật
   useEffect(() => {
     if (category) {
       setValue('name_vi', category.name_vi);
@@ -52,6 +55,7 @@ const Create = () => {
     }
   }, [category, setValue]);
 
+  // Mutation: Tạo mới danh mục
   const createCategoryMutation = useMutation({
     mutationFn: categoryApi.create,
     onSuccess: () => {
@@ -73,6 +77,7 @@ const Create = () => {
     }
   });
 
+  // Mutation: Cập nhật danh mục
   const updateCategoryMutation = useMutation({
     mutationFn: categoryApi.update,
     onSuccess: (data) => {
@@ -81,19 +86,16 @@ const Create = () => {
     }
   });
 
+  // Submit form
   const onSubmit = handleSubmit((data) => {
-    if (!isUpdateMode) {
-      createCategoryMutation.mutate(data);
-    } else {
-      updateCategoryMutation.mutate({ body: data, categoryId: category_id as string });
-    }
+    if (!isUpdateMode) createCategoryMutation.mutate(data);
+    else updateCategoryMutation.mutate({ body: data, categoryId: category_id as string });
   });
 
   return (
     <Fragment>
-      <Back />
       <div className='bg-white rounded-lg p-6 shadow-sm w-1/2'>
-        <h2 className='text-2xl font-bold'>{!isUpdateMode ? 'Tạo mới danh mục' : 'Cập nhật danh mục'}</h2>
+        <h2 className='text-2xl font-semibold'>{!isUpdateMode ? 'Tạo mới danh mục' : 'Cập nhật danh mục'}</h2>
         <form onSubmit={onSubmit}>
           <Input
             type='text'

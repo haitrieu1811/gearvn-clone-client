@@ -4,17 +4,17 @@ import { createContext, useContext, useEffect, useMemo } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { Link, Outlet, useMatch, useNavigate } from 'react-router-dom';
 
+import { Helmet } from 'react-helmet-async';
 import addressApi from 'src/apis/address.api';
 import purchaseApi from 'src/apis/purchase.api';
 import { ChevronLeftIcon } from 'src/components/Icons';
 import { Gender, PaymentMethod, ReceiveMethod } from 'src/constants/enum';
 import PATH from 'src/constants/path';
 import { AppContext, ExtendedPurchase } from 'src/contexts/app.context';
+import { Address } from 'src/types/address.type';
 import { Purchase } from 'src/types/purchase.type';
-import { Address } from 'src/types/user.type';
 import { PaymentOrderSchema, paymentOrderSchema } from 'src/utils/rules';
-import PaymentProgress from './PaymentProgress/PaymentProgress';
-import { Helmet } from 'react-helmet-async';
+import PaymentProgress from './PaymentProgress';
 
 interface CartContext {
   total: number;
@@ -38,15 +38,16 @@ export const CartContext = createContext<CartContext>(initCartContext);
 
 const Cart = () => {
   const navigate = useNavigate();
-  const isCartListPage = Boolean(useMatch(PATH.CART_LIST));
+  const isCartListPage = !!useMatch(PATH.CART_LIST);
   const { extendedCartList, profile } = useContext(AppContext);
 
-  // Lấy danh sách sản phẩm trong giỏ hàng
+  // Query: Lấy danh sách sản phẩm trong giỏ hàng
   const getCartListQuery = useQuery({
     queryKey: ['cart_list'],
     queryFn: () => purchaseApi.getCart()
   });
 
+  // Query: Lấy danh sách địa chỉ
   const getAddressesQuery = useQuery({
     queryKey: ['addresses'],
     queryFn: () => addressApi.getAddresses()
@@ -79,9 +80,7 @@ const Cart = () => {
 
   // Nếu không có sản phẩm nào trong giỏ hàng thì chuyển về trang danh sách sản phẩm
   useEffect(() => {
-    if (total <= 0) {
-      navigate(PATH.CART_LIST);
-    }
+    if (total <= 0) navigate(PATH.CART_LIST);
   }, [total]);
 
   // Form

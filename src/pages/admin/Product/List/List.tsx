@@ -217,10 +217,17 @@ const List = () => {
         }
       />
       {/* Modal */}
-      <Modal isVisible={isOpenModal} onCancel={stopDelete} onOk={handleDelete}>
-        {currentId
-          ? 'Bạn có chắc muốn xóa sản phẩm này'
-          : `Bạn có chắc muốn xóa ${checkedProducts.length} sản phẩm đã chọn`}
+      <Modal name='Xác nhận xóa sản phẩm' isVisible={isOpenModal} onCancel={stopDelete} onOk={handleDelete}>
+        <div className='text-center leading-loose'>
+          <div>
+            {currentId
+              ? 'Bạn có chắc muốn xóa sản phẩm này?'
+              : `Bạn có chắc muốn xóa ${checkedProducts.length} sản phẩm đã chọn?`}
+          </div>
+          <div className='font-medium text-red-500 underline mt-2'>
+            Sản phẩm sẽ bị xóa vĩnh viễn và không thể khôi phục.
+          </div>
+        </div>
       </Modal>
     </Fragment>
   );

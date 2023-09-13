@@ -1,19 +1,17 @@
 import Tippy from '@tippyjs/react/headless';
 import { useContext } from 'react';
-import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { useMutation } from '@tanstack/react-query';
+import { Link } from 'react-router-dom';
 
-import { UserIcon, HandIcon, ChartPieIcon, ViewedIcon, PurchaseIcon, LogoutIcon } from 'src/components/Icons';
-import { AppContext } from 'src/contexts/app.context';
+import { ChartPieIcon, HandIcon, LogoutIcon, PurchaseIcon, UserIcon, ViewedIcon } from 'src/components/Icons';
 import Wrapper from 'src/components/Wrapper';
-import PATH from 'src/constants/path';
 import { UserRole } from 'src/constants/enum';
-import authApi from 'src/apis/auth.api';
+import PATH from 'src/constants/path';
+import { AppContext } from 'src/contexts/app.context';
 
 const Account = () => {
   const { t } = useTranslation('pages');
-  const { isAuthenticated, setIsAuthenticated, profile, setProfile } = useContext(AppContext);
+  const { isAuthenticated, profile, logout } = useContext(AppContext);
 
   // Render menu của người dùng
   const renderUserMenu = () => {
@@ -77,18 +75,6 @@ const Account = () => {
         )}
       </Wrapper>
     );
-  };
-
-  // Đăng xuất
-  const logoutMutation = useMutation({
-    mutationFn: authApi.logout,
-    onSuccess: () => {
-      setIsAuthenticated(false);
-      setProfile(null);
-    }
-  });
-  const logout = () => {
-    logoutMutation.mutate();
   };
 
   return (

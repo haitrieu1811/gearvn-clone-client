@@ -52,7 +52,9 @@ const ProductReviewList = ({ productId }: ProductReviewListProps) => {
                     ))}
                 </div>
                 <div className='flex-1 pl-4'>
-                  {review.comment && review.comment.length > 0 && <div className='text-sm mb-2'>{review.comment}</div>}
+                  {review.comment && review.comment.trim().length > 0 && (
+                    <div className='text-sm mb-2'>{review.comment}</div>
+                  )}
                   {/* Hỉnh ảnh */}
                   {review.images.length > 0 && (
                     <div className='mb-4 flex'>

@@ -262,7 +262,7 @@ const Create = () => {
   return (
     <Fragment>
       <div className='bg-white rounded-lg shadow-sm p-6'>
-        <h2 className='text-2xl font-bold mb-6'>{!isUpdateMode ? 'Tạo sản phẩm mới' : 'Cập nhật sản phẩm'}</h2>
+        <h2 className='text-2xl font-semibold mb-6'>{!isUpdateMode ? 'Tạo sản phẩm mới' : 'Cập nhật sản phẩm'}</h2>
         {/* Khi có dữ liệu hoặc ở chế độ tạo */}
         {(!isUpdateMode || (product && !getProductDetailQuery.isLoading)) && (
           <form onSubmit={onSubmit} encType='multipart/form-data'>

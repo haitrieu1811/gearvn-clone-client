@@ -20,7 +20,7 @@ import Header from '../components/Header';
 import SubMenuItem from '../components/Header/SubMenuItem';
 
 const MainLayout = ({ children }: { children: ReactNode }) => {
-  const { isAuthenticated, isOpenChat, setIsOpenChat } = useContext(AppContext);
+  const { isAuthenticated, isOpenChat, setIsOpenChat, conversationUnreadCount } = useContext(AppContext);
   const isTablet = useMediaQuery({ maxWidth: CONFIG.TABLET_SCREEN_SIZE });
 
   return (
@@ -44,6 +44,8 @@ const MainLayout = ({ children }: { children: ReactNode }) => {
         </div>
       )}
       {children}
+
+      {/* Nút mở chatbox */}
       {isAuthenticated && !isTablet && (
         <Fragment>
           <div
@@ -52,11 +54,11 @@ const MainLayout = ({ children }: { children: ReactNode }) => {
           >
             <ChatIcon className='w-6 h-6 text-white' />
             <span className='text-white text-lg font-semibold ml-3'>Chat</span>
-            {/* {totalUnreadCount > 0 && (
-          <span className='absolute -top-3 -right-3 bg-primary text-white text-xs font-medium w-6 h-6 rounded-full flex justify-center items-center border-[2px]'>
-            {totalUnreadCount <= 9 ? totalUnreadCount : '9+'}
-          </span>
-        )} */}
+            {conversationUnreadCount > 0 && (
+              <span className='absolute -top-3 -right-3 bg-primary text-white text-xs font-medium w-6 h-6 rounded-full flex justify-center items-center border-[2px]'>
+                {conversationUnreadCount <= 9 ? conversationUnreadCount : '9+'}
+              </span>
+            )}
           </div>
 
           <ChatBox visible={isOpenChat} onClose={() => setIsOpenChat(false)} />

@@ -4,23 +4,21 @@ import isUndefined from 'lodash/isUndefined';
 import omitBy from 'lodash/omitBy';
 import moment from 'moment';
 import { ChangeEvent, Fragment, useContext, useEffect, useMemo, useState } from 'react';
-import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
 import brandApi from 'src/apis/brand.api';
 import Checkbox from 'src/components/Checkbox';
-import { SearchIcon } from 'src/components/Icons';
 import Modal from 'src/components/Modal';
 import Table from 'src/components/Table';
 import TableAction from 'src/components/Table/TableAction';
 import PATH from 'src/constants/path';
 import { AppContext } from 'src/contexts/app.context';
 import UseQueryParams from 'src/hooks/useQueryParams';
-import { GetBrandsRequestParams } from 'src/types/brand.type';
+import { PaginationRequestParams } from 'src/types/utils.type';
 import { convertMomentFromNowToVietnamese } from 'src/utils/utils';
 
 type QueryConfig = {
-  [key in keyof GetBrandsRequestParams]: string;
+  [key in keyof PaginationRequestParams]: string;
 };
 
 const List = () => {
@@ -39,7 +37,8 @@ const List = () => {
   // Lấy danh sách nhãn hiệu
   const getBrandsQuery = useQuery({
     queryKey: ['brands', queryConfig],
-    queryFn: () => brandApi.getList(queryConfig)
+    queryFn: () => brandApi.getList(queryConfig),
+    keepPreviousData: true
   });
 
   // Xóa nhãn hiệu
@@ -109,27 +108,8 @@ const List = () => {
 
   return (
     <Fragment>
-      <div className='flex justify-between items-center mb-4 bg-white py-3 px-4 rounded-lg shadow-sm'>
-        <div>
-          <div className='relative'>
-            <input
-              type='text'
-              placeholder='Tìm kiếm'
-              className='border rounded py-[6px] px-3 text-sm outline-none w-[180px] pr-11 bg-slate-100'
-            />
-            <button className='absolute top-1/2 -translate-y-1/2 right-0 h-full w-10 flex justify-center items-center'>
-              <SearchIcon className='w-4 h-4' />
-            </button>
-          </div>
-        </div>
-        <Link
-          to={PATH.DASHBOARD_BRAND_CREATE}
-          className='px-2 py-[6px] rounded bg-blue-600 flex justify-center items-center'
-        >
-          <span className='text-white text-sm font-medium'>Tạo mới</span>
-        </Link>
-      </div>
       <Table
+        tableName='Danh sách nhãn hiệu'
         totalRows={getBrandsQuery.data?.data.data.pagination.total || 0}
         data={extendedBrands}
         columns={[
@@ -141,17 +121,17 @@ const List = () => {
           {
             headerName: 'Nhãn hiệu',
             field: 'name',
-            width: 30
+            width: 50
           },
           {
             headerName: 'Tạo lúc',
             field: 'createdAt',
-            width: 25
+            width: 15
           },
           {
             headerName: 'Cập nhật',
             field: 'updatedAt',
-            width: 25
+            width: 15
           },
           {
             headerName: 'Thao tác',
@@ -173,6 +153,7 @@ const List = () => {
         }))}
         pageSize={pageSize || 0}
         isLoading={getBrandsQuery.isLoading}
+        addNewPath={PATH.DASHBOARD_BRAND_CREATE}
         tableFootLeft={
           checkedBrands.length > 0 && (
             <button
@@ -184,8 +165,13 @@ const List = () => {
           )
         }
       />
-      <Modal isVisible={modalVisible} onOk={handleDelete} onCancel={stopDelete}>
-        Bạn có chắc muốn xóa nhãn hiệu này
+      <Modal name='Xác nhận xóa nhãn hiệu' isVisible={modalVisible} onOk={handleDelete} onCancel={stopDelete}>
+        <div className='text-center leading-loose'>
+          <div>Bạn có chắc muốn xóa nhãn hiệu này ?</div>
+          <div className='font-medium text-red-500 underline'>
+            Nhãn hiệu và những sản phẩm thuộc nhãn hiệu này <br /> sẽ bị xóa vĩnh viễn và không thể khôi phục.
+          </div>
+        </div>
       </Modal>
     </Fragment>
   );

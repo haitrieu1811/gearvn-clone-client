@@ -8,7 +8,7 @@ import userApi from 'src/apis/user.api';
 import Drawer from 'src/components/Drawer';
 import { BarIcon } from 'src/components/Icons';
 import CONFIG from 'src/constants/config';
-import AccountSidebar from 'src/layouts/components/AccountSidebar';
+import SidebarAccount from 'src/layouts/components/SidebarAccount';
 import { GetMeResponse, User } from 'src/types/user.type';
 
 interface AccountContext {
@@ -62,7 +62,7 @@ const Account = () => {
         )}
         {!isTablet && (
           <div className='col-span-12 lg:col-span-3 bg-white rounded shadow-sm'>
-            <AccountSidebar />
+            <SidebarAccount />
           </div>
         )}
         <div className='col-span-12 lg:col-span-9'>
@@ -71,7 +71,7 @@ const Account = () => {
         {isTablet && (
           <Fragment>
             <Drawer isShow={showAccountMenu} onCancel={() => setShowAccountMenu(false)}>
-              <AccountSidebar />
+              <SidebarAccount />
             </Drawer>
           </Fragment>
         )}

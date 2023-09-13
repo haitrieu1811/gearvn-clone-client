@@ -136,7 +136,7 @@ const SendReview = ({ product }: SendReviewProps) => {
       queryClient.invalidateQueries(['product', product._id]);
       queryClient.invalidateQueries(['review_detail', product._id]);
       // Gửi thông báo
-      socket.emit('send_product_review', {
+      socket.emit('new_review', {
         type: NotificationType.NewReview,
         title: 'Có đánh giá mới',
         content: `<strong>${profile?.fullName || ''}</strong> đã đánh giá sản phẩm <strong>${product.name_vi}</strong>`,
@@ -193,7 +193,15 @@ const SendReview = ({ product }: SendReviewProps) => {
         <span className='text-sm text-white font-medium'>Gửi đánh giá của bạn</span>
       </button>
 
-      <Modal isVisible={isVisible} modalHeader={false} cancelButton={false} okButton={false} onCancel={closeModal}>
+      <Modal
+        isVisible={isVisible}
+        icon={false}
+        closeButton={false}
+        cancelButton={false}
+        okButton={false}
+        paddingBody={false}
+        onCancel={closeModal}
+      >
         <div className='flex'>
           {!isTablet && (
             <div className='w-[340px] bg-primary p-4'>

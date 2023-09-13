@@ -8,8 +8,6 @@ interface CartProps {
 }
 
 const Cart = ({ cartSize }: CartProps) => {
-  console.log('>>> Cart re-render');
-
   return (
     <div className='relative'>
       <CartIcon className='w-[18px]' />

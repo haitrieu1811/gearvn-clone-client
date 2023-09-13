@@ -21,7 +21,8 @@ const Notification = () => {
 
   // Socket lắng nghe sự kiện có thông báo mới
   useEffect(() => {
-    socket.on('receive_notification', (new_notification) => {
+    socket.on('receive_notification', (data) => {
+      const { new_notification } = data.payload;
       setNotifications((prevState) => [new_notification, ...prevState]);
       setUnreadCount((prevState) => prevState + 1);
     });
@@ -106,7 +107,7 @@ const Notification = () => {
       placement='bottom-end'
       offset={[0, 10]}
       render={() => (
-        <div className='bg-white rounded-lg shadow-2xl w-[350px]'>
+        <div className='bg-white rounded-lg shadow-2xl w-[350px] border'>
           <div className='flex justify-between items-center px-6 py-3'>
             <h3 className='text-lg font-semibold'>Thông báo</h3>
             {unreadCount !== undefined && unreadCount > 0 && (
@@ -134,14 +135,14 @@ const Notification = () => {
                 {notifications.map((notification) => (
                   <div
                     key={notification._id}
-                    className={classNames('group pl-6 pr-4 py-3 flex cursor-pointer', {
+                    className={classNames('group pl-5 pr-4 py-3 flex cursor-pointer', {
                       'bg-blue-50': !notification.is_read
                     })}
                   >
                     <img
                       src={getImageUrl(notification.sender.avatar)}
                       alt={notification.sender.fullName}
-                      className='w-9 h-9 rounded object-cover'
+                      className='w-10 h-10 rounded-full object-cover'
                     />
                     <Link to={notification.path} className='flex-1 ml-5'>
                       <div

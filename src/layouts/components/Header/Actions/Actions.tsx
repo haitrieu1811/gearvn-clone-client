@@ -12,8 +12,6 @@ interface ActionsProps {
 }
 
 const Actions = ({ cartSize }: ActionsProps) => {
-  console.log('>>> Actions re-render');
-
   return (
     <div className='flex items-center'>
       <HeaderAction

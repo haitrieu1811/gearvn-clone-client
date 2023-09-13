@@ -13,8 +13,12 @@ import {
 } from 'src/components/Icons';
 import PATH from 'src/constants/path';
 import DashboardItem from './DashboardItem';
+import { useContext } from 'react';
+import { AppContext } from 'src/contexts/app.context';
 
-const DashboardSidebar = () => {
+const SidebarDashboard = () => {
+  const { logout } = useContext(AppContext);
+
   return (
     <aside className='w-[240px] h-screen bg-slate-800 sticky z-[999] right-0 top-0 bottom-0 pb-10 border-r'>
       <div className='p-5'>
@@ -56,7 +60,7 @@ const DashboardSidebar = () => {
           <HomeIcon className='w-4 h-4 text-white' />
           <span className='text-sm text-white ml-3 capitalize font-medium'>Về cửa hàng</span>
         </Link>
-        <button className='flex items-center rounded py-3 px-4 hover:bg-slate-700 w-full'>
+        <button onClick={logout} className='flex items-center rounded py-3 px-4 hover:bg-slate-700 w-full'>
           <LogoutIcon className='w-4 h-4 text-white' />
           <span className='text-sm text-white ml-3 capitalize font-medium'>Đăng xuất</span>
         </button>
@@ -65,4 +69,4 @@ const DashboardSidebar = () => {
   );
 };
 
-export default DashboardSidebar;
+export default SidebarDashboard;

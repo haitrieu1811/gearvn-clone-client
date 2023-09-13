@@ -39,6 +39,7 @@ const Profile = () => {
     }
   });
 
+  // Gửi lại email xác thực
   const resendVerifyEmail = () => {
     resendVerifyEmailMutation.mutate();
   };

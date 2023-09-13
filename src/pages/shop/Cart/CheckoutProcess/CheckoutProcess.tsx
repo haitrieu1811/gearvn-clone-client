@@ -3,6 +3,7 @@ import { useContext } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 
+import { toast } from 'react-toastify';
 import purchaseApi from 'src/apis/purchase.api';
 import CODImage from 'src/assets/images/COD.webp';
 import Button from 'src/components/Button/Button';
@@ -11,16 +12,18 @@ import PATH from 'src/constants/path';
 import { PaymentOrderSchema } from 'src/utils/rules';
 import { formatCurrency } from 'src/utils/utils';
 import { CartContext } from '../Cart';
-import { toast } from 'react-toastify';
+import socket from 'src/utils/socket';
+import { AppContext } from 'src/contexts/app.context';
 
 const CheckoutProcess = () => {
   const navigate = useNavigate();
+  const { profile } = useContext(AppContext);
   const { total, checkedCartList, refetchCartList } = useContext(CartContext);
   const { handleSubmit, watch, getValues } = useFormContext<PaymentOrderSchema>();
 
   const payment_method = watch('payment_method');
 
-  // Thanh toán
+  // Mutation: Thanh toán
   const checkoutMutation = useMutation({
     mutationFn: purchaseApi.checkout,
     onSuccess: (data) => {
@@ -31,9 +34,19 @@ const CheckoutProcess = () => {
           order_id: data.data.data.order_id
         }
       });
+      socket.emit('new_order', {
+        payload: {
+          sender: profile,
+          title: 'Có đơn hàng mới',
+          content: `<strong>${getValues(
+            'customer_name'
+          )}</strong> vừa đặt hàng với tổng đơn là <strong>${formatCurrency(total as number)}₫</strong>`
+        }
+      });
     }
   });
 
+  // Xử lý submit form (đặt hàng)
   const onSubmit = handleSubmit((data) => {
     const purchases = checkedCartList.map((cartItem) => cartItem._id);
     const totalItems = checkedCartList.reduce((acc, cartItem) => acc + cartItem.buy_count, 0);
