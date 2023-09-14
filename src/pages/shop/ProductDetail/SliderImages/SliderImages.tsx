@@ -1,31 +1,28 @@
 import classNames from 'classnames';
-import { Fragment, useEffect, useMemo, useRef, useState } from 'react';
-import PropTypes from 'prop-types';
+import { Fragment, useContext, useEffect, useMemo, useRef, useState } from 'react';
 
 import { ArrowLeftIcon, ArrowRightIcon } from 'src/components/Icons';
-import { Product } from 'src/types/product.type';
-import { getImageUrl } from 'src/utils/utils';
+import Image from 'src/components/Image';
+import { ProductDetailContext } from '../ProductDetail';
+import fallbackImage from 'src/assets/images/product-fallback.png';
 
-interface SliderImagesProps {
-  product: Product;
-}
-
-const SliderImages = ({ product }: SliderImagesProps) => {
+const SliderImages = () => {
+  const { imagesObject, setShowPreviewImages, setPreviewImages } = useContext(ProductDetailContext);
   const [indexCurrentImages, setIndexCurrentImages] = useState<number[]>([0, 5]);
   const [activeImage, setActiveImage] = useState<string>('');
   const imageRef = useRef<HTMLImageElement>(null);
 
   // Active hình ảnh đầu tiên của sản phẩm
   useEffect(() => {
-    if (product.images && product.images.length > 0) {
-      setActiveImage(product.images[0].name);
+    if (imagesObject && imagesObject.length > 0) {
+      setActiveImage(imagesObject[0].name);
     }
-  }, [product]);
+  }, [imagesObject]);
 
   // Danh sách những hình ảnh đang nằm trong slide
   const currentImages = useMemo(
-    () => (product.images ? product.images.slice(...indexCurrentImages) : []),
-    [product, indexCurrentImages]
+    () => (imagesObject ? imagesObject.slice(...indexCurrentImages) : []),
+    [imagesObject, indexCurrentImages]
   );
 
   // Prev slider hình ảnh
@@ -37,10 +34,8 @@ const SliderImages = ({ product }: SliderImagesProps) => {
 
   // Next slider hình ảnh
   const nextSliderImages = () => {
-    if (product.images) {
-      if (indexCurrentImages[1] < product.images.length) {
-        setIndexCurrentImages((prevState) => [prevState[0] + 1, prevState[1] + 1]);
-      }
+    if (imagesObject && indexCurrentImages[1] < imagesObject.length) {
+      setIndexCurrentImages((prevState) => [prevState[0] + 1, prevState[1] + 1]);
     }
   };
 
@@ -68,21 +63,31 @@ const SliderImages = ({ product }: SliderImagesProps) => {
     imageRef.current?.removeAttribute('style');
   };
 
+  // Hiển thị danh sách hình ảnh
+  const handleShowPreviewImages = () => {
+    if (setShowPreviewImages && setPreviewImages && imagesObject && imagesObject.length > 0) {
+      setShowPreviewImages(true);
+      setPreviewImages(imagesObject.map((image) => image.name));
+    }
+  };
+
   return (
     <Fragment>
       <div
         className='overflow-hidden pt-[100%] relative hover:cursor-zoom-in'
         onMouseMove={handleZoomImage}
         onMouseLeave={handleRemoveZoomImage}
+        onClick={handleShowPreviewImages}
       >
-        <img
+        <Image
           ref={imageRef}
-          src={getImageUrl(activeImage)}
-          alt={product.name_vi}
+          src={activeImage}
+          fallbackImage={fallbackImage}
+          alt={imagesObject[0].name}
           className='absolute inset-0 w-full h-full object-cover rounded'
         />
       </div>
-      {product.images && product.images.length > 0 && (
+      {imagesObject && imagesObject.length > 0 && (
         <div className='relative group'>
           {indexCurrentImages[0] > 0 && (
             <button
@@ -104,8 +109,8 @@ const SliderImages = ({ product }: SliderImagesProps) => {
                   })}
                   onClick={() => setActiveImage(image.name)}
                 >
-                  <img
-                    src={getImageUrl(image.name)}
+                  <Image
+                    src={image.name}
                     alt={image.name}
                     className='absolute inset-0 rounded object-cover w-full h-full'
                   />
@@ -113,7 +118,7 @@ const SliderImages = ({ product }: SliderImagesProps) => {
               );
             })}
           </div>
-          {indexCurrentImages[1] < product.images.length && (
+          {indexCurrentImages[1] < imagesObject.length && (
             <button
               className='absolute right-1 top-1/2 -translate-y-1/2 border bg-white w-[32px] h-[32px] rounded-full hidden items-center justify-center shadow group-hover:flex'
               onClick={nextSliderImages}
@@ -125,10 +130,6 @@ const SliderImages = ({ product }: SliderImagesProps) => {
       )}
     </Fragment>
   );
-};
-
-SliderImages.propTypes = {
-  product: PropTypes.object.isRequired
 };
 
 export default SliderImages;

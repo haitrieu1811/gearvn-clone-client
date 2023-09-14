@@ -1,13 +1,14 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { isAxiosError } from 'axios';
-import { Fragment, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { toast } from 'react-toastify';
-import addressApi from 'src/apis/address.api';
 
+import addressApi from 'src/apis/address.api';
 import Alert from 'src/components/Alert';
+import ContextMenu from 'src/components/ContextMenu';
 import CreateAddress from 'src/components/CreateAddress';
-import { EmptyImage, PlusIcon } from 'src/components/Icons';
+import { EmptyImage, PencilIcon, PlusIcon, TrashIcon } from 'src/components/Icons';
 import Modal from 'src/components/Modal';
 import { OnlyMessageResponse } from 'src/types/utils.type';
 
@@ -17,7 +18,7 @@ const Address = () => {
   const [currentId, setCurrentId] = useState<string | null>(null);
   const [isUpdateMode, setIsUpdateMode] = useState<boolean>(false);
 
-  // Lấy danh sách địa chỉ
+  // Query: Lấy danh sách địa chỉ
   const getAddressesQuery = useQuery({
     queryKey: ['addresses'],
     queryFn: () => addressApi.getAddresses()
@@ -120,13 +121,13 @@ const Address = () => {
           className='flex items-center bg-[#005EC9] rounded py-[6px] md:py-2 px-2 md:px-3 hover:bg-[#005EC9]/90'
           onClick={startAdd}
         >
-          <PlusIcon className='w-3 h-3 stroke-white mr-1' />
+          <PlusIcon className='w-3 h-3 stroke-white stroke-[3.5] mr-2' />
           <span className='text-xs md:text-sm text-white'>Thêm địa chỉ mới</span>
         </button>
       </div>
       {/* Khi đã có địa chỉ */}
       {addresses && addresses.length > 0 && !getAddressesQuery.isLoading && (
-        <Fragment>
+        <div className='lg:min-h-[280px] flex flex-col justify-between'>
           <div className='px-2 md:px-6 py-4'>
             {addresses.map((address) => (
               <div key={address._id} className='py-3 border-b border-[#cfcfcf] flex justify-between items-center'>
@@ -147,23 +148,26 @@ const Address = () => {
                     {address.street}, {address.ward}, {address.district}, {address.province}
                   </div>
                 </div>
-                <div className='flex items-center ml-2 md:ml-4'>
-                  <button className='text-sm font-semibold text-[#005EC9]' onClick={() => startUpdate(address._id)}>
-                    Sửa
-                  </button>
-                  <div className='h-4 w-[1px] bg-slate-300 mx-1' />
-                  <button className='text-sm font-semibold text-primary' onClick={() => startDelete(address._id)}>
-                    Xóa
-                  </button>
-                </div>
+                <ContextMenu
+                  wrapperClassName='ml-2 md:ml-4'
+                  items={[
+                    {
+                      icon: <PencilIcon className='w-4 h-4 mr-3' />,
+                      label: 'Cập nhật địa chỉ',
+                      onClick: () => startUpdate(address._id)
+                    },
+                    {
+                      icon: <TrashIcon className='w-4 h-4 mr-3' />,
+                      label: 'Xóa địa chỉ',
+                      onClick: () => startDelete(address._id)
+                    }
+                  ]}
+                />
               </div>
             ))}
           </div>
-          <Alert>
-            Nếu địa chỉ nhận hàng chưa chính xác, vui lòng kiểm tra và cập nhật. Mỗi tài khoản chỉ được tạo tối đa 3 địa
-            chỉ
-          </Alert>
-        </Fragment>
+          <Alert>Nếu địa chỉ nhận hàng chưa chính xác, vui lòng kiểm tra và cập nhật.</Alert>
+        </div>
       )}
       {/* Khi chưa có địa chỉ nào */}
       {addresses && addresses.length <= 0 && !getAddressesQuery.isLoading && (
@@ -174,7 +178,7 @@ const Address = () => {
       )}
       <Modal
         icon={false}
-        name={!isUpdateMode ? 'Thêm địa chỉ' : 'Cập nhật địa chỉ'}
+        name={!isUpdateMode ? 'THÊM ĐỊA CHỈ' : 'CẬP NHẬT ĐỊA CHỈ'}
         isVisible={addModalOpen}
         onCancel={!isUpdateMode ? stopAdd : stopUpdate}
         cancelButton={false}

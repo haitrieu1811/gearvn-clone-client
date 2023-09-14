@@ -56,6 +56,13 @@ export interface UpdateMeRequestBody {
   avatar?: string;
 }
 
+// Request: Đổi mật khẩu
+export interface ChangePasswordRequestBody {
+  old_password: string;
+  password: string;
+  confirm_password: string;
+}
+
 // Response: Lấy danh sách người dùng
 export type GetUserResponse = SuccessResponse<{ users: User[]; pagination: Pagination }>;
 

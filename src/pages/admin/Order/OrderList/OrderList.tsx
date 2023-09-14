@@ -3,11 +3,13 @@ import isUndefined from 'lodash/isUndefined';
 import omitBy from 'lodash/omitBy';
 import moment from 'moment';
 import { Fragment, useMemo, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
 import orderApi from 'src/apis/order.api';
 import Badge from 'src/components/Badge/Badge';
+import ContextMenu from 'src/components/ContextMenu';
+import { EyeIcon, TrashIcon } from 'src/components/Icons';
 import Modal from 'src/components/Modal/Modal';
 import Table from 'src/components/Table';
 import { OrderStatus } from 'src/constants/enum';
@@ -30,8 +32,8 @@ export const orderStatus = {
 };
 
 const OrderList = () => {
+  const navigate = useNavigate();
   const [currentId, setCurrentId] = useState<string | null>(null);
-
   const queryParams: QueryConfig = UseQueryParams();
   const queryConfig: QueryConfig = omitBy(
     {
@@ -42,7 +44,7 @@ const OrderList = () => {
     isUndefined
   );
 
-  // Lấy danh sách đơn hàng
+  // Query: Lấy danh sách đơn hàng
   const getOrdersQuery = useQuery({
     queryKey: ['all-orders', queryConfig],
     queryFn: () => orderApi.getAll(queryConfig),
@@ -51,8 +53,10 @@ const OrderList = () => {
 
   // Danh sách đơn hàng
   const orders = useMemo(() => getOrdersQuery.data?.data.data.orders, [getOrdersQuery.data?.data.data.orders]);
+
   // Tổng số đơn hàng
   const total = getOrdersQuery.data?.data.data.pagination.total;
+
   // Tổng số trang
   const pageSize = getOrdersQuery.data?.data.data.pagination.page_size;
 
@@ -108,7 +112,7 @@ const OrderList = () => {
           {
             field: 'note',
             headerName: 'Ghi chú',
-            width: 15
+            width: 20
           },
           {
             field: 'status',
@@ -122,8 +126,8 @@ const OrderList = () => {
           },
           {
             field: 'actions',
-            headerName: 'Thao tác',
-            width: 10
+            headerName: '',
+            width: 5
           }
         ]}
         rows={
@@ -139,15 +143,20 @@ const OrderList = () => {
             status: orderStatus[order.status as OrderStatus],
             createdAt: convertMomentFromNowToVietnamese(moment(order.created_at).fromNow()),
             actions: (
-              <div className='flex items-center'>
-                <Link to={`${PATH.DASHBOARD_ORDER_DETAIL_WITHOUT_ID}/${order._id}`} className='text-blue-500'>
-                  Xem
-                </Link>
-                <div className='w-[1px] h-4 bg-slate-300 mx-1' />
-                <button className='text-sm text-red-500' onClick={() => startDelete(order._id)}>
-                  Xóa
-                </button>
-              </div>
+              <ContextMenu
+                items={[
+                  {
+                    icon: <EyeIcon className='w-4 h-4 mr-3' />,
+                    label: 'Chi tiết đơn hàng',
+                    onClick: () => navigate(`${PATH.DASHBOARD_ORDER_DETAIL_WITHOUT_ID}/${order._id}`)
+                  },
+                  {
+                    icon: <TrashIcon className='w-4 h-4 mr-3' />,
+                    label: 'Xóa đơn hàng',
+                    onClick: () => startDelete(order._id)
+                  }
+                ]}
+              />
             )
           })) || []
         }

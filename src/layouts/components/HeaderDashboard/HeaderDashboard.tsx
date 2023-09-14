@@ -51,6 +51,12 @@ const HeaderDashboard = () => {
                     >
                       Cập nhật tài khoản
                     </Link>
+                    <Link
+                      to={PATH.ACCOUNT_CHANGE_PASSWORD}
+                      className='block py-2 pl-7 pr-20 text-sm text-slate-500 hover:text-slate-600'
+                    >
+                      Đổi mật khẩu
+                    </Link>
                     <button
                       onClick={logout}
                       className='block w-full text-left py-2 pl-7 pr-20 text-sm text-slate-500 hover:text-slate-600'

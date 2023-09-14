@@ -8,7 +8,7 @@ interface Brand {
 }
 
 // Type: Hình ảnh
-interface Image {
+export interface Image {
   _id: string;
   name: string;
 }

@@ -17,6 +17,11 @@ export const userSchema = yup.object({
     .string()
     .required('Nhập lại khẩu không được để trống')
     .oneOf([yup.ref('password')], 'Nhập lại mật khẩu không chính xác'),
+  old_password: yup
+    .string()
+    .required('Mật khẩu cũ không được để trống')
+    .min(6, 'Mật khẩu cũ phải có độ dài từ 6 đến 32 kí tự')
+    .max(32, 'Mật khẩu cũ phải có độ dài từ 6 đến 32 kí tự'),
   fullName: yup
     .string()
     .required('Họ tên không được để trống')
@@ -116,6 +121,7 @@ export const createProductSchema = productSchema.pick([
 ]);
 export const createBlogSchema = blogSchema.pick(['name_vi', 'name_en', 'content_vi', 'content_en']);
 export const updateMeSchema = userSchema.pick(['fullName', 'phoneNumber', 'gender', 'date_of_birth']);
+export const changePasswordSchema = userSchema.pick(['old_password', 'password', 'confirm_password']);
 export const addAddressSchema = addressSchema.pick(['province', 'district', 'ward', 'street', 'type']);
 export const paymentOrderSchema = orderSchema.pick([
   'district',
@@ -139,6 +145,7 @@ export type CreateBrandSchema = yup.InferType<typeof createBrandSchema>;
 export type CreateProductSchema = yup.InferType<typeof createProductSchema>;
 export type CreateBlogSchema = yup.InferType<typeof createBlogSchema>;
 export type UpdateMeSchema = yup.InferType<typeof updateMeSchema>;
+export type ChangePasswordSchema = yup.InferType<typeof changePasswordSchema>;
 export type AddAddressSchema = yup.InferType<typeof addAddressSchema>;
 export type PaymentOrderSchema = yup.InferType<typeof paymentOrderSchema>;
 export type ForgotPasswordSchema = yup.InferType<typeof forgotPasswordSchema>;

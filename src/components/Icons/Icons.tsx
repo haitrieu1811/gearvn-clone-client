@@ -29,7 +29,7 @@ export const EyeIcon = ({ className = 'w-5 h-5', onClick }: IconProps) => (
     viewBox='0 0 24 24'
     strokeWidth={1.5}
     stroke='currentColor'
-    className={`absolute right-2 top-1/2 -translate-y-1/2 stroke-gray-500 cursor-pointer ${className}`}
+    className={className}
     onClick={onClick}
   >
     <path
@@ -1348,6 +1348,74 @@ export const ExclamationCircleIcon = ({ className }: IconProps) => (
       strokeLinecap='round'
       strokeLinejoin='round'
       d='M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z'
+    />
+  </svg>
+);
+
+export const KeyIcon = ({ className }: IconProps) => (
+  <svg
+    xmlns='http://www.w3.org/2000/svg'
+    fill='none'
+    viewBox='0 0 24 24'
+    strokeWidth={1.5}
+    stroke='currentColor'
+    className={className}
+  >
+    <path
+      strokeLinecap='round'
+      strokeLinejoin='round'
+      d='M15.75 5.25a3 3 0 013 3m3 0a6 6 0 01-7.029 5.912c-.563-.097-1.159.026-1.563.43L10.5 17.25H8.25v2.25H6v2.25H2.25v-2.818c0-.597.237-1.17.659-1.591l6.499-6.499c.404-.404.527-1 .43-1.563A6 6 0 1121.75 8.25z'
+    />
+  </svg>
+);
+
+export const DocumentCheckIcon = ({ className }: IconProps) => (
+  <svg
+    xmlns='http://www.w3.org/2000/svg'
+    fill='none'
+    viewBox='0 0 24 24'
+    strokeWidth={1.5}
+    stroke='currentColor'
+    className={className}
+  >
+    <path
+      strokeLinecap='round'
+      strokeLinejoin='round'
+      d='M10.125 2.25h-4.5c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125v-9M10.125 2.25h.375a9 9 0 019 9v.375M10.125 2.25A3.375 3.375 0 0113.5 5.625v1.5c0 .621.504 1.125 1.125 1.125h1.5a3.375 3.375 0 013.375 3.375M9 15l2.25 2.25L15 12'
+    />
+  </svg>
+);
+
+export const SearchPlusIcon = ({ className }: IconProps) => (
+  <svg
+    xmlns='http://www.w3.org/2000/svg'
+    fill='none'
+    viewBox='0 0 24 24'
+    strokeWidth={1.5}
+    stroke='currentColor'
+    className={className}
+  >
+    <path
+      strokeLinecap='round'
+      strokeLinejoin='round'
+      d='M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607zM10.5 7.5v6m3-3h-6'
+    />
+  </svg>
+);
+
+export const SearchMinusIcon = ({ className }: IconProps) => (
+  <svg
+    xmlns='http://www.w3.org/2000/svg'
+    fill='none'
+    viewBox='0 0 24 24'
+    strokeWidth={1.5}
+    stroke='currentColor'
+    className={className}
+  >
+    <path
+      strokeLinecap='round'
+      strokeLinejoin='round'
+      d='M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607zM13.5 10.5h-6'
     />
   </svg>
 );

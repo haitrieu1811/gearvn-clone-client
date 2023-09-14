@@ -15,6 +15,7 @@ const PATH = {
   ACCOUNT_ORDER_DETAIL_WITHOUT_ID: '/account/orders',
   ACCOUNT_VIEWED_PRODUCT: '/account/viewed-product',
   ACCOUNT_ADDRESS: '/account/address',
+  ACCOUNT_CHANGE_PASSWORD: '/account/change-password',
   CART: '/cart',
   CART_LIST: '/cart/list',
   CART_CHECKOUT_INFO: '/cart/checkout-info',

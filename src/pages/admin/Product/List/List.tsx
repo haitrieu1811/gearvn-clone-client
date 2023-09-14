@@ -5,13 +5,15 @@ import keyBy from 'lodash/keyBy';
 import omitBy from 'lodash/omitBy';
 import moment from 'moment';
 import { ChangeEvent, Fragment, useContext, useEffect, useMemo, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
 import productApi from 'src/apis/product.api';
 import Checkbox from 'src/components/Checkbox';
+import ContextMenu from 'src/components/ContextMenu';
+import { PencilIcon, TrashIcon } from 'src/components/Icons';
 import Modal from 'src/components/Modal/Modal';
 import Table from 'src/components/Table';
-import TableAction from 'src/components/Table/TableAction';
 import PATH from 'src/constants/path';
 import { AppContext } from 'src/contexts/app.context';
 import useDebounce from 'src/hooks/useDebounce';
@@ -24,6 +26,7 @@ type QueryConfig = {
 };
 
 const List = () => {
+  const navigate = useNavigate();
   const [currentId, setCurrentId] = useState<string | null>(null);
   const [isOpenModal, setIsOpenModal] = useState<boolean>(false);
   const [keywordSearch, setKeywordSearch] = useState<string>('');
@@ -146,7 +149,7 @@ const List = () => {
           {
             field: 'productName',
             headerName: 'Tên sản phẩm',
-            width: 25
+            width: 30
           },
           {
             field: 'price',
@@ -180,8 +183,8 @@ const List = () => {
           },
           {
             field: 'actions',
-            headerName: 'Thao tác',
-            width: 10
+            headerName: '',
+            width: 5
           }
         ]}
         rows={
@@ -195,9 +198,19 @@ const List = () => {
             createdAt: convertMomentFromNowToVietnamese(moment(product.created_at).fromNow()),
             updatedAt: convertMomentFromNowToVietnamese(moment(product.updated_at).fromNow()),
             actions: (
-              <TableAction
-                editPath={`${PATH.DASHBOARD_PRODUCT_UPDATE_WITHOUT_ID}/${product._id}`}
-                deleteMethod={() => startDelete(product._id)}
+              <ContextMenu
+                items={[
+                  {
+                    icon: <PencilIcon className='w-4 h-4 mr-3' />,
+                    label: 'Cập nhật sản phẩm',
+                    onClick: () => navigate(`${PATH.DASHBOARD_PRODUCT_UPDATE_WITHOUT_ID}/${product._id}`)
+                  },
+                  {
+                    icon: <TrashIcon className='w-4 h-4 mr-3' />,
+                    label: 'Xóa sản phẩm',
+                    onClick: () => startDelete(product._id)
+                  }
+                ]}
               />
             )
           })) || []

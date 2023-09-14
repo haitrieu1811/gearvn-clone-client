@@ -1,5 +1,4 @@
-import { UseQueryResult, useQuery } from '@tanstack/react-query';
-import { AxiosResponse } from 'axios';
+import { useQuery } from '@tanstack/react-query';
 import { Dispatch, Fragment, SetStateAction, createContext, useMemo, useState } from 'react';
 import { useMediaQuery } from 'react-responsive';
 import { Outlet } from 'react-router-dom';
@@ -9,12 +8,12 @@ import Drawer from 'src/components/Drawer';
 import { BarIcon } from 'src/components/Icons';
 import CONFIG from 'src/constants/config';
 import SidebarAccount from 'src/layouts/components/SidebarAccount';
-import { GetMeResponse, User } from 'src/types/user.type';
+import { User } from 'src/types/user.type';
 
 interface AccountContext {
   avatarFile: File[] | null;
   setAvatarFile: Dispatch<SetStateAction<File[] | null>>;
-  getMeQuery: UseQueryResult<AxiosResponse<GetMeResponse, any>, unknown> | undefined;
+  getMeQuery: ReturnType<typeof useQuery> | undefined;
   me: User | undefined;
 }
 

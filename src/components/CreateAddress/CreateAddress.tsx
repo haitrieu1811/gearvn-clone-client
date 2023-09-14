@@ -98,8 +98,8 @@ const CreateAddress = ({ onSuccess, currentId = null }: CreateAddressProps) => {
   return (
     <form onSubmit={onSubmit}>
       <div className='px-6 pb-6 pt-3'>
-        <h3 className='text-sm md:text-base font-medium mb-2'>Địa chỉ</h3>
-        <div className='grid grid-cols-12 gap-3 mb-4'>
+        <h3 className='text-sm md:text-base font-medium mb-2'>Thông tin địa chỉ</h3>
+        <div className='grid grid-cols-12 gap-3 mb-10'>
           <div className='col-span-6'>
             <Input
               type='text'

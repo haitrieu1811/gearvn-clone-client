@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import isEmpty from 'lodash/isEmpty';
 import PropTypes from 'prop-types';
-import { Fragment, useEffect, useMemo } from 'react';
+import { Fragment, useContext, useEffect, useMemo } from 'react';
 
 import moment from 'moment';
 import productApi from 'src/apis/product.api';
@@ -9,12 +9,15 @@ import socket from 'src/utils/socket';
 import { StarIcon } from '../Icons';
 import Image from '../Image';
 import Loading from '../Loading';
+import { ProductDetailContext } from 'src/pages/shop/ProductDetail/ProductDetail';
 
 interface ProductReviewListProps {
   productId: string;
 }
 
 const ProductReviewList = ({ productId }: ProductReviewListProps) => {
+  const { setShowPreviewImages, setPreviewImages } = useContext(ProductDetailContext);
+
   // Kết nối socket
   useEffect(() => {
     socket.on('receive_product_review', () => {
@@ -30,6 +33,12 @@ const ProductReviewList = ({ productId }: ProductReviewListProps) => {
 
   // Danh sách đánh giá sản phẩm
   const reviews = useMemo(() => getReviewsQuery.data?.data.data.reviews, [getReviewsQuery.data?.data.data.reviews]);
+
+  // Xem danh sách hình ảnh đính kèm của đánh giá sản phẩm
+  const handlePreviewImages = (images: string[]) => {
+    setPreviewImages(images);
+    setShowPreviewImages(true);
+  };
 
   return (
     <Fragment>
@@ -59,7 +68,12 @@ const ProductReviewList = ({ productId }: ProductReviewListProps) => {
                   {review.images.length > 0 && (
                     <div className='mb-4 flex'>
                       {review.images.map((image) => (
-                        <Image key={image._id} src={image.name} className='w-16 h-16 object-cover mr-2 rounded' />
+                        <Image
+                          key={image._id}
+                          src={image.name}
+                          onClick={() => handlePreviewImages(review.images.map((image) => image.name))}
+                          className='w-20 h-20 object-cover mr-2 rounded cursor-pointer'
+                        />
                       ))}
                     </div>
                   )}

@@ -5,13 +5,15 @@ import keyBy from 'lodash/keyBy';
 import omitBy from 'lodash/omitBy';
 import moment from 'moment';
 import { ChangeEvent, Fragment, useContext, useEffect, useMemo, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
 import categoryApi from 'src/apis/category.api';
 import Checkbox from 'src/components/Checkbox';
+import ContextMenu from 'src/components/ContextMenu';
+import { PencilIcon, TrashIcon } from 'src/components/Icons';
 import Modal from 'src/components/Modal';
 import Table from 'src/components/Table';
-import TableAction from 'src/components/Table/TableAction';
 import PATH from 'src/constants/path';
 import { AppContext } from 'src/contexts/app.context';
 import UseQueryParams from 'src/hooks/useQueryParams';
@@ -23,6 +25,7 @@ type QueryConfig = {
 };
 
 const List = () => {
+  const navigate = useNavigate();
   const [modalVisible, setModalVisible] = useState<boolean>(false);
   const [currentId, setCurrentId] = useState<string | null>(null);
   const { extendedCategories, setExtendedCategories } = useContext(AppContext);
@@ -132,7 +135,7 @@ const List = () => {
           {
             field: 'nameVi',
             headerName: 'Danh mục',
-            width: 30
+            width: 40
           },
           {
             field: 'createdAt',
@@ -146,8 +149,8 @@ const List = () => {
           },
           {
             field: 'actions',
-            headerName: 'Thao tác',
-            width: 15
+            headerName: '',
+            width: 5
           }
         ]}
         rows={extendedCategories.map((category, index) => ({
@@ -157,9 +160,19 @@ const List = () => {
           createdAt: convertMomentFromNowToVietnamese(moment(category.created_at).fromNow()),
           updatedAt: convertMomentFromNowToVietnamese(moment(category.updated_at).fromNow()),
           actions: (
-            <TableAction
-              editPath={`${PATH.DASHBOARD_CATEGORY_UPDATE_WITHOUT_ID}/${category._id}`}
-              deleteMethod={() => startDelete(category._id)}
+            <ContextMenu
+              items={[
+                {
+                  icon: <PencilIcon className='w-4 h-4 mr-3' />,
+                  label: 'Cập nhật danh mục',
+                  onClick: () => navigate(`${PATH.DASHBOARD_CATEGORY_UPDATE_WITHOUT_ID}/${category._id}`)
+                },
+                {
+                  icon: <TrashIcon className='w-4 h-4 mr-3' />,
+                  label: 'Xóa danh mục',
+                  onClick: () => startDelete(category._id)
+                }
+              ]}
             />
           )
         }))}

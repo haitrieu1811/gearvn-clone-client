@@ -1,9 +1,11 @@
-import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 
 import PATH from 'src/constants/path';
 import { Product } from 'src/types/product.type';
-import { formatCurrency, generateNameId, getImageUrl, rateSale } from 'src/utils/utils';
+import { formatCurrency, generateNameId, rateSale } from 'src/utils/utils';
+import Image from '../Image';
+import fallbackImage from 'src/assets/images/product-fallback.png';
 
 interface ProductItemProps {
   data: Product;
@@ -17,8 +19,9 @@ const ProductItem = ({ data }: ProductItemProps) => {
         to={`${PATH.PRODUCT_DETAIL_WITHOUT_ID}/${generateNameId({ name: data.name_vi, id: data._id })}`}
         className='p-[10px] block'
       >
-        <img
-          src={getImageUrl(data.thumbnail)}
+        <Image
+          src={data.thumbnail}
+          fallbackImage={fallbackImage}
           alt={data.name_vi}
           className='h-[150px] lg:h-[210px] w-full object-cover'
         />

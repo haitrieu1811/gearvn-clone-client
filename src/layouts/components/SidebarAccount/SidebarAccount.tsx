@@ -5,6 +5,7 @@ import { NavLink } from 'react-router-dom';
 import {
   DefaultUserIcon,
   EyeFillIcon,
+  KeyIcon,
   LocationFillIcon,
   LogoutFillIcon,
   OrderFillIcon,
@@ -102,6 +103,18 @@ const SidebarAccount = () => {
         >
           <EyeFillIcon className='w-[14px] h-[14px] md:w-[18px] md:h-[18px] mr-3 fill-[#535353] group-[active]:fill-primary' />
           Sản phẩm đã xem
+        </NavLink>
+        <NavLink
+          to={PATH.ACCOUNT_CHANGE_PASSWORD}
+          className={({ isActive }) =>
+            classNames('flex items-center py-3 px-[20px] text-sm md:text-base', {
+              'text-primary font-semibold groupactive': isActive,
+              'hover:text-primary': !isActive
+            })
+          }
+        >
+          <KeyIcon className='w-[14px] h-[14px] md:w-[18px] md:h-[18px] mr-3 stroke-none fill-[#535353] group-[active]:fill-primary' />
+          Đổi mật khẩu
         </NavLink>
         <button
           className={classNames('flex items-center w-full py-3 px-[20px] text-sm md:text-base hover:text-primary')}

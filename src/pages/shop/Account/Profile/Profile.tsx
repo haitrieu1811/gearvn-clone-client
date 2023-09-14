@@ -72,7 +72,7 @@ const Profile = () => {
     }
   }, [me, setValue]);
 
-  // Cập nhật thông tin tài khoản
+  // Mutation: Cập nhật thông tin tài khoản
   const updateMeMutation = useMutation({
     mutationFn: userApi.updateMe,
     onSuccess: (data) => {
@@ -96,7 +96,7 @@ const Profile = () => {
     }
   });
 
-  // Upload hình ảnh
+  // Mutation: Upload hình ảnh
   const uploadImageMutation = useMutation(mediaApi.uploadImage);
 
   // Submit form
@@ -142,7 +142,7 @@ const Profile = () => {
         <meta property='og:type' content='website' />
       </Helmet>
       {/* Thông tin tài khoản */}
-      {me && getMeQuery && !getMeQuery.isLoading && (
+      {me && !getMeQuery?.isLoading && (
         <form onSubmit={onSubmit}>
           <h2 className='py-4 px-2 md:px-6 text-xl md:text-2xl font-semibold'>Thông tin tài khoản</h2>
           <Alert isVisible={me.verify === UserVerifyStatus.Unverified}>
@@ -258,7 +258,7 @@ const Profile = () => {
         </form>
       )}
       {/* Tải trang */}
-      {getMeQuery && getMeQuery.isLoading && <Loading />}
+      {getMeQuery?.isLoading && <Loading />}
     </div>
   );
 };

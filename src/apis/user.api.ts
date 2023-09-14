@@ -1,5 +1,6 @@
 import { AuthResponse } from 'src/types/auth.type';
 import {
+  ChangePasswordRequestBody,
   GetMeResponse,
   GetQuantityPerCollectionResponse,
   GetUserResponse,
@@ -12,6 +13,7 @@ import http from 'src/utils/http';
 
 export const URL_USERS_LIST = '/users/list';
 export const URL_ME = '/users/me';
+export const URL_CHANGE_PASSWORD = '/users/change-password';
 export const URL_VIEWED_PRODUCTS = '/users/viewed-product';
 export const URL_QUANTITY_PER_COLLECTION = '/users/quantity-per-collection';
 export const URL_FORGOT_PASSWORD = '/users/forgot-password';
@@ -32,6 +34,9 @@ const userApi = {
   // Cập nhật thông tin user
   updateMe(body: UpdateMeRequestBody) {
     return http.patch<AuthResponse>(URL_ME, body);
+  },
+  changePassword(body: ChangePasswordRequestBody) {
+    return http.put<OnlyMessageResponse>(URL_CHANGE_PASSWORD, body);
   },
   // Lấy danh sách sản phẩm đã xem
   getViewedProducts() {

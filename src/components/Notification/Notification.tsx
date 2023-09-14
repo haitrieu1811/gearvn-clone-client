@@ -11,8 +11,10 @@ import notificationApi from 'src/apis/notification.api';
 import { AppContext } from 'src/contexts/app.context';
 import { Notification } from 'src/types/notification.type';
 import socket from 'src/utils/socket';
-import { convertMomentFromNowToVietnamese, getImageUrl } from 'src/utils/utils';
-import { BellIcon, EllipsisHorizontalIcon, EmptyImage, LoadingIcon } from '../Icons';
+import { convertMomentFromNowToVietnamese } from 'src/utils/utils';
+import ContextMenu from '../ContextMenu';
+import { BellIcon, DocumentCheckIcon, EmptyImage, LoadingIcon, TrashIcon } from '../Icons';
+import Image from '../Image';
 
 const Notification = () => {
   const { profile } = useContext(AppContext);
@@ -135,16 +137,16 @@ const Notification = () => {
                 {notifications.map((notification) => (
                   <div
                     key={notification._id}
-                    className={classNames('group pl-5 pr-4 py-3 flex cursor-pointer', {
+                    className={classNames('group pl-5 pr-2 py-3 flex cursor-pointer', {
                       'bg-blue-50': !notification.is_read
                     })}
                   >
-                    <img
-                      src={getImageUrl(notification.sender.avatar)}
+                    <Image
+                      src={notification.sender.avatar}
                       alt={notification.sender.fullName}
                       className='w-10 h-10 rounded-full object-cover'
                     />
-                    <Link to={notification.path} className='flex-1 ml-5'>
+                    <Link to={notification.path} className='flex-1 ml-5 mr-2'>
                       <div
                         className='text-slate-600 text-sm line-clamp-3'
                         dangerouslySetInnerHTML={{
@@ -155,40 +157,20 @@ const Notification = () => {
                         {convertMomentFromNowToVietnamese(moment(notification.created_at).fromNow())}
                       </p>
                     </Link>
-                    <div>
-                      <Tippy
-                        interactive
-                        trigger='click'
-                        placement='bottom-end'
-                        offset={[0, 0]}
-                        render={() => (
-                          <div className='bg-white rounded shadow-2xl'>
-                            <div
-                              aria-hidden='true'
-                              role='button'
-                              tabIndex={0}
-                              onClick={() => handleReadNotifications(notification._id)}
-                              className='pl-3 pr-8 py-2 text-sm text-slate-900 hover:bg-slate-50 border-b'
-                            >
-                              Đánh dấu đã đọc
-                            </div>
-                            <div
-                              aria-hidden='true'
-                              role='button'
-                              tabIndex={0}
-                              onClick={() => handleDeleteNotifications(notification._id)}
-                              className='pl-3 pr-8 py-2 text-sm text-slate-900 hover:bg-slate-50'
-                            >
-                              Xóa thông báo
-                            </div>
-                          </div>
-                        )}
-                      >
-                        <button className='opacity-0 pointer-events-none group-hover:opacity-[1] group-hover:pointer-events-auto'>
-                          <EllipsisHorizontalIcon className='w-5 h-5' />
-                        </button>
-                      </Tippy>
-                    </div>
+                    <ContextMenu
+                      items={[
+                        {
+                          icon: <DocumentCheckIcon />,
+                          label: 'Đánh dấu đã đọc',
+                          onClick: () => handleReadNotifications(notification._id)
+                        },
+                        {
+                          icon: <TrashIcon />,
+                          label: 'Xóa thông báo',
+                          onClick: () => handleDeleteNotifications(notification._id)
+                        }
+                      ]}
+                    />
                   </div>
                 ))}
               </InfiniteScroll>

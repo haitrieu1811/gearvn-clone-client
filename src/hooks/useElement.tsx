@@ -23,6 +23,7 @@ import DashboardProduct from 'src/pages/admin/Product/List';
 import DashboardUser from 'src/pages/admin/User/List';
 import Account from 'src/pages/shop/Account';
 import AccountAddress from 'src/pages/shop/Account/Address';
+import ChangePassword from 'src/pages/shop/Account/ChangePassword';
 import AccountHistoryOrder from 'src/pages/shop/Account/HistoryOrder';
 import OrderDetail from 'src/pages/shop/Account/OrderDetail';
 import AccountProfile from 'src/pages/shop/Account/Profile';
@@ -155,6 +156,10 @@ const useElement = () => {
               element: <AccountHistoryOrder />
             },
             {
+              path: PATH.ACCOUNT_ORDER_DETAIL,
+              element: <OrderDetail />
+            },
+            {
               path: PATH.ACCOUNT_VIEWED_PRODUCT,
               element: <AccountViewedProduct />
             },
@@ -163,8 +168,8 @@ const useElement = () => {
               element: <AccountAddress />
             },
             {
-              path: PATH.ACCOUNT_ORDER_DETAIL,
-              element: <OrderDetail />
+              path: PATH.ACCOUNT_CHANGE_PASSWORD,
+              element: <ChangePassword />
             }
           ]
         },

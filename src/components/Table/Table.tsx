@@ -51,18 +51,6 @@ const Table = ({
   const searchParams = queryString.parse(location.search);
   const [limit, setLimit] = useState<number>(pageSizeOptions[0]);
 
-  const handleChangeLimit = (limit: number) => {
-    setLimit(limit);
-    navigate({
-      pathname: location.pathname,
-      search: createSearchParams({
-        ...searchParams,
-        limit: limit.toString(),
-        page: '1'
-      }).toString()
-    });
-  };
-
   const renderLimit = () => {
     return (
       <div className='bg-white rounded-sm shadow-2xl border'>
@@ -84,6 +72,20 @@ const Table = ({
     );
   };
 
+  // Xử lý khi thay đổi số lượng bản ghi mỗi trang
+  const handleChangeLimit = (limit: number) => {
+    setLimit(limit);
+    navigate({
+      pathname: location.pathname,
+      search: createSearchParams({
+        ...searchParams,
+        limit: limit.toString(),
+        page: '1'
+      }).toString()
+    });
+  };
+
+  // Xử lý tìm kiếm
   const handleSearch = (e: ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
     onSearch && onSearch(value);
@@ -140,7 +142,7 @@ const Table = ({
                   <tr key={index} className='border-t hover:bg-slate-50 hover:cursor-pointer'>
                     {columns.map((column, _index) => (
                       <td key={_index}>
-                        <section className='text-sm text-slate-600 px-2 py-3'>
+                        <section className='text-sm text-slate-600 p-2'>
                           <span className='line-clamp-1'>{row[column.field]}</span>
                         </section>
                       </td>
@@ -165,7 +167,7 @@ const Table = ({
                 {/* Phân trang */}
                 <Pagination
                   pageSize={pageSize}
-                  classNameItem='w-8 h-8 flex justify-center items-center text-black rounded-sm text-sm font-semibold'
+                  classNameItem='w-9 h-9 flex justify-center items-center text-black rounded-full text-sm font-semibold'
                   classNameItemActive='bg-slate-900 text-white'
                 />
               </div>

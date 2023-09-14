@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { Fragment, ReactNode } from 'react';
+import { Fragment, ReactNode, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 
 import { CloseIcon, ExclamationCircleIcon } from '../Icons';
@@ -43,11 +43,17 @@ const Modal = ({
     onCancel && onCancel();
   };
 
+  // Xử lý không cho cuộn website khi modal mở
+  useEffect(() => {
+    if (isVisible) document.body.classList.add('disable-scroll');
+    else document.body.classList.remove('disable-scroll');
+  }, [isVisible]);
+
   return createPortal(
     <Fragment>
       {isVisible && (
         <div className='flex justify-center items-center fixed inset-0 z-[99999999]'>
-          <div className='bg-slate-900/50 fixed inset-0 backdrop-blur-sm' onClick={handleCancel} />
+          <div className='bg-slate-900/50 absolute inset-0 backdrop-blur-sm' onClick={handleCancel} />
           <div className='z-10 max-w-[90%]'>
             {/* Head */}
             {(name || icon || closeButton) && (
@@ -69,7 +75,7 @@ const Modal = ({
               <div className='flex justify-end flex-wrap p-4 rounded-b-lg bg-white'>
                 {cancelButton && (
                   <button
-                    className='py-2 px-4 w-full md:w-auto text-sm rounded bg-slate-100 hover:bg-slate-50 font-semibold'
+                    className='py-2 px-4 w-full md:w-auto text-sm rounded bg-slate-100 hover:bg-slate-200/80 font-semibold'
                     onClick={handleCancel}
                   >
                     {cancelText}
@@ -77,7 +83,7 @@ const Modal = ({
                 )}
                 {okButton && (
                   <button
-                    className='py-2 px-4 w-full md:w-auto text-sm rounded text-white bg-blue-600 hover:bg-blue-500 font-semibold md:ml-2 mt-2 md:mt-0'
+                    className='py-2 px-4 w-full md:w-auto text-sm rounded text-white bg-primary hover:bg-primary/90 font-semibold md:ml-2 mt-2 md:mt-0'
                     onClick={handleOk}
                   >
                     {okText}

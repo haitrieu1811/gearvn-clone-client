@@ -4,13 +4,15 @@ import isUndefined from 'lodash/isUndefined';
 import omitBy from 'lodash/omitBy';
 import moment from 'moment';
 import { ChangeEvent, Fragment, useContext, useEffect, useMemo, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
 import brandApi from 'src/apis/brand.api';
 import Checkbox from 'src/components/Checkbox';
+import ContextMenu from 'src/components/ContextMenu';
+import { PencilIcon, TrashIcon } from 'src/components/Icons';
 import Modal from 'src/components/Modal';
 import Table from 'src/components/Table';
-import TableAction from 'src/components/Table/TableAction';
 import PATH from 'src/constants/path';
 import { AppContext } from 'src/contexts/app.context';
 import UseQueryParams from 'src/hooks/useQueryParams';
@@ -22,6 +24,7 @@ type QueryConfig = {
 };
 
 const List = () => {
+  const navigate = useNavigate();
   const [modalVisible, setModalVisible] = useState<boolean>(false);
   const [currentId, setCurrentId] = useState<string | null>(null);
   const { extendedBrands, setExtendedBrands } = useContext(AppContext);
@@ -121,7 +124,7 @@ const List = () => {
           {
             headerName: 'Nhãn hiệu',
             field: 'name',
-            width: 50
+            width: 60
           },
           {
             headerName: 'Tạo lúc',
@@ -134,9 +137,9 @@ const List = () => {
             width: 15
           },
           {
-            headerName: 'Thao tác',
+            headerName: '',
             field: 'actions',
-            width: 15
+            width: 5
           }
         ]}
         rows={extendedBrands.map((brand, index) => ({
@@ -145,9 +148,19 @@ const List = () => {
           createdAt: convertMomentFromNowToVietnamese(moment(brand.created_at).fromNow()),
           updatedAt: convertMomentFromNowToVietnamese(moment(brand.updated_at).fromNow()),
           actions: (
-            <TableAction
-              editPath={`${PATH.DASHBOARD_BRAND_UPDATE_WITHOUT_ID}/${brand._id}`}
-              deleteMethod={() => startDelete(brand._id)}
+            <ContextMenu
+              items={[
+                {
+                  icon: <PencilIcon className='w-4 h-4 mr-3' />,
+                  label: 'Cập nhật nhãn hiệu',
+                  onClick: () => navigate(`${PATH.DASHBOARD_BRAND_UPDATE_WITHOUT_ID}/${brand._id}`)
+                },
+                {
+                  icon: <TrashIcon className='w-4 h-4 mr-3' />,
+                  label: 'Xóa nhãn hiệu',
+                  onClick: () => startDelete(brand._id)
+                }
+              ]}
             />
           )
         }))}

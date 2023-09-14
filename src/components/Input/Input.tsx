@@ -1,6 +1,6 @@
+import PropTypes from 'prop-types';
 import { InputHTMLAttributes, useState } from 'react';
 import { UseFormRegister } from 'react-hook-form';
-import PropTypes from 'prop-types';
 
 import { EyeCloseIcon, EyeIcon } from '../Icons';
 
@@ -39,8 +39,18 @@ const Input = ({
   return (
     <div className={classNameWrapper}>
       <div className='relative'>
-        {openEye && rest.type === 'password' && <EyeIcon onClick={toggleEye} />}
-        {!openEye && rest.type === 'password' && <EyeCloseIcon onClick={toggleEye} />}
+        {openEye && rest.type === 'password' && (
+          <EyeIcon
+            onClick={toggleEye}
+            className='absolute right-2 top-1/2 -translate-y-1/2 stroke-gray-500 cursor-pointer w-5 h-5'
+          />
+        )}
+        {!openEye && rest.type === 'password' && (
+          <EyeCloseIcon
+            onClick={toggleEye}
+            className='absolute right-2 top-1/2 -translate-y-1/2 stroke-gray-500 cursor-pointer w-5 h-5'
+          />
+        )}
         <input {...rest} type={handleType()} className={classNameInput} {...registerResult} />
       </div>
       {errorMessage && <div className={classNameError}>{errorMessage}</div>}

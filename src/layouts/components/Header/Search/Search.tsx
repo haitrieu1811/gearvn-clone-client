@@ -41,7 +41,7 @@ const Search = () => {
   // Render kết quả tìm kiếm
   const renderSearchResult = () => (
     <Wrapper>
-      <div className='w-full md:w-[315px] px-4'>
+      <div className='w-full md:w-[310px] px-4'>
         {/* Hiển thị khi có dữ liệu */}
         {searchResult &&
           searchResult.length > 0 &&
@@ -113,19 +113,19 @@ const Search = () => {
       interactive
       visible={keywordSearchDebounce.length > 0 && showSearchResult}
       placement='bottom-end'
-      offset={[0, 3]}
+      offset={[-1, 3]}
       render={renderSearchResult}
       onClickOutside={() => setShowSearchResult(false)}
       zIndex={9999999}
     >
-      <form className='relative flex-1 md:w-[315px] ml-2' onSubmit={redirectToSearchPage}>
+      <form className='relative flex-1 ml-2' onSubmit={redirectToSearchPage}>
         <input
           type='text'
           placeholder='Bạn cần tìm gì?'
           value={keywordSearch}
           onChange={(e) => setKeywordSearch(e.target.value)}
           onFocus={() => setShowSearchResult(true)}
-          className='w-full h-full py-2 pl-[15px] pr-[50px] rounded outline-none text-xs md:text-[15px]'
+          className='w-full h-full py-2 pl-[15px] pr-[50px] rounded outline-none text-xs md:text-[15px] md:w-[310px]'
         />
         <button className='absolute top-0 right-0 h-full w-9 flex justify-center items-center'>
           <SearchIcon className='fill-white w-4 h-4' />
