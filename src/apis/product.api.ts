@@ -1,6 +1,6 @@
 import {
   AddReviewRequestBody,
-  CreateAndUpdateProductBody,
+  CreateAndUpdateProductRequestBody,
   CreateProductResponse,
   GetProductDetailResponse,
   GetProductsRequestParams,
@@ -21,20 +21,16 @@ const productApi = {
     return http.get<GetProductDetailResponse>(`/products/${productId}`);
   },
   // Tạo sản phẩm
-  create(body: CreateAndUpdateProductBody) {
+  create(body: CreateAndUpdateProductRequestBody) {
     return http.post<CreateProductResponse>('/products', body);
   },
   // Cập nhật sản phẩm
-  update({ productId, body }: { productId: string; body: CreateAndUpdateProductBody }) {
+  update({ productId, body }: { productId: string; body: CreateAndUpdateProductRequestBody }) {
     return http.patch<OnlyMessageResponse>(`/products/${productId}`, body);
   },
   // Xóa sản phẩm
   delete(productIds: string[]) {
     return http.delete<OnlyMessageResponse>('/products', { data: { product_ids: productIds } });
-  },
-  // Thêm ảnh cho sản phẩm
-  addImage({ productId, body }: { productId: string; body: { images: string[] } }) {
-    return http.post<OnlyMessageResponse>(`/products/image/${productId}`, body);
   },
   // Thêm đánh giá cho sản phẩm
   addReview({ productId, body }: { productId: string; body: AddReviewRequestBody }) {

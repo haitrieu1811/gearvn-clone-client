@@ -161,7 +161,7 @@ const Create = () => {
 
   return (
     <Fragment>
-      <div className='bg-white rounded-lg shadow-sm p-6'>
+      <div className='px-8 py-4'>
         <h2 className='text-2xl font-semibold mb-6'>{!isUpdateMode ? 'Tạo bài viết mới' : 'Cập nhật bài viết'}</h2>
         <form onSubmit={onSubmit}>
           <div className='grid grid-cols-12 gap-10'>
@@ -243,7 +243,7 @@ const Create = () => {
                     className='w-full max-h-[240px] mb-3 rounded object-cover'
                   />
                 )}
-                <InputFile onChange={handleThumbnailChange} name='thumbnail'>
+                <InputFile onChange={handleThumbnailChange}>
                   <button
                     type='button'
                     className='bg-slate-50 border rounded-sm w-full py-2 text-sm font-medium flex justify-center items-center'

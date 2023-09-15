@@ -9,11 +9,11 @@ import { CaretDownIcon, ClockIcon } from 'src/components/Icons';
 import Loading from 'src/components/Loading';
 import PATH from 'src/constants/path';
 import UseQueryParams from 'src/hooks/useQueryParams';
-import { GetBlogListRequestQuery } from 'src/types/blog.type';
+import { PaginationRequestParams } from 'src/types/utils.type';
 import { generateNameId, getImageUrl, htmlToPlainText } from 'src/utils/utils';
 
 type QueryConfig = {
-  [key in keyof GetBlogListRequestQuery]: string;
+  [key in keyof PaginationRequestParams]: string;
 };
 
 const Blog = () => {
@@ -23,12 +23,14 @@ const Blog = () => {
     limit: queryParams.limit || '10'
   };
 
+  // Query: Lấy danh sách blog
   const getBlogsQuery = useQuery({
     queryKey: ['blogs', queryConfig],
     queryFn: () => blogApi.getList(queryConfig),
     keepPreviousData: true
   });
 
+  // Lấy danh sách blog
   const blogs = useMemo(() => getBlogsQuery.data?.data.data.blogs, [getBlogsQuery.data?.data.data.blogs]);
 
   return (
@@ -52,6 +54,8 @@ const Blog = () => {
         <meta property='og:site_name' content='Tin công nghệ' />
         <meta property='og:type' content='website' />
       </Helmet>
+
+      {/* Danh sách blog */}
       {blogs && blogs.length > 0 && !getBlogsQuery.isLoading && (
         <div className='px-2 md:container my-2 lg:my-4 bg-white rounded shadow-sm pb-8'>
           {/* Blog lớn */}
@@ -146,8 +150,13 @@ const Blog = () => {
           </div>
         </div>
       )}
+
       {/* Loading */}
-      {getBlogsQuery.isLoading && <Loading />}
+      {getBlogsQuery.isLoading && (
+        <div className='min-h-[400px] bg-white rounded flex justify-center items-center my-4 container'>
+          <Loading />
+        </div>
+      )}
     </Fragment>
   );
 };

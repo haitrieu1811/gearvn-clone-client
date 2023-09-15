@@ -38,7 +38,7 @@ const ContextMenu = ({ items, wrapperClassName }: ContextMenuProps) => {
   return (
     <div className={wrapperClassName}>
       <Tippy interactive={true} trigger='click' placement='bottom-end' offset={[0, 0]} render={renderItems}>
-        <button className='w-8 h-8 flex justify-center items-center rounded-full border border-transparent active:bg-slate-100/80 active:border-[#fcfcfc]'>
+        <button className='w-7 h-7 flex justify-center items-center rounded-full border border-transparent active:bg-slate-100/80 active:border-[#fcfcfc]'>
           <EllipsisHorizontalIcon className='w-5 h-5' />
         </button>
       </Tippy>

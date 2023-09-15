@@ -48,7 +48,7 @@ const ProductReviewList = ({ productId }: ProductReviewListProps) => {
             <div key={review._id} className='border-b mt-4 pb-4'>
               <div className='flex justify-between items-center mb-2'>
                 <div className='flex items-center'>
-                  <span className='text-sm font-semibold mr-2'>{review.author.fullName}</span>
+                  <span className='text-sm font-semibold mr-2'>{review.author.fullname}</span>
                   <span className='text-sm text-[#97999D]'>{moment(review.created_at).format('DD-MM-YYYY')}</span>
                 </div>
               </div>
@@ -84,7 +84,7 @@ const ProductReviewList = ({ productId }: ProductReviewListProps) => {
                       <div key={reply._id} className='px-4 py-3 bg-[#ececec] rounded mb-4 last:mb-0'>
                         <div className='flex justify-between items-center'>
                           <div className='flex items-center'>
-                            <span className='text-sm text-primary font-semibold mr-2'>{reply.author?.fullName}</span>
+                            <span className='text-sm text-primary font-semibold mr-2'>{reply.author?.fullname}</span>
                             <span className='text-sm text-[#97999D]'>
                               {moment(reply.created_at).format('DD-MM-YYYY')}
                             </span>

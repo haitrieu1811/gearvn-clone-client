@@ -1,10 +1,10 @@
 import classNames from 'classnames';
 import { Fragment, useContext, useEffect, useMemo, useRef, useState } from 'react';
 
+import fallbackImage from 'src/assets/images/product-fallback.png';
 import { ArrowLeftIcon, ArrowRightIcon } from 'src/components/Icons';
 import Image from 'src/components/Image';
 import { ProductDetailContext } from '../ProductDetail';
-import fallbackImage from 'src/assets/images/product-fallback.png';
 
 const SliderImages = () => {
   const { imagesObject, setShowPreviewImages, setPreviewImages } = useContext(ProductDetailContext);
@@ -14,7 +14,7 @@ const SliderImages = () => {
 
   // Active hình ảnh đầu tiên của sản phẩm
   useEffect(() => {
-    if (imagesObject && imagesObject.length > 0) {
+    if (imagesObject && imagesObject.length > 0 && imagesObject[0]) {
       setActiveImage(imagesObject[0].name);
     }
   }, [imagesObject]);
@@ -83,7 +83,7 @@ const SliderImages = () => {
           ref={imageRef}
           src={activeImage}
           fallbackImage={fallbackImage}
-          alt={imagesObject[0].name}
+          alt={imagesObject[0]?.name}
           className='absolute inset-0 w-full h-full object-cover rounded'
         />
       </div>

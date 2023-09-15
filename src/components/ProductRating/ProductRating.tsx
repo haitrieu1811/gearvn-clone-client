@@ -12,7 +12,7 @@ const ProductRating = ({ ratingScore, ratingCount, data }: ProductRatingProps) =
     <div className='flex flex-col lg:flex-row justify-center items-center'>
       <div className='flex items-center flex-col px-12'>
         <div className='text-[36px] font-semibold text-primary mb-[10px]'>
-          {ratingScore ? ratingScore.toFixed(1) : 0}/5
+          {!!ratingScore ? ratingScore.toFixed(1) : 0}/5
         </div>
         <div className='flex items-center'>
           {/* Khi có nhận xét thì cho hiện sao vàng */}

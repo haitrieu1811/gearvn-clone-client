@@ -13,7 +13,7 @@ import { Notification } from 'src/types/notification.type';
 import socket from 'src/utils/socket';
 import { convertMomentFromNowToVietnamese } from 'src/utils/utils';
 import ContextMenu from '../ContextMenu';
-import { BellIcon, DocumentCheckIcon, EmptyImage, LoadingIcon, TrashIcon } from '../Icons';
+import { BellIcon, DocumentCheckIcon, EmptyImage, SpinnerIcon, TrashIcon } from '../Icons';
 import Image from '../Image';
 
 const Notification = () => {
@@ -130,7 +130,7 @@ const Notification = () => {
                 scrollThreshold={1}
                 loader={
                   <div className='flex justify-center'>
-                    <LoadingIcon className='w-6 h-6' />
+                    <SpinnerIcon className='w-6 h-6' />
                   </div>
                 }
               >
@@ -143,7 +143,7 @@ const Notification = () => {
                   >
                     <Image
                       src={notification.sender.avatar}
-                      alt={notification.sender.fullName}
+                      alt={notification.sender.fullname}
                       className='w-10 h-10 rounded-full object-cover'
                     />
                     <Link to={notification.path} className='flex-1 ml-5 mr-2'>
@@ -196,7 +196,7 @@ const Notification = () => {
         </div>
       )}
     >
-      <button className='bg-slate-50 w-9 h-9 rounded flex justify-center items-center mr-4 relative'>
+      <button className='bg-slate-100 w-9 h-9 rounded-full flex justify-center items-center mr-4 relative'>
         <BellIcon className='w-6 h-6 fill-none' />
         {unreadCount !== undefined && unreadCount > 0 && (
           <span className='absolute -top-1 -right-1  bg-red-500 text-[10px] text-white font-bold rounded-full w-5 h-5 flex justify-center items-center'>

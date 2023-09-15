@@ -4,8 +4,7 @@ import { FormEvent, memo, useMemo, useState } from 'react';
 import { Link, createSearchParams, useNavigate } from 'react-router-dom';
 
 import productApi from 'src/apis/product.api';
-import { SearchIcon } from 'src/components/Icons';
-import Loading from 'src/components/Loading';
+import { SearchIcon, SpinnerIcon } from 'src/components/Icons';
 import Wrapper from 'src/components/Wrapper';
 import PATH from 'src/constants/path';
 import useDebounce from 'src/hooks/useDebounce';
@@ -78,6 +77,8 @@ const Search = () => {
               </Link>
             </div>
           ))}
+
+        {/* Xem thêm */}
         {searchResultCount !== undefined && searchResultCount > 5 && (
           <button
             onClick={() => redirectToSearchPage()}
@@ -86,12 +87,18 @@ const Search = () => {
             Xem thêm {searchResultCount - SEARCH_RESULT_LIMIT} sản phẩm
           </button>
         )}
+
         {/* Hiển thị khi không có dữ liệu */}
         {searchResult && searchResult.length <= 0 && !getProductsQuery.isLoading && (
           <div className='text-sm text-center text-[#111111] py-4'>Không có sản phẩm nào...</div>
         )}
+
         {/* Loading */}
-        {getProductsQuery.isFetching && <Loading className='w-6 h-6' />}
+        {getProductsQuery.isFetching && (
+          <div className='min-h-[100px] flex justify-center items-center'>
+            <SpinnerIcon className='w-6 h-6' />
+          </div>
+        )}
       </div>
     </Wrapper>
   );
@@ -118,7 +125,7 @@ const Search = () => {
       onClickOutside={() => setShowSearchResult(false)}
       zIndex={9999999}
     >
-      <form className='relative flex-1 ml-2' onSubmit={redirectToSearchPage}>
+      <form className='relative md:w-[310px] ml-2' onSubmit={redirectToSearchPage}>
         <input
           type='text'
           placeholder='Bạn cần tìm gì?'

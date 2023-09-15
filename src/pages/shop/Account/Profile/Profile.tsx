@@ -1,18 +1,20 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useMutation } from '@tanstack/react-query';
+import classNames from 'classnames';
 import isEmpty from 'lodash/isEmpty';
 import isUndefined from 'lodash/isUndefined';
 import omitBy from 'lodash/omitBy';
 import { useContext, useEffect } from 'react';
+import { Helmet } from 'react-helmet-async';
 import { Controller, useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
-import classNames from 'classnames';
 
 import mediaApi from 'src/apis/media.api';
 import userApi from 'src/apis/user.api';
 import Alert from 'src/components/Alert';
 import Button from 'src/components/Button';
 import DateSelect from 'src/components/DateSelect';
+import FloatLoading from 'src/components/FloatLoading/FloatLoading';
 import Input from 'src/components/Input';
 import Loading from 'src/components/Loading';
 import { Gender, UserVerifyStatus } from 'src/constants/enum';
@@ -22,8 +24,6 @@ import { setProfileToLS } from 'src/utils/auth';
 import { UpdateMeSchema, updateMeSchema } from 'src/utils/rules';
 import { isEntityError } from 'src/utils/utils';
 import { AccountContext } from '../Account';
-import FloatLoading from 'src/components/FloatLoading/FloatLoading';
-import { Helmet } from 'react-helmet-async';
 
 type FormData = UpdateMeSchema;
 
@@ -55,8 +55,8 @@ const Profile = () => {
   } = useForm<FormData>({
     resolver: yupResolver(updateMeSchema),
     defaultValues: {
-      fullName: '',
-      phoneNumber: '',
+      fullname: '',
+      phone_number: '',
       gender: '0',
       date_of_birth: new Date(1990, 0, 1)
     }
@@ -65,8 +65,8 @@ const Profile = () => {
   // Đặt giá trị mặc định
   useEffect(() => {
     if (me) {
-      setValue('fullName', me.fullName);
-      setValue('phoneNumber', me.phoneNumber);
+      setValue('fullname', me.fullname);
+      setValue('phone_number', me.phone_number);
       setValue('gender', String(me.gender));
       setValue('date_of_birth', me.date_of_birth ? new Date(me.date_of_birth) : new Date(1990, 0, 1));
     }
@@ -141,6 +141,7 @@ const Profile = () => {
         <meta property='og:site_name' content='Thông tin tài khoản' />
         <meta property='og:type' content='website' />
       </Helmet>
+
       {/* Thông tin tài khoản */}
       {me && !getMeQuery?.isLoading && (
         <form onSubmit={onSubmit}>
@@ -164,7 +165,7 @@ const Profile = () => {
             {/* Họ tên */}
             <div className='grid grid-cols-12 gap-2 md:gap-6'>
               <div className='col-span-12 md:col-span-4 flex items-center md:justify-end'>
-                <label htmlFor='fullName' className='text-sm md:text-base'>
+                <label htmlFor='fullname' className='text-sm md:text-base'>
                   Họ tên
                 </label>
               </div>
@@ -172,10 +173,10 @@ const Profile = () => {
                 <Input
                   type='text'
                   placeholder='Họ tên'
-                  id='fullName'
-                  name='fullName'
+                  id='fullname'
+                  name='fullname'
                   register={register}
-                  errorMessage={errors.fullName?.message}
+                  errorMessage={errors.fullname?.message}
                 />
               </div>
             </div>
@@ -210,10 +211,10 @@ const Profile = () => {
                 <Input
                   type='text'
                   placeholder='Số điện thoại'
-                  name='phoneNumber'
+                  name='phone_number'
                   id='phone_number'
                   register={register}
-                  errorMessage={errors.phoneNumber?.message}
+                  errorMessage={errors.phone_number?.message}
                 />
               </div>
             </div>
@@ -257,8 +258,13 @@ const Profile = () => {
           </div>
         </form>
       )}
-      {/* Tải trang */}
-      {getMeQuery?.isLoading && <Loading />}
+
+      {/* Loading */}
+      {getMeQuery?.isLoading && (
+        <div className='min-h-[400px] flex justify-center items-center'>
+          <Loading />
+        </div>
+      )}
     </div>
   );
 };

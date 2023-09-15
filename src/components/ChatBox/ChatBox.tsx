@@ -9,7 +9,7 @@ import { AppContext } from 'src/contexts/app.context';
 import { Conversation, ConversationReceiver } from 'src/types/conversation.type';
 import socket from 'src/utils/socket';
 import { convertMomentFromNowToVietnamese } from 'src/utils/utils';
-import { ChevronDownIcon, ChevronLeftIcon, ConversationIcon, LoadingIcon, SendMessageIcon } from '../Icons';
+import { ChevronDownIcon, ChevronLeftIcon, ConversationIcon, SpinnerIcon, SendMessageIcon } from '../Icons';
 import Image from '../Image';
 
 interface ChatBoxProps {
@@ -88,13 +88,13 @@ const ChatBox = ({ visible = true, onClose }: ChatBoxProps) => {
       is_read: false,
       sender: {
         _id: profile._id,
-        fullName: profile.fullName,
+        fullname: profile.fullname,
         avatar: profile.avatar,
         email: profile.email
       },
       receiver: {
         _id: currentReceiver._id,
-        fullName: currentReceiver.fullName,
+        fullname: currentReceiver.fullname,
         avatar: currentReceiver.avatar,
         email: currentReceiver.email
       },
@@ -129,10 +129,10 @@ const ChatBox = ({ visible = true, onClose }: ChatBoxProps) => {
                 <div className='flex md:hidden items-center'>
                   <Image
                     src={currentReceiver.avatar}
-                    alt={currentReceiver.fullName}
+                    alt={currentReceiver.fullname}
                     className='w-8 h-8 rounded-full object-cover'
                   />
-                  <span className='text-slate-600 text-[15px] ml-3 font-semibold'>{currentReceiver.fullName}</span>
+                  <span className='text-slate-600 text-[15px] ml-3 font-semibold'>{currentReceiver.fullname}</span>
                 </div>
               )}
             </div>
@@ -167,12 +167,12 @@ const ChatBox = ({ visible = true, onClose }: ChatBoxProps) => {
                     >
                       <Image
                         src={receiver.avatar}
-                        alt={receiver.fullName}
+                        alt={receiver.fullname}
                         className='w-10 h-10 rounded-full object-cover flex-shrink-0'
                       />
                       <div className='flex-1 ml-3'>
                         <h3 className='font-semibold line-clamp-1 text-sm'>
-                          {receiver.fullName || `User#${receiver._id.slice(-4)}`}
+                          {receiver.fullname || `User#${receiver._id.slice(-4)}`}
                         </h3>
                         <p className='text-sm text-slate-400 line-clamp-1'>
                           {receiver.last_message && receiver.last_message.content}
@@ -212,7 +212,7 @@ const ChatBox = ({ visible = true, onClose }: ChatBoxProps) => {
                           height={450}
                           loader={
                             <div className='flex justify-center pb-4'>
-                              <LoadingIcon className='w-6 h-6' />
+                              <SpinnerIcon className='w-6 h-6' />
                             </div>
                           }
                           scrollableTarget='scrollableDiv'
@@ -252,7 +252,7 @@ const ChatBox = ({ visible = true, onClose }: ChatBoxProps) => {
                         <div className='mt-6 text-slate-600 text-sm'>
                           Bắt đầu trò chuyện với{' '}
                           <span className='font-semibold text-black'>
-                            {currentReceiver.fullName || `User#${currentReceiver._id.slice(-4)}`}
+                            {currentReceiver.fullname || `User#${currentReceiver._id.slice(-4)}`}
                           </span>
                         </div>
                       </div>

@@ -1,13 +1,13 @@
 import Tippy from '@tippyjs/react/headless';
 import classNames from 'classnames';
+import PropTypes from 'prop-types';
 import queryString from 'query-string';
 import { ChangeEvent, Fragment, ReactNode, useState } from 'react';
-import PropTypes from 'prop-types';
-
 import { Link, createSearchParams, useLocation, useNavigate } from 'react-router-dom';
+
 import Loading from 'src/components/Loading';
 import Pagination from 'src/components/Pagination';
-import { CaretDownIcon, EmptyImage, PlusIcon } from '../Icons';
+import { CaretDownIcon, EmptyImage } from '../Icons';
 
 interface Columns {
   field: string;
@@ -117,9 +117,8 @@ const Table = ({
             {addNewPath && (
               <Link
                 to={addNewPath}
-                className='bg-blue-600 px-4 py-[6px] rounded text-white text-sm flex justify-center items-center font-medium ml-4'
+                className='bg-blue-500 px-4 py-[6px] rounded text-white text-sm flex justify-center items-center font-medium ml-4'
               >
-                <PlusIcon className='w-4 h-4 mr-2' />
                 Thêm mới
               </Link>
             )}
@@ -167,8 +166,8 @@ const Table = ({
                 {/* Phân trang */}
                 <Pagination
                   pageSize={pageSize}
-                  classNameItem='w-9 h-9 flex justify-center items-center text-black rounded-full text-sm font-semibold'
-                  classNameItemActive='bg-slate-900 text-white'
+                  classNameItem='w-8 h-8 rounded-full flex justify-center items-center text-black text-sm'
+                  classNameItemActive='bg-blue-600 text-white'
                 />
               </div>
             </div>
@@ -185,7 +184,11 @@ const Table = ({
       )}
 
       {/* Tải dữ liệu */}
-      {isLoading && <Loading />}
+      {isLoading && (
+        <div className='min-h-[500px] bg-white rounded flex justify-center items-center'>
+          <Loading />
+        </div>
+      )}
     </Fragment>
   );
 };

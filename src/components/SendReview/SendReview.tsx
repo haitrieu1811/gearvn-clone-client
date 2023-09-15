@@ -139,7 +139,7 @@ const SendReview = ({ product }: SendReviewProps) => {
       socket.emit('new_review', {
         type: NotificationType.NewReview,
         title: 'Có đánh giá mới',
-        content: `<strong>${profile?.fullName || ''}</strong> đã đánh giá sản phẩm <strong>${product.name_vi}</strong>`,
+        content: `<strong>${profile?.fullname || ''}</strong> đã đánh giá sản phẩm <strong>${product.name_vi}</strong>`,
         path: window.location.href,
         sender_id: profile?._id,
         receiver_id: product.author._id,

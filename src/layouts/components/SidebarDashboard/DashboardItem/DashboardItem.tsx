@@ -17,13 +17,13 @@ const DashboardItem = ({ name, path, icon, end }: DashboardItemProps) => {
       to={path}
       className={({ isActive }) =>
         classNames('flex items-center rounded-tr-sm rounded-br-sm py-2 px-5 mt-1', {
-          'hover:bg-slate-700': !isActive,
-          'bg-gradient-to-r from-sky-500/30 to-indigo-500/30': isActive
+          'hover:bg-slate-50': !isActive,
+          'bg-slate-100': isActive
         })
       }
     >
       {icon}
-      <span className='text-sm capitalize font-medium ml-3 text-white'>{name}</span>
+      <span className='text-sm capitalize font-medium ml-3 text-black'>{name}</span>
     </NavLink>
   );
 };

@@ -11,9 +11,9 @@ export interface Notification {
   sender: {
     _id: string;
     email: string;
-    fullName: string;
+    fullname: string;
     avatar: string;
-    phoneNumber: string;
+    phone_number: string;
   };
   created_at: string;
   updated_at: string;

@@ -87,8 +87,8 @@ const Cart = () => {
   const methods = useForm<PaymentOrderSchema>({
     defaultValues: {
       customer_gender: profile?.gender ? String(profile?.gender) : String(Gender.Male),
-      customer_name: profile?.fullName ? profile?.fullName : '',
-      customer_phone: profile?.phoneNumber,
+      customer_name: profile?.fullname ? profile?.fullname : '',
+      customer_phone: profile?.phone_number,
       province: '',
       district: '',
       ward: '',

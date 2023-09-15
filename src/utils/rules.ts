@@ -22,13 +22,13 @@ export const userSchema = yup.object({
     .required('Mật khẩu cũ không được để trống')
     .min(6, 'Mật khẩu cũ phải có độ dài từ 6 đến 32 kí tự')
     .max(32, 'Mật khẩu cũ phải có độ dài từ 6 đến 32 kí tự'),
-  fullName: yup
+  fullname: yup
     .string()
     .required('Họ tên không được để trống')
     .min(1, 'Họ tên dài từ 1 đến 100 ký tự')
     .max(100, 'Họ tên dài từ 1 đến 100 ký tự'),
   gender: yup.string().required('Hãy chọn giới tính'),
-  phoneNumber: yup
+  phone_number: yup
     .string()
     .required('Số điện thoại không được để trống')
     .matches(REGEX.PHONE_NUMBER, 'Số điện thoại không hợp lệ'),
@@ -93,8 +93,8 @@ export const blogSchema = yup.object({
 
 export const orderSchema = yup.object({
   customer_gender: yup.string().required('Hãy chọn giới tính'),
-  customer_name: userSchema.fields.fullName as yup.StringSchema<string | undefined, yup.AnyObject, undefined, ''>,
-  customer_phone: userSchema.fields.phoneNumber as yup.StringSchema<string | undefined, yup.AnyObject, undefined, ''>,
+  customer_name: userSchema.fields.fullname as yup.StringSchema<string | undefined, yup.AnyObject, undefined, ''>,
+  customer_phone: userSchema.fields.phone_number as yup.StringSchema<string | undefined, yup.AnyObject, undefined, ''>,
   receive_method: yup.number().required('Hãy chọn phương thức nhận hàng'),
   province: addressSchema.fields.province as yup.StringSchema<string | undefined, yup.AnyObject, undefined, ''>,
   district: addressSchema.fields.district as yup.StringSchema<string | undefined, yup.AnyObject, undefined, ''>,
@@ -120,7 +120,7 @@ export const createProductSchema = productSchema.pick([
   'available_count'
 ]);
 export const createBlogSchema = blogSchema.pick(['name_vi', 'name_en', 'content_vi', 'content_en']);
-export const updateMeSchema = userSchema.pick(['fullName', 'phoneNumber', 'gender', 'date_of_birth']);
+export const updateMeSchema = userSchema.pick(['fullname', 'phone_number', 'gender', 'date_of_birth']);
 export const changePasswordSchema = userSchema.pick(['old_password', 'password', 'confirm_password']);
 export const addAddressSchema = addressSchema.pick(['province', 'district', 'ward', 'street', 'type']);
 export const paymentOrderSchema = orderSchema.pick([

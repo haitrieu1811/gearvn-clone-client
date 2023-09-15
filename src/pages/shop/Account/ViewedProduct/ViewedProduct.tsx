@@ -10,11 +10,13 @@ import ProductItem from 'src/components/ProductItem';
 import PATH from 'src/constants/path';
 
 const ViewedProduct = () => {
+  // Query: Lấy danh sách sản phẩm đã xem
   const getViewedProductsQuery = useQuery({
     queryKey: ['viewed_products'],
     queryFn: () => userApi.getViewedProducts()
   });
 
+  // Danh sách sản phẩm đã xem
   const viewedProducts = useMemo(
     () => getViewedProductsQuery.data?.data.data.viewed_products,
     [getViewedProductsQuery.data?.data.data.viewed_products]
@@ -41,6 +43,7 @@ const ViewedProduct = () => {
         <meta property='og:site_name' content='Sản phẩm đã xem' />
         <meta property='og:type' content='website' />
       </Helmet>
+
       {/* Hiển thị khi có dữ liệu */}
       {viewedProducts && viewedProducts.length > 0 && !getViewedProductsQuery.isLoading && (
         <Fragment>
@@ -66,8 +69,12 @@ const ViewedProduct = () => {
         </div>
       )}
 
-      {/* Tải trang */}
-      {getViewedProductsQuery.isLoading && <Loading />}
+      {/* Loading */}
+      {getViewedProductsQuery.isLoading && (
+        <div className='min-h-[400px] flex justify-center items-center'>
+          <Loading />
+        </div>
+      )}
     </div>
   );
 };

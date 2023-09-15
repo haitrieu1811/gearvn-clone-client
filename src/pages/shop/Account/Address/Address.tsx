@@ -9,6 +9,7 @@ import Alert from 'src/components/Alert';
 import ContextMenu from 'src/components/ContextMenu';
 import CreateAddress from 'src/components/CreateAddress';
 import { EmptyImage, PencilIcon, PlusIcon, TrashIcon } from 'src/components/Icons';
+import Loading from 'src/components/Loading';
 import Modal from 'src/components/Modal';
 import { OnlyMessageResponse } from 'src/types/utils.type';
 
@@ -115,6 +116,7 @@ const Address = () => {
         <meta property='og:site_name' content='Danh sách địa chỉ nhận hàng' />
         <meta property='og:type' content='website' />
       </Helmet>
+
       <div className='py-4 px-4 md:px-6 flex justify-between items-center'>
         <h2 className='text-xl md:text-2xl font-semibold'>Sổ địa chỉ</h2>
         <button
@@ -125,6 +127,7 @@ const Address = () => {
           <span className='text-xs md:text-sm text-white'>Thêm địa chỉ mới</span>
         </button>
       </div>
+
       {/* Khi đã có địa chỉ */}
       {addresses && addresses.length > 0 && !getAddressesQuery.isLoading && (
         <div className='lg:min-h-[280px] flex flex-col justify-between'>
@@ -169,6 +172,7 @@ const Address = () => {
           <Alert>Nếu địa chỉ nhận hàng chưa chính xác, vui lòng kiểm tra và cập nhật.</Alert>
         </div>
       )}
+
       {/* Khi chưa có địa chỉ nào */}
       {addresses && addresses.length <= 0 && !getAddressesQuery.isLoading && (
         <div className='flex justify-center items-center flex-col mt-10'>
@@ -176,6 +180,15 @@ const Address = () => {
           <p className='text-center mt-4'>Chưa có địa chỉ nào</p>
         </div>
       )}
+
+      {/* Loading */}
+      {getAddressesQuery.isLoading && (
+        <div className='min-h-[300px] flex justify-center items-center'>
+          <Loading />
+        </div>
+      )}
+
+      {/* Modal thêm, sửa địa chỉ */}
       <Modal
         icon={false}
         name={!isUpdateMode ? 'THÊM ĐỊA CHỈ' : 'CẬP NHẬT ĐỊA CHỈ'}
@@ -200,6 +213,8 @@ const Address = () => {
           currentId={isUpdateMode ? currentId : null}
         />
       </Modal>
+
+      {/* Modal xác nhận xóa địa chỉ */}
       <Modal
         name='Xác nhận xóa địa chỉ'
         isVisible={deleteConfirmModalOpen}

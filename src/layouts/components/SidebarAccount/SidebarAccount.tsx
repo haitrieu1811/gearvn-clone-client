@@ -40,7 +40,7 @@ const SidebarAccount = () => {
               <img
                 src={avatarPreview || getImageUrl(avatar || '')}
                 className='w-full h-full object-cover'
-                alt={me.fullName}
+                alt={me.fullname}
               />
             )}
             <InputFile onChange={handleChangeAvatar}>
@@ -50,7 +50,7 @@ const SidebarAccount = () => {
             </InputFile>
           </div>
           <span className='ml-3 md:ml-6 text-base md:text-lg font-semibold line-clamp-1 capitalize'>
-            {me.fullName ? me.fullName : me.email.split('@')[0]}
+            {me.fullname ? me.fullname : me.email.split('@')[0]}
           </span>
         </form>
       )}

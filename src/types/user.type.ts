@@ -16,12 +16,12 @@ export interface User {
   _id: string;
   email: string;
   role: UserRole;
-  fullName: string;
+  fullname: string;
   avatar: string;
   gender: Gender;
   verify: UserVerifyStatus;
   status: UserStatus;
-  phoneNumber: string;
+  phone_number: string;
   addresses: Address[];
   date_of_birth: string;
   created_at: Date;
@@ -49,9 +49,9 @@ export interface GetUsersParams {
 
 // Request: Cập nhật thông tin tài khoản đăng nhập
 export interface UpdateMeRequestBody {
-  fullName?: string;
+  fullname?: string;
   gender?: Gender;
-  phoneNumber?: string;
+  phone_number?: string;
   date_of_birth?: string;
   avatar?: string;
 }

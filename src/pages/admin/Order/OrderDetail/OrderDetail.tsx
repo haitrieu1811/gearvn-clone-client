@@ -78,10 +78,10 @@ const OrderDetail = () => {
           <Fragment>
             {/* Thông tin đơn hàng */}
             <div className='grid grid-cols-12 gap-10'>
-              <div className='col-span-4'>
+              <div className='col-span-3'>
                 {/* Trạng thái */}
                 <div>
-                  <h3 className='font-semibold mb-2'>
+                  <h3 className='font-semibold mb-2 text-sm'>
                     Trạng thái
                     <button
                       className='bg-blue-500 text-white rounded-sm px-4 py-[2px] text-sm ml-4'
@@ -93,95 +93,95 @@ const OrderDetail = () => {
                   <p className='text-slate-700'>{orderStatus[order.status]}</p>
                 </div>
               </div>
-              <div className='col-span-4'>
+              <div className='col-span-3'>
                 {/* Đặt lúc */}
                 <div>
-                  <h3 className='font-semibold mb-2'>Đặt lúc</h3>
-                  <p className='text-slate-700'>
+                  <h3 className='font-semibold mb-2 text-sm'>Đặt lúc</h3>
+                  <p className='text-slate-700 text-sm'>
                     {moment(order.created_at).format('kk:mm, DD.MM.YYYY')} (
                     {convertMomentFromNowToVietnamese(moment(order.created_at).fromNow())})
                   </p>
                 </div>
               </div>
-              <div className='col-span-4'>
+              <div className='col-span-3'>
                 {/* Cập nhật */}
                 <div>
-                  <h3 className='font-semibold mb-2'>Cập nhật</h3>
-                  <p className='text-slate-700'>
+                  <h3 className='font-semibold mb-2 text-sm'>Cập nhật</h3>
+                  <p className='text-slate-700 text-sm'>
                     {moment(order.updated_at).format('kk:mm, DD.MM.YYYY')} (
                     {convertMomentFromNowToVietnamese(moment(order.updated_at).fromNow())})
                   </p>
                 </div>
               </div>
-              <div className='col-span-4'>
+              <div className='col-span-3'>
                 {/* Tên khách hàng */}
                 <div>
-                  <h3 className='font-semibold mb-2'>Tên khách hàng</h3>
-                  <p className='text-slate-700 capitalize'>{order.customer_name}</p>
+                  <h3 className='font-semibold mb-2 text-sm'>Tên khách hàng</h3>
+                  <p className='text-slate-700 capitalize text-sm'>{order.customer_name}</p>
                 </div>
               </div>
-              <div className='col-span-4'>
+              <div className='col-span-3'>
                 {/* Số điện thoại */}
                 <div>
-                  <h3 className='font-semibold mb-2'>Số điện thoại</h3>
-                  <p className='text-slate-700'>{order.customer_phone}</p>
+                  <h3 className='font-semibold mb-2 text-sm'>Số điện thoại</h3>
+                  <p className='text-slate-700 text-sm'>{order.customer_phone}</p>
                 </div>
               </div>
-              <div className='col-span-4'>
+              <div className='col-span-3'>
                 {/* Địa chỉ nhận hàng */}
                 <div>
-                  <h3 className='font-semibold mb-2'>Địa chỉ nhận hàng</h3>
-                  <p className='text-slate-700 capitalize'>
+                  <h3 className='font-semibold mb-2 text-sm'>Địa chỉ nhận hàng</h3>
+                  <p className='text-slate-700 capitalize text-sm'>
                     {order.street}, {order.ward}, {order.district}, {order.province}
                   </p>
                 </div>
               </div>
-              <div className='col-span-4'>
+              <div className='col-span-3'>
                 {/* Ghi chú */}
                 <div>
-                  <h3 className='font-semibold mb-2'>Ghi chú</h3>
-                  <p className='text-slate-700'>{order.note || 'Không có ghi chú'}</p>
+                  <h3 className='font-semibold mb-2 text-sm'>Ghi chú</h3>
+                  <p className='text-slate-700 text-sm'>{order.note || 'Không có ghi chú'}</p>
                 </div>
               </div>
-              <div className='col-span-4'>
+              <div className='col-span-3'>
                 {/* Phương thức thanh toán */}
                 <div>
-                  <h3 className='font-semibold mb-2'>Phương thức thanh toán</h3>
-                  <p className='text-slate-700'>{paymentMethods[order.payment_method]}</p>
+                  <h3 className='font-semibold mb-2 text-sm'>Phương thức thanh toán</h3>
+                  <p className='text-slate-700 text-sm'>{paymentMethods[order.payment_method]}</p>
                 </div>
               </div>
-              <div className='col-span-4'>
+              <div className='col-span-3'>
                 {/* Hình thức nhận hàng */}
                 <div>
-                  <h3 className='font-semibold mb-2'>Hình thức nhận hàng</h3>
-                  <p className='text-slate-700'>{receiveMethods[order.receive_method]}</p>
+                  <h3 className='font-semibold mb-2 text-sm'>Hình thức nhận hàng</h3>
+                  <p className='text-slate-700 text-sm'>{receiveMethods[order.receive_method]}</p>
                 </div>
               </div>
-              <div className='col-span-4'>
+              <div className='col-span-3'>
                 {/* Phí vận chuyển */}
                 <div>
-                  <h3 className='font-semibold mb-2'>Phí vận chuyển</h3>
-                  <p className='text-slate-700'>{formatCurrency(order.transport_fee)}₫</p>
+                  <h3 className='font-semibold mb-2 text-sm'>Phí vận chuyển</h3>
+                  <p className='text-slate-700 text-sm'>{formatCurrency(order.transport_fee)}₫</p>
                 </div>
               </div>
-              <div className='col-span-4'>
+              <div className='col-span-3'>
                 {/* Tiền giảm */}
                 <div>
-                  <h3 className='font-semibold mb-2'>Tiền giảm</h3>
-                  <p className='text-slate-700'>{formatCurrency(order.total_amount_reduced)}₫</p>
+                  <h3 className='font-semibold mb-2 text-sm'>Tiền giảm</h3>
+                  <p className='text-slate-700 text-sm'>{formatCurrency(order.total_amount_reduced)}₫</p>
                 </div>
               </div>
-              <div className='col-span-4'>
+              <div className='col-span-3'>
                 {/* Tổng đơn */}
                 <div>
-                  <h3 className='font-semibold mb-2'>Tổng đơn</h3>
-                  <p className='text-slate-700'>{formatCurrency(order.total_amount)}₫</p>
+                  <h3 className='font-semibold mb-2 text-sm'>Tổng đơn</h3>
+                  <p className='text-slate-700 text-sm'>{formatCurrency(order.total_amount)}₫</p>
                 </div>
               </div>
             </div>
             {/* Danh sách sản phẩm */}
             <div className='mt-10'>
-              <table className='w-full border'>
+              <table className='w-full border text-sm'>
                 <thead>
                   <tr>
                     <td className='font-semibold px-4 py-2 border'>Sản phẩm</td>
@@ -217,7 +217,7 @@ const OrderDetail = () => {
                       Tổng cộng:
                     </td>
                     <td className='border px-4 py-1'>{order.total_items}</td>
-                    <td className='border px-4 py-1 font-semibold text-lg text-primary'>
+                    <td className='border px-4 py-1 font-semibold text-primary text-sm'>
                       {formatCurrency(order.total_amount)}₫
                     </td>
                   </tr>

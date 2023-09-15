@@ -1,6 +1,6 @@
-import { useState, ChangeEvent, useEffect } from 'react';
-import { range } from 'lodash';
+import range from 'lodash/range';
 import PropTypes from 'prop-types';
+import { ChangeEvent, useEffect, useState } from 'react';
 
 interface DateSelectProps {
   onChange?: (date: Date) => void;

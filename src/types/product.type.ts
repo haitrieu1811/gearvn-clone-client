@@ -17,7 +17,7 @@ export interface Image {
 interface ReviewAuthor {
   _id: string;
   email: string;
-  fullName: string;
+  fullname: string;
   avatar: string;
 }
 
@@ -43,7 +43,7 @@ export interface Product {
   author: {
     _id: string;
     email: string;
-    fullName: string;
+    fullname: string;
     avatar: string;
   };
   brand?: Brand;
@@ -97,7 +97,7 @@ export interface GetProductsRequestParams {
 }
 
 // Request: Tạo và cập nhật sản phẩm
-export interface CreateAndUpdateProductBody {
+export interface CreateAndUpdateProductRequestBody {
   name_vi: string;
   name_en: string;
   thumbnail: string;
@@ -108,6 +108,7 @@ export interface CreateAndUpdateProductBody {
   brand_id: string;
   category_id: string;
   available_count: number;
+  images?: string[]; // Tên của hình ảnh
 }
 
 // Request: Thêm đánh giá

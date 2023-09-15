@@ -43,7 +43,7 @@ const CartList = () => {
     };
   }, []);
 
-  // Cập nhật số lượng
+  // Mutation: Cập nhật số lượng
   const updatePurchaseMutation = useMutation({
     mutationFn: purchaseApi.update,
     onSuccess: () => {
@@ -96,7 +96,7 @@ const CartList = () => {
                 handleTypeQuantity={handleTypeQuantity}
                 handleCheck={handleCheck}
                 disabled={cartItem.disabled}
-                checked={cartItem.checked}
+                checked={cartItem.checked || false}
               />
             ))}
           </div>
@@ -121,6 +121,7 @@ const CartList = () => {
           </div>
         </Fragment>
       )}
+
       {/* Giỏ hàng trống */}
       {extendedCartList && extendedCartList.length <= 0 && !isLoadingGetCartList && (
         <div className='flex flex-col items-center py-6'>
@@ -133,8 +134,13 @@ const CartList = () => {
           </Link>
         </div>
       )}
-      {/* Tải trang */}
-      {isLoadingGetCartList && <Loading />}
+
+      {/* Loading */}
+      {isLoadingGetCartList && (
+        <div className='min-h-[300px] bg-white rounded flex justify-center items-center'>
+          <Loading />
+        </div>
+      )}
     </Fragment>
   );
 };

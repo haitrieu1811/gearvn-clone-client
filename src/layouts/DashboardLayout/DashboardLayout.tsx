@@ -10,13 +10,13 @@ const DashboardLayout = ({ children }: { children: ReactNode }) => {
   const { isOpenChat, setIsOpenChat } = useContext(AppContext);
 
   return (
-    <div className='bg-[#f8f8f8] flex'>
+    <div className='flex'>
       <SidebarDashboard />
       <div className='flex-1'>
         {/* Header */}
         <HeaderDashboard />
-        <div className='min-h-screen p-4 pb-0'>
-          <div className='bg-white rounded'>{children}</div>
+        <div className='min-h-screen'>
+          <div className='bg-white p-4 pb-0'>{children}</div>
         </div>
         <ChatBox visible={isOpenChat} onClose={() => setIsOpenChat(false)} />
       </div>

@@ -95,6 +95,7 @@ const Header = () => {
           </div>
         </header>
       )}
+
       {/* Header của mobile và tablet */}
       {isTablet && (
         <header className='sticky top-0 left-0 right-0 z-[99999]'>

@@ -94,7 +94,7 @@ const Create = () => {
 
   return (
     <Fragment>
-      <div className='bg-white rounded-lg p-6 shadow-sm w-1/2'>
+      <div className='p-6 w-1/2'>
         <h2 className='text-2xl font-semibold'>{!isUpdateMode ? 'Tạo mới danh mục' : 'Cập nhật danh mục'}</h2>
         <form onSubmit={onSubmit}>
           <Input

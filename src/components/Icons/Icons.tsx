@@ -1114,7 +1114,7 @@ export const DiscountIcon = ({ className }: IconProps) => (
   </svg>
 );
 
-export const LoadingIcon = ({ className }: IconProps) => (
+export const SpinnerIcon = ({ className }: IconProps) => (
   <div role='status'>
     <svg
       aria-hidden='true'

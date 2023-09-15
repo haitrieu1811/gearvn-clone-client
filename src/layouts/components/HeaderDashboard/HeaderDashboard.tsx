@@ -15,11 +15,13 @@ const HeaderDashboard = () => {
   return (
     <Fragment>
       <header className='flex justify-between items-center bg-white sticky top-0 white z-[999] h-14 px-4 border-b'>
-        <Back />
+        <div className='flex items-center'>
+          <Back />
+        </div>
         <div className='flex items-center'>
           <button
             onClick={() => setIsOpenChat((prev) => !prev)}
-            className='bg-slate-50 w-9 h-9 rounded flex justify-center items-center mr-4 relative'
+            className='bg-slate-100 w-9 h-9 rounded-full flex justify-center items-center mr-4 relative'
           >
             <ChatIcon className='w-5 h-5 fill-none' />
             {conversationUnreadCount > 0 && (
@@ -40,7 +42,7 @@ const HeaderDashboard = () => {
                   <div className='flex items-center p-5 border-b'>
                     <Image src={profile.avatar} className='w-14 h-14 rounded-full object-cover' />
                     <div className='flex-1 ml-4'>
-                      <div className='font-semibold'>{profile.fullName}</div>
+                      <div className='font-semibold'>{profile.fullname}</div>
                       <div className='text-sm text-slate-500'>Admin</div>
                     </div>
                   </div>
@@ -70,7 +72,7 @@ const HeaderDashboard = () => {
               <div className='ml-3 cursor-pointer select-none'>
                 <Image
                   src={profile.avatar}
-                  alt={profile.fullName}
+                  alt={profile.fullname}
                   className='w-9 h-9 rounded-full object-cover flex-shrink-0'
                 />
               </div>

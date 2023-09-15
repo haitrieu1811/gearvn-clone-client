@@ -18,7 +18,7 @@ import InputFile from 'src/components/InputFile';
 import Loading from 'src/components/Loading';
 import TextEditor from 'src/components/TextEditor';
 import PATH from 'src/constants/path';
-import { CreateAndUpdateProductBody } from 'src/types/product.type';
+import { CreateAndUpdateProductRequestBody } from 'src/types/product.type';
 import { ErrorResponse } from 'src/types/utils.type';
 import { CreateProductSchema, createProductSchema } from 'src/utils/rules';
 import { getImageUrl, htmlToMarkdown, isEntityError } from 'src/utils/utils';
@@ -28,29 +28,29 @@ type FormData = CreateProductSchema;
 const Create = () => {
   const { product_id } = useParams();
   const match = useMatch(PATH.DASHBOARD_PRODUCT_UPDATE);
-  const isUpdateMode = Boolean(match);
+  const isUpdateMode = !!match;
   const [thumbnailFile, setThumbnailFile] = useState<File[] | null>(null);
   const [imagesFile, setImagesFile] = useState<File[] | null>(null);
   const [generalInfo, setGeneralInfo] = useState<string>('');
   const [description, setDescription] = useState<string>('');
 
-  // Lấy danh sách nhãn hiệu sản phẩm
+  // Query: Lấy danh sách nhãn hiệu sản phẩm
   const getBrandsQuery = useQuery({
     queryKey: ['brands'],
     queryFn: () => brandApi.getList()
   });
 
-  // Lấy danh sách danh mục sản phẩm
+  // Query: Lấy danh sách danh mục sản phẩm
   const getCategoriesQuery = useQuery({
     queryKey: ['categories'],
     queryFn: () => categoryApi.getList()
   });
 
-  // Lấy thông tin chi tiết sản phẩm
+  // Query: Lấy thông tin chi tiết sản phẩm
   const getProductDetailQuery = useQuery({
     queryKey: ['product', product_id],
     queryFn: () => productApi.getDetail(product_id as string),
-    enabled: Boolean(product_id)
+    enabled: !!product_id
   });
 
   // Form
@@ -82,12 +82,16 @@ const Create = () => {
     () => getProductDetailQuery.data?.data.data.product,
     [getProductDetailQuery.data?.data.data.product]
   );
+
   // Ảnh đại diện sản phẩm
   const previewThumbnail = useMemo(() => (thumbnailFile ? URL.createObjectURL(thumbnailFile[0]) : ''), [thumbnailFile]);
+
   // Danh sách hình ảnh sản phẩm
   const previewImages = useMemo(() => imagesFile?.map((file) => (file ? URL.createObjectURL(file) : '')), [imagesFile]);
+
   // Lấy danh sách nhãn hiệu sản phẩm
   const brands = useMemo(() => getBrandsQuery.data?.data.data.brands, [getBrandsQuery.data?.data.data.brands]);
+
   // Lấy danh sách danh mục sản phẩm
   const categories = useMemo(
     () => getCategoriesQuery.data?.data.data.categories,
@@ -133,10 +137,10 @@ const Create = () => {
     setImagesFile(files || null);
   };
 
-  // Tải lên hình ảnh sản phẩm
+  // Mutation: Tải lên hình ảnh sản phẩm
   const uploadImageMutation = useMutation(mediaApi.uploadImage);
 
-  // Tạo sản phẩm
+  // Mutation: Tạo sản phẩm
   const createProductMutation = useMutation({
     mutationFn: productApi.create,
     onSuccess: (data) => {
@@ -171,7 +175,7 @@ const Create = () => {
       setImagesFile(null);
     },
     onError: (error) => {
-      if (isEntityError<ErrorResponse<FormData>>(error)) {
+      if (isEntityError<ErrorResponse<{ [key in keyof CreateProductSchema]: string }>>(error)) {
         const formError = error.response?.data.data;
         if (!isEmpty(formError)) {
           Object.keys(formError).forEach((key) => {
@@ -184,10 +188,7 @@ const Create = () => {
     }
   });
 
-  // Thêm hình ảnh sản phẩm
-  const addImageMutation = useMutation(productApi.addImage);
-
-  // Phương thức xóa hình ảnh sản phẩm
+  // Mutation: Xóa hình ảnh sản phẩm
   const deleteImageMutation = useMutation({
     mutationFn: mediaApi.deleteMedia,
     onSuccess: (data) => {
@@ -217,15 +218,18 @@ const Create = () => {
   const onSubmit = handleSubmit(async (data) => {
     let thumbnail = product && product.thumbnail ? product.thumbnail : '';
     let images: string[] = [];
+    // Nếu có chọn ảnh đại diện thì tiến hành tải lên
     if (thumbnailFile) {
       const form = new FormData();
       form.append('image', thumbnailFile[0]);
       await uploadImageMutation.mutateAsync(form, {
         onSuccess: (data) => {
-          thumbnail = data.data.data.medias[0].name;
+          const responseThumbnail = data.data.data.medias[0].name;
+          thumbnail = responseThumbnail;
         }
       });
     }
+    // Nếu có chọn danh sách hình ảnh của sản phẩm thì tiến hành tải lên
     if (imagesFile) {
       const form = new FormData();
       for (const image of imagesFile) {
@@ -233,35 +237,28 @@ const Create = () => {
       }
       await uploadImageMutation.mutateAsync(form, {
         onSuccess: (data) => {
-          const responseImage = data.data.data.medias.map((media) => media.name);
-          images = responseImage;
+          const responseImages = data.data.data.medias.map((media) => media.name);
+          images = responseImages;
         }
       });
     }
+    // Tiến hành tạo sản phẩm
     const { price, price_after_discount, available_count } = data;
-    const body: CreateAndUpdateProductBody = {
+    const body: CreateAndUpdateProductRequestBody = {
       ...data,
       price: Number(price),
       price_after_discount: Number(price_after_discount),
       available_count: Number(available_count),
-      thumbnail
+      thumbnail,
+      images
     };
-    let productId = product_id;
-    if (!isUpdateMode) {
-      const res = await createProductMutation.mutateAsync(body);
-      productId = res.data.data.insertedId;
-    } else {
-      updateProductMutation.mutate({ body, productId: product_id as string });
-    }
-    // Thêm hình ảnh vào database
-    if (images.length > 0) {
-      addImageMutation.mutate({ body: { images }, productId: productId as string });
-    }
+    if (!isUpdateMode) createProductMutation.mutate(body);
+    else updateProductMutation.mutate({ body, productId: product_id as string });
   });
 
   return (
     <Fragment>
-      <div className='bg-white rounded-lg shadow-sm p-6'>
+      <div className='p-6'>
         <h2 className='text-2xl font-semibold mb-6'>{!isUpdateMode ? 'Tạo sản phẩm mới' : 'Cập nhật sản phẩm'}</h2>
         {/* Khi có dữ liệu hoặc ở chế độ tạo */}
         {(!isUpdateMode || (product && !getProductDetailQuery.isLoading)) && (
@@ -433,7 +430,7 @@ const Create = () => {
                       className='w-full max-h-[240px] mb-3 rounded object-contain'
                     />
                   )}
-                  <InputFile onChange={handleThumbnailChange} name='thumbnail'>
+                  <InputFile onChange={handleThumbnailChange}>
                     <button
                       type='button'
                       className='bg-slate-50 border rounded-sm w-full py-2 text-sm font-medium flex justify-center items-center'
@@ -445,7 +442,7 @@ const Create = () => {
                 </div>
                 {/* Images */}
                 <div className='mt-10'>
-                  {!Boolean(previewImages) && !Boolean(product?.images) ? (
+                  {!!previewImages && !!product?.images ? (
                     <div className='flex justify-center items-center min-h-[240px] mb-3 rounded bg-slate-100'>
                       <CloudArrowUpIcon className='w-10 h-10' />
                     </div>
@@ -479,7 +476,7 @@ const Create = () => {
                       ))}
                     </div>
                   )}
-                  <InputFile name='images' onChange={handleImagesChange} multiple>
+                  <InputFile onChange={handleImagesChange} multiple>
                     <button
                       type='button'
                       className='bg-slate-50 border rounded-sm w-full py-2 text-sm font-medium flex justify-center items-center'
@@ -496,9 +493,15 @@ const Create = () => {
             </div>
           </form>
         )}
-        {/* Tải trang */}
-        {getProductDetailQuery.isLoading && isUpdateMode && <Loading />}
+
+        {/* Loading */}
+        {getProductDetailQuery.isLoading && isUpdateMode && (
+          <div className='flex justify-center items-center min-h-[400px]'>
+            <Loading />
+          </div>
+        )}
       </div>
+
       <FloatLoading
         isLoading={
           uploadImageMutation.isLoading ||

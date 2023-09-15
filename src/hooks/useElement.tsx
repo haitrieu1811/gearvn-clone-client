@@ -1,51 +1,51 @@
-import { useContext } from 'react';
+import { Suspense, lazy, useContext } from 'react';
 import { Navigate, Outlet, useRoutes } from 'react-router-dom';
-import { UserRole } from 'src/constants/enum';
 
+import { UserRole } from 'src/constants/enum';
 import PATH from 'src/constants/path';
 import { AppContext } from 'src/contexts/app.context';
 
-import AuthLayout from 'src/layouts/AuthLayout';
-import DashboardLayout from 'src/layouts/DashboardLayout';
-import MainLayout from 'src/layouts/MainLayout';
+const AuthLayout = lazy(() => import('src/layouts/AuthLayout'));
+const DashboardLayout = lazy(() => import('src/layouts/DashboardLayout'));
+const MainLayout = lazy(() => import('src/layouts/MainLayout'));
 
-import DashboardBlogCreate from 'src/pages/admin/Blog/Create';
-import DashboardBlog from 'src/pages/admin/Blog/List';
-import DashboardBrandCreate from 'src/pages/admin/Brand/Create';
-import DashboardBrand from 'src/pages/admin/Brand/List';
-import DashboardCategoryCreate from 'src/pages/admin/Category/Create';
-import DashboardCategory from 'src/pages/admin/Category/List';
-import Dashboard from 'src/pages/admin/Dashboard/Dashboard';
-import DashboardOrderDetail from 'src/pages/admin/Order/OrderDetail';
-import DashboardOrderList from 'src/pages/admin/Order/OrderList';
-import DashboardProductCreate from 'src/pages/admin/Product/Create';
-import DashboardProduct from 'src/pages/admin/Product/List';
-import DashboardUser from 'src/pages/admin/User/List';
-import Account from 'src/pages/shop/Account';
-import AccountAddress from 'src/pages/shop/Account/Address';
-import ChangePassword from 'src/pages/shop/Account/ChangePassword';
-import AccountHistoryOrder from 'src/pages/shop/Account/HistoryOrder';
-import OrderDetail from 'src/pages/shop/Account/OrderDetail';
-import AccountProfile from 'src/pages/shop/Account/Profile';
-import AccountViewedProduct from 'src/pages/shop/Account/ViewedProduct';
-import Blog from 'src/pages/shop/Blog';
-import BlogDetail from 'src/pages/shop/BlogDetail';
-import Cart from 'src/pages/shop/Cart';
-import CartList from 'src/pages/shop/Cart/CartList';
-import CheckoutInfo from 'src/pages/shop/Cart/CheckoutInfo';
-import CheckoutProcess from 'src/pages/shop/Cart/CheckoutProcess';
-import CheckoutSuccess from 'src/pages/shop/Cart/CheckoutSuccess';
-import ForgotPassword from 'src/pages/shop/ForgotPassword';
-import Home from 'src/pages/shop/Home/Home';
-import Login from 'src/pages/shop/Login/Login';
-import NotFound from 'src/pages/shop/NotFound/NotFound';
-import Product from 'src/pages/shop/Product';
-import ProductDetail from 'src/pages/shop/ProductDetail';
-import Register from 'src/pages/shop/Register/Register';
-import ResetPassword from 'src/pages/shop/ResetPassword';
-import Search from 'src/pages/shop/Search';
-import VerifyEmail from 'src/pages/shop/VerifyEmail';
-import VerifyResetPasswordToken from 'src/pages/shop/VerifyForgotPasswordToken';
+const DashboardBlogCreate = lazy(() => import('src/pages/admin/Blog/Create'));
+const DashboardBlog = lazy(() => import('src/pages/admin/Blog/List'));
+const DashboardBrandCreate = lazy(() => import('src/pages/admin/Brand/Create'));
+const DashboardBrand = lazy(() => import('src/pages/admin/Brand/List'));
+const DashboardCategoryCreate = lazy(() => import('src/pages/admin/Category/Create'));
+const DashboardCategory = lazy(() => import('src/pages/admin/Category/List'));
+const Dashboard = lazy(() => import('src/pages/admin/Dashboard'));
+const DashboardOrderDetail = lazy(() => import('src/pages/admin/Order/OrderDetail'));
+const DashboardOrderList = lazy(() => import('src/pages/admin/Order/OrderList'));
+const DashboardProductCreate = lazy(() => import('src/pages/admin/Product/Create'));
+const DashboardProduct = lazy(() => import('src/pages/admin/Product/List'));
+const DashboardUser = lazy(() => import('src/pages/admin/User/List'));
+const Account = lazy(() => import('src/pages/shop/Account'));
+const AccountAddress = lazy(() => import('src/pages/shop/Account/Address'));
+const ChangePassword = lazy(() => import('src/pages/shop/Account/ChangePassword'));
+const AccountHistoryOrder = lazy(() => import('src/pages/shop/Account/HistoryOrder'));
+const OrderDetail = lazy(() => import('src/pages/shop/Account/OrderDetail'));
+const AccountProfile = lazy(() => import('src/pages/shop/Account/Profile'));
+const AccountViewedProduct = lazy(() => import('src/pages/shop/Account/ViewedProduct'));
+const Blog = lazy(() => import('src/pages/shop/Blog'));
+const BlogDetail = lazy(() => import('src/pages/shop/BlogDetail'));
+const Cart = lazy(() => import('src/pages/shop/Cart'));
+const CartList = lazy(() => import('src/pages/shop/Cart/CartList'));
+const CheckoutInfo = lazy(() => import('src/pages/shop/Cart/CheckoutInfo'));
+const CheckoutProcess = lazy(() => import('src/pages/shop/Cart/CheckoutProcess'));
+const CheckoutSuccess = lazy(() => import('src/pages/shop/Cart/CheckoutSuccess'));
+const ForgotPassword = lazy(() => import('src/pages/shop/ForgotPassword'));
+const Home = lazy(() => import('src/pages/shop/Home'));
+const Login = lazy(() => import('src/pages/shop/Login'));
+const NotFound = lazy(() => import('src/pages/shop/NotFound'));
+const Product = lazy(() => import('src/pages/shop/Product'));
+const ProductDetail = lazy(() => import('src/pages/shop/ProductDetail'));
+const Register = lazy(() => import('src/pages/shop/Register'));
+const ResetPassword = lazy(() => import('src/pages/shop/ResetPassword'));
+const Search = lazy(() => import('src/pages/shop/Search'));
+const VerifyEmail = lazy(() => import('src/pages/shop/VerifyEmail'));
+const VerifyForgotPasswordToken = lazy(() => import('src/pages/shop/VerifyForgotPasswordToken'));
 
 const ProtectedRoute = () => {
   const { isAuthenticated } = useContext(AppContext);
@@ -73,9 +73,11 @@ const useElement = () => {
       index: true,
       path: PATH.HOME,
       element: (
-        <MainLayout>
-          <Home />
-        </MainLayout>
+        <Suspense>
+          <MainLayout>
+            <Home />
+          </MainLayout>
+        </Suspense>
       )
     },
     {
@@ -89,9 +91,11 @@ const useElement = () => {
     {
       path: PATH.PRODUCT,
       element: (
-        <MainLayout>
-          <Product />
-        </MainLayout>
+        <Suspense>
+          <MainLayout>
+            <Product />
+          </MainLayout>
+        </Suspense>
       )
     },
     {
@@ -242,7 +246,7 @@ const useElement = () => {
           path: PATH.VERIFY_RESET_PASSWORD_TOKEN,
           element: (
             <MainLayout>
-              <VerifyResetPasswordToken />
+              <VerifyForgotPasswordToken />
             </MainLayout>
           )
         }

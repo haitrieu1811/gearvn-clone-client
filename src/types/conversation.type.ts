@@ -8,13 +8,13 @@ export interface Conversation {
   sender: {
     _id: string;
     email: string;
-    fullName: string;
+    fullname: string;
     avatar: string;
   };
   receiver: {
     _id: string;
     email: string;
-    fullName: string;
+    fullname: string;
     avatar: string;
   };
   created_at: string;
@@ -25,7 +25,7 @@ export interface Conversation {
 export interface ConversationReceiver {
   _id: string;
   email: string;
-  fullName: string;
+  fullname: string;
   avatar: string;
   unread_count: number;
   last_message: {

@@ -16,12 +16,14 @@ const OrderDetail = () => {
   const navigate = useNavigate();
   const { order_id } = useParams();
 
+  // Query: Lấy thông tin đơn hàng
   const getOrderDetailQuery = useQuery({
     queryKey: ['order_detail', order_id],
     queryFn: () => orderApi.getDetail(order_id as string),
     enabled: Boolean(order_id)
   });
 
+  // Thông tin đơn hàng
   const order = useMemo(() => getOrderDetailQuery.data?.data.data.order, [getOrderDetailQuery.data?.data.data.order]);
 
   return (
@@ -171,8 +173,13 @@ const OrderDetail = () => {
           </div>
         </Fragment>
       )}
-      {/* Tải trang */}
-      {getOrderDetailQuery.isLoading && <Loading />}
+
+      {/* Loading */}
+      {getOrderDetailQuery.isLoading && (
+        <div className='min-h-[400px] flex justify-center items-center'>
+          <Loading />
+        </div>
+      )}
     </div>
   );
 };

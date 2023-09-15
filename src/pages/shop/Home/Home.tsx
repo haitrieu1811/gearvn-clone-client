@@ -87,8 +87,9 @@ const Home = () => {
         <meta property='og:site_name' content='Trang chủ' />
         <meta property='og:type' content='website' />
       </Helmet>
-      {/* Mega menu, carousel */}
+
       <div className='px-2 lg:container'>
+        {/* Mega menu, carousel */}
         <div className='flex'>
           {!isTablet && <MegaMenu />}
           <div className='flex-1 grid grid-cols-12 gap-2 lg:ml-[15px]'>
@@ -113,6 +114,7 @@ const Home = () => {
             </div>
           </div>
         </div>
+
         {/* Laptop bán chạy */}
         {laptops.length > 0 && !getProductsQuery.isLoading && (
           <ProductSection
@@ -136,6 +138,7 @@ const Home = () => {
             ]}
           />
         )}
+
         {/* Bàn phím bán chạy */}
         {keyboards.length > 0 && !getProductsQuery.isLoading && (
           <ProductSection
@@ -151,6 +154,7 @@ const Home = () => {
             ]}
           />
         )}
+
         {/* Chuột bán chạy */}
         {mouses.length > 0 && !getProductsQuery.isLoading && (
           <ProductSection
@@ -174,6 +178,7 @@ const Home = () => {
             ]}
           />
         )}
+
         {/* Tin tức công nghệ */}
         {blogs && blogs.length > 0 && !getBlogsQuery.isLoading && (
           <div className='bg-white rounded shadow-sm mt-3'>
@@ -194,15 +199,17 @@ const Home = () => {
             )}
           </div>
         )}
+
         {/* Loading blogs */}
         {getBlogsQuery.isLoading && (
-          <div className='mt-3'>
+          <div className='mt-3 bg-white rounded min-h-[400px] flex justify-center items-center'>
             <Loading />
           </div>
         )}
+
         {/* Loading sản phẩm */}
         {getProductsQuery.isLoading && (
-          <div className='mt-3'>
+          <div className='mt-3 bg-white rounded min-h-[400px] flex justify-center items-center'>
             <Loading />
           </div>
         )}

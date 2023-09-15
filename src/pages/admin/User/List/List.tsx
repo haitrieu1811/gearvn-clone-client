@@ -61,7 +61,7 @@ const List = () => {
             width: 35
           },
           {
-            field: 'fullName',
+            field: 'fullname',
             headerName: 'Họ tên',
             width: 20
           },
@@ -99,7 +99,7 @@ const List = () => {
                 <span className='ml-4'>{user.email}</span>
               </div>
             ),
-            fullName: user.fullName,
+            fullname: user.fullname,
             type: user.role === UserRole.Customer ? 'Khách hàng' : 'Nhân viên',
             status: user.status === UserStatus.Active ? 'Hoạt động' : 'Đã khóa',
             createdAt: convertMomentFromNowToVietnamese(moment(user.created_at).fromNow()),

@@ -49,7 +49,7 @@ const Account = () => {
               <span className='ml-4 text-sm font-semibold'>
                 Xin chào,{' '}
                 <span className='capitalize font-semibold'>
-                  {profile?.fullName ? profile.fullName : profile?.email.split('@')[0]}
+                  {profile?.fullname ? profile.fullname : profile?.email.split('@')[0]}
                 </span>
               </span>
             </Link>
@@ -90,7 +90,7 @@ const Account = () => {
           <span className='text-[13px] text-white ml-3 leading-tight'>
             <div className='font-semibold'>Xin chào</div>
             <div className='capitalize font-semibold'>
-              {profile?.fullName ? profile.fullName : profile?.email.split('@')[0]}
+              {profile?.fullname ? profile.fullname : profile?.email.split('@')[0]}
             </div>
           </span>
         )}

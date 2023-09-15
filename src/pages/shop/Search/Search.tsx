@@ -88,6 +88,7 @@ const Search = () => {
         <meta property='og:site_name' content='Tìm kiếm sản phẩm' />
         <meta property='og:type' content='website' />
       </Helmet>
+
       <div className='px-2 lg:container bg-white my-2 md:my-4 rounded shadow-sm py-6'>
         <h1 className='uppercase text-2xl font-semibold text-[#333333] text-center mb-6'>Tìm kiếm</h1>
         {/* Hiển thị khi có dữ liệu */}
@@ -113,6 +114,7 @@ const Search = () => {
             </div>
           </div>
         )}
+
         {/* Hiển thị khi không có dữ liệu */}
         {products && products.length <= 0 && !getProductsQuery.isLoading && (
           <div className='flex flex-col justify-center items-center'>
@@ -136,8 +138,13 @@ const Search = () => {
             </form>
           </div>
         )}
+
         {/* Loading */}
-        {getProductsQuery.isLoading && <Loading />}
+        {getProductsQuery.isLoading && (
+          <div className='min-h-[300px] flex justify-center items-center'>
+            <Loading />
+          </div>
+        )}
       </div>
     </Fragment>
   );
