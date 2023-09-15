@@ -9,6 +9,7 @@ import ScrollToTop from './components/ScrollToTop';
 import AppProvider from './contexts/app.context.tsx';
 import './i18n/i18n.ts';
 import './index.css';
+import ErrorBoundary from './components/ErrorBoundary';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -25,9 +26,11 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
     <BrowserRouter>
       <HelmetProvider>
         <AppProvider>
-          <ScrollToTop>
-            <App />
-          </ScrollToTop>
+          <ErrorBoundary>
+            <ScrollToTop>
+              <App />
+            </ScrollToTop>
+          </ErrorBoundary>
         </AppProvider>
       </HelmetProvider>
     </BrowserRouter>

@@ -193,32 +193,32 @@ const ChatBox = ({ visible = true, onClose }: ChatBoxProps) => {
                 {/* Đã chọn người để chat */}
                 {currentReceiver && (
                   <Fragment>
-                    {/* Tin nhắn */}
-                    <div
-                      id='scrollableDiv'
-                      style={{
-                        display: 'flex',
-                        flexDirection: 'column-reverse'
-                      }}
-                    >
-                      <InfiniteScroll
-                        className='p-4'
-                        dataLength={conversations.length}
-                        next={getConversationsQuery.fetchNextPage}
-                        style={{ display: 'flex', flexDirection: 'column-reverse' }}
-                        inverse={true}
-                        hasMore={!!getConversationsQuery.hasNextPage}
-                        height={450}
-                        loader={
-                          <div className='flex justify-center pb-4'>
-                            <LoadingIcon className='w-6 h-6' />
-                          </div>
-                        }
-                        scrollableTarget='scrollableDiv'
+                    {/* Đã nhắn tin từ trước */}
+                    {conversations.length > 0 && (
+                      <div
+                        id='scrollableDiv'
+                        style={{
+                          display: 'flex',
+                          flexDirection: 'column-reverse'
+                        }}
                       >
-                        {/* Đã nhắn tin trước đó */}
-                        {conversations.length > 0 &&
-                          conversations.map((conversation) => {
+                        <InfiniteScroll
+                          className='p-4'
+                          dataLength={conversations.length}
+                          next={getConversationsQuery.fetchNextPage}
+                          style={{ display: 'flex', flexDirection: 'column-reverse' }}
+                          inverse={true}
+                          hasMore={!!getConversationsQuery.hasNextPage}
+                          height={450}
+                          loader={
+                            <div className='flex justify-center pb-4'>
+                              <LoadingIcon className='w-6 h-6' />
+                            </div>
+                          }
+                          scrollableTarget='scrollableDiv'
+                        >
+                          {/* Đã nhắn tin trước đó */}
+                          {conversations.map((conversation) => {
                             const isSender = conversation.sender._id === profile?._id;
                             return (
                               <div
@@ -241,21 +241,23 @@ const ChatBox = ({ visible = true, onClose }: ChatBoxProps) => {
                               </div>
                             );
                           })}
+                        </InfiniteScroll>
+                      </div>
+                    )}
 
-                        {/* Chưa nhắn tin lần nào */}
-                        {conversations.length <= 0 && !getConversationsQuery.isFetching && (
-                          <div className='h-full flex justify-center items-center flex-col'>
-                            <Image src={currentReceiver.avatar} className='w-20 h-20 rounded-full  object-cover' />
-                            <div className='mt-6 text-slate-600 text-sm'>
-                              Bắt đầu trò chuyện với{' '}
-                              <span className='font-semibold text-black'>
-                                {currentReceiver.fullName || `User#${currentReceiver._id.slice(-4)}`}
-                              </span>
-                            </div>
-                          </div>
-                        )}
-                      </InfiniteScroll>
-                    </div>
+                    {/* Chưa nhắn tin lần nào */}
+                    {conversations.length <= 0 && !getConversationsQuery.isFetching && (
+                      <div className='h-full flex justify-center items-center flex-col'>
+                        <Image src={currentReceiver.avatar} className='w-20 h-20 rounded-full  object-cover' />
+                        <div className='mt-6 text-slate-600 text-sm'>
+                          Bắt đầu trò chuyện với{' '}
+                          <span className='font-semibold text-black'>
+                            {currentReceiver.fullName || `User#${currentReceiver._id.slice(-4)}`}
+                          </span>
+                        </div>
+                      </div>
+                    )}
+
                     {/* Nhập chat */}
                     <form className='bg-white border-t flex h-[50px]' onSubmit={handleSendMessage}>
                       <input
@@ -273,7 +275,7 @@ const ChatBox = ({ visible = true, onClose }: ChatBoxProps) => {
                 )}
 
                 {/* Chưa chọn người để chat */}
-                {!currentReceiver?._id && (
+                {!currentReceiver && (
                   <div className='flex justify-center items-center flex-col h-[500px]'>
                     <ConversationIcon className='w-28 h-2w-28 stroke-[0.5] stroke-slate-500' />
                     <div className='text-center text-slate-600 mt-4'>Welcome to Gearvn Clone chat</div>
