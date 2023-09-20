@@ -15,11 +15,11 @@ import Table from 'src/components/Table';
 import { OrderStatus } from 'src/constants/enum';
 import PATH from 'src/constants/path';
 import UseQueryParams from 'src/hooks/useQueryParams';
-import { GetOrderListRequestParams } from 'src/types/order.type';
+import { GetOrdersRequestParams } from 'src/types/order.type';
 import { convertMomentFromNowToVietnamese } from 'src/utils/utils';
 
 type QueryConfig = {
-  [key in keyof GetOrderListRequestParams]: string;
+  [key in keyof GetOrdersRequestParams]: string;
 };
 
 export const orderStatus = {
@@ -28,7 +28,7 @@ export const orderStatus = {
   [OrderStatus.Processing]: <Badge name='Đang xử lý' type='Secondary' />,
   [OrderStatus.Delivering]: <Badge name='Đang giao' type='Warning' />,
   [OrderStatus.Succeed]: <Badge name='Thành công' type='Success' />,
-  [OrderStatus.Cancelled]: <Badge name='Đẫ hủy' type='Danger' />
+  [OrderStatus.Canceled]: <Badge name='Đẫ hủy' type='Danger' />
 };
 
 const OrderList = () => {
@@ -46,7 +46,7 @@ const OrderList = () => {
 
   // Query: Lấy danh sách đơn hàng
   const getOrdersQuery = useQuery({
-    queryKey: ['all-orders', queryConfig],
+    queryKey: ['orders', queryConfig],
     queryFn: () => orderApi.getAll(queryConfig),
     keepPreviousData: true
   });

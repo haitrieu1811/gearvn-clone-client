@@ -125,7 +125,7 @@ const Search = () => {
       onClickOutside={() => setShowSearchResult(false)}
       zIndex={9999999}
     >
-      <form className='relative md:w-[310px] ml-2' onSubmit={redirectToSearchPage}>
+      <form className='relative flex-1 lg:flex-auto md:w-[310px] ml-2' onSubmit={redirectToSearchPage}>
         <input
           type='text'
           placeholder='Bạn cần tìm gì?'

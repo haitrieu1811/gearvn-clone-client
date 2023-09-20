@@ -1,7 +1,7 @@
 import { Gender, OrderStatus, PaymentMethod, PurchaseStatus, ReceiveMethod } from 'src/constants/enum';
 import { SuccessResponse } from './utils.type';
 
-// Type: Purchasa
+// Type: Purchase
 export interface Purchase {
   _id: string;
   unit_price: number;
@@ -20,17 +20,6 @@ export interface Purchase {
     created_at: string;
     updated_at: string;
   };
-}
-
-// Type: AddToCartPurchase
-interface AddToCartPurchase {
-  _id: string;
-  buy_count: number;
-  product_id: string;
-  user_id: string;
-  status: PurchaseStatus;
-  created_at: string;
-  updated_at: string;
 }
 
 // Request: Thêm sản phẩm vào giỏ hàng
@@ -67,7 +56,7 @@ export interface CheckoutRequestBody {
 
 // Response: Thêm sản phẩm vào giỏ hàng
 export type AddToCartResponse = SuccessResponse<{
-  purchase: AddToCartPurchase;
+  purchase_id: string;
 }>;
 
 // Response: Lấy giỏ hàng

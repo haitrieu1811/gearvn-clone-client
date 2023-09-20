@@ -26,7 +26,7 @@ const productApi = {
   },
   // Cập nhật sản phẩm
   update({ productId, body }: { productId: string; body: CreateAndUpdateProductRequestBody }) {
-    return http.patch<OnlyMessageResponse>(`/products/${productId}`, body);
+    return http.put<OnlyMessageResponse>(`/products/${productId}`, body);
   },
   // Xóa sản phẩm
   delete(productIds: string[]) {

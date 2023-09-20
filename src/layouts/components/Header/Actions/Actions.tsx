@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
 import { memo } from 'react';
+import { Link } from 'react-router-dom';
 
 import { HotlineIcon, LocationIcon, PurchaseIcon } from 'src/components/Icons';
 import PATH from 'src/constants/path';
@@ -19,7 +19,7 @@ const Actions = ({ cartSize }: ActionsProps) => {
         textAbove='Hotline'
         textBelow='1800.6975'
       />
-      <HeaderAction icon={<LocationIcon className='w-[18px]' />} textAbove='Hệ thống' textBelow='Showroom' />
+      <HeaderAction icon={<LocationIcon className='w-[18px]' />} textAbove='Ngôn ngữ' textBelow='Tiếng Việt' />
       <Link to={PATH.ACCOUNT_ORDER}>
         <HeaderAction
           icon={<PurchaseIcon className='w-[18px] fill-white' />}

@@ -17,7 +17,7 @@ export const orderStatusName = {
   [OrderStatus.Processing]: 'Đang xử lý',
   [OrderStatus.Delivering]: 'Đang vận chuyển',
   [OrderStatus.Succeed]: 'Thành công',
-  [OrderStatus.Cancelled]: 'Đã hủy'
+  [OrderStatus.Canceled]: 'Đã hủy'
 };
 
 const OrderItem = ({ data }: OrderItemProps) => {

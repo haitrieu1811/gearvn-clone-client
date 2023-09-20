@@ -19,6 +19,6 @@ export const ORDER_PROGRESS = [
   },
   {
     name: 'Đã hủy',
-    value: OrderStatus.Cancelled
+    value: OrderStatus.Canceled
   }
 ] as const;

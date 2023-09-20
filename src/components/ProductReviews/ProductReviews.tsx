@@ -72,7 +72,7 @@ const ProductReviewList = ({ productId }: ProductReviewListProps) => {
                           key={image._id}
                           src={image.name}
                           onClick={() => handlePreviewImages(review.images.map((image) => image.name))}
-                          className='w-20 h-20 object-cover mr-2 rounded cursor-pointer'
+                          className='w-16 h-16 rounded-sm object-cover mr-2 cursor-pointer'
                         />
                       ))}
                     </div>

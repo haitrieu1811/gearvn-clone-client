@@ -11,6 +11,8 @@ interface Brand {
 export interface Image {
   _id: string;
   name: string;
+  created_at: string;
+  updated_at: string;
 }
 
 // Type: Người đánh giá

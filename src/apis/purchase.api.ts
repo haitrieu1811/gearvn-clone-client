@@ -12,11 +12,11 @@ import http from 'src/utils/http';
 const purchaseApi = {
   // Thêm sản phẩm vào giỏ hàng
   addToCart({ productId, buyCount }: AddToCartRequestBody) {
-    return http.post<AddToCartResponse>('/purchases/add-to-cart', { product_id: productId, buy_count: buyCount });
+    return http.post<AddToCartResponse>('/purchases', { product_id: productId, buy_count: buyCount });
   },
   // Lấy giỏ hàng
   getCart() {
-    return http.get<GetCartResponse>('/purchases/get-cart');
+    return http.get<GetCartResponse>('/purchases');
   },
   // Cập nhật giỏ hàng
   update({ purchaseId, buyCount }: UpdateCartRequestBody) {
@@ -28,7 +28,7 @@ const purchaseApi = {
   },
   // Xóa tất cả sản phẩm trong giỏ hàng
   deleteAll() {
-    return http.delete<OnlyMessageResponse>('/purchases/delete-all');
+    return http.delete<OnlyMessageResponse>('/purchases/all');
   },
   // Thanh toán
   checkout(body: CheckoutRequestBody) {

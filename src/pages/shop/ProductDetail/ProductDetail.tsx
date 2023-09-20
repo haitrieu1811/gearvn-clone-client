@@ -122,7 +122,7 @@ const ProductDetail = () => {
         { productId: product._id, buyCount },
         {
           onSuccess: (data) => {
-            navigate(PATH.CART_LIST, { state: { cartItemId: data.data.data.purchase._id } });
+            navigate(PATH.CART_LIST, { state: { cartItemId: data.data.data.purchase_id } });
           }
         }
       );
