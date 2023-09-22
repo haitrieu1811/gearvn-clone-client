@@ -1,19 +1,9 @@
-import { Fragment, useState } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import classNames from 'classnames';
 
-import {
-  AccessoryIcon,
-  ChairIcon,
-  HeadphoneIcon,
-  KeyboardIcon,
-  LaptopIcon,
-  MouseIcon,
-  PcIcon,
-  ScreenIcon
-} from 'src/components/Icons';
-import PATH from 'src/constants/path';
-import MegaMenuLink from '../MegaMenuLink';
-import { MENU_DATA } from 'src/constants/header';
+import { MenuLinkArrowIcon } from 'src/components/Icons';
+import useMegaMenuData from 'src/hooks/useMegaMenuData';
 
 export interface MegaMenuItem {
   heading: string;
@@ -24,102 +14,95 @@ export interface MegaMenuItem {
 }
 
 const MegaMenu = () => {
+  const megaMenuData = useMegaMenuData();
   const [menuList, setMenuList] = useState<MegaMenuItem[] | null>(null);
-  const [showMenu, setShowMenu] = useState<boolean>(false);
+  const [isShowMenu, setIsShowMenu] = useState<boolean>(false);
+  const [currentIndex, setCurrentIndex] = useState<number | null>(null);
 
-  const onMouseEnter = (menuList: MegaMenuItem[]) => {
+  // Xử lý khi rê chuột vào menu cha
+  const handleParentEnter = (menuList: MegaMenuItem[], index: number) => () => {
+    setIsShowMenu(true);
+    setCurrentIndex(index);
     setMenuList(menuList);
-    setShowMenu(true);
   };
 
-  const onMouseLeave = () => {
-    !showMenu && setMenuList(null);
+  // Xử lý khi rê chuột ra khỏi menu cha
+  const handleParentLeave = () => {
+    setIsShowMenu(false);
   };
+
+  // Xử lý khi rê chuột vào menu con
+  const handleChildEnter = () => {
+    setIsShowMenu(true);
+  };
+
+  // Xử lý khi rê chuột ra khỏi menu con
+  const handleChildLeave = () => {
+    setIsShowMenu(false);
+  };
+
+  // Reset khi isShowMenu = false
+  useEffect(() => {
+    if (isShowMenu) return;
+    setMenuList(null);
+    setIsShowMenu(false);
+    setCurrentIndex(null);
+  }, [isShowMenu]);
 
   return (
     <Fragment>
       <div className='relative z-10'>
         {/* Sidebar */}
-        <div className='w-[216px] bg-white rounded'>
-          <MegaMenuLink
-            to={PATH.PRODUCT}
-            icon={<LaptopIcon />}
-            name='Laptop'
-            onMouseEnter={() => onMouseEnter(MENU_DATA.LAPTOP)}
-            onMouseLeave={onMouseLeave}
-          />
-          <MegaMenuLink
-            to={PATH.PRODUCT}
-            icon={<LaptopIcon />}
-            name='Laptop Gaming'
-            onMouseEnter={() => onMouseEnter(MENU_DATA.PC_GAMING)}
-            onMouseLeave={onMouseLeave}
-          />
-          <MegaMenuLink
-            to={PATH.HOME}
-            icon={<PcIcon />}
-            name='PC Gaming'
-            onMouseEnter={() => onMouseEnter(MENU_DATA.LAPTOP)}
-            onMouseLeave={onMouseLeave}
-          />
-          <MegaMenuLink
-            to={PATH.HOME}
-            icon={<ScreenIcon />}
-            name='Màn hình'
-            onMouseEnter={() => onMouseEnter(MENU_DATA.PC_GAMING)}
-            onMouseLeave={onMouseLeave}
-          />
-          <MegaMenuLink
-            to={PATH.HOME}
-            icon={<KeyboardIcon />}
-            name='Bàn phím'
-            onMouseEnter={() => onMouseEnter(MENU_DATA.LAPTOP)}
-            onMouseLeave={onMouseLeave}
-          />
-          <MegaMenuLink
-            to={PATH.HOME}
-            icon={<MouseIcon />}
-            name='Chuột'
-            onMouseEnter={() => onMouseEnter(MENU_DATA.PC_GAMING)}
-            onMouseLeave={onMouseLeave}
-          />
-          <MegaMenuLink
-            to={PATH.HOME}
-            icon={<HeadphoneIcon />}
-            name='Tai Nghe - Loa'
-            onMouseEnter={() => onMouseEnter(MENU_DATA.LAPTOP)}
-            onMouseLeave={onMouseLeave}
-          />
-          <MegaMenuLink
-            to={PATH.HOME}
-            icon={<ChairIcon />}
-            name='Ghế - Bàn'
-            onMouseEnter={() => onMouseEnter(MENU_DATA.PC_GAMING)}
-            onMouseLeave={onMouseLeave}
-          />
-          <MegaMenuLink
-            to={PATH.HOME}
-            icon={<AccessoryIcon />}
-            name='Phụ kiện'
-            onMouseEnter={() => onMouseEnter(MENU_DATA.LAPTOP)}
-            onMouseLeave={onMouseLeave}
-          />
+        <div className='w-[216px] bg-white rounded relative'>
+          {megaMenuData.map((item, index) => {
+            const isActive = index === currentIndex;
+            return (
+              <Link
+                key={index}
+                to={item.to}
+                onMouseEnter={handleParentEnter(item.menuData, index)}
+                onMouseLeave={handleParentLeave}
+                className={classNames(
+                  'relative flex justify-between items-center px-4 py-[6px] z-[1] after:absolute after:left-full after:top-0 after:bottom-0 after:border-[16px] after:border-transparent',
+                  {
+                    'bg-[#ea1c04] text-white after:border-l-[#ea1c04] after:block': isActive,
+                    'after:hidden': !isActive
+                  }
+                )}
+              >
+                <span
+                  className={classNames('flex items-center', {
+                    'text-white': isActive
+                  })}
+                >
+                  <div className='w-6'>{item.icon}</div>
+                  <span className='text-[13px] ml-3'>{item.name}</span>
+                </span>
+                <MenuLinkArrowIcon
+                  className={classNames('w-2 h-2 stroke-black', {
+                    'stroke-white': isActive
+                  })}
+                />
+              </Link>
+            );
+          })}
         </div>
+
         {/* Menu */}
-        {menuList && showMenu && (
+        {menuList && (
           <div
             className='ml-2 bg-white rounded p-[10px] absolute right-0 top-0 left-[216px] w-[944px]'
-            onMouseEnter={() => setShowMenu(true)}
-            onMouseLeave={() => setShowMenu(false)}
+            onMouseEnter={handleChildEnter}
+            onMouseLeave={handleChildLeave}
           >
             <div className='grid grid-cols-10 gap-10'>
-              {menuList.map((menu, index) => (
+              {menuList?.map((menu, index) => (
                 <div key={index} className='col-span-2 p-[5px] pb-4'>
                   <h3 className='text-primary text-[15px] font-semibold mb-2'>{menu.heading}</h3>
                   {menu.data.length > 0 && (
                     <div>
-                      {menu.data.map((item, index) => (
-                        <Link key={index} to={item.to} className='block text-[13px] hover:text-primary mb-2'>
+                      {menu.data.map((item, _index) => (
+                        <Link key={_index} to={item.to} className='block text-[13px] hover:text-primary mb-2'>
                           {item.name}
                         </Link>
                       ))}

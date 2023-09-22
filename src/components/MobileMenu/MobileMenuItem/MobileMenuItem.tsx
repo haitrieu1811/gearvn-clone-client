@@ -1,11 +1,11 @@
 import classNames from 'classnames';
+import PropTypes from 'prop-types';
 import { ReactNode } from 'react';
 import { Link } from 'react-router-dom';
-import PropTypes from 'prop-types';
 
-import { MENU_DATA } from 'src/constants/header';
 import PATH from 'src/constants/path';
-import { ChevronDownIcon } from '../Icons';
+import { MENU_DATA } from 'src/hooks/useMegaMenuData';
+import { ChevronDownIcon } from '../../Icons';
 
 interface MobileMenuItemProps {
   index: number;

@@ -16,7 +16,7 @@ const Account = () => {
   // Render menu của người dùng
   const renderUserMenu = () => {
     return (
-      <Wrapper arrow>
+      <Wrapper arrow={true}>
         {/* Khi chưa đăng nhập */}
         {!isAuthenticated && (
           <div className='p-5 min-w-[300px]'>
@@ -47,10 +47,7 @@ const Account = () => {
             <Link to={PATH.ACCOUNT_PROFILE} className='px-5 py-4 flex hover:underline border-b'>
               <HandIcon className='w-5 h-5' />
               <span className='ml-4 text-sm font-semibold'>
-                Xin chào,{' '}
-                <span className='capitalize font-semibold'>
-                  {profile?.fullname ? profile.fullname : profile?.email.split('@')[0]}
-                </span>
+                Xin chào, <span className='capitalize font-semibold'>{profile?.fullname}</span>
               </span>
             </Link>
             {profile?.role !== UserRole.Customer && (

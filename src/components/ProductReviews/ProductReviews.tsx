@@ -1,15 +1,14 @@
 import { useQuery } from '@tanstack/react-query';
-import isEmpty from 'lodash/isEmpty';
 import PropTypes from 'prop-types';
 import { Fragment, useContext, useEffect, useMemo } from 'react';
 
 import moment from 'moment';
 import productApi from 'src/apis/product.api';
+import { ProductDetailContext } from 'src/pages/shop/ProductDetail/ProductDetail';
 import socket from 'src/utils/socket';
 import { StarIcon } from '../Icons';
 import Image from '../Image';
 import Loading from '../Loading';
-import { ProductDetailContext } from 'src/pages/shop/ProductDetail/ProductDetail';
 
 interface ProductReviewListProps {
   productId: string;
@@ -78,22 +77,19 @@ const ProductReviewList = ({ productId }: ProductReviewListProps) => {
                     </div>
                   )}
                   {/* Danh sách trả lời */}
-                  {review.replies.map((reply) => {
-                    if (isEmpty(reply)) return null;
-                    return (
-                      <div key={reply._id} className='px-4 py-3 bg-[#ececec] rounded mb-4 last:mb-0'>
-                        <div className='flex justify-between items-center'>
-                          <div className='flex items-center'>
-                            <span className='text-sm text-primary font-semibold mr-2'>{reply.author?.fullname}</span>
-                            <span className='text-sm text-[#97999D]'>
-                              {moment(reply.created_at).format('DD-MM-YYYY')}
-                            </span>
-                          </div>
+                  {review.replies.map((reply) => (
+                    <div key={reply._id} className='px-4 py-3 bg-[#ececec] rounded mb-4 last:mb-0'>
+                      <div className='flex justify-between items-center'>
+                        <div className='flex items-center'>
+                          <span className='text-sm text-primary font-semibold mr-2'>{reply.author?.fullname}</span>
+                          <span className='text-sm text-[#97999D]'>
+                            {moment(reply.created_at).format('DD-MM-YYYY')}
+                          </span>
                         </div>
-                        <div className='text-sm mt-2'>{reply.comment}</div>
                       </div>
-                    );
-                  })}
+                      <div className='text-sm mt-2'>{reply.comment}</div>
+                    </div>
+                  ))}
                 </div>
               </div>
             </div>

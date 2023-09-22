@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Fragment, useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 
-import { ChevronLeftIcon, ChevronRightIcon, CloseIcon, SearchMinusIcon, SearchPlusIcon } from '../Icons';
+import { ChevronLeftIcon, ChevronRightIcon, CloseIcon } from '../Icons';
 import Image from '../Image';
 
 interface PreviewImagesProps {
@@ -91,17 +91,9 @@ const PreviewImages = ({ images, isVisible, onClose }: PreviewImagesProps) => {
             <ChevronRightIcon className='w-6 h-6 stroke-white' />
           </button>
           {/* Thao tác với ảnh */}
-          <div className='absolute bottom-4 left-1/2 -translate-x-1/2 flex flex-col items-center'>
-            <div className='mb-5 text-white font-semibold'>
+          <div className='absolute bottom-4 left-1/2 -translate-x-1/2'>
+            <div className='mb-5 text-white font-semibold bg-black/50 py-2 px-4 rounded-full'>
               {currentIndex + 1} / {images.length}
-            </div>
-            <div className='bg-black/20 rounded-full flex'>
-              <button className='w-12 h-12 flex justify-center items-center'>
-                <SearchPlusIcon className='w-5 h-5 stroke-white' />
-              </button>
-              <button className='w-12 h-12 flex justify-center items-center'>
-                <SearchMinusIcon className='w-5 h-5 stroke-white' />
-              </button>
             </div>
           </div>
         </div>

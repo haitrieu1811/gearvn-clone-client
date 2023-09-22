@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import Tippy from '@tippyjs/react/headless';
-import { FormEvent, memo, useMemo, useState } from 'react';
+import { FormEvent, memo, useEffect, useMemo, useRef, useState } from 'react';
 import { Link, createSearchParams, useNavigate } from 'react-router-dom';
 
 import productApi from 'src/apis/product.api';
@@ -17,6 +17,15 @@ const Search = () => {
   const [keywordSearch, setKeywordSearch] = useState<string>('');
   const [showSearchResult, setShowSearchResult] = useState<boolean>(false);
   const keywordSearchDebounce = useDebounce(keywordSearch, 1500);
+  const formRef = useRef<HTMLFormElement>(null);
+  const searchResultRef = useRef<HTMLDivElement>(null);
+
+  // Đặt chiều rộng cho phần hiển thị kết quả tìm kiếm
+  useEffect(() => {
+    if (formRef.current && searchResultRef.current) {
+      searchResultRef.current.style.width = `${formRef.current.offsetWidth}px`;
+    }
+  }, [formRef.current, searchResultRef.current]);
 
   // Query: Lấy danh sách sản phẩm
   const getProductsQuery = useQuery({
@@ -37,10 +46,10 @@ const Search = () => {
     [getProductsQuery.data?.data.data.pagination.total]
   );
 
-  // Render kết quả tìm kiếm
+  // Render: Kết quả tìm kiếm
   const renderSearchResult = () => (
     <Wrapper>
-      <div className='w-full md:w-[310px] px-4'>
+      <div ref={searchResultRef} className='px-4'>
         {/* Hiển thị khi có dữ liệu */}
         {searchResult &&
           searchResult.length > 0 &&
@@ -125,17 +134,17 @@ const Search = () => {
       onClickOutside={() => setShowSearchResult(false)}
       zIndex={9999999}
     >
-      <form className='relative flex-1 lg:flex-auto md:w-[310px] ml-2' onSubmit={redirectToSearchPage}>
+      <form ref={formRef} className='relative flex-1 ml-2 bg-white rounded' onSubmit={redirectToSearchPage}>
         <input
           type='text'
           placeholder='Bạn cần tìm gì?'
           value={keywordSearch}
           onChange={(e) => setKeywordSearch(e.target.value)}
           onFocus={() => setShowSearchResult(true)}
-          className='w-full h-full py-2 pl-[15px] pr-[50px] rounded outline-none text-xs md:text-[15px] md:w-[310px]'
+          className='w-full h-full py-2 pl-[15px] pr-12 rounded outline-none text-xs md:text-[15px]'
         />
         <button className='absolute top-0 right-0 h-full w-9 flex justify-center items-center'>
-          <SearchIcon className='fill-white w-4 h-4' />
+          <SearchIcon className='w-4 h-4' />
         </button>
       </form>
     </Tippy>

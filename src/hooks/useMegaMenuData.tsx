@@ -1,3 +1,13 @@
+import {
+  AccessoryIcon,
+  ChairIcon,
+  HeadphoneIcon,
+  KeyboardIcon,
+  LaptopIcon,
+  MouseIcon,
+  PcIcon,
+  ScreenIcon
+} from 'src/components/Icons';
 import { MegaMenuItem } from 'src/components/MegaMenu/MegaMenu';
 import PATH from 'src/constants/path';
 
@@ -479,3 +489,64 @@ export const MENU_DATA: { [key: string]: MegaMenuItem[] } = {
     }
   ]
 };
+
+const useMegaMenuData = () => {
+  return [
+    {
+      to: PATH.PRODUCT,
+      icon: <LaptopIcon />,
+      name: 'Laptop',
+      menuData: MENU_DATA.LAPTOP
+    },
+    {
+      to: PATH.HOME,
+      icon: <LaptopIcon />,
+      name: 'Laptop Gaming',
+      menuData: MENU_DATA.PC_GAMING
+    },
+    {
+      to: PATH.PRODUCT,
+      icon: <PcIcon />,
+      name: 'PC Gaming',
+      menuData: MENU_DATA.LAPTOP
+    },
+    {
+      to: PATH.HOME,
+      icon: <ScreenIcon />,
+      name: 'Màn hình',
+      menuData: MENU_DATA.PC_GAMING
+    },
+    {
+      to: PATH.HOME,
+      icon: <KeyboardIcon />,
+      name: 'Bàn phím',
+      menuData: MENU_DATA.LAPTOP
+    },
+    {
+      to: PATH.HOME,
+      icon: <MouseIcon />,
+      name: 'Chuột',
+      menuData: MENU_DATA.PC_GAMING
+    },
+    {
+      to: PATH.HOME,
+      icon: <HeadphoneIcon />,
+      name: 'Tai Nghe - Loa',
+      menuData: MENU_DATA.LAPTOP
+    },
+    {
+      to: PATH.HOME,
+      icon: <ChairIcon />,
+      name: 'Ghế bàn',
+      menuData: MENU_DATA.PC_GAMING
+    },
+    {
+      to: PATH.HOME,
+      icon: <AccessoryIcon />,
+      name: 'Phụ kiện',
+      menuData: MENU_DATA.LAPTOP
+    }
+  ];
+};
+
+export default useMegaMenuData;
