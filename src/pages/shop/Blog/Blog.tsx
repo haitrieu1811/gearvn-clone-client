@@ -2,6 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import { Fragment, useMemo } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { Link } from 'react-router-dom';
+import moment from 'moment';
 
 import blogApi from 'src/apis/blog.api';
 import BlogVertical from 'src/components/BlogVertical';
@@ -32,6 +33,8 @@ const Blog = () => {
 
   // Lấy danh sách blog
   const blogs = useMemo(() => getBlogsQuery.data?.data.data.blogs, [getBlogsQuery.data?.data.data.blogs]);
+  const _blogs = useMemo(() => blogs?.slice(2, 6) || [], [blogs]);
+  const __blogs = useMemo(() => blogs?.slice(7, 15) || [], [blogs]);
 
   return (
     <Fragment>
@@ -100,17 +103,17 @@ const Blog = () => {
               </p>
             </div>
           </div>
-          {/* Blog dọc */}
+          {/* 4 blog nằm ngang */}
           <div className='grid grid-cols-12 gap-4 mt-6'>
-            {blogs.slice(2, 6).map((blog) => (
+            {_blogs.map((blog) => (
               <div key={blog._id} className='col-span-6 md:col-span-3'>
                 <BlogVertical data={blog} />
               </div>
             ))}
           </div>
-          {/* Blog ngang */}
+          {/* Các blog nằm dọc */}
           <div className='mt-6'>
-            {blogs.slice(7, 15).map((blog) => (
+            {__blogs.map((blog) => (
               <div key={blog._id} className='border-t border-slate-300 py-6 flex items-start'>
                 <Link to={`${PATH.BLOG_DETAIL_WITHOUT_ID}/${generateNameId({ name: blog.name_vi, id: blog._id })}`}>
                   <img
@@ -129,10 +132,12 @@ const Blog = () => {
                   <div className='flex items-center'>
                     <span className='flex items-center'>
                       <ClockIcon className='w-3 h-3 md:w-4 md:h-4' />
-                      <span className='text-slate-500 ml-1 text-xs md:text-base'>Thứ Năm 22,06,2023</span>
+                      <span className='text-slate-500 ml-1 text-sm'>
+                        {moment(blog.created_at).format('DD.MM.YYYY')}
+                      </span>
                     </span>
                     <span className='w-1 h-1 rounded-full bg-slate-500 block mx-2' />
-                    <span className='text-blue-600 text-xs md:text-base'>Lê Thị Mỹ Duyên</span>
+                    <span className='text-blue-600 text-sm'>{blog.author.fullname}</span>
                   </div>
                 </div>
               </div>

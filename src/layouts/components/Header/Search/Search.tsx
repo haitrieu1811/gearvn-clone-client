@@ -1,11 +1,13 @@
 import { useQuery } from '@tanstack/react-query';
 import Tippy from '@tippyjs/react/headless';
 import { FormEvent, memo, useEffect, useMemo, useRef, useState } from 'react';
+import { useMediaQuery } from 'react-responsive';
 import { Link, createSearchParams, useNavigate } from 'react-router-dom';
 
 import productApi from 'src/apis/product.api';
 import { SearchIcon, SpinnerIcon } from 'src/components/Icons';
 import Wrapper from 'src/components/Wrapper';
+import CONFIG from 'src/constants/config';
 import PATH from 'src/constants/path';
 import useDebounce from 'src/hooks/useDebounce';
 import { formatCurrency, generateNameId, getImageUrl } from 'src/utils/utils';
@@ -14,6 +16,7 @@ const SEARCH_RESULT_LIMIT = 5;
 
 const Search = () => {
   const navigate = useNavigate();
+  const isMobile = useMediaQuery({ maxWidth: CONFIG.MOBILE_SCREEN_SIZE });
   const [keywordSearch, setKeywordSearch] = useState<string>('');
   const [showSearchResult, setShowSearchResult] = useState<boolean>(false);
   const keywordSearchDebounce = useDebounce(keywordSearch, 1500);
@@ -23,9 +26,13 @@ const Search = () => {
   // Đặt chiều rộng cho phần hiển thị kết quả tìm kiếm
   useEffect(() => {
     if (formRef.current && searchResultRef.current) {
-      searchResultRef.current.style.width = `${formRef.current.offsetWidth}px`;
+      if (isMobile) {
+        searchResultRef.current.style.width = `100vw`;
+        return;
+      }
+      searchResultRef.current.style.width = ` ${formRef.current.offsetWidth}px`;
     }
-  }, [formRef.current, searchResultRef.current]);
+  }, [formRef.current, searchResultRef.current, isMobile]);
 
   // Query: Lấy danh sách sản phẩm
   const getProductsQuery = useQuery({
@@ -129,7 +136,7 @@ const Search = () => {
       interactive
       visible={keywordSearchDebounce.length > 0 && showSearchResult}
       placement='bottom-end'
-      offset={[-1, 3]}
+      offset={[0, 3]}
       render={renderSearchResult}
       onClickOutside={() => setShowSearchResult(false)}
       zIndex={9999999}

@@ -3,7 +3,7 @@ import { Dispatch, ReactNode, SetStateAction, createContext, useState, useMemo }
 
 import authApi from 'src/apis/auth.api';
 import conversationApi from 'src/apis/conversation.api';
-import { BlogListItem } from 'src/types/blog.type';
+import { BlogType } from 'src/types/blog.type';
 import { Brand } from 'src/types/brand.type';
 import { Category } from 'src/types/category.type';
 import { ConversationReceiver } from 'src/types/conversation.type';
@@ -24,7 +24,7 @@ interface ExtendedProduct extends Product {
   checked: boolean;
 }
 
-interface ExtendedBlog extends BlogListItem {
+interface ExtendedBlog extends BlogType {
   checked: boolean;
 }
 

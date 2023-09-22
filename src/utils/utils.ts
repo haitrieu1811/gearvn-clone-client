@@ -32,10 +32,13 @@ export const rateSale = (originalPrice: number, salePrice: number) => {
   return Math.round(((originalPrice - salePrice) / originalPrice) * 100);
 };
 
-const removeSpecialCharacter = (str: string) => {
-  return str
-    .replace(/!|@|%|\^|\*|\(|\)|\+|\=|\<|\>|\?|\/|,|\.|\:|\;|\'|\"|\&|\#|\[|\]|~|\$|_|`|-|{|}|\||\\/g, '')
-    .toLowerCase();
+const removeSpecialCharacter = (text: string): string => {
+  text = text
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '');
+  text = text.replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
+  return text;
 };
 
 export const generateNameId = ({ name, id }: { name: string; id: string }) => {

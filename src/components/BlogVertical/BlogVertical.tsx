@@ -2,12 +2,12 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 
 import PATH from 'src/constants/path';
-import { BlogListItem } from 'src/types/blog.type';
+import { BlogType } from 'src/types/blog.type';
 import { generateNameId } from 'src/utils/utils';
 import Image from '../Image';
 
 interface BlogVerticalProps {
-  data: BlogListItem;
+  data: BlogType;
 }
 
 const BlogVertical = ({ data }: BlogVerticalProps) => {
