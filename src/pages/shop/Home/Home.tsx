@@ -5,30 +5,19 @@ import { useMediaQuery } from 'react-responsive';
 import { Link } from 'react-router-dom';
 
 import blogApi from 'src/apis/blog.api';
-import productApi from 'src/apis/product.api';
 import BlogVertical from 'src/components/BlogVertical';
 import Carousel from 'src/components/Carousel';
 import Loading from 'src/components/Loading';
 import MegaMenu from 'src/components/MegaMenu';
 import CONFIG from 'src/constants/config';
 import PATH from 'src/constants/path';
-import ProductSection from './ProductSection';
+import useProduct from 'src/hooks/useProduct';
 import { Category } from 'src/types/category.type';
+import ProductSection from './ProductSection';
 
 const Home = () => {
   const isTablet = useMediaQuery({ maxWidth: CONFIG.TABLET_SCREEN_SIZE });
-
-  // Query: Lấy danh sách sản phẩm
-  const getProductsQuery = useQuery({
-    queryKey: ['products'],
-    queryFn: () => productApi.getList({ limit: '100' })
-  });
-
-  // Danh sách sản phẩm
-  const products = useMemo(
-    () => getProductsQuery.data?.data.data.products,
-    [getProductsQuery.data?.data.data.products]
-  );
+  const { products, getProductsQuery } = useProduct({ limit: '100' });
 
   // Danh sách laptop
   const laptops = useMemo(

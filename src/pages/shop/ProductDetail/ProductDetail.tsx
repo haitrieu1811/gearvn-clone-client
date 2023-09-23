@@ -79,7 +79,7 @@ const ProductDetail = () => {
     }
   }, [isMounted, productId]);
 
-  // Lấy thông tin chi tiết sản phẩm
+  // Query: Lấy thông tin chi tiết sản phẩm
   const getProductQuery = useQuery({
     queryKey: ['product', productId],
     queryFn: () => productApi.getDetail(productId),
@@ -94,11 +94,11 @@ const ProductDetail = () => {
     setBuyCount(value);
   };
 
-  // Thêm vào giỏ hàng
+  // Mutation: Thêm vào giỏ hàng
   const addToCartMutation = useMutation({
     mutationFn: purchaseApi.addToCart,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['cart_list'] });
+      queryClient.invalidateQueries({ queryKey: ['cart'] });
     }
   });
 
@@ -183,7 +183,7 @@ const ProductDetail = () => {
 
       <div className='lg:container my-2 lg:my-4'>
         {/* Thông tin chi tiết sản phẩm */}
-        {!!product && !getProductQuery.isLoading && !!blogs && blogs.length > 0 && !getProductQuery.isLoading && (
+        {product && !getProductQuery.isLoading && blogs && blogs.length > 0 && !getProductQuery.isLoading && (
           <Fragment>
             {/* Thông tin và hình ảnh sản phẩm */}
             <div className='flex bg-white rounded flex-wrap lg:flex-nowrap'>

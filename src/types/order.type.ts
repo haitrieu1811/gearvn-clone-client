@@ -21,7 +21,7 @@ interface PurchaseInOrder {
   product: ProductInPurchase;
 }
 
-interface Order {
+export interface Order {
   _id: string;
   status: number;
   province: string;

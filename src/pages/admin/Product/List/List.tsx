@@ -1,14 +1,10 @@
-import { useMutation, useQuery } from '@tanstack/react-query';
 import { produce } from 'immer';
-import isUndefined from 'lodash/isUndefined';
 import keyBy from 'lodash/keyBy';
-import omitBy from 'lodash/omitBy';
 import moment from 'moment';
 import { ChangeEvent, Fragment, useContext, useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
-import productApi from 'src/apis/product.api';
 import Checkbox from 'src/components/Checkbox';
 import ContextMenu from 'src/components/ContextMenu';
 import { PencilIcon, TrashIcon } from 'src/components/Icons';
@@ -17,6 +13,7 @@ import Table from 'src/components/Table';
 import PATH from 'src/constants/path';
 import { AppContext } from 'src/contexts/app.context';
 import useDebounce from 'src/hooks/useDebounce';
+import useProduct from 'src/hooks/useProduct';
 import UseQueryParams from 'src/hooks/useQueryParams';
 import { GetProductsRequestParams } from 'src/types/product.type';
 import { convertMomentFromNowToVietnamese, formatCurrency } from 'src/utils/utils';
@@ -32,52 +29,20 @@ const List = () => {
   const [keywordSearch, setKeywordSearch] = useState<string>('');
   const keywordSearchDebounce = useDebounce(keywordSearch, 1000);
   const { extendedProducts, setExtendedProducts } = useContext(AppContext);
+
   const queryParams: QueryConfig = UseQueryParams();
-  const queryConfig: QueryConfig = omitBy(
-    {
-      page: queryParams.page || 1,
-      limit: queryParams.limit || 20,
-      sortBy: queryParams.sortBy,
-      orderBy: queryParams.orderBy,
-      category: queryParams.category,
-      brand: queryParams.brand,
-      name: keywordSearchDebounce
-    },
-    isUndefined
-  );
+  const queryConfig: QueryConfig = {
+    page: queryParams.page || '1',
+    limit: queryParams.limit || '20',
+    sortBy: queryParams.sortBy,
+    orderBy: queryParams.orderBy,
+    category: queryParams.category,
+    brand: queryParams.brand,
+    name: keywordSearchDebounce
+  };
+  const { products, productsTotal, productsPageSize, getProductsQuery, deleteProductMutation } =
+    useProduct(queryConfig);
 
-  // Lấy danh sách sản phẩm
-  const getProductsQuery = useQuery({
-    queryKey: ['products', queryConfig],
-    queryFn: () => productApi.getList(queryConfig),
-    keepPreviousData: true
-  });
-
-  // Xóa sản phẩm
-  const deleteProductMutation = useMutation({
-    mutationFn: productApi.delete,
-    onSuccess: (data) => {
-      toast.success(data.data.message);
-      getProductsQuery.refetch();
-      setIsOpenModal(false);
-    }
-  });
-
-  // Lấy danh sách sản phẩm
-  const products = useMemo(
-    () => getProductsQuery.data?.data.data.products,
-    [getProductsQuery.data?.data.data.products]
-  );
-  // Lấy tổng số sản phẩm
-  const total = useMemo(
-    () => getProductsQuery.data?.data.data.pagination.total,
-    [getProductsQuery.data?.data.data.pagination.total]
-  );
-  // Lấy tổng số trang
-  const pageSize = useMemo(
-    () => getProductsQuery.data?.data.data.pagination.page_size,
-    [getProductsQuery.data?.data.data.pagination.page_size]
-  );
   // Lấy danh sách sản phẩm được check
   const checkedProducts = useMemo(() => extendedProducts.filter((product) => product.checked), [extendedProducts]);
   // Kiểm tra tất cả sản phẩm đã check hay chưa
@@ -129,8 +94,15 @@ const List = () => {
 
   // Xác nhận xóa
   const handleDelete = () => {
-    if (currentId) deleteProductMutation.mutate([currentId]);
-    else deleteProductMutation.mutate(checkedProducts.map((product) => product._id));
+    if (currentId) {
+      deleteProductMutation.mutate([currentId], {
+        onSuccess: (data) => {
+          toast.success(data.data.message);
+          getProductsQuery.refetch();
+          setIsOpenModal(false);
+        }
+      });
+    } else deleteProductMutation.mutate(checkedProducts.map((product) => product._id));
   };
 
   return (
@@ -139,7 +111,7 @@ const List = () => {
         tableName='Danh sách sản phẩm'
         addNewPath={PATH.DASHBOARD_PRODUCT_CREATE}
         data={extendedProducts}
-        totalRows={total || 0}
+        totalRows={productsTotal}
         columns={[
           {
             field: 'checkbox',
@@ -215,7 +187,7 @@ const List = () => {
             )
           })) || []
         }
-        pageSize={pageSize || 0}
+        pageSize={productsPageSize}
         isLoading={getProductsQuery.isLoading}
         onSearch={(value) => setKeywordSearch(value)}
         tableFootLeft={

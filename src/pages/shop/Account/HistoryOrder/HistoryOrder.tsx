@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { Fragment, useMemo } from 'react';
+import { Fragment, useContext, useMemo } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { Link } from 'react-router-dom';
 
@@ -12,12 +12,14 @@ import PATH from 'src/constants/path';
 import UseQueryParams from 'src/hooks/useQueryParams';
 import { GetOrdersRequestParams, OrderCountByStatus } from 'src/types/order.type';
 import Tabs from './Tabs';
+import { AppContext } from 'src/contexts/app.context';
 
 export type QueryConfig = {
   [key in keyof GetOrdersRequestParams]: string;
 };
 
 const HistoryOrder = () => {
+  const { profile } = useContext(AppContext);
   const queryParams: QueryConfig = UseQueryParams();
   const queryConfig: QueryConfig = useMemo(
     () => ({
@@ -28,8 +30,9 @@ const HistoryOrder = () => {
 
   // Query: Lấy danh sách đơn hàng
   const getOrdersQuery = useQuery({
-    queryKey: ['orders', queryConfig],
+    queryKey: ['orders', profile?._id, queryConfig],
     queryFn: () => orderApi.getList(queryConfig),
+    enabled: !!profile?._id,
     keepPreviousData: true
   });
 

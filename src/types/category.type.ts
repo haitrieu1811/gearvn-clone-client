@@ -1,3 +1,4 @@
+import { User } from './user.type';
 import { Pagination, SuccessResponse } from './utils.type';
 
 // Type: Danh mục
@@ -5,8 +6,10 @@ export interface Category {
   _id: string;
   name_vi: string;
   name_en: string;
-  created_at?: string;
-  updated_at?: string;
+  product_count: number;
+  author: User;
+  created_at: string;
+  updated_at: string;
 }
 
 // Request: Tạo danh mục mới

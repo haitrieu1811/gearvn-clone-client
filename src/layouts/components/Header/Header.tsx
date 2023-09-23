@@ -1,10 +1,7 @@
-import { useQuery } from '@tanstack/react-query';
-import classNames from 'classnames';
-import { Fragment, memo, useContext, useMemo, useState } from 'react';
+import { Fragment, memo, useState } from 'react';
 import { useMediaQuery } from 'react-responsive';
 import { Link, useNavigate } from 'react-router-dom';
 
-import purchaseApi from 'src/apis/purchase.api';
 import logoMobile from 'src/assets/images/logo-mobile.svg';
 import logo from 'src/assets/images/logo-white.svg';
 import Drawer from 'src/components/Drawer';
@@ -13,7 +10,7 @@ import MegaMenu from 'src/components/MegaMenu';
 import MobileMenu from 'src/components/MobileMenu';
 import CONFIG from 'src/constants/config';
 import PATH from 'src/constants/path';
-import { AppContext } from 'src/contexts/app.context';
+import useCart from 'src/hooks/useCart';
 import Account from './Account';
 import Cart from './Cart';
 import Search from './Search';
@@ -21,7 +18,7 @@ import Search from './Search';
 const Header = () => {
   const navigate = useNavigate();
   const isTablet = useMediaQuery({ maxWidth: CONFIG.TABLET_SCREEN_SIZE });
-  const { isAuthenticated } = useContext(AppContext);
+  const { cartSize } = useCart();
   const [showMegaMenu, setShowMegaMenu] = useState<boolean>(false);
   const [showMobileMenu, setShowMobileMenu] = useState<boolean>(false);
 
@@ -39,19 +36,6 @@ const Header = () => {
   const handleCloseMobileMenu = () => {
     setShowMobileMenu(false);
   };
-
-  // Query: Lấy số lượng sản phẩm trong giỏ hàng
-  const getCartListQuery = useQuery({
-    queryKey: ['cart_list'],
-    queryFn: () => purchaseApi.getCart(),
-    enabled: isAuthenticated
-  });
-
-  // Số lượng sản phẩm trong giỏ hàng
-  const cartSize = useMemo(
-    () => getCartListQuery.data?.data.data.cart_size || 0,
-    [getCartListQuery.data?.data.data.cart_size]
-  );
 
   return (
     <Fragment>
@@ -126,18 +110,15 @@ const Header = () => {
           </div>
 
           {/* Mega menu */}
-          <div
-            className={classNames('absolute top-full left-0 w-full duration-200', {
-              'opacity-0 pointer-events-none': !showMegaMenu,
-              'opacity-100 pointer-events-auto': showMegaMenu
-            })}
-          >
-            {/* Mask */}
-            <div onClick={toggleMegaMenu} className='absolute left-0 right-0 w-full h-screen bg-black/50' />
-            <div className='container mt-[15px]'>
-              <MegaMenu />
+          {showMegaMenu && (
+            <div className={'absolute top-full left-0 w-full'}>
+              {/* Mask */}
+              <div onClick={toggleMegaMenu} className='absolute left-0 right-0 w-full h-screen bg-black/50' />
+              <div className='container mt-[15px]'>
+                <MegaMenu />
+              </div>
             </div>
-          </div>
+          )}
         </header>
       )}
 
@@ -156,7 +137,7 @@ const Header = () => {
               to={PATH.CART}
               className='w-9 h-9 bg-[#BE1529] flex justify-center items-center rounded flex-shrink-0 ml-2'
             >
-              <Cart cartSize={cartSize || 0} />
+              <Cart cartSize={cartSize} />
             </Link>
           </nav>
           <Drawer isShow={showMobileMenu} onCancel={handleCloseMobileMenu}>

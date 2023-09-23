@@ -1,9 +1,12 @@
+import { User } from './user.type';
 import { Pagination, SuccessResponse } from './utils.type';
 
 // Type: Thương hiệu
 export interface Brand {
   _id: string;
   name: string;
+  product_count: number;
+  author: User;
   created_at: string;
   updated_at: string;
 }

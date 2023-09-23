@@ -1,14 +1,10 @@
-import { useMutation, useQuery } from '@tanstack/react-query';
 import { produce } from 'immer';
-import isUndefined from 'lodash/isUndefined';
 import keyBy from 'lodash/keyBy';
-import omitBy from 'lodash/omitBy';
 import moment from 'moment';
 import { ChangeEvent, Fragment, useContext, useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
-import categoryApi from 'src/apis/category.api';
 import Checkbox from 'src/components/Checkbox';
 import ContextMenu from 'src/components/ContextMenu';
 import { PencilIcon, TrashIcon } from 'src/components/Icons';
@@ -16,6 +12,7 @@ import Modal from 'src/components/Modal';
 import Table from 'src/components/Table';
 import PATH from 'src/constants/path';
 import { AppContext } from 'src/contexts/app.context';
+import useCategory from 'src/hooks/useCategory';
 import UseQueryParams from 'src/hooks/useQueryParams';
 import { PaginationRequestParams } from 'src/types/utils.type';
 import { convertMomentFromNowToVietnamese } from 'src/utils/utils';
@@ -26,44 +23,19 @@ type QueryConfig = {
 
 const List = () => {
   const navigate = useNavigate();
+  const { extendedCategories, setExtendedCategories } = useContext(AppContext);
   const [modalVisible, setModalVisible] = useState<boolean>(false);
   const [currentId, setCurrentId] = useState<string | null>(null);
-  const { extendedCategories, setExtendedCategories } = useContext(AppContext);
   const queryParams: QueryConfig = UseQueryParams();
-  const queryConfig: QueryConfig = omitBy(
-    {
-      page: queryParams.page || '1',
-      limit: queryParams.limit || '10'
-    },
-    isUndefined
-  );
+  const queryConfig: QueryConfig = {
+    page: queryParams.page || '1',
+    limit: queryParams.limit || '10'
+  };
+  const { categories, categoriesPageSize, getCategoriesQuery, deleteCategoryMutation } = useCategory(queryConfig);
 
-  // Query: Lấy danh sách danh mục
-  const getCategoriesQuery = useQuery({
-    queryKey: ['categories', queryConfig],
-    queryFn: () => categoryApi.getList(queryConfig),
-    keepPreviousData: true
-  });
-
-  // Mutation: Xóa danh mục
-  const deleteCategoryMutation = useMutation({
-    mutationFn: categoryApi.delete,
-    onSuccess: (data) => {
-      toast.success(data.data.message);
-      getCategoriesQuery.refetch();
-      stopDelete();
-    }
-  });
-
-  // Danh sách danh mục
-  const categories = useMemo(
-    () => getCategoriesQuery.data?.data.data.categories,
-    [getCategoriesQuery.data?.data.data.categories]
-  );
-  // Tổng số trang
-  const pageSize = getCategoriesQuery.data?.data.data.pagination.page_size;
   // Kiểm tra tất cả danh mục đã được chọn hay chưa
   const isAllChecked = useMemo(() => extendedCategories.every((category) => category.checked), [extendedCategories]);
+
   // Danh sách danh mục đã chọn
   const checkedCategories = useMemo(
     () => extendedCategories.filter((category) => category.checked),
@@ -77,7 +49,7 @@ const List = () => {
         const extendedCategoriesObj = keyBy(prevState, '_id');
         return categories.map((category) => ({
           ...category,
-          checked: Boolean(extendedCategoriesObj[category._id]?.checked)
+          checked: !!extendedCategoriesObj[category._id]?.checked
         }));
       });
     }
@@ -97,8 +69,26 @@ const List = () => {
 
   // Xác nhận xóa
   const handleDelete = () => {
-    if (currentId) deleteCategoryMutation.mutate([currentId]);
-    else deleteCategoryMutation.mutate(checkedCategories.map((category) => category._id));
+    if (currentId) {
+      deleteCategoryMutation.mutate([currentId], {
+        onSuccess: (data) => {
+          toast.success(data.data.message);
+          getCategoriesQuery.refetch();
+          stopDelete();
+        }
+      });
+    } else {
+      deleteCategoryMutation.mutate(
+        checkedCategories.map((category) => category._id),
+        {
+          onSuccess: (data) => {
+            toast.success(data.data.message);
+            getCategoriesQuery.refetch();
+            stopDelete();
+          }
+        }
+      );
+    }
   };
 
   // Check 1 danh mục
@@ -134,18 +124,33 @@ const List = () => {
           },
           {
             field: 'nameVi',
-            headerName: 'Danh mục',
-            width: 40
+            headerName: 'Tên tiếng Việt',
+            width: 20
+          },
+          {
+            field: 'nameEn',
+            headerName: 'Tên tiếng Anh',
+            width: 20
+          },
+          {
+            field: 'authorName',
+            headerName: 'Người tạo',
+            width: 15
+          },
+          {
+            field: 'productCount',
+            headerName: 'Số sản phẩm',
+            width: 15
           },
           {
             field: 'createdAt',
-            headerName: 'Thời gian tạo',
-            width: 25
+            headerName: 'Tạo lúc',
+            width: 10
           },
           {
             field: 'updatedAt',
             headerName: 'Cập nhật',
-            width: 25
+            width: 10
           },
           {
             field: 'actions',
@@ -157,6 +162,8 @@ const List = () => {
           checkbox: <Checkbox checked={category.checked} onChange={handleCheckOne(index)} />,
           nameVi: category.name_vi,
           nameEn: category.name_en,
+          authorName: category.author.fullname,
+          productCount: `${category.product_count} sản phẩm`,
           createdAt: convertMomentFromNowToVietnamese(moment(category.created_at).fromNow()),
           updatedAt: convertMomentFromNowToVietnamese(moment(category.updated_at).fromNow()),
           actions: (
@@ -176,7 +183,7 @@ const List = () => {
             />
           )
         }))}
-        pageSize={pageSize || 0}
+        pageSize={categoriesPageSize}
         tableFootLeft={
           checkedCategories.length > 0 && (
             <button

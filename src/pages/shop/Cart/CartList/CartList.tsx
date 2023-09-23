@@ -12,23 +12,22 @@ import Loading from 'src/components/Loading';
 import PATH from 'src/constants/path';
 import { AppContext } from 'src/contexts/app.context';
 import { formatCurrency } from 'src/utils/utils';
-import { CartContext } from '../Cart';
 
 const CartList = () => {
   const location = useLocation();
-  const { extendedCartList, setExtendedCartList } = useContext(AppContext);
-  const { total, cartList, isLoadingGetCartList, checkedCartList, refetchCartList } = useContext(CartContext);
+  const { extendedCartList, setExtendedCartList, getCartQuery, cartTotal, cartList, checkedCartList } =
+    useContext(AppContext);
 
-  // Đặt giá trị cho cart list mở rộng
+  // Đặt giá trị cho cart (có thêm thuộc tính checked và disabled)
   useEffect(() => {
-    if (cartList) {
+    if (cartList.length > 0) {
       setExtendedCartList((prevState) => {
         const extendedCartListObj = keyBy(prevState, '_id');
         return cartList.map((cartItem) => {
           const isBuyNow = location.state && (location.state as { cartItemId: string }).cartItemId === cartItem._id;
           return {
             ...cartItem,
-            checked: Boolean(extendedCartListObj[cartItem._id]?.checked) || isBuyNow,
+            checked: !!extendedCartListObj[cartItem._id]?.checked || isBuyNow,
             disabled: false
           };
         });
@@ -47,7 +46,7 @@ const CartList = () => {
   const updatePurchaseMutation = useMutation({
     mutationFn: purchaseApi.update,
     onSuccess: () => {
-      refetchCartList();
+      getCartQuery?.refetch();
     }
   });
 
@@ -72,7 +71,7 @@ const CartList = () => {
   };
 
   // Check một sản phẩm
-  const handleCheck = ({ cartItemIndex, e }: { cartItemIndex: number; e: ChangeEvent<HTMLInputElement> }) => {
+  const chooseToCheckout = ({ cartItemIndex, e }: { cartItemIndex: number; e: ChangeEvent<HTMLInputElement> }) => {
     setExtendedCartList(
       produce((draft) => {
         draft[cartItemIndex].checked = e.target.checked;
@@ -80,13 +79,15 @@ const CartList = () => {
     );
   };
 
+  console.log('>>> checkedCartList CartList', checkedCartList);
+
   return (
     <Fragment>
       {/* Giỏ hàng khi có sản phẩm */}
-      {extendedCartList && extendedCartList.length > 0 && !isLoadingGetCartList && (
+      {extendedCartList && extendedCartList.length > 0 && !getCartQuery?.isLoading && (
         <Fragment>
           {/* Danh sách sản phẩm mua */}
-          <div className='p-2 pb-0'>
+          <div className='px-2 pt-2'>
             {extendedCartList.map((cartItem, index) => (
               <CartItem
                 key={cartItem._id}
@@ -94,7 +95,7 @@ const CartList = () => {
                 data={cartItem}
                 handleChangeQuantity={handleChangeQuantity}
                 handleTypeQuantity={handleTypeQuantity}
-                handleCheck={handleCheck}
+                chooseToCheckout={chooseToCheckout}
                 disabled={cartItem.disabled}
                 checked={cartItem.checked || false}
               />
@@ -108,22 +109,30 @@ const CartList = () => {
             </div>
             <div className='flex justify-between items-center mb-6'>
               <div className='text-base md:text-lg font-semibold'>Tổng tiền:</div>
-              <div className='text-lg md:text-2xl text-primary font-semibold'>{formatCurrency(total as number)}₫</div>
+              <div className='text-lg md:text-2xl text-primary font-semibold'>
+                {formatCurrency(cartTotal as number)}₫
+              </div>
             </div>
-            <Link
-              to={PATH.CART_CHECKOUT_INFO}
+            <div
               className={classNames('', {
-                'pointer-events-none opacity-70': checkedCartList.length <= 0
+                'cursor-not-allowed': checkedCartList.length === 0
               })}
             >
-              <Button>Đặt hàng ngay</Button>
-            </Link>
+              <Link
+                to={PATH.CART_CHECKOUT_INFO}
+                className={classNames('', {
+                  'pointer-events-none opacity-80': checkedCartList.length === 0
+                })}
+              >
+                <Button>Đặt hàng ngay</Button>
+              </Link>
+            </div>
           </div>
         </Fragment>
       )}
 
       {/* Giỏ hàng trống */}
-      {extendedCartList && extendedCartList.length <= 0 && !isLoadingGetCartList && (
+      {extendedCartList && extendedCartList.length <= 0 && !getCartQuery?.isLoading && (
         <div className='flex flex-col items-center py-6'>
           <div className='text-sm text-center'>Giỏ hàng của bạn đang trống</div>
           <Link
@@ -136,7 +145,7 @@ const CartList = () => {
       )}
 
       {/* Loading */}
-      {isLoadingGetCartList && (
+      {getCartQuery?.isLoading && (
         <div className='min-h-[300px] bg-white rounded flex justify-center items-center'>
           <Loading />
         </div>

@@ -1,37 +1,24 @@
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useQuery } from '@tanstack/react-query';
-import { createContext, useContext, useEffect, useMemo } from 'react';
+import { createContext, useContext, useEffect } from 'react';
+import { Helmet } from 'react-helmet-async';
 import { FormProvider, useForm } from 'react-hook-form';
 import { Link, Outlet, useMatch, useNavigate } from 'react-router-dom';
 
-import { Helmet } from 'react-helmet-async';
-import addressApi from 'src/apis/address.api';
-import purchaseApi from 'src/apis/purchase.api';
 import { ChevronLeftIcon } from 'src/components/Icons';
 import { Gender, PaymentMethod, ReceiveMethod } from 'src/constants/enum';
 import PATH from 'src/constants/path';
-import { AppContext, ExtendedPurchase } from 'src/contexts/app.context';
+import { AppContext } from 'src/contexts/app.context';
+import useAddress from 'src/hooks/useAddress';
 import { Address } from 'src/types/address.type';
-import { Purchase } from 'src/types/purchase.type';
 import { PaymentOrderSchema, paymentOrderSchema } from 'src/utils/rules';
 import PaymentProgress from './PaymentProgress';
 
 interface CartContext {
-  total: number;
-  cartList: Purchase[];
-  checkedCartList: ExtendedPurchase[];
-  address?: Address;
-  isLoadingGetCartList: boolean;
-  refetchCartList: () => void;
+  defaultAddress?: Address;
 }
 
 const initCartContext: CartContext = {
-  total: 0,
-  cartList: [],
-  checkedCartList: [],
-  address: undefined,
-  isLoadingGetCartList: false,
-  refetchCartList: () => null
+  defaultAddress: undefined
 };
 
 export const CartContext = createContext<CartContext>(initCartContext);
@@ -39,49 +26,13 @@ export const CartContext = createContext<CartContext>(initCartContext);
 const Cart = () => {
   const navigate = useNavigate();
   const isCartListPage = !!useMatch(PATH.CART_LIST);
-  const { extendedCartList, profile } = useContext(AppContext);
-
-  // Query: Lấy danh sách sản phẩm trong giỏ hàng
-  const getCartListQuery = useQuery({
-    queryKey: ['cart_list'],
-    queryFn: () => purchaseApi.getCart()
-  });
-
-  // Query: Lấy danh sách địa chỉ
-  const getAddressesQuery = useQuery({
-    queryKey: ['addresses'],
-    queryFn: () => addressApi.getAddresses()
-  });
-
-  // Lấy danh sách sản phẩm đã chọn trong giỏ hàng
-  const checkedCartList = useMemo(() => extendedCartList.filter((cartItem) => cartItem.checked), [extendedCartList]);
-
-  // Tính tổng tiền
-  const total = useMemo(
-    () =>
-      checkedCartList?.reduce((acc, cartItem) => acc + cartItem.buy_count * cartItem.product.price_after_discount, 0),
-    [checkedCartList]
-  );
-
-  // Lấy danh sách sản phẩm trong giỏ hàng
-  const cartList = useMemo(
-    () => getCartListQuery.data?.data.data.cart_list,
-    [getCartListQuery.data?.data.data.cart_list]
-  );
-
-  // Lấy danh sách địa chỉ
-  const addresses = useMemo(
-    () => getAddressesQuery.data?.data.data.addresses,
-    [getAddressesQuery.data?.data.data.addresses]
-  );
-
-  // Lấy địa chỉ mặc định
-  const address = useMemo(() => addresses?.find((address) => address.is_default), [addresses]);
+  const { profile, cartTotal } = useContext(AppContext);
+  const { defaultAddress } = useAddress();
 
   // Nếu không có sản phẩm nào trong giỏ hàng thì chuyển về trang danh sách sản phẩm
   useEffect(() => {
-    if (total <= 0) navigate(PATH.CART_LIST);
-  }, [total]);
+    if (cartTotal <= 0) navigate(PATH.CART_LIST);
+  }, [cartTotal]);
 
   // Form
   const methods = useForm<PaymentOrderSchema>({
@@ -100,14 +51,15 @@ const Cart = () => {
     resolver: yupResolver(paymentOrderSchema as any)
   });
 
+  // Set giá trị mặc định cho form đặt hàng
   useEffect(() => {
-    if (address) {
-      methods.setValue('province', address.province);
-      methods.setValue('district', address.district);
-      methods.setValue('ward', address.ward);
-      methods.setValue('street', address.street);
+    if (defaultAddress) {
+      methods.setValue('province', defaultAddress.province);
+      methods.setValue('district', defaultAddress.district);
+      methods.setValue('ward', defaultAddress.ward);
+      methods.setValue('street', defaultAddress.street);
     }
-  }, [address]);
+  }, [defaultAddress]);
 
   return (
     <FormProvider {...methods}>
@@ -130,14 +82,10 @@ const Cart = () => {
         <meta property='og:site_name' content='Giỏ hàng của bạn' />
         <meta property='og:type' content='website' />
       </Helmet>
+
       <CartContext.Provider
         value={{
-          total,
-          cartList: cartList || [],
-          isLoadingGetCartList: getCartListQuery.isLoading,
-          checkedCartList,
-          address,
-          refetchCartList: getCartListQuery.refetch
+          defaultAddress
         }}
       >
         <div className='mb-2 md:mb-4'>

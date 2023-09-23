@@ -51,9 +51,9 @@ const MegaMenu = () => {
 
   return (
     <Fragment>
-      <div className='relative z-10'>
+      <div className='relative z-10 pointer-events-none'>
         {/* Sidebar */}
-        <div className='w-[216px] bg-white rounded relative'>
+        <div className='w-[216px] bg-white rounded relative pointer-events-auto'>
           {megaMenuData.map((item, index) => {
             const isActive = index === currentIndex;
             return (
@@ -91,7 +91,7 @@ const MegaMenu = () => {
         {/* Menu */}
         {menuList && (
           <div
-            className='ml-2 bg-white rounded p-[10px] absolute right-0 top-0 left-[216px] w-[944px]'
+            className='ml-2 bg-white rounded p-[10px] absolute right-0 top-0 left-[216px] w-[944px] pointer-events-auto'
             onMouseEnter={handleChildEnter}
             onMouseLeave={handleChildLeave}
           >

@@ -6,15 +6,15 @@ import Button from 'src/components/Button';
 import Input from 'src/components/Input';
 import { Gender, ReceiveMethod } from 'src/constants/enum';
 import PATH from 'src/constants/path';
+import { AppContext } from 'src/contexts/app.context';
 import { PaymentOrderSchema } from 'src/utils/rules';
 import { formatCurrency } from 'src/utils/utils';
-import { CartContext } from '../Cart';
 
 type FormData = PaymentOrderSchema;
 
 const CheckoutInfo = () => {
   const navigate = useNavigate();
-  const { total } = useContext(CartContext);
+  const { cartTotal } = useContext(AppContext);
 
   const {
     register,
@@ -136,7 +136,7 @@ const CheckoutInfo = () => {
           </div>
           <div className='flex justify-between items-center mb-6'>
             <div className='text-base md:text-lg font-semibold'>Tổng tiền:</div>
-            <div className='text-lg md:text-2xl text-primary font-semibold'>{formatCurrency(total as number)}₫</div>
+            <div className='text-lg md:text-2xl text-primary font-semibold'>{formatCurrency(cartTotal as number)}₫</div>
           </div>
           {/* <Button disabled={checkedCartList.length <= 0} isLoading={checkoutMutation.isLoading} onClick={checkout}>
               Đặt hàng ngay

@@ -9,16 +9,15 @@ import CODImage from 'src/assets/images/COD.webp';
 import Button from 'src/components/Button/Button';
 import { PaymentMethod } from 'src/constants/enum';
 import PATH from 'src/constants/path';
-import { PaymentOrderSchema } from 'src/utils/rules';
-import { formatCurrency } from 'src/utils/utils';
-import { CartContext } from '../Cart';
-import socket from 'src/utils/socket';
 import { AppContext } from 'src/contexts/app.context';
+import { PaymentOrderSchema } from 'src/utils/rules';
+import socket from 'src/utils/socket';
+import { formatCurrency } from 'src/utils/utils';
 
 const CheckoutProcess = () => {
   const navigate = useNavigate();
   const { profile } = useContext(AppContext);
-  const { total, checkedCartList, refetchCartList } = useContext(CartContext);
+  const { cartTotal, checkedCartList, getCartQuery } = useContext(AppContext);
   const { handleSubmit, watch, getValues } = useFormContext<PaymentOrderSchema>();
 
   const payment_method = watch('payment_method');
@@ -27,7 +26,7 @@ const CheckoutProcess = () => {
   const checkoutMutation = useMutation({
     mutationFn: purchaseApi.checkout,
     onSuccess: (data) => {
-      refetchCartList();
+      getCartQuery?.refetch();
       toast.success(data.data.message);
       navigate(PATH.CART_CHECKOUT_SUCCESS, {
         state: {
@@ -40,7 +39,7 @@ const CheckoutProcess = () => {
           title: 'Có đơn hàng mới',
           content: `<strong>${getValues(
             'customer_name'
-          )}</strong> vừa đặt hàng với tổng đơn là <strong>${formatCurrency(total as number)}₫</strong>`
+          )}</strong> vừa đặt hàng với tổng đơn là <strong>${formatCurrency(cartTotal as number)}₫</strong>`
         }
       });
     }
@@ -54,7 +53,7 @@ const CheckoutProcess = () => {
       ...data,
       purchases,
       customer_gender: Number(data.customer_gender),
-      total_amount: total,
+      total_amount: cartTotal,
       total_items: totalItems
     };
     checkoutMutation.mutate(body as any);
@@ -81,7 +80,7 @@ const CheckoutProcess = () => {
           </div>
           <div className='mt-4 flex'>
             <div className='font-semibold basis-1/3'>Tạm tính</div>
-            <div className='flex-1 text-primary font-semibold'>{formatCurrency(total as number)}₫</div>
+            <div className='flex-1 text-primary font-semibold'>{formatCurrency(cartTotal as number)}₫</div>
           </div>
           <div className='mt-4 flex'>
             <div className='font-semibold basis-1/3'> Phí vận chuyển</div>
@@ -89,7 +88,7 @@ const CheckoutProcess = () => {
           </div>
           <div className='mt-4 flex'>
             <div className='font-semibold basis-1/3'>Tổng tiền</div>
-            <div className='flex-1 text-primary font-semibold'>{formatCurrency(total as number)}₫</div>
+            <div className='flex-1 text-primary font-semibold'>{formatCurrency(cartTotal as number)}₫</div>
           </div>
         </div>
       </div>
@@ -114,7 +113,7 @@ const CheckoutProcess = () => {
       <div className='px-4 py-6 md:p-6 bg-white'>
         <div className='flex justify-between items-center mb-6'>
           <div className='text-base md:text-lg font-semibold'>Tổng tiền:</div>
-          <div className='text-lg md:text-2xl text-primary font-semibold'>{formatCurrency(total as number)}₫</div>
+          <div className='text-lg md:text-2xl text-primary font-semibold'>{formatCurrency(cartTotal as number)}₫</div>
         </div>
         <Button disabled={checkedCartList.length <= 0} isLoading={checkoutMutation.isLoading}>
           Thanh toán ngay

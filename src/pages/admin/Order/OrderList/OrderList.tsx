@@ -82,9 +82,7 @@ const OrderList = () => {
 
   // Xác nhận xóa
   const handleDelete = () => {
-    if (currentId) {
-      deleteOrderMutation.mutate(currentId);
-    }
+    if (currentId) deleteOrderMutation.mutate([currentId]);
   };
 
   return (

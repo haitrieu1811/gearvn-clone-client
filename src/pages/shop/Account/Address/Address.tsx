@@ -1,6 +1,6 @@
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query';
 import { isAxiosError } from 'axios';
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { toast } from 'react-toastify';
 
@@ -11,6 +11,7 @@ import CreateAddress from 'src/components/CreateAddress';
 import { EmptyImage, PencilIcon, PlusIcon, TrashIcon } from 'src/components/Icons';
 import Loading from 'src/components/Loading';
 import Modal from 'src/components/Modal';
+import useAddress from 'src/hooks/useAddress';
 import { OnlyMessageResponse } from 'src/types/utils.type';
 
 const Address = () => {
@@ -18,18 +19,7 @@ const Address = () => {
   const [deleteConfirmModalOpen, setDeleteConfirmModalOpen] = useState<boolean>(false);
   const [currentId, setCurrentId] = useState<string | null>(null);
   const [isUpdateMode, setIsUpdateMode] = useState<boolean>(false);
-
-  // Query: Lấy danh sách địa chỉ
-  const getAddressesQuery = useQuery({
-    queryKey: ['addresses'],
-    queryFn: () => addressApi.getAddresses()
-  });
-
-  // Danh sách địa chỉ
-  const addresses = useMemo(
-    () => getAddressesQuery.data?.data.data.addresses,
-    [getAddressesQuery.data?.data.data.addresses]
-  );
+  const { getAddressesQuery, addresses, setDefaultAddressMutation } = useAddress();
 
   // Bắt đầu thêm
   const startAdd = () => {
@@ -72,7 +62,7 @@ const Address = () => {
     mutationFn: addressApi.deleteAddress,
     onSuccess: (data) => {
       toast.success(data.data.message);
-      getAddressesQuery.refetch();
+      getAddressesQuery?.refetch();
       stopDelete();
     },
     onError: (error) => {
@@ -86,17 +76,13 @@ const Address = () => {
     if (currentId) deleteAddressMutation.mutate(currentId);
   };
 
-  // Thiết lập địa chỉ mặc định
-  const setDefaultAddressMutation = useMutation({
-    mutationFn: addressApi.setDefaultAddress,
-    onSuccess: () => {
-      getAddressesQuery.refetch();
-    }
-  });
-
   // Xử lý đặt địa chỉ thành mặc định
   const setDefaultAddress = (addressId: string) => {
-    setDefaultAddressMutation.mutate(addressId);
+    setDefaultAddressMutation.mutate(addressId, {
+      onSuccess: () => {
+        getAddressesQuery?.refetch();
+      }
+    });
   };
 
   return (
@@ -129,7 +115,7 @@ const Address = () => {
       </div>
 
       {/* Khi đã có địa chỉ */}
-      {addresses && addresses.length > 0 && !getAddressesQuery.isLoading && (
+      {addresses && addresses.length > 0 && !getAddressesQuery?.isLoading && (
         <div className='lg:min-h-[280px] flex flex-col justify-between'>
           <div className='px-2 md:px-6 py-4'>
             {addresses.map((address) => (
@@ -174,7 +160,7 @@ const Address = () => {
       )}
 
       {/* Khi chưa có địa chỉ nào */}
-      {addresses && addresses.length <= 0 && !getAddressesQuery.isLoading && (
+      {addresses && addresses.length <= 0 && !getAddressesQuery?.isLoading && (
         <div className='flex justify-center items-center flex-col mt-10'>
           <EmptyImage />
           <p className='text-center mt-4'>Chưa có địa chỉ nào</p>
@@ -182,7 +168,7 @@ const Address = () => {
       )}
 
       {/* Loading */}
-      {getAddressesQuery.isLoading && (
+      {getAddressesQuery?.isLoading && (
         <div className='min-h-[300px] flex justify-center items-center'>
           <Loading />
         </div>
@@ -203,11 +189,11 @@ const Address = () => {
             isUpdateMode
               ? () => {
                   stopUpdate();
-                  getAddressesQuery.refetch();
+                  getAddressesQuery?.refetch();
                 }
               : () => {
                   stopAdd();
-                  getAddressesQuery.refetch();
+                  getAddressesQuery?.refetch();
                 }
           }
           currentId={isUpdateMode ? currentId : null}

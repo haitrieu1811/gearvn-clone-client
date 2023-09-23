@@ -1,37 +1,20 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
-import { Dispatch, ReactNode, SetStateAction, createContext, useState, useMemo } from 'react';
+import { Dispatch, ReactNode, SetStateAction, createContext, useMemo, useState } from 'react';
 
 import authApi from 'src/apis/auth.api';
 import conversationApi from 'src/apis/conversation.api';
-import { BlogType } from 'src/types/blog.type';
-import { Brand } from 'src/types/brand.type';
-import { Category } from 'src/types/category.type';
+import useCart from 'src/hooks/useCart';
 import { ConversationReceiver } from 'src/types/conversation.type';
-import { Product } from 'src/types/product.type';
+import {
+  ExtendedBlog,
+  ExtendedBrand,
+  ExtendedCategory,
+  ExtendedProduct,
+  ExtendedPurchase
+} from 'src/types/extended.type';
 import { Purchase } from 'src/types/purchase.type';
 import { User } from 'src/types/user.type';
 import { getAccessTokenFromLS, getProfileFromLS } from 'src/utils/auth';
-
-interface ExtendedCategory extends Category {
-  checked: boolean;
-}
-
-interface ExtendedBrand extends Brand {
-  checked: boolean;
-}
-
-interface ExtendedProduct extends Product {
-  checked: boolean;
-}
-
-interface ExtendedBlog extends BlogType {
-  checked: boolean;
-}
-
-export interface ExtendedPurchase extends Purchase {
-  checked: boolean;
-  disabled: boolean;
-}
 
 interface AppContextType {
   isAuthenticated: boolean;
@@ -39,6 +22,11 @@ interface AppContextType {
   profile: User | null;
   setProfile: Dispatch<SetStateAction<User | null>>;
   reset: () => void;
+  cartList: Purchase[];
+  cartTotal: number;
+  cartSize: number;
+  checkedCartList: ExtendedPurchase[];
+  getCartQuery: ReturnType<typeof useQuery> | undefined;
   isOpenChat: boolean;
   setIsOpenChat: Dispatch<SetStateAction<boolean>>;
   logout: () => void;
@@ -58,12 +46,17 @@ interface AppContextType {
   setExtendedCartList: Dispatch<SetStateAction<ExtendedPurchase[]>>;
 }
 
-const initialContext = {
+const initialContext: AppContextType = {
   isAuthenticated: Boolean(getAccessTokenFromLS()),
   setIsAuthenticated: () => null,
   profile: getProfileFromLS(),
   setProfile: () => null,
   reset: () => null,
+  cartList: [],
+  cartTotal: 0,
+  cartSize: 0,
+  checkedCartList: [],
+  getCartQuery: undefined,
   isOpenChat: false,
   setIsOpenChat: () => null,
   logout: () => null,
@@ -96,7 +89,9 @@ const AppProvider = ({ children }: { children: ReactNode }) => {
   const [extendedBlogs, setExtendedBlogs] = useState<ExtendedBlog[]>(initialContext.extendedBlogs);
   const [extendedCartList, setExtendedCartList] = useState<ExtendedPurchase[]>(initialContext.extendedCartList);
 
-  // Reset auth
+  const { cartList, cartSize, getCartQuery } = useCart();
+
+  // Reset auth (logout)
   const reset = () => {
     setIsAuthenticated(false);
     setProfile(null);
@@ -116,10 +111,21 @@ const AppProvider = ({ children }: { children: ReactNode }) => {
     logoutMutation.mutate();
   };
 
+  // Danh sách sản phẩm đã chọn trong giỏ hàng
+  const checkedCartList = useMemo(() => extendedCartList.filter((cartItem) => cartItem.checked), [extendedCartList]);
+
+  // Tổng tiền sản phẩm đã chọn trong giỏ hàng
+  const cartTotal = useMemo(
+    () =>
+      checkedCartList?.reduce((acc, cartItem) => acc + cartItem.buy_count * cartItem.product.price_after_discount, 0),
+    [checkedCartList]
+  );
+
   // Query: Lấy dánh sách người đã nhắn tin với mình
   const getReceiversQuery = useQuery({
-    queryKey: ['conversation_receivers'],
-    queryFn: () => conversationApi.getReceivers()
+    queryKey: ['conversation_receivers', profile?._id],
+    queryFn: () => conversationApi.getReceivers(),
+    enabled: !!profile?._id
   });
 
   // Danh sách người đã nhắn tin với mình
@@ -142,6 +148,11 @@ const AppProvider = ({ children }: { children: ReactNode }) => {
         profile,
         setProfile,
         reset,
+        cartList,
+        cartTotal,
+        cartSize,
+        checkedCartList,
+        getCartQuery,
         isOpenChat,
         setIsOpenChat,
         logout,

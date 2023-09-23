@@ -11,7 +11,6 @@ import ScrollToTop from './components/ScrollToTop';
 import AppProvider from './contexts/app.context.tsx';
 import './i18n/i18n.ts';
 import './index.css';
-import Loading from './components/Loading/Loading.tsx';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -26,13 +25,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
   // <React.StrictMode>
   <QueryClientProvider client={queryClient}>
     <BrowserRouter>
-      <Suspense
-        fallback={
-          <div className='min-h-screen bg-white flex justify-center items-center'>
-            <Loading />
-          </div>
-        }
-      >
+      <Suspense>
         <HelmetProvider>
           <AppProvider>
             <ErrorBoundary>

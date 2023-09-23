@@ -15,7 +15,7 @@ interface CartItemProps {
   data: Purchase;
   handleChangeQuantity: ({ cartItemIndex, value }: { cartItemIndex: number; value: number }) => void;
   handleTypeQuantity: ({ cartItemIndex, value }: { cartItemIndex: number; value: number }) => void;
-  handleCheck: ({ cartItemIndex, e }: { cartItemIndex: number; e: ChangeEvent<HTMLInputElement> }) => void;
+  chooseToCheckout: ({ cartItemIndex, e }: { cartItemIndex: number; e: ChangeEvent<HTMLInputElement> }) => void;
   disabled: boolean;
   checked: boolean;
 }
@@ -25,7 +25,7 @@ const CartItem = ({
   data,
   handleChangeQuantity,
   handleTypeQuantity,
-  handleCheck,
+  chooseToCheckout,
   disabled,
   checked
 }: CartItemProps) => {
@@ -37,7 +37,7 @@ const CartItem = ({
     mutationFn: purchaseApi.delete,
     onSuccess: (data) => {
       toast.success(data.data.message);
-      queryClient.invalidateQueries({ queryKey: ['cart_list'] });
+      queryClient.invalidateQueries({ queryKey: ['cart'] });
     }
   });
 
@@ -59,35 +59,33 @@ const CartItem = ({
         ref={checkBoxRef}
         type='checkbox'
         checked={checked}
-        onChange={(e) => handleCheck({ cartItemIndex: index, e })}
+        onChange={(e) => chooseToCheckout({ cartItemIndex: index, e })}
         className='peer appearance-none absolute'
       />
       <div className='flex justify-between p-2 md:p-6 mb-2 peer-checked:bg-slate-100 cursor-pointer'>
-        <div className='w-[70px] md:w-[90px] flex items-center'>
-          <div>
-            <div className='border border-[#ececec] rounded-sm'>
-              <Link
-                to={`${PATH.PRODUCT_DETAIL_WITHOUT_ID}/${generateNameId({
-                  name: data.product.name_vi,
-                  id: data.product._id
-                })}`}
-              >
-                <img
-                  src={getImageUrl(data.product.thumbnail)}
-                  alt={data.product.name_vi}
-                  className='w-[60px] h-[60px] md:w-[90px] md:h-[90px] object-cover'
-                />
-              </Link>
-            </div>
-            <div className='flex justify-center items-center mt-3'>
-              <button onClick={chooseToBuy} className='text-[#6D6E72] text-xs font-medium'>
-                {!checked ? 'Chọn' : 'Bỏ chọn'}
-              </button>
-              <div className='w-[1px] h-3 bg-slate-400 mx-[6px]' />
-              <button onClick={() => handleDelete(data._id)} className='text-[#6D6E72] text-xs font-medium'>
-                Xóa
-              </button>
-            </div>
+        <div className='w-[70px] md:w-[90px]'>
+          <div className='border border-[#ececec] rounded-sm'>
+            <Link
+              to={`${PATH.PRODUCT_DETAIL_WITHOUT_ID}/${generateNameId({
+                name: data.product.name_vi,
+                id: data.product._id
+              })}`}
+            >
+              <img
+                src={getImageUrl(data.product.thumbnail)}
+                alt={data.product.name_vi}
+                className='w-[60px] h-[60px] md:w-[90px] md:h-[90px] object-cover'
+              />
+            </Link>
+          </div>
+          <div className='flex justify-center items-center mt-3'>
+            <button onClick={chooseToBuy} className='text-[#6D6E72] text-xs font-medium'>
+              {!checked ? 'Chọn' : 'Bỏ chọn'}
+            </button>
+            <div className='w-[1px] h-3 bg-slate-400 mx-[6px]' />
+            <button onClick={() => handleDelete(data._id)} className='text-[#6D6E72] text-xs font-medium'>
+              Xóa
+            </button>
           </div>
         </div>
         <div className='flex-1 flex justify-between items-start pl-4'>
@@ -132,7 +130,7 @@ CartItem.propTypes = {
   data: PropTypes.object.isRequired,
   handleChangeQuantity: PropTypes.func.isRequired,
   handleTypeQuantity: PropTypes.func.isRequired,
-  handleCheck: PropTypes.func.isRequired,
+  chooseToCheckout: PropTypes.func.isRequired,
   disabled: PropTypes.bool.isRequired,
   checked: PropTypes.bool.isRequired
 };

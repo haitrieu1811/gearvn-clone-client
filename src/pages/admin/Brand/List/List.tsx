@@ -1,13 +1,9 @@
-import { useMutation, useQuery } from '@tanstack/react-query';
 import { produce } from 'immer';
-import isUndefined from 'lodash/isUndefined';
-import omitBy from 'lodash/omitBy';
 import moment from 'moment';
 import { ChangeEvent, Fragment, useContext, useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
-import brandApi from 'src/apis/brand.api';
 import Checkbox from 'src/components/Checkbox';
 import ContextMenu from 'src/components/ContextMenu';
 import { PencilIcon, TrashIcon } from 'src/components/Icons';
@@ -15,6 +11,7 @@ import Modal from 'src/components/Modal';
 import Table from 'src/components/Table';
 import PATH from 'src/constants/path';
 import { AppContext } from 'src/contexts/app.context';
+import useBrand from 'src/hooks/useBrand';
 import UseQueryParams from 'src/hooks/useQueryParams';
 import { PaginationRequestParams } from 'src/types/utils.type';
 import { convertMomentFromNowToVietnamese } from 'src/utils/utils';
@@ -29,43 +26,19 @@ const List = () => {
   const [currentId, setCurrentId] = useState<string | null>(null);
   const { extendedBrands, setExtendedBrands } = useContext(AppContext);
   const queryParams: QueryConfig = UseQueryParams();
-  const queryConfig: QueryConfig = omitBy(
-    {
-      page: queryParams.page || 1,
-      limit: queryParams.limit || 10
-    },
-    isUndefined
-  );
+  const queryConfig: QueryConfig = {
+    page: queryParams.page || '1',
+    limit: queryParams.limit || '10'
+  };
+  const { brands, brandsPageSize, getBrandsQuery, deleteBrandMutation } = useBrand(queryConfig);
 
-  // Lấy danh sách nhãn hiệu
-  const getBrandsQuery = useQuery({
-    queryKey: ['brands', queryConfig],
-    queryFn: () => brandApi.getList(queryConfig),
-    keepPreviousData: true
-  });
-
-  // Xóa nhãn hiệu
-  const deleteBrandMutation = useMutation({
-    mutationFn: brandApi.delete,
-    onSuccess: (data) => {
-      toast.success(data.data.message);
-      setModalVisible(false);
-      getBrandsQuery.refetch();
-    }
-  });
-
-  // Danh sách nhãn hiệu
-  const brands = useMemo(() => getBrandsQuery.data?.data.data.brands, [getBrandsQuery.data?.data.data.brands]);
-  // Tổng số nhãn hiệu
-  const pageSize = useMemo(
-    () => getBrandsQuery.data?.data.data.pagination.page_size,
-    [getBrandsQuery.data?.data.data.pagination.page_size]
-  );
   // Danh sách nhãn hiệu đã chọn
   const checkedBrands = useMemo(() => extendedBrands.filter((brand) => brand.checked), [extendedBrands]);
+
+  // Kiểm tra tất cả nhãn hiệu đã được check hay chưa
   const isAllChecked = extendedBrands.every((brand) => brand.checked);
 
-  // Cập nhật danh sách nhãn hiệu
+  // Cập nhật danh sách nhãn hiệu (có thêm trường checked)
   useEffect(() => {
     if (brands) {
       setExtendedBrands(() =>
@@ -91,8 +64,26 @@ const List = () => {
 
   // Xác nhận xóa
   const handleDelete = () => {
-    if (currentId) deleteBrandMutation.mutate([currentId]);
-    else deleteBrandMutation.mutate(checkedBrands.map((brand) => brand._id));
+    if (currentId) {
+      deleteBrandMutation.mutate([currentId], {
+        onSuccess: (data) => {
+          toast.success(data.data.message);
+          setModalVisible(false);
+          getBrandsQuery.refetch();
+        }
+      });
+    } else {
+      deleteBrandMutation.mutate(
+        checkedBrands.map((brand) => brand._id),
+        {
+          onSuccess: (data) => {
+            toast.success(data.data.message);
+            setModalVisible(false);
+            getBrandsQuery.refetch();
+          }
+        }
+      );
+    }
   };
 
   // Check 1 nhãn hiệu
@@ -124,7 +115,17 @@ const List = () => {
           {
             headerName: 'Nhãn hiệu',
             field: 'name',
-            width: 60
+            width: 30
+          },
+          {
+            headerName: 'Người tạo',
+            field: 'authorName',
+            width: 15
+          },
+          {
+            headerName: 'Số sản phẩm',
+            field: 'productCount',
+            width: 15
           },
           {
             headerName: 'Tạo lúc',
@@ -145,6 +146,8 @@ const List = () => {
         rows={extendedBrands.map((brand, index) => ({
           checkbox: <Checkbox checked={brand.checked} onChange={handleCheckOne(index)} />,
           name: brand.name,
+          authorName: brand.author.fullname,
+          productCount: `${brand.product_count} sản phẩm`,
           createdAt: convertMomentFromNowToVietnamese(moment(brand.created_at).fromNow()),
           updatedAt: convertMomentFromNowToVietnamese(moment(brand.updated_at).fromNow()),
           actions: (
@@ -164,7 +167,7 @@ const List = () => {
             />
           )
         }))}
-        pageSize={pageSize || 0}
+        pageSize={brandsPageSize}
         isLoading={getBrandsQuery.isLoading}
         addNewPath={PATH.DASHBOARD_BRAND_CREATE}
         tableFootLeft={
@@ -178,6 +181,7 @@ const List = () => {
           )
         }
       />
+
       <Modal name='Xác nhận xóa nhãn hiệu' isVisible={modalVisible} onOk={handleDelete} onCancel={stopDelete}>
         <div className='text-center leading-loose'>
           <div>Bạn có chắc muốn xóa nhãn hiệu này ?</div>

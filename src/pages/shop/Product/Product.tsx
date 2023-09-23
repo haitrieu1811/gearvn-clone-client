@@ -1,17 +1,14 @@
-import { useQuery } from '@tanstack/react-query';
-import isUndefined from 'lodash/isUndefined';
-import omitBy from 'lodash/omitBy';
-import { Fragment, useMemo } from 'react';
+import { Fragment } from 'react';
 import { Helmet } from 'react-helmet-async';
 
-import brandApi from 'src/apis/brand.api';
-import categoryApi from 'src/apis/category.api';
-import productApi from 'src/apis/product.api';
 import Filter from 'src/components/Filter';
 import Loading from 'src/components/Loading';
-import Pagination from 'src/components/Pagination/Pagination';
+import Pagination from 'src/components/Pagination';
 import ProductItem from 'src/components/ProductItem';
 import Sort from 'src/components/Sort';
+import useBrand from 'src/hooks/useBrand';
+import useCategory from 'src/hooks/useCategory';
+import useProduct from 'src/hooks/useProduct';
 import UseQueryParams from 'src/hooks/useQueryParams';
 import { GetProductsRequestParams } from 'src/types/product.type';
 
@@ -21,47 +18,18 @@ type QueryConfig = {
 
 const Product = () => {
   const queryParams: QueryConfig = UseQueryParams();
-  const queryConfig: QueryConfig = omitBy(
-    {
-      page: queryParams.page || 1,
-      limit: queryParams.limit || 20,
-      category: queryParams.category,
-      brand: queryParams.brand,
-      sortBy: queryParams.sortBy,
-      orderBy: queryParams.orderBy
-    },
-    isUndefined
-  );
+  const queryConfig: QueryConfig = {
+    page: queryParams.page || '1',
+    limit: queryParams.limit || '20',
+    category: queryParams.category,
+    brand: queryParams.brand,
+    sortBy: queryParams.sortBy,
+    orderBy: queryParams.orderBy
+  };
 
-  const getProductsQuery = useQuery({
-    queryKey: ['products', queryConfig],
-    queryFn: () => productApi.getList(queryConfig),
-    keepPreviousData: true
-  });
-
-  const getBrandsQuery = useQuery({
-    queryKey: ['brands'],
-    queryFn: () => brandApi.getList()
-  });
-
-  const getCategoriesQuery = useQuery({
-    queryKey: ['categories'],
-    queryFn: () => categoryApi.getList()
-  });
-
-  const products = useMemo(
-    () => getProductsQuery.data?.data.data.products,
-    [getProductsQuery.data?.data.data.products]
-  );
-  const brands = useMemo(() => getBrandsQuery.data?.data.data.brands, [getBrandsQuery.data?.data.data.brands]);
-  const categories = useMemo(
-    () => getCategoriesQuery.data?.data.data.categories,
-    [getCategoriesQuery.data?.data.data.categories]
-  );
-  const pageSize = useMemo(
-    () => getProductsQuery.data?.data.data.pagination.page_size,
-    [getProductsQuery.data?.data.data.pagination.page_size]
-  );
+  const { products, getProductsQuery, productsPageSize } = useProduct(queryConfig);
+  const { categories } = useCategory();
+  const { brands } = useBrand();
 
   return (
     <div className='lg:container'>
@@ -84,6 +52,7 @@ const Product = () => {
         <meta property='og:site_name' content='Danh sách sản phẩm' />
         <meta property='og:type' content='website' />
       </Helmet>
+
       <div className='bg-white my-2 lg:my-4 rounded shadow-sm pb-10 px-3'>
         {/* Bộ lọc sản phẩm */}
         <div className='py-6 px-3 flex'>
@@ -109,6 +78,7 @@ const Product = () => {
             />
           )}
         </div>
+
         {/* Sắp xếp sản phẩm */}
         <div className='flex justify-end mb-4'>
           <Sort
@@ -131,6 +101,7 @@ const Product = () => {
             ]}
           />
         </div>
+
         {/* Danh sách sản phẩm */}
         {products && products.length > 0 && !getProductsQuery.isLoading && (
           <Fragment>
@@ -143,7 +114,7 @@ const Product = () => {
             </div>
             <div className='flex justify-center mt-10'>
               <Pagination
-                pageSize={pageSize || 0}
+                pageSize={productsPageSize}
                 classNameItem='w-8 h-8 md:w-10 md:h-10 mx-1 rounded-full flex justify-center items-center font-semibold text-sm md:text-base select-none'
                 classNameItemActive='bg-black text-white pointer-events-none'
                 classNameItemUnActive='bg-[#f3f3f3]'
@@ -151,14 +122,20 @@ const Product = () => {
             </div>
           </Fragment>
         )}
+
         {/* Không có sản phẩm nào phù hợp */}
         {products && products.length <= 0 && !getProductsQuery.isLoading && (
           <div className='p-2 md:p-[15px] bg-[#fcf8e3] border border-[#faebcc] text-xs md:text-sm text-[#8a6d3b]'>
             Chưa có sản phẩm nào trong danh mục này
           </div>
         )}
+
         {/* Loading */}
-        {getProductsQuery.isLoading && <Loading />}
+        {getProductsQuery.isLoading && (
+          <div className='min-h-[300px] flex justify-center items-center'>
+            <Loading />
+          </div>
+        )}
       </div>
     </div>
   );

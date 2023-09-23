@@ -20,8 +20,8 @@ const orderApi = {
     return http.patch<OnlyMessageResponse>(`/orders/${orderId}`, { status });
   },
   // Xóa đơn hàng
-  delete(orderId: string) {
-    return http.delete<OnlyMessageResponse>(`/orders/${orderId}`);
+  delete(orderIds: string[]) {
+    return http.delete<OnlyMessageResponse>(`/orders`, { data: { order_ids: orderIds } });
   }
 };
 
