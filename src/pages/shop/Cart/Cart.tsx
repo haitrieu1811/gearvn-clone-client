@@ -1,5 +1,5 @@
 import { yupResolver } from '@hookform/resolvers/yup';
-import { createContext, useContext, useEffect } from 'react';
+import { Fragment, useContext, useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { FormProvider, useForm } from 'react-hook-form';
 import { Link, Outlet, useMatch, useNavigate } from 'react-router-dom';
@@ -8,20 +8,10 @@ import { ChevronLeftIcon } from 'src/components/Icons';
 import { Gender, PaymentMethod, ReceiveMethod } from 'src/constants/enum';
 import PATH from 'src/constants/path';
 import { AppContext } from 'src/contexts/app.context';
+import CartProvider from 'src/contexts/cart.context';
 import useAddress from 'src/hooks/useAddress';
-import { Address } from 'src/types/address.type';
 import { PaymentOrderSchema, paymentOrderSchema } from 'src/utils/rules';
 import PaymentProgress from './PaymentProgress';
-
-interface CartContext {
-  defaultAddress?: Address;
-}
-
-const initCartContext: CartContext = {
-  defaultAddress: undefined
-};
-
-export const CartContext = createContext<CartContext>(initCartContext);
 
 const Cart = () => {
   const navigate = useNavigate();
@@ -62,7 +52,7 @@ const Cart = () => {
   }, [defaultAddress]);
 
   return (
-    <FormProvider {...methods}>
+    <Fragment>
       <Helmet>
         <title>Giỏ hàng của bạn</title>
         <meta
@@ -83,35 +73,33 @@ const Cart = () => {
         <meta property='og:type' content='website' />
       </Helmet>
 
-      <CartContext.Provider
-        value={{
-          defaultAddress
-        }}
-      >
-        <div className='mb-2 md:mb-4'>
-          <div className='md:container flex justify-center'>
-            <div className='w-[600px]'>
-              {isCartListPage && (
-                <Link to={PATH.HOME} className='flex items-center text-[#1982F9] p-4'>
-                  <ChevronLeftIcon className='w-3 h-3 md:w-4 md:h-4' />{' '}
-                  <span className='font-medium ml-[5px] text-sm md:text-base'>Mua thêm sản phẩm khác</span>
-                </Link>
-              )}
-              {!isCartListPage && (
-                <button className='flex items-center text-[#1982F9] p-4' onClick={() => navigate(-1)}>
-                  <ChevronLeftIcon className='w-3 h-3 md:w-4 md:h-4' />{' '}
-                  <span className='font-medium ml-[5px] text-sm md:text-base'>Trở về</span>
-                </button>
-              )}
-              <div className='rounded bg-white shadow-sm'>
-                <PaymentProgress />
-                <Outlet />
+      <FormProvider {...methods}>
+        <CartProvider>
+          <div className='mb-2 md:mb-4'>
+            <div className='md:container flex justify-center'>
+              <div className='w-[600px]'>
+                {isCartListPage && (
+                  <Link to={PATH.HOME} className='flex items-center text-[#1982F9] p-4'>
+                    <ChevronLeftIcon className='w-3 h-3 md:w-4 md:h-4' />{' '}
+                    <span className='font-medium ml-[5px] text-sm md:text-base'>Mua thêm sản phẩm khác</span>
+                  </Link>
+                )}
+                {!isCartListPage && (
+                  <button className='flex items-center text-[#1982F9] p-4' onClick={() => navigate(-1)}>
+                    <ChevronLeftIcon className='w-3 h-3 md:w-4 md:h-4' />{' '}
+                    <span className='font-medium ml-[5px] text-sm md:text-base'>Trở về</span>
+                  </button>
+                )}
+                <div className='rounded bg-white shadow-sm'>
+                  <PaymentProgress />
+                  <Outlet />
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      </CartContext.Provider>
-    </FormProvider>
+        </CartProvider>
+      </FormProvider>
+    </Fragment>
   );
 };
 

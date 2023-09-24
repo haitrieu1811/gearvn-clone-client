@@ -8,13 +8,13 @@ import userApi from 'src/apis/user.api';
 import fallbackAvatar from 'src/assets/images/fallback-avatar.jpg';
 import Checkbox from 'src/components/Checkbox';
 import Table from 'src/components/Table';
-import { UserRole, UserStatus } from 'src/constants/enum';
+import { UserStatus } from 'src/constants/enum';
 import UseQueryParams from 'src/hooks/useQueryParams';
-import { GetUsersParams } from 'src/types/user.type';
-import { convertMomentFromNowToVietnamese, getImageUrl } from 'src/utils/utils';
+import { PaginationRequestParams } from 'src/types/utils.type';
+import { convertMomentFromNowToVietnamese, formatCurrency, getImageUrl } from 'src/utils/utils';
 
 export type QueryConfig = {
-  [key in keyof GetUsersParams]: string;
+  [key in keyof PaginationRequestParams]: string;
 };
 
 const List = () => {
@@ -22,33 +22,36 @@ const List = () => {
   const queryConfig: QueryConfig = omitBy(
     {
       page: queryParams.page || '1',
-      limit: queryParams.limit || 10,
-      gender: queryParams.gender,
-      status: queryParams.status,
-      role: queryParams.role
+      limit: queryParams.limit || '10'
     },
     isUndefined
   );
 
-  // Query: Lấy danh sách tài khoản
-  const getUsersQuery = useQuery({
-    queryKey: ['users_list', queryConfig],
-    queryFn: () => userApi.getList(queryConfig),
+  // Query: Lấy danh sách khách hàng
+  const getCustomersQuery = useQuery({
+    queryKey: ['customers', queryConfig],
+    queryFn: () => userApi.getCustomers(queryConfig),
     keepPreviousData: true
   });
 
-  // Danh sách tài khoản
-  const users = useMemo(() => getUsersQuery.data?.data.data.users, [getUsersQuery.data]);
+  // Danh sách khách hàng
+  const customers = useMemo(() => getCustomersQuery.data?.data.data.customers || [], [getCustomersQuery.data]);
 
-  // Số lượng tài khoản
-  const pageSize = useMemo(() => getUsersQuery.data?.data.data.pagination.page_size, [getUsersQuery.data]);
+  // Số lượng trang của danh sách khách hàng
+  const pageSize = useMemo(() => getCustomersQuery.data?.data.data.pagination.page_size || 0, [getCustomersQuery.data]);
+
+  // Tổng số lượng khách hàng
+  const customersTotal = useMemo(
+    () => getCustomersQuery.data?.data.data.pagination.total || 0,
+    [getCustomersQuery.data]
+  );
 
   return (
     <Fragment>
       <Table
-        tableName='Danh sách tài khoản'
-        totalRows={getUsersQuery.data?.data.data.pagination.total || 0}
-        data={users || []}
+        tableName='Danh sách khách hàng'
+        totalRows={customersTotal}
+        data={customers}
         columns={[
           {
             field: 'checkbox',
@@ -57,17 +60,22 @@ const List = () => {
           },
           {
             field: 'name',
-            headerName: 'Tên tài khoản',
-            width: 35
+            headerName: 'Khách hàng',
+            width: 25
           },
           {
-            field: 'fullname',
-            headerName: 'Họ tên',
-            width: 20
+            field: 'ordersCount',
+            headerName: 'Tổng đơn hàng',
+            width: 15
           },
           {
-            field: 'type',
-            headerName: 'Loại',
+            field: 'succeedOrdersTotal',
+            headerName: 'Đã thanh toán',
+            width: 15
+          },
+          {
+            field: 'addressesCount',
+            headerName: 'Số địa chỉ',
             width: 10
           },
           {
@@ -87,27 +95,28 @@ const List = () => {
           }
         ]}
         rows={
-          users?.map((user) => ({
+          customers.map((customers) => ({
             checkbox: <Checkbox />,
             name: (
               <div className='flex items-center'>
                 <img
-                  src={user.avatar ? getImageUrl(user.avatar) : fallbackAvatar}
-                  alt={user.email}
+                  src={customers.avatar ? getImageUrl(customers.avatar) : fallbackAvatar}
+                  alt={customers.email}
                   className='w-7 h-7 object-cover rounded-full'
                 />
-                <span className='ml-4'>{user.email}</span>
+                <span className='ml-4'>{customers.fullname}</span>
               </div>
             ),
-            fullname: user.fullname,
-            type: user.role === UserRole.Customer ? 'Khách hàng' : 'Nhân viên',
-            status: user.status === UserStatus.Active ? 'Hoạt động' : 'Đã khóa',
-            createdAt: convertMomentFromNowToVietnamese(moment(user.created_at).fromNow()),
-            updatedAt: convertMomentFromNowToVietnamese(moment(user.updated_at).fromNow())
+            addressesCount: `${customers.addresses_count} địa chỉ`,
+            status: customers.status === UserStatus.Active ? 'Hoạt động' : 'Đã khóa',
+            succeedOrdersTotal: `${formatCurrency(customers.succeed_orders_total)}`,
+            ordersCount: `${customers.orders_count} đơn hàng`,
+            createdAt: convertMomentFromNowToVietnamese(moment(customers.created_at).fromNow()),
+            updatedAt: convertMomentFromNowToVietnamese(moment(customers.updated_at).fromNow())
           })) || []
         }
         tableFootLeft={<div></div>}
-        pageSize={pageSize || 0}
+        pageSize={pageSize}
       />
     </Fragment>
   );

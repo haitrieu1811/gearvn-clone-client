@@ -1,5 +1,6 @@
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
+import { memo } from 'react';
 
 interface PaymentProgressItemProps {
   isActive: boolean;
@@ -19,10 +20,10 @@ const PaymentProgressItem = ({ isActive, icon, name }: PaymentProgressItemProps)
   const Icon = icon;
 
   return (
-    <div className='flex justify-center items-center flex-col flex-1'>
+    <div className='flex justify-center flex-col flex-1'>
       <div
         className={classNames(
-          'relative before:absolute before:top-1/2 before:right-full before:-translate-y-1/2 before:w-[110px] before:h-[2px] before:border-t',
+          'relative flex justify-center before:absolute before:top-1/2 before:right-1/2 before:-translate-y-1/2 before:w-full before:h-[2px] before:border-t',
           {
             'before:border-dashed before:border-[#6b6868]': !isActive,
             'before:border-solid before:border-primary': isActive
@@ -30,7 +31,7 @@ const PaymentProgressItem = ({ isActive, icon, name }: PaymentProgressItemProps)
         )}
       >
         <Icon
-          className={classNames('w-7 h-7', {
+          className={classNames('w-7 h-7 relative z-10', {
             'fill-primary': isActive
           })}
           circleClassName={classNames('', {
@@ -42,7 +43,7 @@ const PaymentProgressItem = ({ isActive, icon, name }: PaymentProgressItemProps)
         />
       </div>
       <p
-        className={classNames('mt-1', {
+        className={classNames('mt-1 text-center text-sm md:text-base', {
           'text-[##535353]': !isActive,
           'text-primary': isActive
         })}
@@ -59,4 +60,4 @@ PaymentProgressItem.propTypes = {
   icon: PropTypes.func.isRequired
 };
 
-export default PaymentProgressItem;
+export default memo(PaymentProgressItem);

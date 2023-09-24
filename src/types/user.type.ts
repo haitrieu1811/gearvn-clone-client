@@ -38,6 +38,34 @@ export interface QuantityPerCollection {
   blogs: number;
 }
 
+export interface Customer {
+  _id: string;
+  email: string;
+  fullname: string;
+  phone_number: string;
+  status: number;
+  role: number;
+  avatar: string;
+  gender: number;
+  verify: number;
+  orders_count: number;
+  new_orders_count: number;
+  processing_orders_count: number;
+  delivering_orders_count: number;
+  succeed_orders_count: number;
+  canceled_orders_count: number;
+  orders_total: number;
+  new_orders_total: number;
+  processing_orders_total: number;
+  delivering_orders_total: number;
+  succeed_orders_total: number;
+  canceled_orders_total: number;
+  addresses_count: number;
+  date_of_birth: string;
+  created_at: string;
+  updated_at: string;
+}
+
 // Request: Lấy danh sách người dùng
 export interface GetUsersParams {
   page?: string;
@@ -78,3 +106,9 @@ export type GetViewedProductsResponse = SuccessResponse<{
 
 // Response: Lấy số lượng người dùng, sản phẩm, đơn hàng, danh mục, thương hiệu, bài viết
 export type GetQuantityPerCollectionResponse = SuccessResponse<QuantityPerCollection>;
+
+// Response: Lấy danh sách khách hàng
+export type GetCustomersResponse = SuccessResponse<{
+  customers: Customer[];
+  pagination: Pagination;
+}>;

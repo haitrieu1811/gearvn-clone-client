@@ -1,6 +1,7 @@
 import { AuthResponse } from 'src/types/auth.type';
 import {
   ChangePasswordRequestBody,
+  GetCustomersResponse,
   GetMeResponse,
   GetQuantityPerCollectionResponse,
   GetUserResponse,
@@ -8,10 +9,10 @@ import {
   GetViewedProductsResponse,
   UpdateMeRequestBody
 } from 'src/types/user.type';
-import { OnlyMessageResponse } from 'src/types/utils.type';
+import { OnlyMessageResponse, PaginationRequestParams } from 'src/types/utils.type';
 import http from 'src/utils/http';
 
-export const URL_USERS_LIST = '/users/list';
+export const URL_USERS_LIST = '/users';
 export const URL_ME = '/users/me';
 export const URL_CHANGE_PASSWORD = '/users/change-password';
 export const URL_VIEWED_PRODUCTS = '/users/viewed-product';
@@ -69,6 +70,10 @@ const userApi = {
   // Đặt lại mật khẩu
   resetPassword(body: { forgot_password_token: string; password: string; confirm_password: string }) {
     return http.put<AuthResponse>(URL_RESET_PASSWORD, body);
+  },
+  // Lấy danh sách khách hàng
+  getCustomers(params: PaginationRequestParams) {
+    return http.get<GetCustomersResponse>('/users/customers', { params });
   }
 };
 

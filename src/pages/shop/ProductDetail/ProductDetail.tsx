@@ -83,7 +83,7 @@ const ProductDetail = () => {
   const getProductQuery = useQuery({
     queryKey: ['product', productId],
     queryFn: () => productApi.getDetail(productId),
-    enabled: Boolean(productId)
+    enabled: !!productId
   });
 
   // Thông tin sản phẩm
@@ -116,16 +116,10 @@ const ProductDetail = () => {
   };
 
   // Mua ngay
-  const buyNow = () => {
+  const buyNow = async () => {
     if (product) {
-      addToCartMutation.mutate(
-        { productId: product._id, buyCount },
-        {
-          onSuccess: (data) => {
-            navigate(PATH.CART_LIST, { state: { cartItemId: data.data.data.purchase_id } });
-          }
-        }
-      );
+      const res = await addToCartMutation.mutateAsync({ productId: product._id, buyCount });
+      navigate(PATH.CART_LIST, { state: { cartItemId: res.data.data.purchase_id } });
     }
   };
 
@@ -256,10 +250,10 @@ const ProductDetail = () => {
                 )}
                 {/* Hết sản phẩm */}
                 {product.available_count <= 0 && (
-                  <div className='mt-4'>
+                  <div className='mt-4 cursor-not-allowed'>
                     <button
                       type='button'
-                      className='w-[400px] h-[50px] flex justify-center items-center bg-[#BCBEC2] text-white text-lg font-semibold uppercase rounded'
+                      className='w-full md:w-[400px] h-[50px] flex justify-center items-center bg-[#BCBEC2] text-white text-lg font-semibold uppercase rounded pointer-events-none'
                     >
                       Hết hàng
                     </button>

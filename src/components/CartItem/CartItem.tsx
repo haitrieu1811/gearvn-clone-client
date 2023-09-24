@@ -1,8 +1,8 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import PropTypes from 'prop-types';
 import { ChangeEvent, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import PropTypes from 'prop-types';
 
 import purchaseApi from 'src/apis/purchase.api';
 import PATH from 'src/constants/path';
@@ -48,9 +48,7 @@ const CartItem = ({
 
   // Chọn sản phẩm để mua
   const chooseToBuy = () => {
-    if (checkBoxRef) {
-      checkBoxRef.current?.click();
-    }
+    if (checkBoxRef) checkBoxRef.current?.click();
   };
 
   return (

@@ -31,7 +31,7 @@ const SidebarDashboard = () => {
         <DashboardItem
           path={PATH.DASHBOARD_USER}
           icon={<UserIcon className='w-4 h-4 stroke-black' />}
-          name='Người dùng'
+          name='Khách hàng'
         />
         <DashboardItem
           path={PATH.DASHBOARD_CATEGORY}

@@ -138,9 +138,6 @@ const CheckoutInfo = () => {
             <div className='text-base md:text-lg font-semibold'>Tổng tiền:</div>
             <div className='text-lg md:text-2xl text-primary font-semibold'>{formatCurrency(cartTotal as number)}₫</div>
           </div>
-          {/* <Button disabled={checkedCartList.length <= 0} isLoading={checkoutMutation.isLoading} onClick={checkout}>
-              Đặt hàng ngay
-            </Button> */}
           <Button onClick={nextStep}>Đặt hàng ngay</Button>
         </div>
         <p className='text-sm text-[#666666] text-center'>Bạn có thể chọn hình thức thanh toán sau khi đặt hàng</p>

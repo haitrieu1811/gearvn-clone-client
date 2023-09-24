@@ -15,10 +15,9 @@ const useCart = () => {
   });
 
   // Danh sách sản phẩm trong giỏ hàng
-  const cartList = useMemo(
-    () => getCartQuery.data?.data.data.cart_list || [],
-    [getCartQuery.data?.data.data.cart_list]
-  );
+  const cartList = useMemo(() => {
+    return getCartQuery.data?.data.data.cart_list || [];
+  }, [getCartQuery.data?.data.data.cart_list]);
 
   // Số lượng sản phẩm trong giỏ hàng
   const cartSize = useMemo(() => getCartQuery.data?.data.data.cart_size || 0, [getCartQuery.data?.data.data.cart_size]);

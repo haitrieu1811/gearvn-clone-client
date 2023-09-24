@@ -3,7 +3,6 @@ import { Dispatch, ReactNode, SetStateAction, createContext, useMemo, useState }
 
 import authApi from 'src/apis/auth.api';
 import conversationApi from 'src/apis/conversation.api';
-import useCart from 'src/hooks/useCart';
 import { ConversationReceiver } from 'src/types/conversation.type';
 import {
   ExtendedBlog,
@@ -12,7 +11,6 @@ import {
   ExtendedProduct,
   ExtendedPurchase
 } from 'src/types/extended.type';
-import { Purchase } from 'src/types/purchase.type';
 import { User } from 'src/types/user.type';
 import { getAccessTokenFromLS, getProfileFromLS } from 'src/utils/auth';
 
@@ -22,11 +20,8 @@ interface AppContextType {
   profile: User | null;
   setProfile: Dispatch<SetStateAction<User | null>>;
   reset: () => void;
-  cartList: Purchase[];
   cartTotal: number;
-  cartSize: number;
   checkedCartList: ExtendedPurchase[];
-  getCartQuery: ReturnType<typeof useQuery> | undefined;
   isOpenChat: boolean;
   setIsOpenChat: Dispatch<SetStateAction<boolean>>;
   logout: () => void;
@@ -52,11 +47,8 @@ const initialContext: AppContextType = {
   profile: getProfileFromLS(),
   setProfile: () => null,
   reset: () => null,
-  cartList: [],
   cartTotal: 0,
-  cartSize: 0,
   checkedCartList: [],
-  getCartQuery: undefined,
   isOpenChat: false,
   setIsOpenChat: () => null,
   logout: () => null,
@@ -88,8 +80,6 @@ const AppProvider = ({ children }: { children: ReactNode }) => {
   const [extendedProducts, setExtendedProducts] = useState<ExtendedProduct[]>(initialContext.extendedProducts);
   const [extendedBlogs, setExtendedBlogs] = useState<ExtendedBlog[]>(initialContext.extendedBlogs);
   const [extendedCartList, setExtendedCartList] = useState<ExtendedPurchase[]>(initialContext.extendedCartList);
-
-  const { cartList, cartSize, getCartQuery } = useCart();
 
   // Reset auth (logout)
   const reset = () => {
@@ -148,11 +138,8 @@ const AppProvider = ({ children }: { children: ReactNode }) => {
         profile,
         setProfile,
         reset,
-        cartList,
         cartTotal,
-        cartSize,
         checkedCartList,
-        getCartQuery,
         isOpenChat,
         setIsOpenChat,
         logout,

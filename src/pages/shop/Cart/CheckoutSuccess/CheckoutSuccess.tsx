@@ -7,13 +7,11 @@ import PATH from 'src/constants/path';
 import { AppContext } from 'src/contexts/app.context';
 import { PaymentOrderSchema } from 'src/utils/rules';
 import { formatCurrency } from 'src/utils/utils';
-import { CartContext } from '../Cart';
 
 const CheckoutSuccess = () => {
   const location = useLocation();
   const { getValues } = useFormContext<PaymentOrderSchema>();
-  const { profile } = useContext(AppContext);
-  const { total } = useContext(CartContext);
+  const { profile, cartTotal } = useContext(AppContext);
   const orderId = useMemo(() => (location?.state as { order_id: string })?.order_id, [location?.state?.order_id]);
 
   return (
@@ -55,7 +53,7 @@ const CheckoutSuccess = () => {
           </div>
           <div className='mt-4 flex'>
             <div className='font-semibold basis-[40%]'>Tổng tiền</div>
-            <div className='flex-1 text-primary font-semibold'>{formatCurrency(total)}₫</div>
+            <div className='flex-1 text-primary font-semibold'>{formatCurrency(cartTotal)}₫</div>
           </div>
           <div className='mt-4 flex'>
             <div className='font-semibold basis-[40%]'>Hình thức thanh toán</div>

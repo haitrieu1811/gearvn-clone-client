@@ -11,23 +11,30 @@ import CartItem from 'src/components/CartItem';
 import Loading from 'src/components/Loading';
 import PATH from 'src/constants/path';
 import { AppContext } from 'src/contexts/app.context';
+import { CartContext } from 'src/contexts/cart.context';
 import { formatCurrency } from 'src/utils/utils';
 
 const CartList = () => {
   const location = useLocation();
-  const { extendedCartList, setExtendedCartList, getCartQuery, cartTotal, cartList, checkedCartList } =
-    useContext(AppContext);
+  const { extendedCartList, setExtendedCartList, cartTotal, checkedCartList } = useContext(AppContext);
+  const { getCartQuery, cartList } = useContext(CartContext);
 
   // Đặt giá trị cho cart (có thêm thuộc tính checked và disabled)
   useEffect(() => {
     if (cartList.length > 0) {
       setExtendedCartList((prevState) => {
         const extendedCartListObj = keyBy(prevState, '_id');
+        console.log('>>> cartList', cartList);
+
         return cartList.map((cartItem) => {
+          console.log('>>> location.state', location.state);
+
           const isBuyNow = location.state && (location.state as { cartItemId: string }).cartItemId === cartItem._id;
+          console.log('>>> isBuyNow', isBuyNow);
+
           return {
             ...cartItem,
-            checked: !!extendedCartListObj[cartItem._id]?.checked || isBuyNow,
+            checked: !!extendedCartListObj[cartItem._id]?.checked || !!isBuyNow,
             disabled: false
           };
         });
@@ -79,12 +86,10 @@ const CartList = () => {
     );
   };
 
-  console.log('>>> checkedCartList CartList', checkedCartList);
-
   return (
     <Fragment>
       {/* Giỏ hàng khi có sản phẩm */}
-      {extendedCartList && extendedCartList.length > 0 && !getCartQuery?.isLoading && (
+      {cartList.length > 0 && !getCartQuery?.isLoading && (
         <Fragment>
           {/* Danh sách sản phẩm mua */}
           <div className='px-2 pt-2'>
@@ -132,7 +137,7 @@ const CartList = () => {
       )}
 
       {/* Giỏ hàng trống */}
-      {extendedCartList && extendedCartList.length <= 0 && !getCartQuery?.isLoading && (
+      {cartList.length === 0 && !getCartQuery?.isLoading && (
         <div className='flex flex-col items-center py-6'>
           <div className='text-sm text-center'>Giỏ hàng của bạn đang trống</div>
           <Link
