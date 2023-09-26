@@ -5,20 +5,22 @@ import { useNavigate } from 'react-router-dom';
 
 import { toast } from 'react-toastify';
 import purchaseApi from 'src/apis/purchase.api';
+import voucherApi from 'src/apis/voucher.api';
 import CODImage from 'src/assets/images/COD.webp';
 import Button from 'src/components/Button/Button';
 import { PaymentMethod } from 'src/constants/enum';
 import PATH from 'src/constants/path';
 import { AppContext } from 'src/contexts/app.context';
+import { CartContext } from 'src/contexts/cart.context';
 import { PaymentOrderSchema } from 'src/utils/rules';
 import socket from 'src/utils/socket';
 import { formatCurrency } from 'src/utils/utils';
 
 const CheckoutProcess = () => {
   const navigate = useNavigate();
-  const { profile } = useContext(AppContext);
-  const { cartTotal, checkedCartList, getCartQuery } = useContext(AppContext);
   const { handleSubmit, watch, getValues } = useFormContext<PaymentOrderSchema>();
+  const { profile, cartTotal, checkedCartList } = useContext(AppContext);
+  const { getCartQuery, totalReduced, voucherCode, totalPayment } = useContext(CartContext);
 
   const payment_method = watch('payment_method');
 
@@ -42,8 +44,12 @@ const CheckoutProcess = () => {
           )}</strong> vừa đặt hàng với tổng đơn là <strong>${formatCurrency(cartTotal as number)}₫</strong>`
         }
       });
+      !!voucherCode && useVoucherMutation.mutate(voucherCode);
     }
   });
+
+  // Mutation: Sử dụng voucher
+  const useVoucherMutation = useMutation(voucherApi.useVoucher);
 
   // Xử lý submit form (đặt hàng)
   const onSubmit = handleSubmit((data) => {
@@ -53,7 +59,9 @@ const CheckoutProcess = () => {
       ...data,
       purchases,
       customer_gender: Number(data.customer_gender),
-      total_amount: cartTotal,
+      total_amount_before_discount: cartTotal,
+      total_amount: totalPayment,
+      total_amount_reduced: totalReduced,
       total_items: totalItems
     };
     checkoutMutation.mutate(body as any);
@@ -79,8 +87,8 @@ const CheckoutProcess = () => {
             </div>
           </div>
           <div className='mt-4 flex'>
-            <div className='font-semibold basis-1/3'>Tạm tính</div>
-            <div className='flex-1 text-primary font-semibold'>{formatCurrency(cartTotal as number)}₫</div>
+            <div className='font-semibold basis-1/3'>Voucher</div>
+            <div className='flex-1 text-primary font-semibold'>-{formatCurrency(totalReduced)}₫</div>
           </div>
           <div className='mt-4 flex'>
             <div className='font-semibold basis-1/3'> Phí vận chuyển</div>
@@ -88,7 +96,7 @@ const CheckoutProcess = () => {
           </div>
           <div className='mt-4 flex'>
             <div className='font-semibold basis-1/3'>Tổng tiền</div>
-            <div className='flex-1 text-primary font-semibold'>{formatCurrency(cartTotal as number)}₫</div>
+            <div className='flex-1 text-primary font-semibold'>{formatCurrency(totalPayment)}₫</div>
           </div>
         </div>
       </div>
@@ -113,7 +121,7 @@ const CheckoutProcess = () => {
       <div className='px-4 py-6 md:p-6 bg-white'>
         <div className='flex justify-between items-center mb-6'>
           <div className='text-base md:text-lg font-semibold'>Tổng tiền:</div>
-          <div className='text-lg md:text-2xl text-primary font-semibold'>{formatCurrency(cartTotal as number)}₫</div>
+          <div className='text-lg md:text-2xl text-primary font-semibold'>{formatCurrency(totalPayment)}₫</div>
         </div>
         <Button disabled={checkedCartList.length <= 0} isLoading={checkoutMutation.isLoading}>
           Thanh toán ngay

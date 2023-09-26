@@ -13,6 +13,7 @@ import {
 } from 'src/types/extended.type';
 import { User } from 'src/types/user.type';
 import { getAccessTokenFromLS, getProfileFromLS } from 'src/utils/auth';
+import socket from 'src/utils/socket';
 
 interface AppContextType {
   isAuthenticated: boolean;
@@ -93,6 +94,7 @@ const AppProvider = ({ children }: { children: ReactNode }) => {
     onSuccess: () => {
       setIsAuthenticated(false);
       setProfile(null);
+      socket.emit('logout');
     }
   });
 

@@ -26,10 +26,7 @@ const PaymentProgress = () => {
   return (
     <div className='p-2'>
       <div className='bg-[#FFEDED] px-[14px] pt-5 pb-4 flex items-start'>
-        <div className='flex justify-center items-center flex-col flex-1'>
-          <InCartIcon className='w-7 h-7' />
-          <p className='text-primary mt-1 text-sm md:text-base'>Giỏ hàng</p>
-        </div>
+        <PaymentProgressItem icon={InCartIcon} name='Giỏ hàng' isActive={true} border={false} />
         <PaymentProgressItem icon={InfoCheckoutIcon} name='Thông tin đặt hàng' isActive={checkoutInfoActive} />
         <PaymentProgressItem icon={CheckoutIcon} name='Thanh toán' isActive={checkoutProcessActive} />
         <PaymentProgressItem icon={CheckoutSuccessIcon} name='Hoàn tất' isActive={checkoutSuccessActive} />

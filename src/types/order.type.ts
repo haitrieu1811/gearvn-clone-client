@@ -32,6 +32,7 @@ export interface Order {
   customer_name: string;
   customer_phone: string;
   transport_fee: number;
+  total_amount_before_discount: number;
   total_amount: number;
   total_amount_reduced: number;
   note: string;
@@ -66,6 +67,7 @@ interface OrderDetail {
   note: string;
   transport_fee: number;
   status: OrderStatus;
+  total_amount_before_discount: number;
   total_amount: number;
   total_amount_reduced: number;
   total_items: number;

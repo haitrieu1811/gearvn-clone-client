@@ -61,8 +61,8 @@ export const htmlToMarkdown = (html: string) => {
   return turndownService.turndown(html);
 };
 
-export const convertMomentFromNowToVietnamese = (momentFromNow: string) => {
-  return momentFromNow
+export const convertMomentFromNowToVietnamese = (momentFromNow: string) =>
+  momentFromNow
     .replace('a few seconds ago', 'vài giây trước')
     .replace('seconds ago', 'giây trước')
     .replace('a minute ago', '1 phút trước')
@@ -75,4 +75,8 @@ export const convertMomentFromNowToVietnamese = (momentFromNow: string) => {
     .replace('months ago', 'tháng trước')
     .replace('a year ago', '1 năm trước')
     .replace('years ago', 'năm trước');
-};
+
+export const enumToArray = (enumObj: any): number[] =>
+  Object.keys(enumObj)
+    .filter((key) => !isNaN(Number(enumObj[key])))
+    .map((key) => Number(enumObj[key]));

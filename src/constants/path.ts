@@ -48,6 +48,10 @@ const PATH = {
   DASHBOARD_ORDER: '/dashboard/order',
   DASHBOARD_ORDER_DETAIL: '/dashboard/order/:order_id',
   DASHBOARD_ORDER_DETAIL_WITHOUT_ID: '/dashboard/order',
+  DASHBOARD_VOUCHER: '/dashboard/voucher',
+  DASHBOARD_VOUCHER_CREATE: '/dashboard/voucher/create',
+  DASHBOARD_VOUCHER_UPDATE: '/dashboard/voucher/update/:voucher_id',
+  DASHBOARD_VOUCHER_UPDATE_WITHOUT_ID: '/dashboard/voucher/update',
   NOT_FOUND: '*'
 } as const;
 

@@ -6,7 +6,7 @@ import Button from 'src/components/Button';
 import Input from 'src/components/Input';
 import { Gender, ReceiveMethod } from 'src/constants/enum';
 import PATH from 'src/constants/path';
-import { AppContext } from 'src/contexts/app.context';
+import { CartContext } from 'src/contexts/cart.context';
 import { PaymentOrderSchema } from 'src/utils/rules';
 import { formatCurrency } from 'src/utils/utils';
 
@@ -14,7 +14,7 @@ type FormData = PaymentOrderSchema;
 
 const CheckoutInfo = () => {
   const navigate = useNavigate();
-  const { cartTotal } = useContext(AppContext);
+  const { totalReduced, totalPayment } = useContext(CartContext);
 
   const {
     register,
@@ -22,7 +22,6 @@ const CheckoutInfo = () => {
     handleSubmit,
     formState: { errors }
   } = useFormContext<FormData>();
-
   const gender = watch('customer_gender');
   const receiveMethod = watch('receive_method');
 
@@ -134,9 +133,13 @@ const CheckoutInfo = () => {
             <div className='text-sm md:text-base font-semibold'>Phí vận chuyển:</div>
             <div className='text-sm md:text-base font-semibold'>Miễn phí</div>
           </div>
+          <div className='flex justify-between items-center mb-2'>
+            <div className='text-sm md:text-base font-semibold'>Voucher:</div>
+            <div className='text-sm md:text-base font-semibold'>-{formatCurrency(totalReduced)}₫</div>
+          </div>
           <div className='flex justify-between items-center mb-6'>
             <div className='text-base md:text-lg font-semibold'>Tổng tiền:</div>
-            <div className='text-lg md:text-2xl text-primary font-semibold'>{formatCurrency(cartTotal as number)}₫</div>
+            <div className='text-lg md:text-2xl text-primary font-semibold'>{formatCurrency(totalPayment)}₫</div>
           </div>
           <Button onClick={nextStep}>Đặt hàng ngay</Button>
         </div>

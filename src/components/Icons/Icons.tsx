@@ -1420,7 +1420,115 @@ export const SearchMinusIcon = ({ className }: IconProps) => (
   </svg>
 );
 
-export const LanguageIcon = ({ className }: IconProps) => (
+export const OrderedIcon = ({ className, circleClassName }: IconProps & { circleClassName?: string }) => (
+  <svg width={56} height={56} viewBox='0 0 57 56' fill='none' xmlns='http://www.w3.org/2000/svg' className={className}>
+    <circle cx='28.5' cy={28} r='26.5' strokeWidth={3} className={circleClassName} />
+    <path
+      d='M19.1667 29.3333V18.6667C19.1667 17.9594 19.4476 17.2811 19.9477 16.781C20.4478 16.281 21.1261 16 21.8333 16H37.8333C38.5406 16 39.2189 16.281 39.719 16.781C40.219 17.2811 40.5 17.9594 40.5 18.6667V36C40.5 37.3333 39.7 40 36.5 40M36.5 40H20.5C19.1667 40 16.5 39.2 16.5 36V33.3333H32.5V36C32.5 39.2 35.1667 40 36.5 40ZM24.5 21.3333H35.1667M24.5 26.6667H29.8333'
+      strokeWidth={3}
+      stroke='currentColor'
+      strokeLinecap='round'
+      strokeLinejoin='round'
+    />
+  </svg>
+);
+
+export const WaitProcessingIcon = ({ className, circleClassName }: IconProps & { circleClassName?: string }) => (
+  <svg
+    width={56}
+    height={56}
+    viewBox='0 0 56 56'
+    fill='none'
+    stroke='currentColor'
+    xmlns='http://www.w3.org/2000/svg'
+    className={className}
+  >
+    <circle cx={28} cy={28} r='26.5' strokeWidth={3} className={circleClassName} />
+    <mask
+      id='mask0_7525_18447'
+      style={{ maskType: 'luminance' }}
+      maskUnits='userSpaceOnUse'
+      x={15}
+      y={16}
+      width={27}
+      height={24}
+    >
+      <path
+        d='M25.9815 31.8895L29.537 33.0007C29.537 33.0007 38.4259 31.334 39.6111 31.334C40.7963 31.334 40.7963 32.4451 39.6111 33.5562C38.4259 34.6673 34.2778 38.0007 30.7222 38.0007C27.1667 38.0007 24.7963 36.334 22.4259 36.334H16.5'
+        strokeWidth={3}
+        strokeLinecap='round'
+        strokeLinejoin='round'
+        stroke='currentColor'
+      />
+      <path
+        d='M16.5 29.6667C17.6852 28.5556 20.0556 26.8889 22.4259 26.8889C24.7963 26.8889 30.4259 29.1111 31.3148 30.2222C32.2037 31.3333 29.537 33 29.537 33M23.6111 23.5556V19.1111C23.6111 18.8164 23.736 18.5338 23.9582 18.3254C24.1805 18.1171 24.482 18 24.7963 18H39.0185C39.3328 18 39.6343 18.1171 39.8566 18.3254C40.0788 18.5338 40.2037 18.8164 40.2037 19.1111V28'
+        strokeWidth={3}
+        strokeLinecap='round'
+        strokeLinejoin='round'
+        stroke='currentColor'
+      />
+      <path
+        d='M28.9443 18H34.8703V23H28.9443V18Z'
+        strokeWidth={3}
+        strokeLinecap='round'
+        strokeLinejoin='round'
+        stroke='currentColor'
+      />
+    </mask>
+    <g mask='url(#mask0_7525_18447)'>
+      <path d='M14.1299 13.5566H42.5743V40.2233H14.1299V13.5566Z' fill='currentColor' />
+    </g>
+  </svg>
+);
+
+export const DeliveringIcon = ({ className, circleClassName }: IconProps & { circleClassName?: string }) => (
+  <svg
+    width={56}
+    height={56}
+    viewBox='0 0 56 56'
+    fill='none'
+    stroke='currentColor'
+    xmlns='http://www.w3.org/2000/svg'
+    className={className}
+  >
+    <circle cx={28} cy={28} r='26.5' strokeWidth={3} className={circleClassName} />
+    <path
+      d='M18.7627 35.1432C18.7627 35.901 19.0621 36.6277 19.5951 37.1635C20.1281 37.6993 20.851 38.0003 21.6048 38.0003C22.3586 38.0003 23.0815 37.6993 23.6145 37.1635C24.1475 36.6277 24.4469 35.901 24.4469 35.1432C24.4469 34.3855 24.1475 33.6588 23.6145 33.123C23.0815 32.5871 22.3586 32.2861 21.6048 32.2861C20.851 32.2861 20.1281 32.5871 19.5951 33.123C19.0621 33.6588 18.7627 34.3855 18.7627 35.1432ZM32.9732 35.1432C32.9732 35.901 33.2727 36.6277 33.8057 37.1635C34.3387 37.6993 35.0616 38.0003 35.8153 38.0003C36.5691 38.0003 37.292 37.6993 37.825 37.1635C38.358 36.6277 38.6574 35.901 38.6574 35.1432C38.6574 34.3855 38.358 33.6588 37.825 33.123C37.292 32.5871 36.5691 32.2861 35.8153 32.2861C35.0616 32.2861 34.3387 32.5871 33.8057 33.123C33.2727 33.6588 32.9732 34.3855 32.9732 35.1432Z'
+      strokeWidth={3}
+      strokeLinecap='round'
+      strokeLinejoin='round'
+      stroke='currentColor'
+    />
+    <path
+      d='M18.7632 35.1426H15.9211V29.4284M14.5 18H30.1316V35.1426M24.4474 35.1426H32.9737M38.6579 35.1426H41.5V26.5713M41.5 26.5713H30.1316M41.5 26.5713L37.2368 19.4286H30.1316M15.9211 23.7142H21.6053'
+      strokeWidth={3}
+      strokeLinecap='round'
+      strokeLinejoin='round'
+      stroke='currentColor'
+    />
+  </svg>
+);
+
+export const RatingIcon = ({ className, circleClassName }: IconProps & { circleClassName?: string }) => (
+  <svg width={57} height={56} viewBox='0 0 57 56' fill='none' xmlns='http://www.w3.org/2000/svg' className={className}>
+    <circle cx='28.5' cy={28} r='26.5' stroke='currentColor' strokeWidth={3} className={circleClassName} />
+    <path
+      d='M28.5 22.7024L29.9315 27.4051H34.2262L30.7692 29.8547L32.1855 34.4061L28.5 31.6238L24.8145 34.4061L26.2308 29.8547L22.7738 27.4051H27.0685L28.5 22.7024ZM24.8145 24.3808H18.0223C16.5451 24.3808 15.9359 26.271 17.139 27.1178L22.6824 31.0492L20.5047 38.02C20.063 39.4263 21.7078 40.5604 22.8804 39.6682L28.5 35.4343L34.1196 39.6833C35.2922 40.5755 36.937 39.4414 36.4953 38.0351L34.3176 31.0643L39.861 27.1329C41.0641 26.271 40.4549 24.396 38.9777 24.396H32.1855L29.9468 17.0774C29.5051 15.6409 27.4644 15.6409 27.038 17.0774L24.8145 24.3808Z'
+      fill='currentColor'
+    />
+  </svg>
+);
+
+export const VoucherIcon = ({ className }: IconProps) => (
+  <svg viewBox='0 0 20 16' fill='none' xmlns='http://www.w3.org/2000/svg' className={className}>
+    <path
+      d='M12.8 4L14 5.2L7.2 12L6 10.8L12.8 4ZM2 0H18C19.11 0 20 0.89 20 2V6C19.4696 6 18.9609 6.21071 18.5858 6.58579C18.2107 6.96086 18 7.46957 18 8C18 8.53043 18.2107 9.03914 18.5858 9.41421C18.9609 9.78929 19.4696 10 20 10V14C20 15.11 19.11 16 18 16H2C1.46957 16 0.960859 15.7893 0.585786 15.4142C0.210714 15.0391 0 14.5304 0 14V10C1.11 10 2 9.11 2 8C2 7.46957 1.78929 6.96086 1.41421 6.58579C1.03914 6.21071 0.530433 6 0 6V2C0 1.46957 0.210714 0.960859 0.585786 0.585786C0.960859 0.210714 1.46957 0 2 0ZM2 2V4.54C2.60768 4.8904 3.11236 5.39466 3.46325 6.00205C3.81415 6.60944 3.9989 7.29854 3.9989 8C3.9989 8.70146 3.81415 9.39056 3.46325 9.99795C3.11236 10.6053 2.60768 11.1096 2 11.46V14H18V11.46C17.3923 11.1096 16.8876 10.6053 16.5367 9.99795C16.1858 9.39056 16.0011 8.70146 16.0011 8C16.0011 7.29854 16.1858 6.60944 16.5367 6.00205C16.8876 5.39466 17.3923 4.8904 18 4.54V2H2ZM7.5 4C8.33 4 9 4.67 9 5.5C9 6.33 8.33 7 7.5 7C6.67 7 6 6.33 6 5.5C6 4.67 6.67 4 7.5 4ZM12.5 9C13.33 9 14 9.67 14 10.5C14 11.33 13.33 12 12.5 12C11.67 12 11 11.33 11 10.5C11 9.67 11.67 9 12.5 9Z'
+      fill='#1982F9'
+    />
+  </svg>
+);
+
+export const TicketIcon = ({ className }: IconProps) => (
   <svg
     xmlns='http://www.w3.org/2000/svg'
     fill='none'
@@ -1432,7 +1540,7 @@ export const LanguageIcon = ({ className }: IconProps) => (
     <path
       strokeLinecap='round'
       strokeLinejoin='round'
-      d='M10.5 21l5.25-11.25L21 21m-9-3h7.5M3 5.621a48.474 48.474 0 016-.371m0 0c1.12 0 2.233.038 3.334.114M9 5.25V3m3.334 2.364C11.176 10.658 7.69 15.08 3 17.502m9.334-12.138c.896.061 1.785.147 2.666.257m-4.589 8.495a18.023 18.023 0 01-3.827-5.802'
+      d='M16.5 6v.75m0 3v.75m0 3v.75m0 3V18m-9-5.25h5.25M7.5 15h3M3.375 5.25c-.621 0-1.125.504-1.125 1.125v3.026a2.999 2.999 0 010 5.198v3.026c0 .621.504 1.125 1.125 1.125h17.25c.621 0 1.125-.504 1.125-1.125v-3.026a2.999 2.999 0 010-5.198V6.375c0-.621-.504-1.125-1.125-1.125H3.375z'
     />
   </svg>
 );

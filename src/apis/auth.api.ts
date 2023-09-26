@@ -1,4 +1,4 @@
-import { AuthResponse, RegisterRequestBody, LoginRequestBody } from 'src/types/auth.type';
+import { AuthResponse, LoginRequestBody, LogoutResponse, RegisterRequestBody } from 'src/types/auth.type';
 import { getRefreshTokenFromLS } from 'src/utils/auth';
 import http from 'src/utils/http';
 
@@ -19,7 +19,7 @@ const authApi = {
   // Đăng xuất
   logout() {
     const refresh_token = getRefreshTokenFromLS();
-    return http.post<{ message: string }>(URL_LOGOUT, { refresh_token });
+    return http.post<LogoutResponse>(URL_LOGOUT, { refresh_token });
   }
 };
 

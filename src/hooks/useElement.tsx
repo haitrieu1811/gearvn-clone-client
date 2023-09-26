@@ -9,6 +9,8 @@ const AuthLayout = lazy(() => import('src/layouts/AuthLayout'));
 const DashboardLayout = lazy(() => import('src/layouts/DashboardLayout'));
 const MainLayout = lazy(() => import('src/layouts/MainLayout'));
 
+const DashboardVoucherList = lazy(() => import('src/pages/admin/VoucherList'));
+const DashboardVoucherCreate = lazy(() => import('src/pages/admin/VoucherCreate'));
 const DashboardBlogCreate = lazy(() => import('src/pages/admin/Blog/Create'));
 const DashboardBlog = lazy(() => import('src/pages/admin/Blog/List'));
 const DashboardBrandCreate = lazy(() => import('src/pages/admin/Brand/Create'));
@@ -382,6 +384,30 @@ const useElement = () => {
           element: (
             <DashboardLayout>
               <DashboardOrderDetail />
+            </DashboardLayout>
+          )
+        },
+        {
+          path: PATH.DASHBOARD_VOUCHER,
+          element: (
+            <DashboardLayout>
+              <DashboardVoucherList />
+            </DashboardLayout>
+          )
+        },
+        {
+          path: PATH.DASHBOARD_VOUCHER_CREATE,
+          element: (
+            <DashboardLayout>
+              <DashboardVoucherCreate />
+            </DashboardLayout>
+          )
+        },
+        {
+          path: PATH.DASHBOARD_VOUCHER_UPDATE,
+          element: (
+            <DashboardLayout>
+              <DashboardVoucherCreate />
             </DashboardLayout>
           )
         }

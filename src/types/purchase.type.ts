@@ -46,6 +46,7 @@ export interface CheckoutRequestBody {
   street: string;
   note?: string;
   transport_fee?: number;
+  total_amount_before_discount: number;
   total_amount: number;
   total_amount_reduced?: number;
   total_items: number;

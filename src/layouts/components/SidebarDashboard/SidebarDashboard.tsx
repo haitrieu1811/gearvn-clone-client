@@ -9,6 +9,7 @@ import {
   LogoutIcon,
   NewspaperIcon,
   ShoppingBagIcon,
+  TicketIcon,
   UserIcon
 } from 'src/components/Icons';
 import PATH from 'src/constants/path';
@@ -53,6 +54,11 @@ const SidebarDashboard = () => {
           path={PATH.DASHBOARD_ORDER}
           icon={<CheckoutIcon className='w-4 h-4 text-black' />}
           name='Đơn hàng'
+        />
+        <DashboardItem
+          path={PATH.DASHBOARD_VOUCHER}
+          icon={<TicketIcon className='w-4 h-4 text-black' />}
+          name='Voucher'
         />
       </div>
       <div className='py-5 px-6 pl-0'>

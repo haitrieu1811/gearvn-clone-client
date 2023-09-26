@@ -26,3 +26,8 @@ export interface LoginRequestBody {
   email: string;
   password: string;
 }
+
+// Response: Đăng xuất
+export type LogoutResponse = SuccessResponse<{
+  user_id: string;
+}>;

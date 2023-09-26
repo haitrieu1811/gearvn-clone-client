@@ -14,33 +14,34 @@ interface PaymentProgressItemProps {
     circleClassName?: string;
     pathClassName?: string;
   }) => JSX.Element;
+  border?: boolean;
 }
 
-const PaymentProgressItem = ({ isActive, icon, name }: PaymentProgressItemProps) => {
+const PaymentProgressItem = ({ isActive, icon, name, border = true }: PaymentProgressItemProps) => {
   const Icon = icon;
-
   return (
     <div className='flex justify-center flex-col flex-1'>
       <div
-        className={classNames(
-          'relative flex justify-center before:absolute before:top-1/2 before:right-1/2 before:-translate-y-1/2 before:w-full before:h-[2px] before:border-t',
-          {
-            'before:border-dashed before:border-[#6b6868]': !isActive,
-            'before:border-solid before:border-primary': isActive
-          }
-        )}
+        className={classNames('relative flex justify-center', {
+          'before:absolute before:top-1/2 before:right-1/2 before:-translate-y-1/2 before:w-full before:h-[2px] before:border-t':
+            border,
+          'before:border-dashed before:border-[#6b6868]': !isActive,
+          'before:border-solid before:border-primary': isActive
+        })}
       >
-        <Icon
-          className={classNames('w-7 h-7 relative z-10', {
-            'fill-primary': isActive
-          })}
-          circleClassName={classNames('', {
-            'stroke-primary': isActive
-          })}
-          pathClassName={classNames('', {
-            'fill-white': isActive
-          })}
-        />
+        <div className='relative z-10'>
+          <Icon
+            className={classNames('w-7 h-7 relative z-10', {
+              'fill-primary': isActive
+            })}
+            circleClassName={classNames('', {
+              'stroke-primary': isActive
+            })}
+            pathClassName={classNames('', {
+              'fill-white': isActive
+            })}
+          />
+        </div>
       </div>
       <p
         className={classNames('mt-1 text-center text-sm md:text-base', {

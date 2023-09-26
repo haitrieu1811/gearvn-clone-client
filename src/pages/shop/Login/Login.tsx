@@ -15,6 +15,7 @@ import PATH from 'src/constants/path';
 import { AppContext } from 'src/contexts/app.context';
 import { ErrorResponse } from 'src/types/utils.type';
 import { LoginSchema, loginSchema } from 'src/utils/rules';
+import socket from 'src/utils/socket';
 import { isEntityError } from 'src/utils/utils';
 
 type FormData = LoginSchema;
@@ -37,7 +38,8 @@ const Login = () => {
     onSuccess: (data) => {
       setIsAuthenticated(true);
       setProfile(data.data.data.user);
-      toast.success('Đăng nhập thành công');
+      toast.success(data.data.message);
+      socket.emit('login');
     },
     onError: (error) => {
       if (isEntityError<ErrorResponse<FormData>>(error)) {
