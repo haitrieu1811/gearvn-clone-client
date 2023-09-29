@@ -13,7 +13,7 @@ import CONFIG from 'src/constants/config';
 import PATH from 'src/constants/path';
 import useProduct from 'src/hooks/useProduct';
 import { Category } from 'src/types/category.type';
-import ProductSection from './ProductSection';
+import ProductSection from './ProductSection/ProductSection';
 
 const Home = () => {
   const isTablet = useMediaQuery({ maxWidth: CONFIG.TABLET_SCREEN_SIZE });

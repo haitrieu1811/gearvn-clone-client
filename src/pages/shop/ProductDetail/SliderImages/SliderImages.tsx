@@ -27,9 +27,8 @@ const SliderImages = () => {
 
   // Prev slider hình ảnh
   const prevSliderImages = () => {
-    if (indexCurrentImages[0] > 0) {
-      setIndexCurrentImages((prevState) => [prevState[0] - 1, prevState[1] - 1]);
-    }
+    if (indexCurrentImages[0] <= 0) return;
+    setIndexCurrentImages((prevState) => [prevState[0] - 1, prevState[1] - 1]);
   };
 
   // Next slider hình ảnh

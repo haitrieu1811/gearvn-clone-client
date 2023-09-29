@@ -104,7 +104,11 @@ const Register = () => {
                 errorMessage={errors.confirm_password?.message}
                 classNameWrapper='mt-4'
               />
-              <Button classNameWrapper='mt-4' isLoading={registerMutation.isLoading}>
+              <Button
+                classNameWrapper='mt-4'
+                className='bg-primary px-4 py-2 text-white text-sm md:text-base uppercase rounded hover:bg-primary/90 flex items-center justify-center font-medium select-none w-full'
+                isLoading={registerMutation.isLoading}
+              >
                 {t('register_login.register')}
               </Button>
             </form>

@@ -8,8 +8,11 @@ import {
   ExtendedBlog,
   ExtendedBrand,
   ExtendedCategory,
+  ExtendedCustomer,
+  ExtendedOrder,
   ExtendedProduct,
-  ExtendedPurchase
+  ExtendedPurchase,
+  ExtendedVoucher
 } from 'src/types/extended.type';
 import { User } from 'src/types/user.type';
 import { getAccessTokenFromLS, getProfileFromLS } from 'src/utils/auth';
@@ -40,6 +43,12 @@ interface AppContextType {
   setExtendedBlogs: Dispatch<SetStateAction<ExtendedBlog[]>>;
   extendedCartList: ExtendedPurchase[];
   setExtendedCartList: Dispatch<SetStateAction<ExtendedPurchase[]>>;
+  extendedVouchers: ExtendedVoucher[];
+  setExtendedVouchers: Dispatch<SetStateAction<ExtendedVoucher[]>>;
+  extendedOrders: ExtendedOrder[];
+  setExtendedOrders: Dispatch<SetStateAction<ExtendedOrder[]>>;
+  extendedCustomers: ExtendedCustomer[];
+  setExtendedCustomers: Dispatch<SetStateAction<ExtendedCustomer[]>>;
 }
 
 const initialContext: AppContextType = {
@@ -66,7 +75,13 @@ const initialContext: AppContextType = {
   extendedBlogs: [],
   setExtendedBlogs: () => null,
   extendedCartList: [],
-  setExtendedCartList: () => null
+  setExtendedCartList: () => null,
+  extendedVouchers: [],
+  setExtendedVouchers: () => null,
+  extendedOrders: [],
+  setExtendedOrders: () => null,
+  extendedCustomers: [],
+  setExtendedCustomers: () => null
 };
 
 export const AppContext = createContext<AppContextType>(initialContext);
@@ -81,6 +96,9 @@ const AppProvider = ({ children }: { children: ReactNode }) => {
   const [extendedProducts, setExtendedProducts] = useState<ExtendedProduct[]>(initialContext.extendedProducts);
   const [extendedBlogs, setExtendedBlogs] = useState<ExtendedBlog[]>(initialContext.extendedBlogs);
   const [extendedCartList, setExtendedCartList] = useState<ExtendedPurchase[]>(initialContext.extendedCartList);
+  const [extendedVouchers, setExtendedVouchers] = useState<ExtendedVoucher[]>(initialContext.extendedVouchers);
+  const [extendedOrders, setExtendedOrders] = useState<ExtendedOrder[]>(initialContext.extendedOrders);
+  const [extendedCustomers, setExtendedCustomers] = useState<ExtendedCustomer[]>(initialContext.extendedCustomers);
 
   // Reset auth (logout)
   const reset = () => {
@@ -158,7 +176,13 @@ const AppProvider = ({ children }: { children: ReactNode }) => {
         extendedBlogs,
         setExtendedBlogs,
         extendedCartList,
-        setExtendedCartList
+        setExtendedCartList,
+        extendedVouchers,
+        setExtendedVouchers,
+        extendedOrders,
+        setExtendedOrders,
+        extendedCustomers,
+        setExtendedCustomers
       }}
     >
       {children}

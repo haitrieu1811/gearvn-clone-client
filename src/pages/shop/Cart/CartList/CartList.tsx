@@ -1,6 +1,5 @@
 import { useMutation } from '@tanstack/react-query';
 import classNames from 'classnames';
-import { produce } from 'immer';
 import keyBy from 'lodash/keyBy';
 import { ChangeEvent, Fragment, useContext, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
@@ -10,7 +9,6 @@ import purchaseApi from 'src/apis/purchase.api';
 import voucherApi from 'src/apis/voucher.api';
 import Button from 'src/components/Button';
 import CartItem from 'src/components/CartItem';
-import FloatLoading from 'src/components/FloatLoading';
 import { CaretDownIcon, VoucherIcon } from 'src/components/Icons';
 import Input from 'src/components/Input';
 import Loading from 'src/components/Loading';
@@ -67,41 +65,54 @@ const CartList = () => {
   });
 
   // Thay đổi số lượng
-  const handleChangeQuantity = ({ cartItemIndex, value }: { cartItemIndex: number; value: number }) => {
-    const cartItem = extendedCartList[cartItemIndex];
-    setExtendedCartList(
-      produce((draft) => {
-        draft[cartItemIndex].disabled = true;
+  const handleChangeQuantity = ({ purchaseId, value }: { purchaseId: string; value: number }) => {
+    setExtendedCartList((prevState) =>
+      prevState.map((cartItem) => {
+        if (cartItem._id === purchaseId) {
+          return {
+            ...cartItem,
+            disabled: true
+          };
+        }
+        return cartItem;
       })
     );
-    updatePurchaseMutation.mutate({ purchaseId: cartItem._id, buyCount: value });
+    updatePurchaseMutation.mutate({ purchaseId, buyCount: value });
   };
 
   // Nhập số lượng
-  const handleTypeQuantity = ({ cartItemIndex, value }: { cartItemIndex: number; value: number }) => {
-    setExtendedCartList(
-      produce((draft) => {
-        draft[cartItemIndex].buy_count = value;
+  const handleTypeQuantity = ({ purchaseId, value }: { purchaseId: string; value: number }) => {
+    setExtendedCartList((prevState) =>
+      prevState.map((cartItem) => {
+        if (cartItem._id === purchaseId) {
+          return {
+            ...cartItem,
+            buy_count: value
+          };
+        }
+        return cartItem;
       })
     );
   };
 
   // Check một sản phẩm
-  const chooseToCheckout = ({ cartItemIndex, e }: { cartItemIndex: number; e: ChangeEvent<HTMLInputElement> }) => {
-    setExtendedCartList(
-      produce((draft) => {
-        draft[cartItemIndex].checked = e.target.checked;
-      })
-    );
+  const chooseToCheckout = ({ purchaseId, e }: { purchaseId: string; e: ChangeEvent<HTMLInputElement> }) => {
+    setExtendedCartList((prevState) => {
+      return prevState.map((cartItem) => {
+        if (cartItem._id === purchaseId) {
+          return {
+            ...cartItem,
+            checked: e.target.checked
+          };
+        }
+        return cartItem;
+      });
+    });
   };
 
   // Mutation: Áp dụng voucher
   const applyVoucherMutation = useMutation({
     mutationFn: voucherApi.applyVoucher,
-    onSuccess: (data) => {
-      setTotalReduced(data.data.data.total_reduced);
-      toast.success(data.data.message);
-    },
     onError: () => {
       setTotalReduced(0);
     }
@@ -110,12 +121,36 @@ const CartList = () => {
   // Xử lý áp dụng voucher
   const handleUseVoucher = (e: ChangeEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!voucherCode) return;
-    applyVoucherMutation.mutate({
-      voucher_code: voucherCode,
-      original_price: cartTotal
-    });
+    if (!voucherCode || cartTotal === 0) return;
+    applyVoucherMutation.mutate(
+      {
+        voucher_code: voucherCode,
+        original_price: cartTotal
+      },
+      {
+        onSuccess: (data) => {
+          setTotalReduced(data.data.data.total_reduced);
+          toast.success(data.data.message);
+        }
+      }
+    );
   };
+
+  // Áp dụng voucher khi giá trị giỏ hàng thay đổi
+  useEffect(() => {
+    if (!voucherCode || cartTotal === 0) return;
+    applyVoucherMutation.mutate(
+      {
+        voucher_code: voucherCode,
+        original_price: cartTotal
+      },
+      {
+        onSuccess: (data) => {
+          setTotalReduced(data.data.data.total_reduced);
+        }
+      }
+    );
+  }, [cartTotal]);
 
   return (
     <Fragment>
@@ -124,10 +159,9 @@ const CartList = () => {
         <Fragment>
           {/* Danh sách sản phẩm mua */}
           <div className='px-2 pt-2'>
-            {extendedCartList.map((cartItem, index) => (
+            {extendedCartList.map((cartItem) => (
               <CartItem
                 key={cartItem._id}
-                index={index}
                 data={cartItem}
                 handleChangeQuantity={handleChangeQuantity}
                 handleTypeQuantity={handleTypeQuantity}
@@ -202,7 +236,9 @@ const CartList = () => {
                     'pointer-events-none opacity-80': checkedCartList.length === 0
                   })}
                 >
-                  <Button>Đặt hàng ngay</Button>
+                  <Button className='bg-primary px-4 py-2 text-white text-sm md:text-base uppercase rounded hover:bg-primary/90 flex items-center justify-center font-medium select-none w-full'>
+                    Đặt hàng ngay
+                  </Button>
                 </Link>
               </div>
             </div>
@@ -229,9 +265,6 @@ const CartList = () => {
           <Loading />
         </div>
       )}
-
-      {/* Float loading */}
-      <FloatLoading isLoading={applyVoucherMutation.isLoading} />
     </Fragment>
   );
 };

@@ -1,7 +1,7 @@
 import { useInfiniteQuery } from '@tanstack/react-query';
 import classNames from 'classnames';
 import moment from 'moment';
-import { FormEvent, Fragment, useContext, useEffect, useState } from 'react';
+import { FormEvent, Fragment, useContext, useEffect, useRef, useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 
 import conversationApi from 'src/apis/conversation.api';
@@ -9,7 +9,7 @@ import { AppContext } from 'src/contexts/app.context';
 import { Conversation, ConversationReceiver } from 'src/types/conversation.type';
 import socket from 'src/utils/socket';
 import { convertMomentFromNowToVietnamese } from 'src/utils/utils';
-import { ChevronDownIcon, ChevronLeftIcon, ConversationIcon, SpinnerIcon, SendMessageIcon } from '../Icons';
+import { ChevronDownIcon, ChevronLeftIcon, ConversationIcon, SendMessageIcon, SpinnerIcon } from '../Icons';
 import Image from '../Image';
 
 interface ChatBoxProps {
@@ -23,6 +23,7 @@ const ChatBox = ({ visible = true, onClose }: ChatBoxProps) => {
   const [currentReceiver, setCurrentReceiver] = useState<ConversationReceiver | null>(null);
   const [conversations, setConversations] = useState<Conversation[]>([]);
   const [message, setMessage] = useState<string>('');
+  const inputRef = useRef<HTMLInputElement>(null);
 
   // Nhận tin nhắn từ socket server và hiển thị lên màn hình
   useEffect(() => {
@@ -76,6 +77,7 @@ const ChatBox = ({ visible = true, onClose }: ChatBoxProps) => {
       return;
     }
     setCurrentReceiver(receiver);
+    inputRef.current?.focus();
   };
 
   // Xử lý gửi tin nhắn
@@ -194,7 +196,7 @@ const ChatBox = ({ visible = true, onClose }: ChatBoxProps) => {
                 {currentReceiver && (
                   <Fragment>
                     {/* Đã nhắn tin từ trước */}
-                    {conversations.length > 0 && (
+                    {conversations.length > 0 && !getConversationsQuery.isLoading && (
                       <div
                         id='scrollableDiv'
                         style={{
@@ -246,21 +248,26 @@ const ChatBox = ({ visible = true, onClose }: ChatBoxProps) => {
                     )}
 
                     {/* Chưa nhắn tin lần nào */}
-                    {conversations.length <= 0 && !getConversationsQuery.isFetching && (
-                      <div className='h-full flex justify-center items-center flex-col'>
-                        <Image src={currentReceiver.avatar} className='w-20 h-20 rounded-full  object-cover' />
-                        <div className='mt-6 text-slate-600 text-sm'>
-                          Bắt đầu trò chuyện với{' '}
-                          <span className='font-semibold text-black'>
-                            {currentReceiver.fullname || `User#${currentReceiver._id.slice(-4)}`}
-                          </span>
-                        </div>
+                    {conversations.length === 0 && (
+                      <div className='h-[450px] flex justify-center items-center flex-col'>
+                        {!getConversationsQuery.isFetching && (
+                          <Fragment>
+                            <Image src={currentReceiver.avatar} className='w-20 h-20 rounded-full object-cover' />
+                            <div className='mt-6 text-slate-600'>
+                              Bắt đầu trò chuyện với{' '}
+                              <span className='font-semibold text-black'>
+                                {currentReceiver.fullname || `User#${currentReceiver._id.slice(-4)}`}
+                              </span>
+                            </div>
+                          </Fragment>
+                        )}
                       </div>
                     )}
 
                     {/* Nhập chat */}
                     <form className='bg-white border-t flex h-[50px]' onSubmit={handleSendMessage}>
                       <input
+                        ref={inputRef}
                         type='text'
                         placeholder='Nhập nội dung tin nhắn'
                         className='w-full py-3 pl-4 pr-1 outline-none text-slate-600'

@@ -107,7 +107,11 @@ const Login = () => {
                   Quên mật khẩu?
                 </Link>
               </p>
-              <Button classNameWrapper='mt-4' isLoading={loginMutation.isLoading}>
+              <Button
+                classNameWrapper='mt-4'
+                className='bg-primary px-4 py-2 text-white text-sm md:text-base uppercase rounded hover:bg-primary/90 flex items-center justify-center font-medium select-none w-full'
+                isLoading={loginMutation.isLoading}
+              >
                 {t('register_login.login')}
               </Button>
             </form>

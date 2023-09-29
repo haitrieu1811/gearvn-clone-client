@@ -100,8 +100,6 @@ const Notification = () => {
     });
   };
 
-  //
-
   return (
     <Tippy
       interactive

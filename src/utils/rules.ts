@@ -1,5 +1,6 @@
 import * as yup from 'yup';
 import REGEX from 'src/constants/regex';
+import { VoucherDiscountUnit } from 'src/constants/enum';
 
 export const userSchema = yup.object({
   email: yup
@@ -95,13 +96,31 @@ export const orderSchema = yup.object({
   customer_gender: yup.string().required('Hãy chọn giới tính'),
   customer_name: userSchema.fields.fullname as yup.StringSchema<string | undefined, yup.AnyObject, undefined, ''>,
   customer_phone: userSchema.fields.phone_number as yup.StringSchema<string | undefined, yup.AnyObject, undefined, ''>,
-  receive_method: yup.number().required('Hãy chọn phương thức nhận hàng'),
+  receive_method: yup.string().required('Hãy chọn phương thức nhận hàng'),
   province: addressSchema.fields.province as yup.StringSchema<string | undefined, yup.AnyObject, undefined, ''>,
   district: addressSchema.fields.district as yup.StringSchema<string | undefined, yup.AnyObject, undefined, ''>,
   ward: addressSchema.fields.ward as yup.StringSchema<string | undefined, yup.AnyObject, undefined, ''>,
   street: addressSchema.fields.street as yup.StringSchema<string | undefined, yup.AnyObject, undefined, ''>,
-  payment_method: yup.number().required('Hãy chọn phương thức thanh toán'),
+  payment_method: yup.string().required('Hãy chọn phương thức thanh toán'),
   note: yup.string().max(250, 'Ghi chú dài tối đa 250 kí tự')
+});
+
+export const voucherSchema = yup.object({
+  code: yup.string().required('Mã giảm giá không được để trống'),
+  discount_unit: yup.string().required('Hãy chọn đơn vị giảm giá'),
+  discount: yup
+    .string()
+    .required('Giá trị giảm giá không được để trống')
+    .test('is-numeric', 'Giá trị giảm giá phải là một số', (value) => !isNaN(Number(value)))
+    .test('is-positive', 'Giá trị giảm giá phải là một số nguyên dương', (value) => Number(value) >= 0)
+    .test(
+      'is-less-than-100-percent',
+      'Giá trị giảm giá phải nhỏ hơn 100 vì đơn vị giảm giá là phần trăm (%)',
+      (value, { parent }) => {
+        const { discount_unit } = parent;
+        return Number(discount_unit) !== VoucherDiscountUnit.Percentage || Number(value) <= 100;
+      }
+    )
 });
 
 export const registerSchema = userSchema.pick(['email', 'password', 'confirm_password']);
@@ -150,3 +169,4 @@ export type AddAddressSchema = yup.InferType<typeof addAddressSchema>;
 export type PaymentOrderSchema = yup.InferType<typeof paymentOrderSchema>;
 export type ForgotPasswordSchema = yup.InferType<typeof forgotPasswordSchema>;
 export type ResetPasswordSchema = yup.InferType<typeof resetPasswordSchema>;
+export type VoucherSchema = yup.InferType<typeof voucherSchema>;

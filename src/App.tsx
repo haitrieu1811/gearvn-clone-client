@@ -3,7 +3,7 @@ import { Fragment, useContext, useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { ToastContainer } from 'react-toastify';
 
-import favicon from './assets/images/favicon.ico';
+import favicon from 'src/assets/images/favicon.ico';
 import { AppContext } from './contexts/app.context';
 import useElement from './hooks/useElement';
 import { localStorageEventTarget } from './utils/auth';

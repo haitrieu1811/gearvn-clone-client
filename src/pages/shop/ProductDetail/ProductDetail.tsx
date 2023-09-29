@@ -134,9 +134,8 @@ const ProductDetail = () => {
 
   // Cuộn đến phần đánh giá
   const handleSeeReviews = () => {
-    if (reviewsRef.current) {
-      reviewsRef.current.scrollIntoView({ behavior: 'smooth' });
-    }
+    if (!reviewsRef.current) return;
+    reviewsRef.current.scrollIntoView({ behavior: 'smooth' });
   };
 
   return (

@@ -45,13 +45,12 @@ const CreateAddress = ({ onSuccess, currentId = null }: CreateAddressProps) => {
 
   // Set giá trị cho form
   useEffect(() => {
-    if (address) {
-      setValue('district', address.district);
-      setValue('province', address.province);
-      setValue('ward', address.ward);
-      setValue('street', address.street);
-      setValue('type', address.type);
-    }
+    if (!address) return;
+    setValue('district', address.district);
+    setValue('province', address.province);
+    setValue('ward', address.ward);
+    setValue('street', address.street);
+    setValue('type', address.type);
   }, [address, setValue]);
 
   // Loại địa chỉ
@@ -83,15 +82,14 @@ const CreateAddress = ({ onSuccess, currentId = null }: CreateAddressProps) => {
 
   // Submit
   const onSubmit = handleSubmit((data) => {
-    if (!Boolean(currentId)) {
+    if (!currentId) {
       addAddressMutation.mutate(data);
     } else {
-      if (address) {
-        updateAddressMutation.mutate({
-          body: data,
-          address_id: address._id
-        });
-      }
+      if (!address) return;
+      updateAddressMutation.mutate({
+        body: data,
+        address_id: address._id
+      });
     }
   });
 
@@ -175,9 +173,10 @@ const CreateAddress = ({ onSuccess, currentId = null }: CreateAddressProps) => {
         {errors.type?.message && <div className='text-sm text-red-500 mt-4'>{errors.type?.message}</div>}
         <Button
           classNameWrapper='mt-6'
-          isLoading={Boolean(currentId) ? updateAddressMutation.isLoading : addAddressMutation.isLoading}
+          isLoading={!!currentId ? updateAddressMutation.isLoading : addAddressMutation.isLoading}
+          className='bg-primary px-4 py-2 text-white text-sm md:text-base uppercase rounded hover:bg-primary/90 flex items-center justify-center font-medium select-none w-full'
         >
-          {Boolean(currentId) ? 'Cập nhật' : 'Thêm mới'}
+          {!!currentId ? 'Cập nhật' : 'Thêm mới'}
         </Button>
       </div>
     </form>

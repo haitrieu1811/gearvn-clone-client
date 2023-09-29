@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { Fragment, ReactNode, useEffect } from 'react';
+import { Fragment, ReactNode, useEffect, memo } from 'react';
 import { createPortal } from 'react-dom';
 
 import { CloseIcon, ExclamationCircleIcon } from '../Icons';
@@ -114,4 +114,4 @@ Modal.propTypes = {
   paddingBody: PropTypes.bool
 };
 
-export default Modal;
+export default memo(Modal);

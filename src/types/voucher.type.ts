@@ -3,12 +3,13 @@ import { Pagination, PaginationRequestParams, SuccessResponse } from './utils.ty
 
 // Type: Voucher
 export interface VoucherType {
-  id: number;
+  _id: string;
   name: string;
   description: string;
   code: string;
   discount: number;
   discount_unit: VoucherDiscountUnit;
+  is_used: boolean;
   created_at: string;
   updated_at: string;
 }

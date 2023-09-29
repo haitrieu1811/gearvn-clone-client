@@ -141,7 +141,12 @@ const CheckoutInfo = () => {
             <div className='text-base md:text-lg font-semibold'>Tổng tiền:</div>
             <div className='text-lg md:text-2xl text-primary font-semibold'>{formatCurrency(totalPayment)}₫</div>
           </div>
-          <Button onClick={nextStep}>Đặt hàng ngay</Button>
+          <Button
+            onClick={nextStep}
+            className='bg-primary px-4 py-2 text-white text-sm md:text-base uppercase rounded hover:bg-primary/90 flex items-center justify-center font-medium select-none w-full'
+          >
+            Đặt hàng ngay
+          </Button>
         </div>
         <p className='text-sm text-[#666666] text-center'>Bạn có thể chọn hình thức thanh toán sau khi đặt hàng</p>
       </form>

@@ -38,6 +38,7 @@ export interface QuantityPerCollection {
   blogs: number;
 }
 
+// Type: Khách hàng
 export interface Customer {
   _id: string;
   email: string;
@@ -89,6 +90,11 @@ export interface ChangePasswordRequestBody {
   old_password: string;
   password: string;
   confirm_password: string;
+}
+
+// Request: Xóa người dùng
+export interface DeleteUsersRequestBody {
+  user_ids: string[];
 }
 
 // Response: Lấy danh sách người dùng

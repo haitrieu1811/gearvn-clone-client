@@ -33,8 +33,8 @@ const voucherApi = {
     return http.put<OnlyMessageResponse>(`/vouchers/${voucherId}`, body);
   },
   // Xóa voucher (xóa một hoặc nhiều voucher)
-  deleteVoucher(voucherIds: string[]) {
-    return http.delete<OnlyMessageResponse>('vouchers', { data: { voucher_ids: voucherIds } });
+  deleteVouchers(voucherIds: string[]) {
+    return http.delete<OnlyMessageResponse>('/vouchers', { data: { voucher_ids: voucherIds } });
   },
   // Áp dụng voucher
   applyVoucher(body: ApplyVoucherRequestBody) {

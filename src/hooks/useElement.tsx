@@ -11,18 +11,18 @@ const MainLayout = lazy(() => import('src/layouts/MainLayout'));
 
 const DashboardVoucherList = lazy(() => import('src/pages/admin/VoucherList'));
 const DashboardVoucherCreate = lazy(() => import('src/pages/admin/VoucherCreate'));
-const DashboardBlogCreate = lazy(() => import('src/pages/admin/Blog/Create'));
-const DashboardBlog = lazy(() => import('src/pages/admin/Blog/List'));
-const DashboardBrandCreate = lazy(() => import('src/pages/admin/Brand/Create'));
-const DashboardBrand = lazy(() => import('src/pages/admin/Brand/List'));
-const DashboardCategoryCreate = lazy(() => import('src/pages/admin/Category/Create'));
-const DashboardCategory = lazy(() => import('src/pages/admin/Category/List'));
+const DashboardBlogCreate = lazy(() => import('src/pages/admin/BlogCreate'));
+const DashboardBlog = lazy(() => import('src/pages/admin/BlogList'));
+const DashboardBrandCreate = lazy(() => import('src/pages/admin/BrandCreate'));
+const DashboardBrand = lazy(() => import('src/pages/admin/BrandList'));
+const DashboardCategoryCreate = lazy(() => import('src/pages/admin/CategoryCreate'));
+const DashboardCategory = lazy(() => import('src/pages/admin/CategoryList'));
 const Dashboard = lazy(() => import('src/pages/admin/Dashboard'));
-const DashboardOrderDetail = lazy(() => import('src/pages/admin/Order/OrderDetail'));
-const DashboardOrderList = lazy(() => import('src/pages/admin/Order/OrderList'));
-const DashboardProductCreate = lazy(() => import('src/pages/admin/Product/Create'));
-const DashboardProduct = lazy(() => import('src/pages/admin/Product/List'));
-const DashboardUser = lazy(() => import('src/pages/admin/User/List'));
+const DashboardOrderDetail = lazy(() => import('src/pages/admin/OrderDetail'));
+const DashboardOrderList = lazy(() => import('src/pages/admin/OrderList'));
+const DashboardProductCreate = lazy(() => import('src/pages/admin/ProductCreate'));
+const DashboardProduct = lazy(() => import('src/pages/admin/ProductList'));
+const DashboardCustomer = lazy(() => import('src/pages/admin/CustomerList'));
 const Account = lazy(() => import('src/pages/shop/Account'));
 const AccountAddress = lazy(() => import('src/pages/shop/Account/Address'));
 const ChangePassword = lazy(() => import('src/pages/shop/Account/ChangePassword'));
@@ -271,7 +271,7 @@ const useElement = () => {
           path: PATH.DASHBOARD_USER,
           element: (
             <DashboardLayout>
-              <DashboardUser />
+              <DashboardCustomer />
             </DashboardLayout>
           )
         },

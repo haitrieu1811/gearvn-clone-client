@@ -64,12 +64,11 @@ const Profile = () => {
 
   // Đặt giá trị mặc định
   useEffect(() => {
-    if (me) {
-      setValue('fullname', me.fullname);
-      setValue('phone_number', me.phone_number);
-      setValue('gender', String(me.gender));
-      setValue('date_of_birth', me.date_of_birth ? new Date(me.date_of_birth) : new Date(1990, 0, 1));
-    }
+    if (!me) return;
+    setValue('fullname', me.fullname);
+    setValue('phone_number', me.phone_number);
+    setValue('gender', String(me.gender));
+    setValue('date_of_birth', me.date_of_birth ? new Date(me.date_of_birth) : new Date(1990, 0, 1));
   }, [me, setValue]);
 
   // Mutation: Cập nhật thông tin tài khoản
@@ -248,9 +247,9 @@ const Profile = () => {
             </div>
             {/* Lưu thay đổi */}
             <div className='grid grid-cols-12 gap-2 md:gap-6 my-4'>
-              <div className='col-span-4 flex items-center justify-end'></div>
+              <div className='col-span-4 flex items-center justify-end' />
               <div className='col-span-12 md:col-span-8'>
-                <div className='w-[120px] h-[28px] md:w-[150px] md:h-[38px] text-xs md:text-sm'>
+                <div className='h-[28px] text-xs md:text-sm'>
                   <Button isLoading={updateMeMutation.isLoading || uploadImageMutation.isLoading}>Lưu thay đổi</Button>
                 </div>
               </div>

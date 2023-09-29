@@ -11,17 +11,15 @@ import { formatCurrency, generateNameId, getImageUrl } from 'src/utils/utils';
 import QuantityController from '../QuantityController';
 
 interface CartItemProps {
-  index: number;
   data: Purchase;
-  handleChangeQuantity: ({ cartItemIndex, value }: { cartItemIndex: number; value: number }) => void;
-  handleTypeQuantity: ({ cartItemIndex, value }: { cartItemIndex: number; value: number }) => void;
-  chooseToCheckout: ({ cartItemIndex, e }: { cartItemIndex: number; e: ChangeEvent<HTMLInputElement> }) => void;
+  handleChangeQuantity: ({ purchaseId, value }: { purchaseId: string; value: number }) => void;
+  handleTypeQuantity: ({ purchaseId, value }: { purchaseId: string; value: number }) => void;
+  chooseToCheckout: ({ purchaseId, e }: { purchaseId: string; e: ChangeEvent<HTMLInputElement> }) => void;
   disabled: boolean;
   checked: boolean;
 }
 
 const CartItem = ({
-  index,
   data,
   handleChangeQuantity,
   handleTypeQuantity,
@@ -57,7 +55,7 @@ const CartItem = ({
         ref={checkBoxRef}
         type='checkbox'
         checked={checked}
-        onChange={(e) => chooseToCheckout({ cartItemIndex: index, e })}
+        onChange={(e) => chooseToCheckout({ purchaseId: data._id, e })}
         className='peer appearance-none absolute'
       />
       <div className='flex justify-between p-2 md:p-6 mb-2 peer-checked:bg-slate-100 cursor-pointer'>
@@ -104,12 +102,12 @@ const CartItem = ({
             <div className='mt-4'>
               <QuantityController
                 value={data.buy_count}
-                onDecrease={(value) => handleChangeQuantity({ cartItemIndex: index, value })}
-                onIncrease={(value) => handleChangeQuantity({ cartItemIndex: index, value })}
-                onType={(value) => handleTypeQuantity({ cartItemIndex: index, value })}
+                onDecrease={(value) => handleChangeQuantity({ purchaseId: data._id, value })}
+                onIncrease={(value) => handleChangeQuantity({ purchaseId: data._id, value })}
+                onType={(value) => handleTypeQuantity({ purchaseId: data._id, value })}
                 onFocusOut={(value) =>
                   handleChangeQuantity({
-                    cartItemIndex: index,
+                    purchaseId: data._id,
                     value
                   })
                 }
@@ -124,7 +122,6 @@ const CartItem = ({
 };
 
 CartItem.propTypes = {
-  index: PropTypes.number.isRequired,
   data: PropTypes.object.isRequired,
   handleChangeQuantity: PropTypes.func.isRequired,
   handleTypeQuantity: PropTypes.func.isRequired,

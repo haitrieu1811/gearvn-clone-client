@@ -3,7 +3,6 @@ import { useContext } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 
-import { toast } from 'react-toastify';
 import purchaseApi from 'src/apis/purchase.api';
 import voucherApi from 'src/apis/voucher.api';
 import CODImage from 'src/assets/images/COD.webp';
@@ -12,6 +11,7 @@ import { PaymentMethod } from 'src/constants/enum';
 import PATH from 'src/constants/path';
 import { AppContext } from 'src/contexts/app.context';
 import { CartContext } from 'src/contexts/cart.context';
+import { CheckoutRequestBody } from 'src/types/purchase.type';
 import { PaymentOrderSchema } from 'src/utils/rules';
 import socket from 'src/utils/socket';
 import { formatCurrency } from 'src/utils/utils';
@@ -28,17 +28,18 @@ const CheckoutProcess = () => {
   const checkoutMutation = useMutation({
     mutationFn: purchaseApi.checkout,
     onSuccess: (data) => {
+      const orderId = data.data.data.order_id;
       getCartQuery?.refetch();
-      toast.success(data.data.message);
       navigate(PATH.CART_CHECKOUT_SUCCESS, {
         state: {
-          order_id: data.data.data.order_id
+          order_id: orderId
         }
       });
       socket.emit('new_order', {
         payload: {
           sender: profile,
           title: 'Có đơn hàng mới',
+          path: `${PATH.DASHBOARD_ORDER_DETAIL_WITHOUT_ID}/${orderId}`,
           content: `<strong>${getValues(
             'customer_name'
           )}</strong> vừa đặt hàng với tổng đơn là <strong>${formatCurrency(cartTotal as number)}₫</strong>`
@@ -55,16 +56,23 @@ const CheckoutProcess = () => {
   const onSubmit = handleSubmit((data) => {
     const purchases = checkedCartList.map((cartItem) => cartItem._id);
     const totalItems = checkedCartList.reduce((acc, cartItem) => acc + cartItem.buy_count, 0);
-    const body = {
-      ...data,
+    const body: CheckoutRequestBody = {
       purchases,
+      customer_name: data.customer_name || '',
+      customer_phone: data.customer_phone || '',
+      province: data.province || '',
+      district: data.district || '',
+      ward: data.ward || '',
+      street: data.street || '',
       customer_gender: Number(data.customer_gender),
+      receive_method: Number(data.receive_method),
+      payment_method: Number(data.payment_method),
       total_amount_before_discount: cartTotal,
       total_amount: totalPayment,
       total_amount_reduced: totalReduced,
       total_items: totalItems
     };
-    checkoutMutation.mutate(body as any);
+    checkoutMutation.mutate(body);
   });
 
   return (
@@ -123,7 +131,11 @@ const CheckoutProcess = () => {
           <div className='text-base md:text-lg font-semibold'>Tổng tiền:</div>
           <div className='text-lg md:text-2xl text-primary font-semibold'>{formatCurrency(totalPayment)}₫</div>
         </div>
-        <Button disabled={checkedCartList.length <= 0} isLoading={checkoutMutation.isLoading}>
+        <Button
+          disabled={checkedCartList.length <= 0}
+          isLoading={checkoutMutation.isLoading}
+          className='bg-primary px-4 py-2 text-white text-sm md:text-base uppercase rounded hover:bg-primary/90 flex items-center justify-center font-medium select-none w-full'
+        >
           Thanh toán ngay
         </Button>
       </div>

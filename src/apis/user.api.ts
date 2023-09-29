@@ -1,6 +1,7 @@
 import { AuthResponse } from 'src/types/auth.type';
 import {
   ChangePasswordRequestBody,
+  DeleteUsersRequestBody,
   GetCustomersResponse,
   GetMeResponse,
   GetQuantityPerCollectionResponse,
@@ -74,6 +75,10 @@ const userApi = {
   // Lấy danh sách khách hàng
   getCustomers(params: PaginationRequestParams) {
     return http.get<GetCustomersResponse>('/users/customers', { params });
+  },
+  // Xóa người dụng
+  deleteUsers(body: DeleteUsersRequestBody) {
+    return http.delete<OnlyMessageResponse>('/users', { data: body });
   }
 };
 

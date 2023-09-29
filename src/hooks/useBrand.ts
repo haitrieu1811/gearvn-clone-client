@@ -10,7 +10,7 @@ type QueryConfig = {
   [key in keyof PaginationRequestParams]: string;
 };
 
-const useBrand = (queryConfig: QueryConfig) => {
+const useBrand = (queryConfig?: QueryConfig) => {
   const _queryConfig: QueryConfig = omitBy(queryConfig, isUndefined);
 
   // Query: Lấy danh sách nhãn hiệu

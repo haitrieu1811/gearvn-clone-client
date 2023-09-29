@@ -5,7 +5,7 @@ import { FormProvider, useForm } from 'react-hook-form';
 import { Link, Outlet, useMatch, useNavigate } from 'react-router-dom';
 
 import { ChevronLeftIcon } from 'src/components/Icons';
-import { Gender, PaymentMethod, ReceiveMethod } from 'src/constants/enum';
+import { PaymentMethod, ReceiveMethod } from 'src/constants/enum';
 import PATH from 'src/constants/path';
 import { AppContext } from 'src/contexts/app.context';
 import CartProvider from 'src/contexts/cart.context';
@@ -27,27 +27,37 @@ const Cart = () => {
   // Form
   const methods = useForm<PaymentOrderSchema>({
     defaultValues: {
-      customer_gender: profile?.gender ? String(profile?.gender) : String(Gender.Male),
-      customer_name: profile?.fullname ? profile?.fullname : '',
-      customer_phone: profile?.phone_number,
+      customer_gender: '',
+      customer_name: '',
+      customer_phone: '',
       province: '',
       district: '',
       ward: '',
       street: '',
-      receive_method: ReceiveMethod.AtHome,
+      receive_method: String(ReceiveMethod.AtHome),
       note: '',
-      payment_method: PaymentMethod.Cash
+      payment_method: String(PaymentMethod.Cash)
     },
     resolver: yupResolver(paymentOrderSchema as any)
   });
 
+  // Lấy các method của form
+  const { setValue } = methods;
+
   // Set giá trị mặc định cho form đặt hàng
   useEffect(() => {
     if (defaultAddress) {
-      methods.setValue('province', defaultAddress.province);
-      methods.setValue('district', defaultAddress.district);
-      methods.setValue('ward', defaultAddress.ward);
-      methods.setValue('street', defaultAddress.street);
+      const { province, district, ward, street } = defaultAddress;
+      setValue('province', province);
+      setValue('district', district);
+      setValue('ward', ward);
+      setValue('street', street);
+    }
+    if (profile) {
+      const { gender, fullname, phone_number } = profile;
+      setValue('customer_gender', String(gender));
+      setValue('customer_name', fullname);
+      setValue('customer_phone', phone_number);
     }
   }, [defaultAddress]);
 

@@ -19,9 +19,9 @@ const OrderDetail = () => {
 
   // Query: Lấy thông tin đơn hàng
   const getOrderDetailQuery = useQuery({
-    queryKey: ['order_detail', order_id],
+    queryKey: ['order', order_id],
     queryFn: () => orderApi.getDetail(order_id as string),
-    enabled: Boolean(order_id)
+    enabled: !!order_id
   });
 
   // Thông tin đơn hàng
