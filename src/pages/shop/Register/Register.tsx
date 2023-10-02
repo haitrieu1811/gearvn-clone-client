@@ -1,7 +1,7 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useMutation } from '@tanstack/react-query';
 import isEmpty from 'lodash/isEmpty';
-import { useContext } from 'react';
+import { Fragment, useContext } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
@@ -56,7 +56,7 @@ const Register = () => {
   });
 
   return (
-    <div className='bg-primary'>
+    <Fragment>
       <Helmet>
         <title>Đăng ký tài khoản</title>
         <meta
@@ -76,52 +76,55 @@ const Register = () => {
         <meta property='og:site_name' content='Đăng ký tài khoản' />
         <meta property='og:type' content='website' />
       </Helmet>
-      <div className='container py-10 md:py-24'>
-        <div className='grid grid-cols-12'>
-          <div className='bg-white p-10 lg:col-start-9 lg:col-span-4 rounded col-span-12 col-start-1 md:col-span-8 md:col-start-3 shadow-sm'>
-            <h2 className='text-2xl capitalize mb-5'>{t('register_login.register')}</h2>
-            <form onSubmit={onSubmit}>
-              <Input
-                type='text'
-                name='email'
-                placeholder={t('register_login.email')}
-                register={register}
-                errorMessage={errors.email?.message}
-              />
-              <Input
-                type='password'
-                name='password'
-                placeholder={t('register_login.password')}
-                register={register}
-                errorMessage={errors.password?.message}
-                classNameWrapper='mt-4'
-              />
-              <Input
-                type='password'
-                name='confirm_password'
-                placeholder={t('register_login.confirm_password')}
-                register={register}
-                errorMessage={errors.confirm_password?.message}
-                classNameWrapper='mt-4'
-              />
-              <Button
-                classNameWrapper='mt-4'
-                className='bg-primary px-4 py-2 text-white text-sm md:text-base uppercase rounded hover:bg-primary/90 flex items-center justify-center font-medium select-none w-full'
-                isLoading={registerMutation.isLoading}
-              >
-                {t('register_login.register')}
-              </Button>
-            </form>
-            <div className='mt-4 text-center'>
-              <span className='text-gray-500'>{t('register_login.already_have_account')}</span>{' '}
-              <Link to={PATH.LOGIN} className='text-blue-700 font-medium'>
-                {t('register_login.login')}
-              </Link>
+
+      <div className='bg-primary'>
+        <div className='container py-10 md:py-24'>
+          <div className='grid grid-cols-12'>
+            <div className='bg-white p-7 md:p-10 lg:col-start-9 lg:col-span-4 rounded col-span-12 col-start-1 md:col-span-8 md:col-start-3 shadow-sm'>
+              <h2 className='text-xl md:text-2xl capitalize mb-5'>{t('register_login.register')}</h2>
+              <form onSubmit={onSubmit}>
+                <Input
+                  type='text'
+                  name='email'
+                  placeholder={t('register_login.email')}
+                  register={register}
+                  errorMessage={errors.email?.message}
+                />
+                <Input
+                  type='password'
+                  name='password'
+                  placeholder={t('register_login.password')}
+                  register={register}
+                  errorMessage={errors.password?.message}
+                  classNameWrapper='mt-4'
+                />
+                <Input
+                  type='password'
+                  name='confirm_password'
+                  placeholder={t('register_login.confirm_password')}
+                  register={register}
+                  errorMessage={errors.confirm_password?.message}
+                  classNameWrapper='mt-4'
+                />
+                <Button
+                  classNameWrapper='mt-4'
+                  className='bg-primary px-4 py-2 text-white text-sm md:text-base uppercase rounded hover:bg-primary/90 flex items-center justify-center font-medium select-none w-full'
+                  isLoading={registerMutation.isLoading}
+                >
+                  {t('register_login.register')}
+                </Button>
+              </form>
+              <div className='mt-4 text-center'>
+                <span className='text-gray-500 text-sm md:text-base'>{t('register_login.already_have_account')}</span>{' '}
+                <Link to={PATH.LOGIN} className='text-blue-700 font-medium text-sm md:text-base'>
+                  {t('register_login.login')}
+                </Link>
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
+    </Fragment>
   );
 };
 

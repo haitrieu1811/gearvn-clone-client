@@ -7,6 +7,7 @@ import 'react-toastify/dist/ReactToastify.css';
 
 import App from './App.tsx';
 import ErrorBoundary from './components/ErrorBoundary';
+import Loading from './components/Loading/Loading.tsx';
 import ScrollToTop from './components/ScrollToTop';
 import AppProvider from './contexts/app.context.tsx';
 import './i18n/i18n.ts';
@@ -25,7 +26,13 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
   // <React.StrictMode>
   <QueryClientProvider client={queryClient}>
     <BrowserRouter>
-      <Suspense>
+      <Suspense
+        fallback={
+          <div className='flex justify-center items-center h-screen bg-white'>
+            <Loading />
+          </div>
+        }
+      >
         <HelmetProvider>
           <AppProvider>
             <ErrorBoundary>

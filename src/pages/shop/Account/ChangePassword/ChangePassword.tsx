@@ -79,6 +79,7 @@ const ChangePassword = () => {
         <meta property='og:site_name' content='Đổi mật khẩu' />
         <meta property='og:type' content='website' />
       </Helmet>
+
       <form onSubmit={onSubmit}>
         <h2 className='py-4 px-2 md:px-6 text-xl md:text-2xl font-semibold'>Đổi mật khẩu</h2>
         <div className='px-2 md:px-4 py-4 lg:pl-6 lg:pr-[200px] min-h-[340px]'>
@@ -140,9 +141,7 @@ const ChangePassword = () => {
           <div className='grid grid-cols-12 gap-2 md:gap-6 my-6'>
             <div className='col-span-4 flex items-center justify-end'></div>
             <div className='col-span-12 md:col-span-8'>
-              <div className='w-[120px] h-[28px] md:w-[150px] md:h-[38px] text-xs md:text-sm'>
-                <Button isLoading={changePasswordMutation.isLoading}>Đổi mật khẩu</Button>
-              </div>
+              <Button isLoading={changePasswordMutation.isLoading}>Đổi mật khẩu</Button>
             </div>
           </div>
         </div>

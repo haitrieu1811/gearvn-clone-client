@@ -1,8 +1,8 @@
 import { useQuery } from '@tanstack/react-query';
+import moment from 'moment';
 import PropTypes from 'prop-types';
 import { Fragment, useContext, useEffect, useMemo } from 'react';
 
-import moment from 'moment';
 import productApi from 'src/apis/product.api';
 import { ProductDetailContext } from 'src/pages/shop/ProductDetail/ProductDetail';
 import socket from 'src/utils/socket';
@@ -24,7 +24,7 @@ const ProductReviewList = ({ productId }: ProductReviewListProps) => {
     });
   }, []);
 
-  // Lấy danh sách đánh giá sản phẩm
+  // Query: Lấy danh sách đánh giá sản phẩm
   const getReviewsQuery = useQuery({
     queryKey: ['reviews', productId],
     queryFn: () => productApi.getReviews(productId)
@@ -42,7 +42,7 @@ const ProductReviewList = ({ productId }: ProductReviewListProps) => {
   return (
     <Fragment>
       {reviews && reviews.length > 0 && !getReviewsQuery.isLoading && (
-        <div>
+        <Fragment>
           {reviews.map((review) => (
             <div key={review._id} className='border-b mt-4 pb-4'>
               <div className='flex justify-between items-center mb-2'>
@@ -94,7 +94,7 @@ const ProductReviewList = ({ productId }: ProductReviewListProps) => {
               </div>
             </div>
           ))}
-        </div>
+        </Fragment>
       )}
       {/* Loading */}
       {getReviewsQuery.isLoading && <Loading />}

@@ -1,11 +1,11 @@
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 
+import fallbackImage from 'src/assets/images/product-fallback.png';
 import PATH from 'src/constants/path';
 import { Product } from 'src/types/product.type';
 import { formatCurrency, generateNameId, rateSale } from 'src/utils/utils';
 import Image from '../Image';
-import fallbackImage from 'src/assets/images/product-fallback.png';
 
 interface ProductItemProps {
   data: Product;
@@ -37,12 +37,10 @@ const ProductItem = ({ data }: ProductItemProps) => {
           </Link>
         </div>
         {data.price > data.price_after_discount && (
-          <div className='text-[#6D6E72] text-[13px] line-through'>{formatCurrency(data.price)}₫</div>
+          <div className='text-[#6D6E72] text-xs line-through'>{formatCurrency(data.price)}₫</div>
         )}
         <div className='flex items-center'>
-          <div className='text-primary text-sm md:text-base font-semibold'>
-            {formatCurrency(data.price_after_discount)}₫
-          </div>
+          <div className='text-primary text-sm font-semibold'>{formatCurrency(data.price_after_discount)}₫</div>
           {rateSale(data.price, data.price_after_discount) > 0 && (
             <span className='border rounded-sm border-primary px-1 bg-[#FFEDED] text-[10px] md:text-[13px] text-primary ml-[10px] font-medium'>
               -{rateSale(data.price, data.price_after_discount)}%

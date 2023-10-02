@@ -37,16 +37,14 @@ const PreviewImages = ({ images, isVisible, onClose }: PreviewImagesProps) => {
 
   // Prev hình ảnh
   const handlePrev = () => {
-    if (currentIndex > 0) {
-      setCurrentIndex((prevState) => prevState - 1);
-    }
+    if (currentIndex === 0) return;
+    setCurrentIndex((prevState) => prevState - 1);
   };
 
   // Next hình ảnh
   const handleNext = () => {
-    if (currentIndex < images.length - 1) {
-      setCurrentIndex((prevState) => prevState + 1);
-    }
+    if (currentIndex === images.length - 1) return;
+    setCurrentIndex((prevState) => prevState + 1);
   };
 
   return createPortal(
@@ -92,7 +90,7 @@ const PreviewImages = ({ images, isVisible, onClose }: PreviewImagesProps) => {
           </button>
           {/* Thao tác với ảnh */}
           <div className='absolute bottom-4 left-1/2 -translate-x-1/2'>
-            <div className='mb-5 text-white font-semibold bg-black/50 py-2 px-4 rounded-full'>
+            <div className='mb-5 text-white text-sm md:text-base font-semibold bg-black/50 py-2 px-4 rounded-full'>
               {currentIndex + 1} / {images.length}
             </div>
           </div>

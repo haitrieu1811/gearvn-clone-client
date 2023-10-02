@@ -125,18 +125,18 @@ const VoucherList = () => {
   }, [extendedVouchers, navigate]);
 
   return (
-    <div>
-      <Table
-        data={extendedVouchers}
-        setData={setExtendedVouchers}
-        pageSize={pageSize}
-        isLoading={getVouchersQuery.isLoading}
-        updateItemPath={PATH.DASHBOARD_VOUCHER_UPDATE_WITHOUT_ID}
-        onDelete={(voucherIds) => deleteVouchersMutation.mutate(voucherIds)}
-        columns={columns}
-        dataSource={dataSource}
-      />
-    </div>
+    <Table
+      data={extendedVouchers}
+      setData={setExtendedVouchers}
+      pageSize={pageSize}
+      isLoading={getVouchersQuery.isLoading}
+      updateItemPath={PATH.DASHBOARD_VOUCHER_UPDATE_WITHOUT_ID}
+      onDelete={(voucherIds) => deleteVouchersMutation.mutate(voucherIds)}
+      columns={columns}
+      dataSource={dataSource}
+      tableName='Danh sách voucher'
+      addNewPath={PATH.DASHBOARD_VOUCHER_CREATE}
+    />
   );
 };
 

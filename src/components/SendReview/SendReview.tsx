@@ -1,7 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
-import { Fragment, useContext, useEffect, useMemo, useState } from 'react';
+import { Fragment, useContext, useEffect, useMemo, useState, memo } from 'react';
 import { useMediaQuery } from 'react-responsive';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
@@ -335,4 +335,4 @@ SendReview.propTypes = {
   product: PropTypes.object.isRequired
 };
 
-export default SendReview;
+export default memo(SendReview);

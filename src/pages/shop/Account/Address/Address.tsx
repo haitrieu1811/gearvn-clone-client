@@ -207,7 +207,7 @@ const Address = () => {
         onCancel={stopDelete}
         onOk={handleDeleteAddress}
       >
-        <div className='text-center text-slate-600'>
+        <div className='text-center text-slate-600 text-sm md:text-base'>
           <div>Bạn có chắc muốn xóa địa chỉ này</div>
           <div className='my-2'>khỏi danh sách địa chỉ nhận hàng của bạn ?</div>
           <div className='font-semibold text-red-500 underline'>Địa chỉ này sẽ bị xóa vĩnh viễn</div>

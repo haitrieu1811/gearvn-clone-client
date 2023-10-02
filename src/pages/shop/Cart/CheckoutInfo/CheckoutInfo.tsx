@@ -30,9 +30,9 @@ const CheckoutInfo = () => {
   });
 
   return (
-    <div className='p-6'>
+    <div className='py-6 px-4 md:p-6'>
       <form onSubmit={nextStep}>
-        <h3 className='text-lg font-semibold mb-2'>Thông tin khách mua hàng</h3>
+        <h3 className='md:text-lg font-semibold mb-2'>Thông tin khách mua hàng</h3>
         {/* Xưng hô */}
         <div className='flex items-center mt-2 mb-4'>
           <div className='flex items-center'>
@@ -43,7 +43,7 @@ const CheckoutInfo = () => {
               value={Gender.Male}
               {...register('customer_gender')}
             />
-            <label htmlFor='male' className='ml-2'>
+            <label htmlFor='male' className='text-sm md:text-base ml-2'>
               Anh
             </label>
           </div>
@@ -55,7 +55,7 @@ const CheckoutInfo = () => {
               value={Gender.Female}
               {...register('customer_gender')}
             />
-            <label htmlFor='female' className='ml-2'>
+            <label htmlFor='female' className='text-sm md:text-base ml-2'>
               Chị
             </label>
           </div>
@@ -80,7 +80,7 @@ const CheckoutInfo = () => {
           </div>
         </div>
         {/* Phương thức nhận hàng */}
-        <h3 className='text-lg font-semibold mb-2'>Chọn cách nhận hàng</h3>
+        <h3 className='md:text-lg font-semibold mb-2'>Chọn cách nhận hàng</h3>
         <div className='mt-2 mb-4 flex items-center'>
           <input
             type='radio'
@@ -89,12 +89,12 @@ const CheckoutInfo = () => {
             value={ReceiveMethod.AtHome}
             {...register('receive_method')}
           />
-          <label htmlFor='receive-at-home' className='ml-2'>
+          <label htmlFor='receive-at-home' className='text-sm md:text-base ml-2'>
             Giao hàng tận nơi
           </label>
         </div>
         {/* Địa chỉ */}
-        <div className='bg-[#ECECEC] p-6 rounded mb-6'>
+        <div className='bg-[#ECECEC] p-3 md:p-6 rounded mb-6'>
           <div className='grid grid-cols-12 gap-4'>
             <div className='col-span-6'>
               <Input
@@ -128,7 +128,7 @@ const CheckoutInfo = () => {
         {/* Yêu cầu khác */}
         <Input type='text' placeholder='Lưu ý, yêu cầu khác (Không bắt buộc)' name='note' register={register} />
         {/* Thông tin thanh toán */}
-        <div className='px-4 py-6 mt-6 md:p-6 md:pb-3 bg-white border-t border-[#cfcfcf]'>
+        <div className='md:px-4 py-6 mt-6 md:p-6 md:pb-3 bg-white border-t border-[#cfcfcf]'>
           <div className='flex justify-between items-center mb-2'>
             <div className='text-sm md:text-base font-semibold'>Phí vận chuyển:</div>
             <div className='text-sm md:text-base font-semibold'>Miễn phí</div>
@@ -148,7 +148,9 @@ const CheckoutInfo = () => {
             Đặt hàng ngay
           </Button>
         </div>
-        <p className='text-sm text-[#666666] text-center'>Bạn có thể chọn hình thức thanh toán sau khi đặt hàng</p>
+        <p className='text-xs md:text-sm text-[#666666] text-center'>
+          Bạn có thể chọn hình thức thanh toán sau khi đặt hàng
+        </p>
       </form>
     </div>
   );

@@ -1421,7 +1421,7 @@ export const SearchMinusIcon = ({ className }: IconProps) => (
 );
 
 export const OrderedIcon = ({ className, circleClassName }: IconProps & { circleClassName?: string }) => (
-  <svg width={56} height={56} viewBox='0 0 57 56' fill='none' xmlns='http://www.w3.org/2000/svg' className={className}>
+  <svg viewBox='0 0 57 56' fill='none' xmlns='http://www.w3.org/2000/svg' className={className}>
     <circle cx='28.5' cy={28} r='26.5' strokeWidth={3} className={circleClassName} />
     <path
       d='M19.1667 29.3333V18.6667C19.1667 17.9594 19.4476 17.2811 19.9477 16.781C20.4478 16.281 21.1261 16 21.8333 16H37.8333C38.5406 16 39.2189 16.281 39.719 16.781C40.219 17.2811 40.5 17.9594 40.5 18.6667V36C40.5 37.3333 39.7 40 36.5 40M36.5 40H20.5C19.1667 40 16.5 39.2 16.5 36V33.3333H32.5V36C32.5 39.2 35.1667 40 36.5 40ZM24.5 21.3333H35.1667M24.5 26.6667H29.8333'
@@ -1434,15 +1434,7 @@ export const OrderedIcon = ({ className, circleClassName }: IconProps & { circle
 );
 
 export const WaitProcessingIcon = ({ className, circleClassName }: IconProps & { circleClassName?: string }) => (
-  <svg
-    width={56}
-    height={56}
-    viewBox='0 0 56 56'
-    fill='none'
-    stroke='currentColor'
-    xmlns='http://www.w3.org/2000/svg'
-    className={className}
-  >
+  <svg viewBox='0 0 56 56' fill='none' stroke='currentColor' xmlns='http://www.w3.org/2000/svg' className={className}>
     <circle cx={28} cy={28} r='26.5' strokeWidth={3} className={circleClassName} />
     <mask
       id='mask0_7525_18447'
@@ -1482,15 +1474,7 @@ export const WaitProcessingIcon = ({ className, circleClassName }: IconProps & {
 );
 
 export const DeliveringIcon = ({ className, circleClassName }: IconProps & { circleClassName?: string }) => (
-  <svg
-    width={56}
-    height={56}
-    viewBox='0 0 56 56'
-    fill='none'
-    stroke='currentColor'
-    xmlns='http://www.w3.org/2000/svg'
-    className={className}
-  >
+  <svg viewBox='0 0 56 56' fill='none' stroke='currentColor' xmlns='http://www.w3.org/2000/svg' className={className}>
     <circle cx={28} cy={28} r='26.5' strokeWidth={3} className={circleClassName} />
     <path
       d='M18.7627 35.1432C18.7627 35.901 19.0621 36.6277 19.5951 37.1635C20.1281 37.6993 20.851 38.0003 21.6048 38.0003C22.3586 38.0003 23.0815 37.6993 23.6145 37.1635C24.1475 36.6277 24.4469 35.901 24.4469 35.1432C24.4469 34.3855 24.1475 33.6588 23.6145 33.123C23.0815 32.5871 22.3586 32.2861 21.6048 32.2861C20.851 32.2861 20.1281 32.5871 19.5951 33.123C19.0621 33.6588 18.7627 34.3855 18.7627 35.1432ZM32.9732 35.1432C32.9732 35.901 33.2727 36.6277 33.8057 37.1635C34.3387 37.6993 35.0616 38.0003 35.8153 38.0003C36.5691 38.0003 37.292 37.6993 37.825 37.1635C38.358 36.6277 38.6574 35.901 38.6574 35.1432C38.6574 34.3855 38.358 33.6588 37.825 33.123C37.292 32.5871 36.5691 32.2861 35.8153 32.2861C35.0616 32.2861 34.3387 32.5871 33.8057 33.123C33.2727 33.6588 32.9732 34.3855 32.9732 35.1432Z'
@@ -1510,7 +1494,7 @@ export const DeliveringIcon = ({ className, circleClassName }: IconProps & { cir
 );
 
 export const RatingIcon = ({ className, circleClassName }: IconProps & { circleClassName?: string }) => (
-  <svg width={57} height={56} viewBox='0 0 57 56' fill='none' xmlns='http://www.w3.org/2000/svg' className={className}>
+  <svg viewBox='0 0 57 56' fill='none' xmlns='http://www.w3.org/2000/svg' className={className}>
     <circle cx='28.5' cy={28} r='26.5' stroke='currentColor' strokeWidth={3} className={circleClassName} />
     <path
       d='M28.5 22.7024L29.9315 27.4051H34.2262L30.7692 29.8547L32.1855 34.4061L28.5 31.6238L24.8145 34.4061L26.2308 29.8547L22.7738 27.4051H27.0685L28.5 22.7024ZM24.8145 24.3808H18.0223C16.5451 24.3808 15.9359 26.271 17.139 27.1178L22.6824 31.0492L20.5047 38.02C20.063 39.4263 21.7078 40.5604 22.8804 39.6682L28.5 35.4343L34.1196 39.6833C35.2922 40.5755 36.937 39.4414 36.4953 38.0351L34.3176 31.0643L39.861 27.1329C41.0641 26.271 40.4549 24.396 38.9777 24.396H32.1855L29.9468 17.0774C29.5051 15.6409 27.4644 15.6409 27.038 17.0774L24.8145 24.3808Z'

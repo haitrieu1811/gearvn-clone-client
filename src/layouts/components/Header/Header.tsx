@@ -1,4 +1,4 @@
-import { Fragment, memo, useState } from 'react';
+import { Fragment, useState } from 'react';
 import { useMediaQuery } from 'react-responsive';
 import { Link, useNavigate } from 'react-router-dom';
 
@@ -134,7 +134,7 @@ const Header = () => {
             </Link>
             <Search />
             <Link
-              to={PATH.CART}
+              to={PATH.CART_LIST}
               className='w-9 h-9 bg-[#BE1529] flex justify-center items-center rounded flex-shrink-0 ml-2'
             >
               <Cart cartSize={cartSize} />
@@ -149,4 +149,4 @@ const Header = () => {
   );
 };
 
-export default memo(Header);
+export default Header;

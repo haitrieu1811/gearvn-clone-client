@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import PropTypes from 'prop-types';
-import { ChangeEvent, useRef } from 'react';
+import { ChangeEvent, memo, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
@@ -30,7 +30,7 @@ const CartItem = ({
   const queryClient = useQueryClient();
   const checkBoxRef = useRef<HTMLInputElement>(null);
 
-  // Xóa sản phẩm khỏi giỏ hàng
+  // Mutation: Xóa sản phẩm khỏi giỏ hàng
   const deletePurchaseMutation = useMutation({
     mutationFn: purchaseApi.delete,
     onSuccess: (data) => {
@@ -46,7 +46,8 @@ const CartItem = ({
 
   // Chọn sản phẩm để mua
   const chooseToBuy = () => {
-    if (checkBoxRef) checkBoxRef.current?.click();
+    if (!checkBoxRef) return;
+    checkBoxRef.current?.click();
   };
 
   return (
@@ -59,8 +60,8 @@ const CartItem = ({
         className='peer appearance-none absolute'
       />
       <div className='flex justify-between p-2 md:p-6 mb-2 peer-checked:bg-slate-100 cursor-pointer'>
-        <div className='w-[70px] md:w-[90px]'>
-          <div className='border border-[#ececec] rounded-sm'>
+        <div className='w-[90px] flex flex-col items-center'>
+          <div className='border border-[#ececec] rounded-sm w-[60px] h-[60px] md:w-[90px] md:h-[90px]'>
             <Link
               to={`${PATH.PRODUCT_DETAIL_WITHOUT_ID}/${generateNameId({
                 name: data.product.name_vi,
@@ -70,21 +71,24 @@ const CartItem = ({
               <img
                 src={getImageUrl(data.product.thumbnail)}
                 alt={data.product.name_vi}
-                className='w-[60px] h-[60px] md:w-[90px] md:h-[90px] object-cover'
+                className='w-full h-full object-cover'
               />
             </Link>
           </div>
           <div className='flex justify-center items-center mt-3'>
-            <button onClick={chooseToBuy} className='text-[#6D6E72] text-xs font-medium'>
+            <button onClick={chooseToBuy} className='text-[#6D6E72] text-[10px] md:text-xs font-medium'>
               {!checked ? 'Chọn' : 'Bỏ chọn'}
             </button>
             <div className='w-[1px] h-3 bg-slate-400 mx-[6px]' />
-            <button onClick={() => handleDelete(data._id)} className='text-[#6D6E72] text-xs font-medium'>
+            <button
+              onClick={() => handleDelete(data._id)}
+              className='text-[#6D6E72] text-[10px] md:text-xs font-medium'
+            >
               Xóa
             </button>
           </div>
         </div>
-        <div className='flex-1 flex justify-between items-start pl-4'>
+        <div className='flex-1 flex justify-between items-start pl-2 md:pl-4'>
           <Link
             to={`${PATH.PRODUCT_DETAIL_WITHOUT_ID}/${generateNameId({
               name: data.product.name_vi,
@@ -130,4 +134,4 @@ CartItem.propTypes = {
   checked: PropTypes.bool.isRequired
 };
 
-export default CartItem;
+export default memo(CartItem);

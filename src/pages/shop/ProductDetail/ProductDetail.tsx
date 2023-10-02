@@ -117,10 +117,9 @@ const ProductDetail = () => {
 
   // Mua ngay
   const buyNow = async () => {
-    if (product) {
-      const res = await addToCartMutation.mutateAsync({ productId: product._id, buyCount });
-      navigate(PATH.CART_LIST, { state: { cartItemId: res.data.data.purchase_id } });
-    }
+    if (!product) return;
+    const res = await addToCartMutation.mutateAsync({ productId: product._id, buyCount });
+    navigate(PATH.CART_LIST, { state: { cartItemId: res.data.data.purchase_id } });
   };
 
   // Danh sách blog
@@ -186,7 +185,7 @@ const ProductDetail = () => {
               </div>
               {/* Thông tin sản phẩm */}
               <div className='flex-1 p-2 py-6 lg:p-6 lg:border-l'>
-                <h1 className='font-semibold text-[20px] md:text-2xl mb-2'>{product.name_vi}</h1>
+                <h1 className='font-semibold text-xl md:text-2xl mb-2'>{product.name_vi}</h1>
                 <div className='flex items-center mb-4'>
                   <div className='flex items-center mr-4'>
                     <span className='text-[#ff8a00] font-semibold mr-[2px]'>
@@ -194,12 +193,12 @@ const ProductDetail = () => {
                     </span>
                     <StarIcon className='w-3 h-3 text-[#ff8a00]' />
                   </div>
-                  <button type='button' className='text-[#1982F9]' onClick={handleSeeReviews}>
+                  <button type='button' className='text-[#1982F9] text-sm md:text-base' onClick={handleSeeReviews}>
                     Xem đánh giá
                   </button>
                 </div>
                 <div className='flex items-center mt-4'>
-                  <div className='text-primary font-semibold text-[20px] md:text-[32px]'>
+                  <div className='text-primary font-semibold text-2xl md:text-[32px]'>
                     {formatCurrency(product.price_after_discount)}₫
                   </div>
                   {product.price > product.price_after_discount && (
@@ -226,7 +225,7 @@ const ProductDetail = () => {
                         onDecrease={handleChangeBuyCount}
                         onIncrease={handleChangeBuyCount}
                       />
-                      <div className='ml-6 text-slate-500 text-xs md:text-base'>
+                      <div className='ml-6 text-slate-500 text-sm md:text-base'>
                         {product.available_count} sản phẩm có sẵn
                       </div>
                     </div>
@@ -252,7 +251,7 @@ const ProductDetail = () => {
                   <div className='mt-4 cursor-not-allowed'>
                     <button
                       type='button'
-                      className='w-full md:w-[400px] h-[50px] flex justify-center items-center bg-[#BCBEC2] text-white text-lg font-semibold uppercase rounded pointer-events-none'
+                      className='w-full md:w-[400px] h-10 md:h-[50px] flex justify-center items-center bg-[#BCBEC2] text-white text-base md:text-lg font-semibold uppercase rounded pointer-events-none'
                     >
                       Hết hàng
                     </button>

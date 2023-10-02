@@ -10,7 +10,7 @@ interface FooterLinkProps {
 
 const FooterLink = ({ to = PATH.HOME, name }: FooterLinkProps) => {
   return (
-    <Link to={to} className='text-sm hover:underline hover:text-primary'>
+    <Link to={to} className='text-xs md:text-sm hover:underline hover:text-primary'>
       {name}
     </Link>
   );

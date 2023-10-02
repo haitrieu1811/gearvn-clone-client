@@ -142,6 +142,7 @@ const OrderList = () => {
         isLoading={getOrdersQuery.isLoading}
         onDelete={(orderIds) => deleteOrderMutation.mutate(orderIds)}
         updateItemPath={PATH.DASHBOARD_ORDER_DETAIL_WITHOUT_ID}
+        tableName='Danh sách đơn hàng'
       />
     </Fragment>
   );

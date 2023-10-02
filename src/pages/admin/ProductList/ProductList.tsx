@@ -106,6 +106,8 @@ const ProductList = () => {
       onSearch={(value) => setKeywordSearch(value)}
       updateItemPath={PATH.DASHBOARD_PRODUCT_UPDATE_WITHOUT_ID}
       onDelete={(productIds) => console.log(productIds)}
+      tableName='Danh sách sản phẩm'
+      addNewPath={PATH.DASHBOARD_PRODUCT_CREATE}
     />
   );
 };

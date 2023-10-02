@@ -31,7 +31,7 @@ const ForgotPassword = () => {
     resolver: yupResolver(forgotPasswordSchema)
   });
 
-  // Quên mật khẩu
+  // Mutation: Quên mật khẩu
   const forgotPasswordMutation = useMutation({
     mutationFn: userApi.forgotPassword,
     onSuccess: (data) => {
@@ -79,10 +79,11 @@ const ForgotPassword = () => {
         <meta property='og:site_name' content='Quên mật khẩu' />
         <meta property='og:type' content='website' />
       </Helmet>
+
       <div className='flex justify-center items-center py-10'>
         <div className='w-[450px] max-w-[90%]'>
           <form onSubmit={onSubmit}>
-            <h1 className='font-semibold text-2xl mb-6'>Quên mật khẩu</h1>
+            <h1 className='font-semibold text-xl md:text-2xl mb-6'>Quên mật khẩu</h1>
             <Input
               type='text'
               placeholder='Email'
@@ -93,8 +94,8 @@ const ForgotPassword = () => {
             />
             <Button isLoading={forgotPasswordMutation.isLoading}>Khôi phục</Button>
             <p className='text-center mt-6'>
-              <span className='text-slate-500'>Bạn đã nhớ mật khẩu?</span>{' '}
-              <Link to={PATH.LOGIN} className='text-blue-600'>
+              <span className='text-slate-500 text-sm md:text-base'>Bạn đã nhớ mật khẩu?</span>{' '}
+              <Link to={PATH.LOGIN} className='text-blue-600 text-sm md:text-base'>
                 Trở về đăng nhập
               </Link>
             </p>

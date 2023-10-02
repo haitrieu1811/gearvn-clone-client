@@ -69,17 +69,70 @@ const Filter = ({
 
   // Xem kết quả
   const handleSeeResult = () => {
-    if (choosenValue.length > 0) {
-      const queryValue = choosenValue.join('-');
-      navigate({
-        pathname: location.pathname,
-        search: createSearchParams({
-          ...queryParams,
-          [queryName]: queryValue
-        }).toString()
-      });
-    }
+    if (choosenValue.length === 0) return;
+    const queryValue = choosenValue.join('-');
+    navigate({
+      pathname: location.pathname,
+      search: createSearchParams({
+        ...queryParams,
+        [queryName]: queryValue
+      }).toString()
+    });
   };
+
+  // Render: Filter
+  const renderFilter = () => (
+    <div className='rounded max-w-[500px] shadow-3xl bg-white relative before:absolute before:left-6 before:bottom-full before:border-[11px] before:border-transparent before:border-b-white'>
+      <div className='first:-ml-2 p-4'>
+        {data.map((item) => (
+          <button
+            key={item.value}
+            className={classNames(childrenClassName, {
+              'border-[#1982F9] text-[#1982F9]': choosenValue.includes(item.value),
+              'border-[#cfcfcf] hover:border-[#1982F9] hover:text-[#1982F9]': !choosenValue.includes(item.value)
+            })}
+            onClick={() => handleChoose(item.value)}
+          >
+            {item.text}
+          </button>
+        ))}
+      </div>
+      <div className='border-t p-4 flex justify-center'>
+        <div
+          className={classNames('', {
+            'cursor-not-allowed': !isChoosen
+          })}
+        >
+          <button
+            className={classNames(
+              'py-[6px] px-6 md:px-10 border border-primary rounded text-xs md:text-sm text-primary',
+              {
+                'pointer-events-none opacity-50': !isChoosen
+              }
+            )}
+            onClick={handleUnChoose}
+          >
+            Bỏ chọn
+          </button>
+        </div>
+
+        <div
+          className={classNames('', {
+            'cursor-not-allowed': !isChoosen
+          })}
+        >
+          <button
+            className={classNames('py-[6px] px-6 md:px-10 rounded text-xs md:text-sm text-white bg-[#1982F9] ml-3', {
+              'pointer-events-none opacity-50': !isChoosen
+            })}
+            onClick={handleSeeResult}
+          >
+            Xem kết quả
+          </button>
+        </div>
+      </div>
+    </div>
+  );
 
   return (
     <Tippy
@@ -89,47 +142,7 @@ const Filter = ({
       offset={[0, 11]}
       onShow={onShow}
       onHide={onHide}
-      render={() => (
-        <div className='rounded max-w-[500px] shadow-3xl bg-white relative before:absolute before:left-6 before:bottom-full before:border-[11px] before:border-transparent before:border-b-white'>
-          <div className='first:-ml-2 p-4'>
-            {data.map((item) => (
-              <button
-                key={item.value}
-                className={classNames(childrenClassName, {
-                  'border-[#1982F9] text-[#1982F9]': choosenValue.includes(item.value),
-                  'border-[#cfcfcf] hover:border-[#1982F9] hover:text-[#1982F9]': !choosenValue.includes(item.value)
-                })}
-                onClick={() => handleChoose(item.value)}
-              >
-                {item.text}
-              </button>
-            ))}
-          </div>
-          <div className='border-t p-4 flex justify-center'>
-            <button
-              className={classNames(
-                'py-[6px] px-6 md:px-10 border border-primary rounded text-xs md:text-sm text-primary',
-                {
-                  'pointer-events-none': !isChoosen,
-                  'opacity-50': !isChoosen
-                }
-              )}
-              onClick={handleUnChoose}
-            >
-              Bỏ chọn
-            </button>
-            <button
-              className={classNames('py-[6px] px-6 md:px-10 rounded text-xs md:text-sm text-white bg-[#1982F9] ml-3', {
-                'pointer-events-none': !isChoosen,
-                'opacity-50': !isChoosen
-              })}
-              onClick={handleSeeResult}
-            >
-              Xem kết quả
-            </button>
-          </div>
-        </div>
-      )}
+      render={renderFilter}
     >
       <button
         className={classNames(parentClassName, {

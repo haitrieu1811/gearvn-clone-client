@@ -13,7 +13,7 @@ import {
   useMemo,
   useState
 } from 'react';
-import { createSearchParams, useLocation, useNavigate } from 'react-router-dom';
+import { Link, createSearchParams, useLocation, useNavigate } from 'react-router-dom';
 
 import Loading from 'src/components/Loading';
 import Pagination from 'src/components/Pagination';
@@ -62,6 +62,8 @@ interface TableProps {
   onSearch?: (value: string) => void;
   onDelete?: (ids: string[]) => void;
   updateItemPath?: string;
+  tableName?: string;
+  addNewPath?: string;
 }
 
 const Table = ({
@@ -73,7 +75,9 @@ const Table = ({
   onSearch,
   setData,
   onDelete,
-  updateItemPath
+  updateItemPath,
+  tableName,
+  addNewPath
 }: TableProps) => {
   const location = useLocation();
   const navigate = useNavigate();
@@ -179,6 +183,7 @@ const Table = ({
       {/* Hiển thị khi có dữ liệu */}
       <div className='bg-white px-4'>
         <div className='flex justify-between items-center mb-3 py-5'>
+          <div>{tableName && <h2 className='text-2xl font-semibold'>{tableName}</h2>}</div>
           <div className='flex'>
             {onSearch && (
               <div className='flex items-center'>
@@ -192,6 +197,11 @@ const Table = ({
                   onChange={handleSearch}
                 />
               </div>
+            )}
+            {addNewPath && (
+              <Link to={addNewPath} className='bg-blue-600 text-white text-sm font-medium rounded px-4 py-1 ml-3'>
+                Thêm mới
+              </Link>
             )}
           </div>
         </div>
@@ -321,7 +331,9 @@ Table.propTypes = {
   pageSize: PropTypes.number.isRequired,
   onSearch: PropTypes.func,
   onDelete: PropTypes.func,
-  updateItemPath: PropTypes.string
+  updateItemPath: PropTypes.string,
+  tableName: PropTypes.string,
+  addNewPath: PropTypes.string
 };
 
 export default memo(Table);

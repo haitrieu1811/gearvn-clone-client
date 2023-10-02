@@ -66,7 +66,7 @@ const OrderDetail = () => {
             </div>
             {/* Tiến trình đơn hàng */}
             {order.status !== OrderStatus.Canceled && (
-              <div className='px-6 py-8'>
+              <div className='px-3 py-6 md:px-6 md:py-8'>
                 <OrderTracking order={order} />
               </div>
             )}
@@ -176,6 +176,7 @@ const OrderDetail = () => {
                   </div>
                 </div>
               </div>
+
               {/* Quay lại danh sách đơn hàng */}
               <div className='mt-8 md:mt-16 mb-4 md:mb-8 flex justify-center'>
                 <button

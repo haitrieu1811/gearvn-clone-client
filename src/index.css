@@ -23,6 +23,9 @@
     border-radius: 0;
     background-color: rgba(0, 0, 0, 0);
   }
+  body {
+    background-color: #ececec;
+  }
   body.disable-scroll {
     overflow: hidden;
     height: 100vh;

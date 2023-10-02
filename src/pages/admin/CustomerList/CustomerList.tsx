@@ -142,6 +142,7 @@ const CustomerList = () => {
       pageSize={pageSize}
       isLoading={getCustomersQuery.isLoading}
       onDelete={(userIds) => deleteUsersMutation.mutate({ user_ids: userIds })}
+      tableName='Danh sách khách hàng'
     />
   );
 };

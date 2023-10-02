@@ -78,38 +78,38 @@ const CheckoutProcess = () => {
   return (
     <form onSubmit={onSubmit}>
       <div className='p-6'>
-        <h3 className='mb-2 font-semibold text-2xl'>Thông tin đặt hàng</h3>
-        <div>
+        <h3 className='mb-2 font-semibold text-lg md:text-2xl'>Thông tin đặt hàng</h3>
+        <div className='text-sm md:text-base'>
           <div className='mt-4 flex'>
             <div className='font-semibold basis-1/3'>Khách hàng</div>
-            <div className='flex-1'>{getValues('customer_name')}</div>
+            <div className='flex-1 ml-5'>{getValues('customer_name')}</div>
           </div>
           <div className='mt-4 flex'>
             <div className='font-semibold basis-1/3'>Số điện thoại</div>
-            <div className='flex-1'>{getValues('customer_phone')}</div>
+            <div className='flex-1 ml-5'>{getValues('customer_phone')}</div>
           </div>
           <div className='mt-4 flex'>
             <div className='font-semibold basis-1/3'>Địa chỉ nhận hàng</div>
-            <div className='flex-1 capitalize'>
+            <div className='flex-1 ml-5 capitalize'>
               {getValues('street')}, {getValues('ward')}, {getValues('district')}, {getValues('province')}
             </div>
           </div>
           <div className='mt-4 flex'>
             <div className='font-semibold basis-1/3'>Voucher</div>
-            <div className='flex-1 text-primary font-semibold'>-{formatCurrency(totalReduced)}₫</div>
+            <div className='flex-1 ml-5 text-primary font-semibold'>-{formatCurrency(totalReduced)}₫</div>
           </div>
           <div className='mt-4 flex'>
             <div className='font-semibold basis-1/3'> Phí vận chuyển</div>
-            <div className='flex-1 text-primary font-semibold'>Miễn phí</div>
+            <div className='flex-1 ml-5 text-primary font-semibold'>Miễn phí</div>
           </div>
           <div className='mt-4 flex'>
             <div className='font-semibold basis-1/3'>Tổng tiền</div>
-            <div className='flex-1 text-primary font-semibold'>{formatCurrency(totalPayment)}₫</div>
+            <div className='flex-1 ml-5 text-primary font-semibold'>{formatCurrency(totalPayment)}₫</div>
           </div>
         </div>
       </div>
       <div className='py-6 mx-6 border-t border-b'>
-        <h3 className='mb-4 font-semibold text-2xl'>Chọn hình thức thanh toán</h3>
+        <h3 className='mb-4 font-semibold text-lg md:text-2xl'>Chọn hình thức thanh toán</h3>
         <div className='flex items-center my-3'>
           <input
             type='radio'
@@ -120,7 +120,7 @@ const CheckoutProcess = () => {
             checked={PaymentMethod.Cash === Number(payment_method)}
           />
           <img src={CODImage} alt='' className='w-6 h-6' />
-          <label htmlFor='cash' className='ml-5'>
+          <label htmlFor='cash' className='text-sm md:text-base ml-5'>
             Thanh toán khi giao hàng (COD)
           </label>
         </div>

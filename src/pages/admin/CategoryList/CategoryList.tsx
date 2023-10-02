@@ -92,6 +92,8 @@ const CategoryList = () => {
       isLoading={getCategoriesQuery.isLoading}
       updateItemPath={PATH.DASHBOARD_CATEGORY_UPDATE_WITHOUT_ID}
       onDelete={(categoryIds) => deleteCategoryMutation.mutate(categoryIds)}
+      tableName='Danh sách danh mục'
+      addNewPath={PATH.DASHBOARD_CATEGORY_CREATE}
     />
   );
 };

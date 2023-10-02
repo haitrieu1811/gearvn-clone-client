@@ -1,14 +1,21 @@
 import classNames from 'classnames';
 import { Fragment, useContext } from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 
-import { CategoryIcon, ChatIcon, DiscountIcon, HomeIcon, UserIcon } from 'src/components/Icons';
+import { CategoryIcon, ChatIcon, HomeIcon, NewspaperIcon, UserIcon } from 'src/components/Icons';
 import PATH from 'src/constants/path';
 import { AppContext } from 'src/contexts/app.context';
 import ChatBox from '../ChatBox';
 
 const StickyBottomMenu = () => {
-  const { isOpenChat, setIsOpenChat } = useContext(AppContext);
+  const navigate = useNavigate();
+  const { isAuthenticated, isOpenChat, setIsOpenChat } = useContext(AppContext);
+
+  // Mở chatbox
+  const handleOpenChat = () => {
+    if (isAuthenticated) setIsOpenChat(true);
+    else navigate(PATH.LOGIN);
+  };
 
   return (
     <Fragment>
@@ -22,35 +29,32 @@ const StickyBottomMenu = () => {
               })
             }
           >
-            <HomeIcon className='w-5 h-5 mb-[6px] stroke-[#333333] group-[active]:fill-primary' />
+            <HomeIcon className='w-5 h-5 mb-[6px] stroke-[#333333] group-[active]:text-primary' />
             <span className='text-[10px] text-[#333333] group-[active]:text-primary'>Trang chủ</span>
           </NavLink>
           <NavLink
-            to={PATH.HOME}
+            to={PATH.ACCOUNT_ORDER}
             className={({ isActive }) =>
               classNames('flex-1 flex justify-center items-center flex-col py-[10px]', {
                 groupactive: isActive
               })
             }
           >
-            <CategoryIcon className='w-5 h-5 mb-[6px] group-[active]:stroke-primary' />
-            <span className='text-[10px] text-[#333333]'>Danh mục</span>
+            <CategoryIcon className='w-5 h-5 mb-[6px] group-[active]:text-primary' />
+            <span className='text-[10px] text-[#333333] group-[active]:text-primary'>Đơn hàng</span>
           </NavLink>
           <NavLink
-            to={PATH.HOME}
+            to={PATH.BLOG}
             className={({ isActive }) =>
               classNames('flex-1 flex justify-center items-center flex-col py-[10px]', {
                 groupactive: isActive
               })
             }
           >
-            <DiscountIcon className='w-5 h-5 mb-[6px] group-[active]:stroke-primary' />
-            <span className='text-[10px] text-[#333333]'>Khuyến mãi</span>
+            <NewspaperIcon className='w-5 h-5 mb-[6px] stroke-[#333333] group-[active]:text-primary' />
+            <span className='text-[10px] text-[#333333] group-[active]:text-primary'>Tin công nghệ</span>
           </NavLink>
-          <button
-            onClick={() => setIsOpenChat(true)}
-            className='flex-1 flex justify-center items-center flex-col py-[10px]'
-          >
+          <button onClick={handleOpenChat} className='flex-1 flex justify-center items-center flex-col py-[10px]'>
             <ChatIcon className='w-5 h-5 mb-[6px] stroke-[#333333]' />
             <span className='text-[10px] text-[#333333]'>Chat</span>
           </button>
@@ -69,7 +73,6 @@ const StickyBottomMenu = () => {
       </div>
 
       <ChatBox visible={isOpenChat} onClose={() => setIsOpenChat(false)} />
-      {isOpenChat && <div className='fixed inset-0 bg-black/80 z-[99999]' onClick={() => setIsOpenChat(false)} />}
     </Fragment>
   );
 };

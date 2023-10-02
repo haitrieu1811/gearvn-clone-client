@@ -87,13 +87,13 @@ const Home = () => {
             </div>
             <div className='col-span-12 lg:col-span-4'>
               <div className='grid grid-cols-12'>
-                <Link to={PATH.HOME} className='col-span-6 lg:col-span-12 -ml-3 lg:ml-0'>
+                <Link to={PATH.HOME} className='col-span-6 lg:col-span-12'>
                   <img
                     src='https://file.hstatic.net/200000722513/file/banner_slider_-_bottom_1_5b6a8d4aa5b643a0b47e4afcc53f9592.png'
                     alt=''
                   />
                 </Link>
-                <Link to={PATH.HOME} className='col-span-6 lg:col-span-12 block lg:mt-2'>
+                <Link to={PATH.HOME} className='col-span-6 lg:col-span-12 block lg:mt-1'>
                   <img
                     src='https://file.hstatic.net/200000722513/file/banner_slider_-_bottom_2_174ef77e3cab47abbc01abb351de4f25.png'
                     alt=''

@@ -11,7 +11,7 @@ const ProductRating = ({ ratingScore, ratingCount, data }: ProductRatingProps) =
   return (
     <div className='flex flex-col lg:flex-row justify-center items-center'>
       <div className='flex items-center flex-col px-12'>
-        <div className='text-[36px] font-semibold text-primary mb-[10px]'>
+        <div className='text-3xl md:text-[36px] font-semibold text-primary mb-[10px]'>
           {!!ratingScore ? ratingScore.toFixed(1) : 0}/5
         </div>
         <div className='flex items-center'>
@@ -40,7 +40,7 @@ const ProductRating = ({ ratingScore, ratingCount, data }: ProductRatingProps) =
                 <span className='text-sm mr-[6px]'>{_index}</span>
                 <StarIcon className='text-[#fdd835] w-4 h-4' />
               </span>
-              <div className='flex-1 w-[100px] lg:w-[360px] h-3 bg-[#ECECEC] rounded-[30px] ml-4 mr-4 lg:mr-16 relative overflow-hidden'>
+              <div className='flex-1 w-[100px] lg:w-[360px] h-2 md:h-3 bg-[#ECECEC] rounded-[30px] ml-4 mr-4 lg:mr-16 relative overflow-hidden'>
                 <div className='absolute rounded-[30px] inset-0 bg-[#24b400]' style={{ width: `${percent}%` }} />
               </div>
               <span className='text-sm'>{item} đánh giá</span>

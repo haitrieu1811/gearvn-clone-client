@@ -125,19 +125,19 @@ const Blog = () => {
                 <div className='flex-1 ml-2 md:ml-4'>
                   <Link
                     to={`${PATH.BLOG_DETAIL_WITHOUT_ID}/${generateNameId({ name: blog.name_vi, id: blog._id })}`}
-                    className='text-sm md:text-base font-semibold mb-[10px] block'
+                    className='mb-[10px] block'
                   >
-                    {blog.name_vi}
+                    <span className='line-clamp-2 text-sm md:text-base font-semibold'>{blog.name_vi}</span>
                   </Link>
                   <div className='flex items-center'>
                     <span className='flex items-center'>
                       <ClockIcon className='w-3 h-3 md:w-4 md:h-4' />
-                      <span className='text-slate-500 ml-1 text-sm'>
+                      <span className='text-slate-500 ml-1 text-xs md:text-sm'>
                         {moment(blog.created_at).format('DD.MM.YYYY')}
                       </span>
                     </span>
                     <span className='w-1 h-1 rounded-full bg-slate-500 block mx-2' />
-                    <span className='text-blue-600 text-sm'>{blog.author.fullname}</span>
+                    <span className='text-blue-600 text-xs md:text-sm'>{blog.author.fullname}</span>
                   </div>
                 </div>
               </div>

@@ -15,7 +15,6 @@ import PATH from 'src/constants/path';
 import { AppContext } from 'src/contexts/app.context';
 import { ErrorResponse } from 'src/types/utils.type';
 import { LoginSchema, loginSchema } from 'src/utils/rules';
-import socket from 'src/utils/socket';
 import { isEntityError } from 'src/utils/utils';
 
 type FormData = LoginSchema;
@@ -32,14 +31,14 @@ const Login = () => {
     resolver: yupResolver(loginSchema)
   });
 
-  // Đăng nhập
+  // Mutation: Đăng nhập
   const loginMutation = useMutation({
     mutationFn: authApi.login,
     onSuccess: (data) => {
       setIsAuthenticated(true);
       setProfile(data.data.data.user);
       toast.success(data.data.message);
-      socket.emit('login');
+      window.location.reload();
     },
     onError: (error) => {
       if (isEntityError<ErrorResponse<FormData>>(error)) {
@@ -82,10 +81,11 @@ const Login = () => {
         <meta property='og:site_name' content='Đăng nhập' />
         <meta property='og:type' content='website' />
       </Helmet>
+
       <div className='container py-10 md:py-24'>
         <div className='grid grid-cols-12'>
           <div className='bg-white p-7 md:p-10 lg:col-start-9 lg:col-span-4 rounded col-span-12 col-start-1 md:col-span-8 md:col-start-3 shadow-sm'>
-            <h2 className='text-2xl capitalize mb-5'>{t('register_login.login')}</h2>
+            <h2 className='text-xl md:text-2xl capitalize mb-5'>{t('register_login.login')}</h2>
             <form onSubmit={onSubmit}>
               <Input
                 type='text'
@@ -103,7 +103,7 @@ const Login = () => {
                 classNameWrapper='mt-4'
               />
               <p className='text-right mt-4'>
-                <Link to={PATH.FORGOT_PASSWORD} className='italic text-[15px] text-slate-500'>
+                <Link to={PATH.FORGOT_PASSWORD} className='text-sm md:text-[15px] text-slate-400'>
                   Quên mật khẩu?
                 </Link>
               </p>
@@ -116,8 +116,8 @@ const Login = () => {
               </Button>
             </form>
             <div className='mt-4 text-center'>
-              <span className='text-gray-500'>{t('register_login.dont_have_account')}</span>{' '}
-              <Link to={PATH.REGISTER} className='text-blue-700 font-medium'>
+              <span className='text-gray-500 text-sm md:text-base'>{t('register_login.dont_have_account')}</span>{' '}
+              <Link to={PATH.REGISTER} className='text-blue-700 font-medium text-sm md:text-base'>
                 {t('register_login.register')}
               </Link>
             </div>

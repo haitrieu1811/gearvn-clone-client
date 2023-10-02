@@ -91,6 +91,8 @@ const BrandList = () => {
         isLoading={getBrandsQuery.isLoading}
         updateItemPath={PATH.DASHBOARD_BRAND_UPDATE_WITHOUT_ID}
         onDelete={(brandIds) => deleteBrandMutation.mutate(brandIds)}
+        tableName='Danh sách nhãn hiệu'
+        addNewPath={PATH.DASHBOARD_BRAND_CREATE}
       />
     </Fragment>
   );

@@ -115,6 +115,8 @@ const BlogList = () => {
       isLoading={getBlogsQuery.isLoading}
       updateItemPath={PATH.DASHBOARD_BLOG_UPDATE_WITHOUT_ID}
       onDelete={(blogIds) => deleteBlogMutation.mutate(blogIds)}
+      tableName='Danh sách blog'
+      addNewPath={PATH.DASHBOARD_BLOG_CREATE}
     />
   );
 };
