@@ -1,15 +1,18 @@
-import { Fragment } from 'react';
+import { useQuery } from '@tanstack/react-query';
+import isUndefined from 'lodash/isUndefined';
+import omitBy from 'lodash/omitBy';
+import { Fragment, useMemo } from 'react';
 import { Helmet } from 'react-helmet-async';
 
+import brandApi from 'src/apis/brand.api';
+import categoryApi from 'src/apis/category.api';
+import productApi from 'src/apis/product.api';
 import Filter from 'src/components/Filter';
 import Loading from 'src/components/Loading';
 import Pagination from 'src/components/Pagination';
 import ProductItem from 'src/components/ProductItem';
 import Sort from 'src/components/Sort';
-import useBrand from 'src/hooks/useBrand';
-import useCategory from 'src/hooks/useCategory';
-import useProduct from 'src/hooks/useProduct';
-import UseQueryParams from 'src/hooks/useQueryParams';
+import useQueryParams from 'src/hooks/useQueryParams';
 import { GetProductsRequestParams } from 'src/types/product.type';
 
 type QueryConfig = {
@@ -17,19 +20,62 @@ type QueryConfig = {
 };
 
 const Product = () => {
-  const queryParams: QueryConfig = UseQueryParams();
-  const queryConfig: QueryConfig = {
-    page: queryParams.page || '1',
-    limit: queryParams.limit || '20',
-    category: queryParams.category,
-    brand: queryParams.brand,
-    sortBy: queryParams.sortBy,
-    orderBy: queryParams.orderBy
-  };
+  const queryParams: QueryConfig = useQueryParams();
+  const queryConfig: QueryConfig = omitBy(
+    {
+      page: queryParams.page || '1',
+      limit: queryParams.limit || '20',
+      category: queryParams.category,
+      brand: queryParams.brand,
+      sortBy: queryParams.sortBy,
+      orderBy: queryParams.orderBy
+    },
+    isUndefined
+  );
 
-  const { products, getProductsQuery, productsPageSize } = useProduct(queryConfig);
-  const { categories } = useCategory();
-  const { brands } = useBrand();
+  // Query: Lấy danh sách sản phẩm
+  const getProductsQuery = useQuery({
+    queryKey: ['products', queryConfig],
+    queryFn: () => productApi.getList(queryConfig),
+    keepPreviousData: true,
+    staleTime: Infinity
+  });
+
+  // Danh sách sản phẩm
+  const products = useMemo(
+    () => getProductsQuery.data?.data.data.products || [],
+    [getProductsQuery.data?.data.data.products]
+  );
+
+  // Số lượng trang của danh sách sản phẩm
+  const productsPageSize = useMemo(
+    () => getProductsQuery.data?.data.data.pagination.page_size || 0,
+    [getProductsQuery.data?.data.data.pagination.page_size]
+  );
+
+  // Query: Lấy danh sách danh mục
+  const getCategoriesQuery = useQuery({
+    queryKey: ['categories'],
+    queryFn: () => categoryApi.getList(),
+    staleTime: Infinity
+  });
+
+  // Danh sách danh mục
+  const categories = useMemo(
+    () => getCategoriesQuery.data?.data.data.categories || [],
+    [getCategoriesQuery.data?.data.data.categories]
+  );
+
+  // Query: Lấy danh sách nhãn hiệu
+  const getBrandsQuery = useQuery({
+    queryKey: ['brands'],
+    queryFn: () => brandApi.getList(),
+    keepPreviousData: true,
+    staleTime: Infinity
+  });
+
+  // Danh sách nhãn hiệu
+  const brands = useMemo(() => getBrandsQuery.data?.data.data.brands || [], [getBrandsQuery.data?.data.data.brands]);
 
   return (
     <div className='lg:container'>

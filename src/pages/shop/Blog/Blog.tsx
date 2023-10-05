@@ -1,15 +1,15 @@
 import { useQuery } from '@tanstack/react-query';
+import moment from 'moment';
 import { Fragment, useMemo } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { Link } from 'react-router-dom';
-import moment from 'moment';
 
 import blogApi from 'src/apis/blog.api';
 import BlogVertical from 'src/components/BlogVertical';
 import { CaretDownIcon, ClockIcon } from 'src/components/Icons';
 import Loading from 'src/components/Loading';
 import PATH from 'src/constants/path';
-import UseQueryParams from 'src/hooks/useQueryParams';
+import useQueryParams from 'src/hooks/useQueryParams';
 import { PaginationRequestParams } from 'src/types/utils.type';
 import { generateNameId, getImageUrl, htmlToPlainText } from 'src/utils/utils';
 
@@ -18,7 +18,7 @@ type QueryConfig = {
 };
 
 const Blog = () => {
-  const queryParams: QueryConfig = UseQueryParams();
+  const queryParams: QueryConfig = useQueryParams();
   const queryConfig: QueryConfig = {
     page: queryParams.page || '1',
     limit: queryParams.limit || '10'
@@ -28,7 +28,8 @@ const Blog = () => {
   const getBlogsQuery = useQuery({
     queryKey: ['blogs', queryConfig],
     queryFn: () => blogApi.getList(queryConfig),
-    keepPreviousData: true
+    keepPreviousData: true,
+    staleTime: 1000 * 60 * 10
   });
 
   // Lấy danh sách blog

@@ -1,13 +1,16 @@
+import isUndefined from 'lodash/isUndefined';
 import keyBy from 'lodash/keyBy';
+import omitBy from 'lodash/omitBy';
 import moment from 'moment';
 import { useContext, useEffect, useMemo, useState } from 'react';
 
+import { useQuery } from '@tanstack/react-query';
+import productApi from 'src/apis/product.api';
 import Table from 'src/components/Table';
 import PATH from 'src/constants/path';
-import { AppContext } from 'src/contexts/app.context';
+import { ExtendedContext } from 'src/contexts/extended.context';
 import useDebounce from 'src/hooks/useDebounce';
-import useProduct from 'src/hooks/useProduct';
-import UseQueryParams from 'src/hooks/useQueryParams';
+import useQueryParams from 'src/hooks/useQueryParams';
 import { GetProductsRequestParams } from 'src/types/product.type';
 import { convertMomentFromNowToVietnamese, formatCurrency } from 'src/utils/utils';
 
@@ -16,15 +19,42 @@ type QueryConfig = {
 };
 
 const ProductList = () => {
-  const { extendedProducts, setExtendedProducts } = useContext(AppContext);
+  const { extendedProducts, setExtendedProducts } = useContext(ExtendedContext);
   const [keywordSearch, setKeywordSearch] = useState<string>('');
   const keywordSearchDebounce = useDebounce(keywordSearch, 1000);
-  const queryParams: QueryConfig = UseQueryParams();
-  const queryConfig: QueryConfig = {
-    ...queryParams,
-    name: keywordSearchDebounce
-  };
-  const { products, productsPageSize, getProductsQuery } = useProduct(queryConfig);
+  const queryParams: QueryConfig = useQueryParams();
+  const queryConfig: QueryConfig = omitBy(
+    {
+      page: queryParams.page || '1',
+      limit: queryParams.limit || '20',
+      category: queryParams.category,
+      brand: queryParams.brand,
+      name: keywordSearchDebounce,
+      orderBy: queryParams.orderBy,
+      sortBy: queryParams.sortBy
+    },
+    isUndefined
+  );
+
+  // Query: Lấy danh sách sản phẩm
+  const getProductsQuery = useQuery({
+    queryKey: ['products', queryConfig],
+    queryFn: () => productApi.getList(queryConfig),
+    keepPreviousData: true,
+    staleTime: Infinity
+  });
+
+  // Danh sách sản phẩm
+  const products = useMemo(
+    () => getProductsQuery.data?.data.data.products || [],
+    [getProductsQuery.data?.data.data.products]
+  );
+
+  // Số lượng trang của danh sách sản phẩm
+  const productsPageSize = useMemo(
+    () => getProductsQuery.data?.data.data.pagination.page_size || 0,
+    [getProductsQuery.data?.data.data.pagination.page_size]
+  );
 
   // Cập nhật extendedProducts khi có thay đổi từ products
   useEffect(() => {

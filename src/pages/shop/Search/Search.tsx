@@ -11,7 +11,7 @@ import Loading from 'src/components/Loading';
 import Pagination from 'src/components/Pagination';
 import ProductItem from 'src/components/ProductItem';
 import PATH from 'src/constants/path';
-import UseQueryParams from 'src/hooks/useQueryParams';
+import useQueryParams from 'src/hooks/useQueryParams';
 import { GetProductsRequestParams } from 'src/types/product.type';
 
 type QueryConfig = {
@@ -21,7 +21,7 @@ type QueryConfig = {
 const Search = () => {
   const navigate = useNavigate();
   const [keywordSearch, setKeywordSearch] = useState<string>('');
-  const queryParams: QueryConfig = UseQueryParams();
+  const queryParams: QueryConfig = useQueryParams();
   const queryConfig: QueryConfig = omitBy(
     {
       name: queryParams.name,

@@ -8,9 +8,11 @@ import Image from 'src/components/Image';
 import Notification from 'src/components/Notification';
 import PATH from 'src/constants/path';
 import { AppContext } from 'src/contexts/app.context';
+import { ChatContext } from 'src/contexts/chat.context';
 
 const HeaderDashboard = () => {
-  const { profile, setIsOpenChat, logout, conversationUnreadCount } = useContext(AppContext);
+  const { profile, logout } = useContext(AppContext);
+  const { setIsOpenChat, unreadCount } = useContext(ChatContext);
 
   return (
     <Fragment>
@@ -24,9 +26,9 @@ const HeaderDashboard = () => {
             className='bg-slate-100 w-9 h-9 rounded-full flex justify-center items-center mr-4 relative'
           >
             <ChatIcon className='w-5 h-5 fill-none' />
-            {conversationUnreadCount > 0 && (
+            {unreadCount > 0 && (
               <span className='absolute -top-1 -right-1  bg-red-500 text-[10px] text-white font-bold rounded-full w-5 h-5 flex justify-center items-center'>
-                {conversationUnreadCount <= 9 ? conversationUnreadCount : '9+'}
+                {unreadCount <= 9 ? unreadCount : '9+'}
               </span>
             )}
           </button>

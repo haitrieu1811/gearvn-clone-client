@@ -4,13 +4,13 @@ import { useNavigate } from 'react-router-dom';
 
 import userApi from 'src/apis/user.api';
 import PATH from 'src/constants/path';
-import UseQueryParams from 'src/hooks/useQueryParams';
+import useQueryParams from 'src/hooks/useQueryParams';
 import { OnlyMessageResponse } from 'src/types/utils.type';
 import { isUnauthorizedError } from 'src/utils/utils';
 
 const VerifyResetPasswordToken = () => {
   const navigate = useNavigate();
-  const searchParams = UseQueryParams();
+  const searchParams = useQueryParams();
   const { token } = searchParams;
   const [message, setMessage] = useState('');
 

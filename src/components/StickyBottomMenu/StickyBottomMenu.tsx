@@ -5,11 +5,13 @@ import { NavLink, useNavigate } from 'react-router-dom';
 import { CategoryIcon, ChatIcon, HomeIcon, NewspaperIcon, UserIcon } from 'src/components/Icons';
 import PATH from 'src/constants/path';
 import { AppContext } from 'src/contexts/app.context';
+import { ChatContext } from 'src/contexts/chat.context';
 import ChatBox from '../ChatBox';
 
 const StickyBottomMenu = () => {
   const navigate = useNavigate();
-  const { isAuthenticated, isOpenChat, setIsOpenChat } = useContext(AppContext);
+  const { isAuthenticated } = useContext(AppContext);
+  const { isOpenChat, setIsOpenChat } = useContext(ChatContext);
 
   // Mở chatbox
   const handleOpenChat = () => {

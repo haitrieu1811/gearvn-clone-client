@@ -1,7 +1,7 @@
 import { useMutation } from '@tanstack/react-query';
 import classNames from 'classnames';
 import keyBy from 'lodash/keyBy';
-import { ChangeEvent, Fragment, useContext, useEffect, useCallback } from 'react';
+import { ChangeEvent, Fragment, useCallback, useContext, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
@@ -13,13 +13,13 @@ import { CaretDownIcon, VoucherIcon } from 'src/components/Icons';
 import Input from 'src/components/Input';
 import Loading from 'src/components/Loading';
 import PATH from 'src/constants/path';
-import { AppContext } from 'src/contexts/app.context';
 import { CartContext } from 'src/contexts/cart.context';
+import { ExtendedContext } from 'src/contexts/extended.context';
 import { formatCurrency } from 'src/utils/utils';
 
 const CartList = () => {
   const location = useLocation();
-  const { extendedCartList, setExtendedCartList, cartTotal, checkedCartList } = useContext(AppContext);
+  const { extendedCartList, setExtendedCartList, cartTotal, checkedCartList } = useContext(ExtendedContext);
   const {
     getCartQuery,
     cartList,

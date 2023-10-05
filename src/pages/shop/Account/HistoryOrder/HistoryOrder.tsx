@@ -9,10 +9,10 @@ import Loading from 'src/components/Loading';
 import OrderItem from 'src/components/OrderItem';
 import { OrderStatus } from 'src/constants/enum';
 import PATH from 'src/constants/path';
-import UseQueryParams from 'src/hooks/useQueryParams';
+import { AppContext } from 'src/contexts/app.context';
+import useQueryParams from 'src/hooks/useQueryParams';
 import { GetOrdersRequestParams, OrderCountByStatus } from 'src/types/order.type';
 import Tabs from './Tabs';
-import { AppContext } from 'src/contexts/app.context';
 
 export type QueryConfig = {
   [key in keyof GetOrdersRequestParams]: string;
@@ -20,7 +20,7 @@ export type QueryConfig = {
 
 const HistoryOrder = () => {
   const { profile } = useContext(AppContext);
-  const queryParams: QueryConfig = UseQueryParams();
+  const queryParams: QueryConfig = useQueryParams();
   const queryConfig: QueryConfig = useMemo(
     () => ({
       status: queryParams.status || String(OrderStatus.All)

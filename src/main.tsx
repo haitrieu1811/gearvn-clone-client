@@ -10,8 +10,11 @@ import ErrorBoundary from './components/ErrorBoundary';
 import Loading from './components/Loading/Loading.tsx';
 import ScrollToTop from './components/ScrollToTop';
 import AppProvider from './contexts/app.context.tsx';
+import ChatProvider from './contexts/chat.context.tsx';
+import ExtendedProvider from './contexts/extended.context.tsx';
 import './i18n/i18n.ts';
 import './index.css';
+import CartProvider from './contexts/cart.context.tsx';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -35,11 +38,17 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
       >
         <HelmetProvider>
           <AppProvider>
-            <ErrorBoundary>
-              <ScrollToTop>
-                <App />
-              </ScrollToTop>
-            </ErrorBoundary>
+            <ChatProvider>
+              <ExtendedProvider>
+                <CartProvider>
+                  <ErrorBoundary>
+                    <ScrollToTop>
+                      <App />
+                    </ScrollToTop>
+                  </ErrorBoundary>
+                </CartProvider>
+              </ExtendedProvider>
+            </ChatProvider>
           </AppProvider>
         </HelmetProvider>
       </Suspense>

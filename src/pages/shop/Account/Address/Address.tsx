@@ -1,6 +1,6 @@
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { isAxiosError } from 'axios';
-import { useState } from 'react';
+import { useContext, useMemo, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { toast } from 'react-toastify';
 
@@ -11,15 +11,36 @@ import CreateAddress from 'src/components/CreateAddress';
 import { EmptyImage, PencilIcon, PlusIcon, TrashIcon } from 'src/components/Icons';
 import Loading from 'src/components/Loading';
 import Modal from 'src/components/Modal';
-import useAddress from 'src/hooks/useAddress';
+import { AppContext } from 'src/contexts/app.context';
 import { OnlyMessageResponse } from 'src/types/utils.type';
 
 const Address = () => {
+  const { profile } = useContext(AppContext);
   const [addModalOpen, setAddModalOpen] = useState<boolean>(false);
   const [deleteConfirmModalOpen, setDeleteConfirmModalOpen] = useState<boolean>(false);
   const [currentId, setCurrentId] = useState<string | null>(null);
   const [isUpdateMode, setIsUpdateMode] = useState<boolean>(false);
-  const { getAddressesQuery, addresses, setDefaultAddressMutation } = useAddress();
+
+  // Query: Lấy danh sách địa chỉ
+  const getAddressesQuery = useQuery({
+    queryKey: ['addresses', profile?._id],
+    queryFn: () => addressApi.getAddresses(),
+    enabled: !!profile?._id
+  });
+
+  // Mutation: Thiết lập địa chỉ mặc định
+  const setDefaultAddressMutation = useMutation({
+    mutationFn: addressApi.setDefaultAddress,
+    onSuccess: () => {
+      getAddressesQuery?.refetch();
+    }
+  });
+
+  // Danh sách địa chỉ
+  const addresses = useMemo(
+    () => getAddressesQuery.data?.data.data.addresses || [],
+    [getAddressesQuery.data?.data.data.addresses]
+  );
 
   // Bắt đầu thêm
   const startAdd = () => {

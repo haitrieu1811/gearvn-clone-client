@@ -1,25 +1,29 @@
 import PropTypes from 'prop-types';
 
-import FooterHeading from '../Heading/Heading';
-import FooterLink from '../Link/Link';
+import { Link } from 'react-router-dom';
+import PATH from 'src/constants/path';
+import FooterHeading from '../FooterHeading';
 
 interface LinkItem {
+  path?: string;
   name: string;
 }
 
-interface ListProps {
+interface FooterListProps {
   heading: string;
   data: LinkItem[];
 }
 
-const List = ({ heading, data }: ListProps) => {
+const FooterList = ({ heading, data }: FooterListProps) => {
   return (
     <div className='lg:col-span-2 col-span-12 mt-2 md:mt-4 lg:mt-0'>
       <FooterHeading name={heading} />
       <ul className='md:leading-loose'>
         {data.map((item, index) => (
           <li key={index}>
-            <FooterLink name={item.name} />
+            <Link to={PATH.HOME} className='text-xs md:text-sm hover:underline hover:text-primary'>
+              {item.name}
+            </Link>
           </li>
         ))}
       </ul>
@@ -27,9 +31,9 @@ const List = ({ heading, data }: ListProps) => {
   );
 };
 
-List.propTypes = {
+FooterList.propTypes = {
   heading: PropTypes.string.isRequired,
   data: PropTypes.array.isRequired
 };
 
-export default List;
+export default FooterList;

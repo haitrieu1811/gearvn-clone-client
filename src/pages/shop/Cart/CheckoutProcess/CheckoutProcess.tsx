@@ -11,6 +11,7 @@ import { PaymentMethod } from 'src/constants/enum';
 import PATH from 'src/constants/path';
 import { AppContext } from 'src/contexts/app.context';
 import { CartContext } from 'src/contexts/cart.context';
+import { ExtendedContext } from 'src/contexts/extended.context';
 import { CheckoutRequestBody } from 'src/types/purchase.type';
 import { PaymentOrderSchema } from 'src/utils/rules';
 import socket from 'src/utils/socket';
@@ -19,7 +20,8 @@ import { formatCurrency } from 'src/utils/utils';
 const CheckoutProcess = () => {
   const navigate = useNavigate();
   const { handleSubmit, watch, getValues } = useFormContext<PaymentOrderSchema>();
-  const { profile, cartTotal, checkedCartList } = useContext(AppContext);
+  const { profile } = useContext(AppContext);
+  const { cartTotal, checkedCartList } = useContext(ExtendedContext);
   const { getCartQuery, totalReduced, voucherCode, totalPayment } = useContext(CartContext);
 
   const payment_method = watch('payment_method');

@@ -6,13 +6,13 @@ import { toast } from 'react-toastify';
 import userApi from 'src/apis/user.api';
 import PATH from 'src/constants/path';
 import { AppContext } from 'src/contexts/app.context';
-import UseQueryParams from 'src/hooks/useQueryParams';
+import useQueryParams from 'src/hooks/useQueryParams';
 import { OnlyMessageResponse } from 'src/types/utils.type';
 import { isUnauthorizedError } from 'src/utils/utils';
 
 const VerifyEmail = () => {
   const navigate = useNavigate();
-  const searchParams = UseQueryParams();
+  const searchParams = useQueryParams();
   const { token } = searchParams;
   const [message, setMessage] = useState('');
   const { setIsAuthenticated } = useContext(AppContext);

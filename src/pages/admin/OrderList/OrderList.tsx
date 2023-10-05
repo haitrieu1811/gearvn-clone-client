@@ -11,8 +11,8 @@ import Badge from 'src/components/Badge/Badge';
 import Table from 'src/components/Table';
 import { OrderStatus } from 'src/constants/enum';
 import PATH from 'src/constants/path';
-import { AppContext } from 'src/contexts/app.context';
-import UseQueryParams from 'src/hooks/useQueryParams';
+import { ExtendedContext } from 'src/contexts/extended.context';
+import useQueryParams from 'src/hooks/useQueryParams';
 import { GetOrdersRequestParams } from 'src/types/order.type';
 import { convertMomentFromNowToVietnamese } from 'src/utils/utils';
 
@@ -30,7 +30,7 @@ export const orderStatus = {
 };
 
 const OrderList = () => {
-  const queryParams: QueryConfig = UseQueryParams();
+  const queryParams: QueryConfig = useQueryParams();
   const queryConfig: QueryConfig = omitBy(
     {
       page: queryParams.page || 1,
@@ -40,7 +40,7 @@ const OrderList = () => {
     isUndefined
   );
 
-  const { extendedOrders, setExtendedOrders } = useContext(AppContext);
+  const { extendedOrders, setExtendedOrders } = useContext(ExtendedContext);
 
   // Query: Lấy danh sách đơn hàng
   const getOrdersQuery = useQuery({

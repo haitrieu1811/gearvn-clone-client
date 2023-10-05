@@ -2,17 +2,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import classNames from 'classnames';
 import DOMPurify from 'dompurify';
 import { convert } from 'html-to-text';
-import {
-  Dispatch,
-  Fragment,
-  SetStateAction,
-  createContext,
-  useContext,
-  useEffect,
-  useMemo,
-  useRef,
-  useState
-} from 'react';
+import { Fragment, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
@@ -23,30 +13,14 @@ import purchaseApi from 'src/apis/purchase.api';
 import userApi from 'src/apis/user.api';
 import { ChevronDownIcon, StarIcon } from 'src/components/Icons';
 import Loading from 'src/components/Loading';
-import PreviewImages from 'src/components/PreviewImages';
 import ProductRating from 'src/components/ProductRating';
 import ProductReviews from 'src/components/ProductReviews';
 import QuantityController from 'src/components/QuantityController';
 import SendReview from 'src/components/SendReview';
 import PATH from 'src/constants/path';
 import { AppContext } from 'src/contexts/app.context';
-import { Image } from 'src/types/product.type';
 import { formatCurrency, generateNameId, getIdFromNameId, getImageUrl, rateSale } from 'src/utils/utils';
 import SliderImages from './SliderImages';
-
-interface ProductDetailContext {
-  imagesObject: Image[];
-  previewImages: string[];
-  setShowPreviewImages: Dispatch<SetStateAction<boolean>>;
-  setPreviewImages: Dispatch<SetStateAction<string[]>>;
-}
-
-export const ProductDetailContext = createContext<ProductDetailContext>({
-  imagesObject: [],
-  previewImages: [],
-  setShowPreviewImages: () => null,
-  setPreviewImages: () => null
-});
 
 const ProductDetail = () => {
   const navigate = useNavigate();
@@ -57,8 +31,6 @@ const ProductDetail = () => {
   const [isMounted, setIsMounted] = useState(false);
   const [buyCount, setBuyCount] = useState<number>(1);
   const [readMore, setReadMore] = useState<boolean>(false);
-  const [showPreviewImages, setShowPreviewImages] = useState<boolean>(false);
-  const [previewImages, setPreviewImages] = useState<string[]>([]);
   const reviewsRef = useRef<HTMLDivElement>(null);
 
   // Đánh dấu đã mount component
@@ -125,11 +97,12 @@ const ProductDetail = () => {
   // Danh sách blog
   const getBlogsQuery = useQuery({
     queryKey: ['blogs'],
-    queryFn: () => blogApi.getList({ limit: '5' })
+    queryFn: () => blogApi.getList({ limit: '5' }),
+    staleTime: Infinity
   });
 
   // Danh sách blog
-  const blogs = useMemo(() => getBlogsQuery.data?.data.data.blogs, [getBlogsQuery.data?.data.data.blogs]);
+  const blogs = useMemo(() => getBlogsQuery.data?.data.data.blogs || [], [getBlogsQuery.data?.data.data.blogs]);
 
   // Cuộn đến phần đánh giá
   const handleSeeReviews = () => {
@@ -138,15 +111,8 @@ const ProductDetail = () => {
   };
 
   return (
-    <ProductDetailContext.Provider
-      value={{
-        imagesObject: product?.images || [],
-        previewImages,
-        setShowPreviewImages,
-        setPreviewImages
-      }}
-    >
-      {!!product && (
+    <Fragment>
+      {product && (
         <Helmet>
           <title>{product.name_vi}</title>
           <meta
@@ -175,13 +141,13 @@ const ProductDetail = () => {
 
       <div className='lg:container my-2 lg:my-4'>
         {/* Thông tin chi tiết sản phẩm */}
-        {product && !getProductQuery.isLoading && blogs && blogs.length > 0 && !getProductQuery.isLoading && (
+        {product && !getProductQuery.isLoading && !getProductQuery.isLoading && (
           <Fragment>
             {/* Thông tin và hình ảnh sản phẩm */}
             <div className='flex bg-white rounded flex-wrap lg:flex-nowrap'>
               {/* Hình ảnh sản phẩm */}
               <div className='px-2 lg:p-6 w-full lg:w-[420px]'>
-                <SliderImages />
+                <SliderImages images={product.images || []} />
               </div>
               {/* Thông tin sản phẩm */}
               <div className='flex-1 p-2 py-6 lg:p-6 lg:border-l'>
@@ -258,7 +224,7 @@ const ProductDetail = () => {
                   </div>
                 )}
                 <div
-                  className='mt-6 text-[#333333] leading-loose'
+                  className='mt-6 text-[#333333] text-sm md:text-base leading-loose md:leading-loose'
                   dangerouslySetInnerHTML={{
                     __html: DOMPurify.sanitize(product.general_info)
                   }}
@@ -281,7 +247,7 @@ const ProductDetail = () => {
                       dangerouslySetInnerHTML={{
                         __html: DOMPurify.sanitize(product.description)
                       }}
-                      className='px-2 lg:px-6 text-[#111111] text-base md:text-lg'
+                      className='px-2 lg:px-6 text-[#111111] text-sm leading-loose md:text-lg'
                     />
                   </div>
                 </div>
@@ -310,37 +276,39 @@ const ProductDetail = () => {
                 </div>
               </div>
               {/* Tin tức */}
-              <div className='bg-white rounded mt-2 lg:mt-0 lg:ml-4 w-full lg:w-[40%]'>
-                <h2 className='font-semibold text-xl md:text-2xl py-4 px-2 lg:px-6'>Tin tức về sản phẩm</h2>
-                <div className='px-2 lg:px-6 pb-2'>
-                  {blogs.map((blog) => (
-                    <div key={blog._id} className='flex mb-4'>
-                      <Link
-                        to={`${PATH.BLOG_DETAIL_WITHOUT_ID}/${generateNameId({
-                          name: blog.name_vi,
-                          id: blog._id
-                        })}`}
-                        className='flex-shrink-0'
-                      >
-                        <img
-                          src={getImageUrl(blog.thumbnail)}
-                          alt={blog.name_vi}
-                          className='w-[88px] h-[50px] object-cover rounded'
-                        />
-                      </Link>
-                      <Link
-                        to={`${PATH.BLOG_DETAIL_WITHOUT_ID}/${generateNameId({
-                          name: blog.name_vi,
-                          id: blog._id
-                        })}`}
-                        className='flex-1 ml-4'
-                      >
-                        <span className='line-clamp-2 text-sm md:text-base'>{blog.name_vi}</span>
-                      </Link>
-                    </div>
-                  ))}
+              {blogs.length > 0 && (
+                <div className='bg-white rounded mt-2 lg:mt-0 lg:ml-4 w-full lg:w-[40%]'>
+                  <h2 className='font-semibold text-xl md:text-2xl py-4 px-2 lg:px-6'>Tin tức về sản phẩm</h2>
+                  <div className='px-2 lg:px-6 pb-2'>
+                    {blogs.map((blog) => (
+                      <div key={blog._id} className='flex mb-4'>
+                        <Link
+                          to={`${PATH.BLOG_DETAIL_WITHOUT_ID}/${generateNameId({
+                            name: blog.name_vi,
+                            id: blog._id
+                          })}`}
+                          className='flex-shrink-0'
+                        >
+                          <img
+                            src={getImageUrl(blog.thumbnail)}
+                            alt={blog.name_vi}
+                            className='w-[88px] h-[50px] object-cover rounded'
+                          />
+                        </Link>
+                        <Link
+                          to={`${PATH.BLOG_DETAIL_WITHOUT_ID}/${generateNameId({
+                            name: blog.name_vi,
+                            id: blog._id
+                          })}`}
+                          className='flex-1 ml-4'
+                        >
+                          <span className='line-clamp-2 text-sm md:text-base'>{blog.name_vi}</span>
+                        </Link>
+                      </div>
+                    ))}
+                  </div>
                 </div>
-              </div>
+              )}
             </div>
             {/* Đánh giá và nhận xét */}
             <div ref={reviewsRef} className='bg-white rounded-sm mt-4'>
@@ -384,10 +352,7 @@ const ProductDetail = () => {
           </div>
         )}
       </div>
-
-      {/* Xem hình ảnh */}
-      <PreviewImages images={previewImages} isVisible={showPreviewImages} onClose={() => setShowPreviewImages(false)} />
-    </ProductDetailContext.Provider>
+    </Fragment>
   );
 };
 

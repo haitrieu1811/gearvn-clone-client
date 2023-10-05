@@ -8,16 +8,17 @@ import { ChevronLeftIcon } from 'src/components/Icons';
 import { PaymentMethod, ReceiveMethod } from 'src/constants/enum';
 import PATH from 'src/constants/path';
 import { AppContext } from 'src/contexts/app.context';
-import CartProvider from 'src/contexts/cart.context';
-import useAddress from 'src/hooks/useAddress';
+import { CartContext } from 'src/contexts/cart.context';
+import { ExtendedContext } from 'src/contexts/extended.context';
 import { PaymentOrderSchema, paymentOrderSchema } from 'src/utils/rules';
 import PaymentProgress from './PaymentProgress';
 
 const Cart = () => {
   const navigate = useNavigate();
   const isCartListPage = !!useMatch(PATH.CART_LIST);
-  const { profile, cartTotal } = useContext(AppContext);
-  const { defaultAddress } = useAddress();
+  const { profile } = useContext(AppContext);
+  const { cartTotal } = useContext(ExtendedContext);
+  const { defaultAddress } = useContext(CartContext);
 
   // Nếu không có sản phẩm nào trong giỏ hàng thì chuyển về trang danh sách sản phẩm
   useEffect(() => {
@@ -84,30 +85,28 @@ const Cart = () => {
       </Helmet>
 
       <FormProvider {...methods}>
-        <CartProvider>
-          <div className='mb-2 md:mb-4'>
-            <div className='md:container flex justify-center'>
-              <div className='w-[600px]'>
-                {isCartListPage && (
-                  <Link to={PATH.HOME} className='flex items-center text-[#1982F9] p-4'>
-                    <ChevronLeftIcon className='w-3 h-3 md:w-4 md:h-4' />{' '}
-                    <span className='font-medium ml-[5px] text-sm md:text-base'>Mua thêm sản phẩm khác</span>
-                  </Link>
-                )}
-                {!isCartListPage && (
-                  <button className='flex items-center text-[#1982F9] p-4' onClick={() => navigate(-1)}>
-                    <ChevronLeftIcon className='w-3 h-3 md:w-4 md:h-4' />{' '}
-                    <span className='font-medium ml-[5px] text-sm md:text-base'>Trở về</span>
-                  </button>
-                )}
-                <div className='rounded bg-white shadow-sm'>
-                  <PaymentProgress />
-                  <Outlet />
-                </div>
+        <div className='mb-2 md:mb-4'>
+          <div className='md:container flex justify-center'>
+            <div className='w-[600px]'>
+              {isCartListPage && (
+                <Link to={PATH.HOME} className='flex items-center text-[#1982F9] p-4'>
+                  <ChevronLeftIcon className='w-3 h-3 md:w-4 md:h-4' />{' '}
+                  <span className='font-medium ml-[5px] text-sm md:text-base'>Mua thêm sản phẩm khác</span>
+                </Link>
+              )}
+              {!isCartListPage && (
+                <button className='flex items-center text-[#1982F9] p-4' onClick={() => navigate(-1)}>
+                  <ChevronLeftIcon className='w-3 h-3 md:w-4 md:h-4' />{' '}
+                  <span className='font-medium ml-[5px] text-sm md:text-base'>Trở về</span>
+                </button>
+              )}
+              <div className='rounded bg-white shadow-sm'>
+                <PaymentProgress />
+                <Outlet />
               </div>
             </div>
           </div>
-        </CartProvider>
+        </div>
       </FormProvider>
     </Fragment>
   );

@@ -1,28 +1,34 @@
 import classNames from 'classnames';
-import { Fragment, useContext, useEffect, useMemo, useRef, useState } from 'react';
+import PropTypes from 'prop-types';
+import { Fragment, useEffect, useMemo, useRef, useState } from 'react';
 
+import { Link } from 'react-router-dom';
 import fallbackImage from 'src/assets/images/product-fallback.png';
 import { ArrowLeftIcon, ArrowRightIcon } from 'src/components/Icons';
 import Image from 'src/components/Image';
-import { ProductDetailContext } from '../ProductDetail';
+import { Image as ImageType } from 'src/types/product.type';
+import { getImageUrl } from 'src/utils/utils';
 
-const SliderImages = () => {
-  const { imagesObject, setShowPreviewImages, setPreviewImages } = useContext(ProductDetailContext);
+interface SliderImagesProps {
+  images: ImageType[];
+}
+
+const SliderImages = ({ images }: SliderImagesProps) => {
   const [indexCurrentImages, setIndexCurrentImages] = useState<number[]>([0, 5]);
   const [activeImage, setActiveImage] = useState<string>('');
   const imageRef = useRef<HTMLImageElement>(null);
 
   // Active hình ảnh đầu tiên của sản phẩm
   useEffect(() => {
-    if (imagesObject && imagesObject.length > 0 && imagesObject[0]) {
-      setActiveImage(imagesObject[0].name);
+    if (images && images.length > 0 && images[0]) {
+      setActiveImage(images[0].name);
     }
-  }, [imagesObject]);
+  }, [images]);
 
   // Danh sách những hình ảnh đang nằm trong slide
   const currentImages = useMemo(
-    () => (imagesObject ? imagesObject.slice(...indexCurrentImages) : []),
-    [imagesObject, indexCurrentImages]
+    () => (images ? images.slice(...indexCurrentImages) : []),
+    [images, indexCurrentImages]
   );
 
   // Prev slider hình ảnh
@@ -33,7 +39,7 @@ const SliderImages = () => {
 
   // Next slider hình ảnh
   const nextSliderImages = () => {
-    if (imagesObject && indexCurrentImages[1] < imagesObject.length) {
+    if (images && indexCurrentImages[1] < images.length) {
       setIndexCurrentImages((prevState) => [prevState[0] + 1, prevState[1] + 1]);
     }
   };
@@ -62,31 +68,26 @@ const SliderImages = () => {
     imageRef.current?.removeAttribute('style');
   };
 
-  // Hiển thị danh sách hình ảnh
-  const handleShowPreviewImages = () => {
-    if (setShowPreviewImages && setPreviewImages && imagesObject && imagesObject.length > 0) {
-      setShowPreviewImages(true);
-      setPreviewImages(imagesObject.map((image) => image.name));
-    }
-  };
-
   return (
     <Fragment>
+      {/* Ảnh được hiển thị */}
       <div
         className='overflow-hidden pt-[100%] relative hover:cursor-zoom-in'
         onMouseMove={handleZoomImage}
         onMouseLeave={handleRemoveZoomImage}
-        onClick={handleShowPreviewImages}
       >
-        <Image
-          ref={imageRef}
-          src={activeImage}
-          fallbackImage={fallbackImage}
-          alt={imagesObject[0]?.name}
-          className='absolute inset-0 w-full h-full object-cover rounded'
-        />
+        <Link to={getImageUrl(activeImage)} target='_blank'>
+          <Image
+            ref={imageRef}
+            src={activeImage}
+            fallbackImage={fallbackImage}
+            alt={images[0]?.name}
+            className='absolute inset-0 w-full h-full object-cover rounded'
+          />
+        </Link>
       </div>
-      {imagesObject && imagesObject.length > 0 && (
+      {/* Danh sách hình ảnh */}
+      {images && images.length > 0 && (
         <div className='relative group'>
           {indexCurrentImages[0] > 0 && (
             <button
@@ -117,7 +118,7 @@ const SliderImages = () => {
               );
             })}
           </div>
-          {indexCurrentImages[1] < imagesObject.length && (
+          {indexCurrentImages[1] < images.length && (
             <button
               className='absolute right-1 top-1/2 -translate-y-1/2 border bg-white w-[32px] h-[32px] rounded-full hidden items-center justify-center shadow group-hover:flex'
               onClick={nextSliderImages}
@@ -129,6 +130,10 @@ const SliderImages = () => {
       )}
     </Fragment>
   );
+};
+
+SliderImages.propTypes = {
+  images: PropTypes.array.isRequired
 };
 
 export default SliderImages;

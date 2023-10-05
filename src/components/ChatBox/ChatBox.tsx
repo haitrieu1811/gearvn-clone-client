@@ -1,9 +1,9 @@
 import { useInfiniteQuery } from '@tanstack/react-query';
-import classNames from 'classnames';
-import { FormEvent, useCallback, useContext, useEffect, useRef, useState } from 'react';
+import { FormEvent, Fragment, useCallback, useContext, useEffect, useRef } from 'react';
 
 import conversationApi from 'src/apis/conversation.api';
 import { AppContext } from 'src/contexts/app.context';
+import { ChatContext } from 'src/contexts/chat.context';
 import { Conversation, ConversationReceiver } from 'src/types/conversation.type';
 import socket from 'src/utils/socket';
 import { ChevronDownIcon, ChevronLeftIcon } from '../Icons';
@@ -17,12 +17,20 @@ interface ChatBoxProps {
 }
 
 const ChatBox = ({ visible = true, onClose }: ChatBoxProps) => {
-  const { profile, getConversationReceiversQuery, conversationReceivers, conversationUnreadCount } =
-    useContext(AppContext);
-  const [currentReceiver, setCurrentReceiver] = useState<ConversationReceiver | null>(null);
-  const [conversations, setConversations] = useState<Conversation[]>([]);
-  const [message, setMessage] = useState<string>('');
-  const [chatBodyHeight, setChatBodyHeight] = useState<number>(0);
+  const { profile } = useContext(AppContext);
+  const {
+    unreadCount,
+    receivers,
+    refetchReceivers,
+    currentReceiver,
+    setCurrentReceiver,
+    conversations,
+    setConversations,
+    chatBodyHeight,
+    setChatBodyHeight,
+    message,
+    setMessage
+  } = useContext(ChatContext);
   const inputRef = useRef<HTMLInputElement>(null);
   const chatBodyRef = useRef<HTMLDivElement>(null);
 
@@ -34,7 +42,7 @@ const ChatBox = ({ visible = true, onClose }: ChatBoxProps) => {
   // Nhận tin nhắn từ socket server và hiển thị lên màn hình
   useEffect(() => {
     socket.on('receive_message', (newConversation) => {
-      getConversationReceiversQuery?.refetch();
+      refetchReceivers();
       // Nếu đang ở một cuộc trò chuyện khác thì không hiển thị tin nhắn
       if (newConversation.sender._id !== currentReceiver?._id) return;
       setConversations((prev) => [newConversation, ...prev]);
@@ -92,7 +100,7 @@ const ChatBox = ({ visible = true, onClose }: ChatBoxProps) => {
   const handleSendMessage = useCallback(
     (e: FormEvent<HTMLFormElement>) => {
       e.preventDefault();
-      if (!message || !currentReceiver || !profile || !conversationReceivers) return;
+      if (!message || !currentReceiver || !profile || !receivers) return;
       const newConversation: Conversation = {
         _id: new Date().getTime().toString(),
         content: message,
@@ -115,75 +123,68 @@ const ChatBox = ({ visible = true, onClose }: ChatBoxProps) => {
       socket.emit('new_message', { content: message, receiver_id: currentReceiver._id, sender_id: profile?._id });
       setConversations((prev) => [newConversation, ...prev]);
       setMessage('');
-      getConversationReceiversQuery?.refetch();
+      refetchReceivers();
     },
-    [currentReceiver, message, profile, conversationReceivers]
+    [currentReceiver, message, profile, receivers]
   );
 
   return (
-    <div
-      className={classNames(
-        'bg-white fixed bottom-0 right-0 md:right-2 z-[999999] lg:z-[99] shadow-3xl rounded-t-lg h-[80vh] md:h-[550px] max-w-full w-full md:w-[640px] flex flex-col duration-300',
-        {
-          'opacity-0 pointer-events-none translate-y-14': !visible,
-          'opacity-100 pointer-events-auto translate-x-0': visible
-        }
-      )}
-    >
-      {/* Heading */}
-      <div className='flex-shrink-0 flex justify-between items-center h-[50px] pl-6 pr-3 border-b'>
-        <div className='flex items-center'>
-          {/* Trở về danh sách chat */}
-          {currentReceiver && (
-            <button className='md:hidden py-2 pr-4' onClick={() => setCurrentReceiver(null)}>
-              <ChevronLeftIcon className='w-4 h-4' />
-            </button>
-          )}
-          {/* Tiêu đề */}
-          <div className='text-primary font-semibold text-lg hidden md:flex items-center'>
-            Chat{' '}
-            {conversationUnreadCount > 0 && (
-              <span className='text-xs font-normal ml-1'>({conversationUnreadCount})</span>
-            )}
-          </div>
-          {/* Người nhận hiện tại */}
-          {currentReceiver && (
-            <div className='flex md:hidden items-center'>
-              <Image
-                src={currentReceiver.avatar}
-                alt={currentReceiver.fullname}
-                className='w-8 h-8 rounded-full object-cover'
-              />
-              <span className='text-slate-600 text-[15px] ml-3 font-semibold'>{currentReceiver.fullname}</span>
+    <Fragment>
+      {visible && (
+        <div className='bg-white fixed bottom-0 right-0 md:right-2 z-[999999] lg:z-[99] shadow-3xl rounded-t-lg h-[80vh] md:h-[550px] max-w-full w-full md:w-[640px] flex flex-col duration-300'>
+          {/* Heading */}
+          <div className='flex-shrink-0 flex justify-between items-center h-[50px] pl-6 pr-3 border-b'>
+            <div className='flex items-center'>
+              {/* Trở về danh sách chat */}
+              {currentReceiver && (
+                <button className='md:hidden py-2 pr-4' onClick={() => setCurrentReceiver(null)}>
+                  <ChevronLeftIcon className='w-4 h-4' />
+                </button>
+              )}
+              {/* Tiêu đề */}
+              <div className='text-primary font-semibold text-lg hidden md:flex items-center'>
+                Chat {unreadCount > 0 && <span className='text-xs font-normal ml-1'>({unreadCount})</span>}
+              </div>
+              {/* Người nhận hiện tại */}
+              {currentReceiver && (
+                <div className='flex md:hidden items-center'>
+                  <Image
+                    src={currentReceiver.avatar}
+                    alt={currentReceiver.fullname}
+                    className='w-8 h-8 rounded-full object-cover'
+                  />
+                  <span className='text-slate-600 text-[15px] ml-3 font-semibold'>{currentReceiver.fullname}</span>
+                </div>
+              )}
             </div>
-          )}
+            <button className='py-1 px-2' onClick={handleClose}>
+              <ChevronDownIcon className='w-4 h-4' />
+            </button>
+          </div>
+          {/* Body */}
+          <div ref={chatBodyRef} className='flex-1 bg-white border-t-slate-900'>
+            <div className='flex relative h-full'>
+              {/* Danh sách người đã nhắn tin với mình */}
+              <Receivers
+                chatBodyHeight={chatBodyHeight}
+                receivers={receivers}
+                currentReceiver={currentReceiver}
+                handleSelectReceiver={handleSelectReceiver}
+              />
+              {/* Cửa sổ chat */}
+              <ChatWindow
+                chatBodyHeight={chatBodyHeight}
+                conversations={conversations}
+                currentReceiver={currentReceiver}
+                handleSendMessage={handleSendMessage}
+                message={message}
+                setMessage={setMessage}
+              />
+            </div>
+          </div>
         </div>
-        <button className='py-1 px-2' onClick={handleClose}>
-          <ChevronDownIcon className='w-4 h-4' />
-        </button>
-      </div>
-      {/* Body */}
-      <div ref={chatBodyRef} className='flex-1 bg-white border-t-slate-900'>
-        <div className='flex relative h-full'>
-          {/* Danh sách người đã nhắn tin với mình */}
-          <Receivers
-            chatBodyHeight={chatBodyHeight}
-            conversationReceivers={conversationReceivers}
-            currentReceiver={currentReceiver}
-            handleSelectReceiver={handleSelectReceiver}
-          />
-          {/* Cửa sổ chat */}
-          <ChatWindow
-            chatBodyHeight={chatBodyHeight}
-            conversations={conversations}
-            currentReceiver={currentReceiver}
-            handleSendMessage={handleSendMessage}
-            message={message}
-            setMessage={setMessage}
-          />
-        </div>
-      </div>
-    </div>
+      )}
+    </Fragment>
   );
 };
 

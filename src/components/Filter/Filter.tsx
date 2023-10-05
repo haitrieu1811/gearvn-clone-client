@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import { useMemo, useState } from 'react';
 import { createSearchParams, useLocation, useNavigate } from 'react-router-dom';
 
-import UseQueryParams from 'src/hooks/useQueryParams';
+import useQueryParams from 'src/hooks/useQueryParams';
 import { CaretDownIcon } from '../Icons';
 
 interface FilterItem {
@@ -30,7 +30,7 @@ const Filter = ({
 }: FilterProps) => {
   const navigate = useNavigate();
   const location = useLocation();
-  const queryParams = UseQueryParams();
+  const queryParams = useQueryParams();
   const defaultValue = useMemo(
     () => (queryName in queryParams ? queryParams[queryName].split('-') : []),
     [queryParams]

@@ -10,8 +10,8 @@ import userApi from 'src/apis/user.api';
 import fallbackAvatar from 'src/assets/images/fallback-avatar.jpg';
 import Table from 'src/components/Table';
 import { UserStatus } from 'src/constants/enum';
-import { AppContext } from 'src/contexts/app.context';
-import UseQueryParams from 'src/hooks/useQueryParams';
+import { ExtendedContext } from 'src/contexts/extended.context';
+import useQueryParams from 'src/hooks/useQueryParams';
 import { PaginationRequestParams } from 'src/types/utils.type';
 import { convertMomentFromNowToVietnamese, formatCurrency, getImageUrl } from 'src/utils/utils';
 
@@ -20,8 +20,8 @@ export type QueryConfig = {
 };
 
 const CustomerList = () => {
-  const { extendedCustomers, setExtendedCustomers } = useContext(AppContext);
-  const queryParams: QueryConfig = UseQueryParams();
+  const { extendedCustomers, setExtendedCustomers } = useContext(ExtendedContext);
+  const queryParams: QueryConfig = useQueryParams();
   const queryConfig: QueryConfig = omitBy(
     {
       page: queryParams.page || '1',

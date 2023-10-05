@@ -9,6 +9,7 @@ import {
   LogoutIcon,
   NewspaperIcon,
   ShoppingBagIcon,
+  StarIcon,
   TicketIcon,
   UserIcon
 } from 'src/components/Icons';
@@ -35,16 +36,6 @@ const SidebarDashboard = () => {
           name='Khách hàng'
         />
         <DashboardItem
-          path={PATH.DASHBOARD_CATEGORY}
-          icon={<ShoppingBagIcon className='w-4 h-4 text-black' />}
-          name='Danh mục'
-        />
-        <DashboardItem
-          path={PATH.DASHBOARD_BRAND}
-          icon={<FlagIcon className='w-4 h-4 text-black' />}
-          name='Nhãn hiệu'
-        />
-        <DashboardItem
           path={PATH.DASHBOARD_PRODUCT}
           icon={<ItemIcon className='w-4 h-4 text-black' />}
           name='Sản phẩm'
@@ -58,7 +49,22 @@ const SidebarDashboard = () => {
         <DashboardItem
           path={PATH.DASHBOARD_VOUCHER}
           icon={<TicketIcon className='w-4 h-4 text-black' />}
-          name='Voucher'
+          name='Voucher khuyến mãi'
+        />
+        <DashboardItem
+          path={PATH.DASHBOARD_REVIEW_LIST}
+          icon={<StarIcon className='w-4 h-4 stroke-black fill-none' />}
+          name='Đánh giá sản phẩm'
+        />
+        <DashboardItem
+          path={PATH.DASHBOARD_CATEGORY}
+          icon={<ShoppingBagIcon className='w-4 h-4 text-black' />}
+          name='Danh mục sản phẩm'
+        />
+        <DashboardItem
+          path={PATH.DASHBOARD_BRAND}
+          icon={<FlagIcon className='w-4 h-4 text-black' />}
+          name='Nhãn hiệu sản phẩm'
         />
       </div>
       <div className='py-5 px-6 pl-0'>

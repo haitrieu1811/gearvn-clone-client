@@ -1,11 +1,12 @@
 import { useQuery } from '@tanstack/react-query';
-import { Dispatch, ReactNode, SetStateAction, createContext, useContext, useState } from 'react';
+import { Dispatch, ReactNode, SetStateAction, createContext, useContext, useMemo, useState } from 'react';
 
-import useAddress from 'src/hooks/useAddress';
-import useCart from 'src/hooks/useCart';
+import addressApi from 'src/apis/address.api';
+import purchaseApi from 'src/apis/purchase.api';
 import { Address } from 'src/types/address.type';
 import { Purchase } from 'src/types/purchase.type';
 import { AppContext } from './app.context';
+import { ExtendedContext } from './extended.context';
 
 interface CartContext {
   cartList: Purchase[];
@@ -38,13 +39,44 @@ const initCartContext: CartContext = {
 export const CartContext = createContext<CartContext>(initCartContext);
 
 const CartProvider = ({ children }: { children: ReactNode }) => {
-  const { cartList, cartSize, getCartQuery } = useCart();
-  const { defaultAddress } = useAddress();
+  const { profile } = useContext(AppContext);
+  const { cartTotal } = useContext(ExtendedContext);
   const [voucherCode, setVoucherCode] = useState<string>(initCartContext.voucherCode);
   const [totalReduced, setTotalReduced] = useState<number>(initCartContext.totalReduced);
   const [isUsingVoucher, setIsUsingVoucher] = useState<boolean>(initCartContext.isUsingVoucher);
-  const { cartTotal } = useContext(AppContext);
   const totalPayment = cartTotal - totalReduced > 0 ? cartTotal - totalReduced : 0;
+
+  // Query: Lấy danh sách sản phẩm trong giỏ hàng
+  const getCartQuery = useQuery({
+    queryKey: ['cart', profile?._id],
+    queryFn: () => purchaseApi.getCart(),
+    enabled: !!profile?._id
+  });
+
+  // Danh sách sản phẩm trong giỏ hàng
+  const cartList = useMemo(() => {
+    return getCartQuery.data?.data.data.cart_list || [];
+  }, [getCartQuery.data?.data.data.cart_list]);
+
+  // Số lượng sản phẩm trong giỏ hàng
+  const cartSize = useMemo(() => getCartQuery.data?.data.data.cart_size || 0, [getCartQuery.data?.data.data.cart_size]);
+
+  // Query: Lấy danh sách địa chỉ
+  const getAddressesQuery = useQuery({
+    queryKey: ['addresses', profile?._id],
+    queryFn: () => addressApi.getAddresses(),
+    enabled: !!profile?._id,
+    staleTime: Infinity
+  });
+
+  // Danh sách địa chỉ
+  const addresses = useMemo(
+    () => getAddressesQuery.data?.data.data.addresses,
+    [getAddressesQuery.data?.data.data.addresses]
+  );
+
+  // Địa chỉ mặc định
+  const defaultAddress = useMemo(() => addresses?.find((address) => address.is_default), [addresses]);
 
   return (
     <CartContext.Provider

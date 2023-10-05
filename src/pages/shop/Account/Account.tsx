@@ -26,7 +26,8 @@ const Account = () => {
   // Query: Lấy thông tin tài khoản
   const getMeQuery = useQuery({
     queryKey: ['me'],
-    queryFn: () => userApi.getMe()
+    queryFn: () => userApi.getMe(),
+    staleTime: Infinity
   });
 
   // Thông tin tài khoản
@@ -45,7 +46,6 @@ const Account = () => {
         <div className='col-span-12 lg:col-span-3 bg-white rounded shadow-sm'>
           <SidebarAccount />
         </div>
-
         {/* Nội dung */}
         <div className='col-span-12 lg:col-span-9'>
           <Outlet />

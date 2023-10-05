@@ -56,11 +56,22 @@ export interface Product {
 }
 
 // Type: Đánh giá của sản phẩm
+
 export interface ProductReview {
   _id: string;
   rating: number;
   comment: string;
   author: ReviewAuthor;
+  product: {
+    _id: string;
+    name_vi: string;
+    name_en: string;
+    thumbnail: string;
+    price: number;
+    price_after_discount: number;
+    created_at: string;
+    updated_at: string;
+  };
   images: Image[];
   replies: ProductReviewReply[];
   created_at: string;

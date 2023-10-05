@@ -1,12 +1,13 @@
+import { useMutation, useQuery } from '@tanstack/react-query';
 import keyBy from 'lodash/keyBy';
 import moment from 'moment';
 import { Fragment, useContext, useEffect, useMemo } from 'react';
 
+import brandApi from 'src/apis/brand.api';
 import Table from 'src/components/Table';
 import PATH from 'src/constants/path';
-import { AppContext } from 'src/contexts/app.context';
-import useBrand from 'src/hooks/useBrand';
-import UseQueryParams from 'src/hooks/useQueryParams';
+import { ExtendedContext } from 'src/contexts/extended.context';
+import useQueryParams from 'src/hooks/useQueryParams';
 import { PaginationRequestParams } from 'src/types/utils.type';
 import { convertMomentFromNowToVietnamese } from 'src/utils/utils';
 
@@ -15,13 +16,31 @@ type QueryConfig = {
 };
 
 const BrandList = () => {
-  const { extendedBrands, setExtendedBrands } = useContext(AppContext);
-  const queryParams: QueryConfig = UseQueryParams();
+  const { extendedBrands, setExtendedBrands } = useContext(ExtendedContext);
+  const queryParams: QueryConfig = useQueryParams();
   const queryConfig: QueryConfig = {
     page: queryParams.page || '1',
     limit: queryParams.limit || '10'
   };
-  const { brands, brandsPageSize, getBrandsQuery, deleteBrandMutation } = useBrand(queryConfig);
+
+  // Query: Lấy danh sách nhãn hiệu
+  const getBrandsQuery = useQuery({
+    queryKey: ['brands', queryConfig],
+    queryFn: () => brandApi.getList(queryConfig),
+    keepPreviousData: true
+  });
+
+  // Xóa nhãn hiệu
+  const deleteBrandMutation = useMutation(brandApi.delete);
+
+  // Danh sách nhãn hiệu
+  const brands = useMemo(() => getBrandsQuery.data?.data.data.brands || [], [getBrandsQuery.data?.data.data.brands]);
+
+  // Tổng số nhãn hiệu
+  const brandsPageSize = useMemo(
+    () => getBrandsQuery.data?.data.data.pagination.page_size || 0,
+    [getBrandsQuery.data?.data.data.pagination.page_size]
+  );
 
   // Cập nhật danh sách nhãn hiệu (có thêm trường checked)
   useEffect(() => {
@@ -91,7 +110,7 @@ const BrandList = () => {
         isLoading={getBrandsQuery.isLoading}
         updateItemPath={PATH.DASHBOARD_BRAND_UPDATE_WITHOUT_ID}
         onDelete={(brandIds) => deleteBrandMutation.mutate(brandIds)}
-        tableName='Danh sách nhãn hiệu'
+        tableName='Nhãn hiệu sản phẩm'
         addNewPath={PATH.DASHBOARD_BRAND_CREATE}
       />
     </Fragment>

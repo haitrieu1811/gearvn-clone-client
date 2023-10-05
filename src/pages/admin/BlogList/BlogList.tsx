@@ -9,8 +9,8 @@ import { toast } from 'react-toastify';
 import blogApi from 'src/apis/blog.api';
 import Table from 'src/components/Table';
 import PATH from 'src/constants/path';
-import { AppContext } from 'src/contexts/app.context';
-import UseQueryParams from 'src/hooks/useQueryParams';
+import { ExtendedContext } from 'src/contexts/extended.context';
+import useQueryParams from 'src/hooks/useQueryParams';
 import { PaginationRequestParams } from 'src/types/utils.type';
 import { convertMomentFromNowToVietnamese } from 'src/utils/utils';
 
@@ -19,8 +19,8 @@ type QueryConfig = {
 };
 
 const BlogList = () => {
-  const { extendedBlogs, setExtendedBlogs } = useContext(AppContext);
-  const queryParams: QueryConfig = UseQueryParams();
+  const { extendedBlogs, setExtendedBlogs } = useContext(ExtendedContext);
+  const queryParams: QueryConfig = useQueryParams();
   const queryConfig: QueryConfig = omitBy(
     {
       page: queryParams.page || 1,

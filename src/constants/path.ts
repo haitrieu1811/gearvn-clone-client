@@ -52,6 +52,7 @@ const PATH = {
   DASHBOARD_VOUCHER_CREATE: '/dashboard/voucher/create',
   DASHBOARD_VOUCHER_UPDATE: '/dashboard/voucher/update/:voucher_id',
   DASHBOARD_VOUCHER_UPDATE_WITHOUT_ID: '/dashboard/voucher/update',
+  DASHBOARD_REVIEW_LIST: '/dashboard/reviews',
   NOT_FOUND: '*'
 } as const;
 

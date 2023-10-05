@@ -1,7 +1,9 @@
-import { Fragment, useState } from 'react';
+import { Fragment, useContext, useMemo, useState } from 'react';
 import { useMediaQuery } from 'react-responsive';
 import { Link, useNavigate } from 'react-router-dom';
 
+import { useQuery } from '@tanstack/react-query';
+import purchaseApi from 'src/apis/purchase.api';
 import logoMobile from 'src/assets/images/logo-mobile.svg';
 import logo from 'src/assets/images/logo-white.svg';
 import Drawer from 'src/components/Drawer';
@@ -10,7 +12,7 @@ import MegaMenu from 'src/components/MegaMenu';
 import MobileMenu from 'src/components/MobileMenu';
 import CONFIG from 'src/constants/config';
 import PATH from 'src/constants/path';
-import useCart from 'src/hooks/useCart';
+import { AppContext } from 'src/contexts/app.context';
 import Account from './Account';
 import Cart from './Cart';
 import Search from './Search';
@@ -18,9 +20,20 @@ import Search from './Search';
 const Header = () => {
   const navigate = useNavigate();
   const isTablet = useMediaQuery({ maxWidth: CONFIG.TABLET_SCREEN_SIZE });
-  const { cartSize } = useCart();
+  const { profile } = useContext(AppContext);
   const [showMegaMenu, setShowMegaMenu] = useState<boolean>(false);
   const [showMobileMenu, setShowMobileMenu] = useState<boolean>(false);
+
+  // Query: Lấy giỏ hàng
+  const getCartQuery = useQuery({
+    queryKey: ['cart', profile?._id],
+    queryFn: () => purchaseApi.getCart(),
+    enabled: !!profile?._id,
+    staleTime: 1000 * 60 * 10
+  });
+
+  // Số lượng sản phẩm trong giỏ hàng
+  const cartSize = useMemo(() => getCartQuery.data?.data.data.cart_size || 0, [getCartQuery.data?.data.data.cart_size]);
 
   // Ẩn hiện mega menu
   const toggleMegaMenu = () => {

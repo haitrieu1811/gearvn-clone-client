@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { useState } from 'react';
 import { createSearchParams, useLocation, useNavigate } from 'react-router-dom';
 
-import UseQueryParams from 'src/hooks/useQueryParams';
+import useQueryParams from 'src/hooks/useQueryParams';
 import { CaretDownIcon, SortIcon } from '../Icons';
 
 type SortBy = 'price' | 'price_after_discount' | 'created_at';
@@ -23,7 +23,7 @@ interface SortProps {
 const Sort = ({ data }: SortProps) => {
   const navigate = useNavigate();
   const location = useLocation();
-  const queryParams = UseQueryParams();
+  const queryParams = useQueryParams();
   const [currentSort, setCurrentSort] = useState<SortItem>(data[0]);
 
   // Tiến hành lọc

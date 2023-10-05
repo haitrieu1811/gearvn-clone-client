@@ -12,16 +12,16 @@ import Badge from 'src/components/Badge';
 import Table from 'src/components/Table';
 import { VoucherDiscountUnit } from 'src/constants/enum';
 import PATH from 'src/constants/path';
-import { AppContext } from 'src/contexts/app.context';
-import UseQueryParams from 'src/hooks/useQueryParams';
+import { ExtendedContext } from 'src/contexts/extended.context';
+import useQueryParams from 'src/hooks/useQueryParams';
 import { GetVouchersRequestParams } from 'src/types/voucher.type';
 import { convertMomentFromNowToVietnamese, formatCurrency } from 'src/utils/utils';
 
 const VoucherList = () => {
   const navigate = useNavigate();
-  const queryParams: GetVouchersRequestParams = UseQueryParams();
+  const queryParams: GetVouchersRequestParams = useQueryParams();
   const queryConfig = omitBy(queryParams, isUndefined);
-  const { extendedVouchers, setExtendedVouchers } = useContext(AppContext);
+  const { extendedVouchers, setExtendedVouchers } = useContext(ExtendedContext);
 
   // Query: Lấy danh sách voucher
   const getVouchersQuery = useQuery({

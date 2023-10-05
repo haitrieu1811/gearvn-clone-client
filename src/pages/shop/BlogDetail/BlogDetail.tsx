@@ -4,11 +4,12 @@ import { convert } from 'html-to-text';
 import moment from 'moment';
 import { Fragment, useMemo } from 'react';
 import { Helmet } from 'react-helmet-async';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 
 import blogApi from 'src/apis/blog.api';
 import BlogVertical from 'src/components/BlogVertical';
 import { ClockIcon } from 'src/components/Icons';
+import Image from 'src/components/Image';
 import Loading from 'src/components/Loading';
 import { getIdFromNameId, getImageUrl } from 'src/utils/utils';
 
@@ -26,14 +27,15 @@ const BlogDetail = () => {
   // Danh sách blog khác
   const getBlogsQuery = useQuery({
     queryKey: ['blogs'],
-    queryFn: () => blogApi.getList({ limit: '6' })
+    queryFn: () => blogApi.getList({ limit: '6' }),
+    enabled: !!blogId
   });
 
   // Lấy thông tin blog
   const blog = useMemo(() => getBlogQuery.data?.data.data.blog, [getBlogQuery.data?.data.data.blog]);
 
   // Danh sách blog khác
-  const otherBlogs = useMemo(() => getBlogsQuery.data?.data.data.blogs, [getBlogsQuery.data?.data.data.blogs]);
+  const otherBlogs = useMemo(() => getBlogsQuery.data?.data.data.blogs || [], [getBlogsQuery.data?.data.data.blogs]);
 
   return (
     <Fragment>
@@ -68,7 +70,9 @@ const BlogDetail = () => {
         {/* Chi tiết blog */}
         {blog && !getBlogQuery.isLoading && (
           <div className='md:px-[80px] lg:px-[220px] my-2 md:py-4'>
-            <img src={getImageUrl(blog.thumbnail)} alt={blog.name_vi} className='w-full object-contain rounded mb-4' />
+            <Link to={getImageUrl(blog.thumbnail)} target='_blank'>
+              <Image src={blog.thumbnail} alt={blog.name_vi} className='w-full object-contain rounded mb-4' />
+            </Link>
             <h1 className='text-xl md:text-[28px] font-semibold mb-4 leading-normal'>{blog.name_vi}</h1>
             <div className='flex items-center mb-4'>
               <span className='flex items-center'>
@@ -83,14 +87,14 @@ const BlogDetail = () => {
                 dangerouslySetInnerHTML={{
                   __html: DOMPurify.sanitize(blog.content_vi)
                 }}
-                className='text-base md:text-lg text-justify text-[#111111]'
+                className='text-sm leading-loose md:text-lg text-justify text-[#111111]'
               />
             </div>
           </div>
         )}
 
         {/* Danh sách blog khác */}
-        {!!otherBlogs && otherBlogs.length > 0 && !getBlogsQuery.isLoading && (
+        {otherBlogs.length > 0 && !getBlogsQuery.isLoading && (
           <div className='md:px-[40px] lg:px-[110px] mt-12'>
             <h2 className='text-lg md:text-2xl font-semibold uppercase md:mb-4 text-[#333333]'>Bài viết liên quan</h2>
             <div className='grid grid-cols-12 gap-2 md:gap-6'>

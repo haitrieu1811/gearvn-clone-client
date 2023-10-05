@@ -140,7 +140,7 @@ const SendReview = ({ product }: SendReviewProps) => {
         type: NotificationType.NewReview,
         title: 'Có đánh giá mới',
         content: `<strong>${profile?.fullname || ''}</strong> đã đánh giá sản phẩm <strong>${product.name_vi}</strong>`,
-        path: window.location.href,
+        path: PATH.DASHBOARD_REVIEW_LIST,
         sender_id: profile?._id,
         receiver_id: product.author._id,
         sender: profile

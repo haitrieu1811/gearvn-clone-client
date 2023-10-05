@@ -8,7 +8,7 @@ import {
   GetReviewDetailResponse,
   GetReviewsResponse
 } from 'src/types/product.type';
-import { OnlyMessageResponse } from 'src/types/utils.type';
+import { OnlyMessageResponse, PaginationRequestParams } from 'src/types/utils.type';
 import http from 'src/utils/http';
 
 const productApi = {
@@ -36,8 +36,12 @@ const productApi = {
   addReview({ productId, body }: { productId: string; body: AddReviewRequestBody }) {
     return http.post<OnlyMessageResponse>(`/reviews/product/${productId}`, body);
   },
+  // Lấy danh sách đánh giá
+  getReviews(params: PaginationRequestParams) {
+    return http.get<GetReviewsResponse>('/reviews', { params });
+  },
   // Lấy danh sách đánh giá của sản phẩm
-  getReviews(productId: string) {
+  getReviewsByProductId(productId: string) {
     return http.get<GetReviewsResponse>(`/reviews/product/${productId}`);
   },
   // Lấy chi tiết đánh giá của sản phẩm

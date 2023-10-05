@@ -5,18 +5,13 @@ import Image from 'src/components/Image';
 import { ConversationReceiver } from 'src/types/conversation.type';
 
 interface ReceiversProps {
-  conversationReceivers: ConversationReceiver[];
+  receivers: ConversationReceiver[];
   currentReceiver: ConversationReceiver | null;
   handleSelectReceiver: (receiver: any) => void;
   chatBodyHeight: number;
 }
 
-const Receivers = ({
-  conversationReceivers,
-  currentReceiver,
-  handleSelectReceiver,
-  chatBodyHeight
-}: ReceiversProps) => {
+const Receivers = ({ receivers, currentReceiver, handleSelectReceiver, chatBodyHeight }: ReceiversProps) => {
   return (
     <div
       style={{
@@ -30,7 +25,7 @@ const Receivers = ({
         }
       )}
     >
-      {conversationReceivers.map((receiver) => (
+      {receivers.map((receiver) => (
         <div
           key={receiver._id}
           className={classNames('flex py-4 pl-4 pr-6 relative', {
