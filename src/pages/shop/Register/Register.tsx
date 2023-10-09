@@ -4,7 +4,6 @@ import isEmpty from 'lodash/isEmpty';
 import { Fragment, useContext } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { useForm } from 'react-hook-form';
-import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 
 import authApi from 'src/apis/auth.api';
@@ -19,7 +18,6 @@ import { isEntityError } from 'src/utils/utils';
 type FormData = RegisterSchema;
 
 const Register = () => {
-  const { t } = useTranslation('pages');
   const { setIsAuthenticated, setProfile } = useContext(AppContext);
   const {
     register,
@@ -81,19 +79,19 @@ const Register = () => {
         <div className='container py-10 md:py-24'>
           <div className='grid grid-cols-12'>
             <div className='bg-white p-7 md:p-10 lg:col-start-9 lg:col-span-4 rounded col-span-12 col-start-1 md:col-span-8 md:col-start-3 shadow-sm'>
-              <h2 className='text-xl md:text-2xl capitalize mb-5'>{t('register_login.register')}</h2>
+              <h2 className='text-xl md:text-2xl capitalize mb-5'>Đăng ký</h2>
               <form onSubmit={onSubmit}>
                 <Input
                   type='text'
                   name='email'
-                  placeholder={t('register_login.email')}
+                  placeholder='Email'
                   register={register}
                   errorMessage={errors.email?.message}
                 />
                 <Input
                   type='password'
                   name='password'
-                  placeholder={t('register_login.password')}
+                  placeholder='Mật khẩu'
                   register={register}
                   errorMessage={errors.password?.message}
                   classNameWrapper='mt-4'
@@ -101,7 +99,7 @@ const Register = () => {
                 <Input
                   type='password'
                   name='confirm_password'
-                  placeholder={t('register_login.confirm_password')}
+                  placeholder='Nhập lại mật khẩu'
                   register={register}
                   errorMessage={errors.confirm_password?.message}
                   classNameWrapper='mt-4'
@@ -111,13 +109,13 @@ const Register = () => {
                   className='bg-primary px-4 py-2 text-white text-sm md:text-base uppercase rounded hover:bg-primary/90 flex items-center justify-center font-medium select-none w-full'
                   isLoading={registerMutation.isLoading}
                 >
-                  {t('register_login.register')}
+                  Đăng ký
                 </Button>
               </form>
               <div className='mt-4 text-center'>
-                <span className='text-gray-500 text-sm md:text-base'>{t('register_login.already_have_account')}</span>{' '}
+                <span className='text-gray-500 text-sm md:text-base'>Bạn đã có tài khoản?</span>{' '}
                 <Link to={PATH.LOGIN} className='text-blue-700 font-medium text-sm md:text-base'>
-                  {t('register_login.login')}
+                  Đăng nhập
                 </Link>
               </div>
             </div>

@@ -1,13 +1,11 @@
 import { useQuery } from '@tanstack/react-query';
 import Tippy from '@tippyjs/react/headless';
 import { FormEvent, memo, useContext, useEffect, useMemo, useRef, useState } from 'react';
-import { useMediaQuery } from 'react-responsive';
 import { Link, createSearchParams, useNavigate } from 'react-router-dom';
 
 import productApi from 'src/apis/product.api';
 import { SearchIcon, SpinnerIcon } from 'src/components/Icons';
 import Wrapper from 'src/components/Wrapper';
-import CONFIG from 'src/constants/config';
 import PATH from 'src/constants/path';
 import { AppContext } from 'src/contexts/app.context';
 import useDebounce from 'src/hooks/useDebounce';
@@ -17,7 +15,6 @@ const SEARCH_RESULT_LIMIT = 5;
 
 const Search = () => {
   const navigate = useNavigate();
-  const isMobile = useMediaQuery({ maxWidth: CONFIG.MOBILE_SCREEN_SIZE });
   const { profile } = useContext(AppContext);
   const [keywordSearch, setKeywordSearch] = useState<string>('');
   const [showSearchResult, setShowSearchResult] = useState<boolean>(false);
@@ -28,13 +25,9 @@ const Search = () => {
   // Đặt chiều rộng cho phần hiển thị kết quả tìm kiếm
   useEffect(() => {
     if (formRef.current && searchResultRef.current) {
-      if (isMobile) {
-        searchResultRef.current.style.width = `100vw`;
-        return;
-      }
       searchResultRef.current.style.width = ` ${formRef.current.offsetWidth}px`;
     }
-  }, [formRef.current, searchResultRef.current, isMobile, profile?._id]);
+  }, [formRef.current, searchResultRef.current, profile?._id]);
 
   // Query: Lấy danh sách sản phẩm
   const getProductsQuery = useQuery({

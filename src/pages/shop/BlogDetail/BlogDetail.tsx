@@ -93,6 +93,13 @@ const BlogDetail = () => {
           </div>
         )}
 
+        {/* Loading */}
+        {getBlogQuery.isLoading && (
+          <div className='min-h-[200px] flex justify-center items-center'>
+            <Loading />
+          </div>
+        )}
+
         {/* Danh sách blog khác */}
         {otherBlogs.length > 0 && !getBlogsQuery.isLoading && (
           <div className='md:px-[40px] lg:px-[110px] mt-12'>
@@ -108,8 +115,8 @@ const BlogDetail = () => {
         )}
 
         {/* Loading */}
-        {(getBlogQuery.isLoading || getBlogsQuery.isLoading) && (
-          <div className='min-h-[400px] flex justify-center items-center'>
+        {getBlogsQuery.isLoading && (
+          <div className='min-h-[200px] flex justify-center items-center'>
             <Loading />
           </div>
         )}

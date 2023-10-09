@@ -32,5 +32,7 @@ export const clearAuthFromLS = () => {
   localStorage.removeItem('refresh_token');
   localStorage.removeItem('profile');
   const clearLSEvent = new Event('clearLS');
+  const clearChatEvent = new Event('clearChat');
   localStorageEventTarget.dispatchEvent(clearLSEvent);
+  localStorageEventTarget.dispatchEvent(clearChatEvent);
 };

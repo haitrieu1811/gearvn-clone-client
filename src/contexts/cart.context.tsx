@@ -6,7 +6,6 @@ import purchaseApi from 'src/apis/purchase.api';
 import { Address } from 'src/types/address.type';
 import { Purchase } from 'src/types/purchase.type';
 import { AppContext } from './app.context';
-import { ExtendedContext } from './extended.context';
 
 interface CartContext {
   cartList: Purchase[];
@@ -39,8 +38,7 @@ const initCartContext: CartContext = {
 export const CartContext = createContext<CartContext>(initCartContext);
 
 const CartProvider = ({ children }: { children: ReactNode }) => {
-  const { profile } = useContext(AppContext);
-  const { cartTotal } = useContext(ExtendedContext);
+  const { profile, cartTotal } = useContext(AppContext);
   const [voucherCode, setVoucherCode] = useState<string>(initCartContext.voucherCode);
   const [totalReduced, setTotalReduced] = useState<number>(initCartContext.totalReduced);
   const [isUsingVoucher, setIsUsingVoucher] = useState<boolean>(initCartContext.isUsingVoucher);

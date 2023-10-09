@@ -78,7 +78,7 @@ const Product = () => {
   const brands = useMemo(() => getBrandsQuery.data?.data.data.brands || [], [getBrandsQuery.data?.data.data.brands]);
 
   return (
-    <div className='lg:container'>
+    <Fragment>
       <Helmet>
         <title>Danh sách sản phẩm</title>
         <meta
@@ -99,91 +99,93 @@ const Product = () => {
         <meta property='og:type' content='website' />
       </Helmet>
 
-      <div className='bg-white my-2 lg:my-4 rounded shadow-sm pb-10 px-3'>
-        {/* Bộ lọc sản phẩm */}
-        <div className='py-6 px-3 flex'>
-          {categories && categories.length > 0 && (
-            <Filter
-              queryName='category'
-              label='Danh mục sản phẩm'
-              data={categories.map((category) => ({
-                value: category._id,
-                text: category.name_vi
-              }))}
-            />
-          )}
-          <div className='mx-1' />
-          {brands && brands.length > 0 && (
-            <Filter
-              queryName='brand'
-              label='Nhãn hiệu'
-              data={brands.map((brand) => ({
-                value: brand._id,
-                text: brand.name
-              }))}
-            />
-          )}
-        </div>
-
-        {/* Sắp xếp sản phẩm */}
-        <div className='flex justify-end mb-4'>
-          <Sort
-            data={[
-              {
-                orderBy: 'desc',
-                sortBy: 'created_at',
-                name: 'Nổi bật'
-              },
-              {
-                orderBy: 'desc',
-                sortBy: 'price_after_discount',
-                name: 'Giá giảm dần'
-              },
-              {
-                orderBy: 'asc',
-                sortBy: 'price_after_discount',
-                name: 'Giá tăng dần'
-              }
-            ]}
-          />
-        </div>
-
-        {/* Danh sách sản phẩm */}
-        {products && products.length > 0 && !getProductsQuery.isLoading && (
-          <Fragment>
-            <div className='grid grid-cols-12 lg:grid-cols-10 gap-3'>
-              {products.map((product, index) => (
-                <div key={index} className='col-span-6 md:col-span-4 lg:col-span-2'>
-                  <ProductItem data={product} />
-                </div>
-              ))}
-            </div>
-            <div className='flex justify-center mt-10'>
-              <Pagination
-                pageSize={productsPageSize}
-                classNameItem='w-8 h-8 md:w-10 md:h-10 mx-1 rounded-full flex justify-center items-center font-semibold text-sm md:text-base select-none'
-                classNameItemActive='bg-black text-white pointer-events-none'
-                classNameItemUnActive='bg-[#f3f3f3]'
+      <div className='lg:container'>
+        <div className='bg-white my-2 lg:my-4 rounded shadow-sm pb-10 px-3'>
+          {/* Bộ lọc sản phẩm */}
+          <div className='py-6 px-3 flex'>
+            {categories && categories.length > 0 && (
+              <Filter
+                queryName='category'
+                label='Danh mục sản phẩm'
+                data={categories.map((category) => ({
+                  value: category._id,
+                  text: category.name_vi
+                }))}
               />
+            )}
+            <div className='mx-1' />
+            {brands && brands.length > 0 && (
+              <Filter
+                queryName='brand'
+                label='Nhãn hiệu'
+                data={brands.map((brand) => ({
+                  value: brand._id,
+                  text: brand.name
+                }))}
+              />
+            )}
+          </div>
+
+          {/* Sắp xếp sản phẩm */}
+          <div className='flex justify-end mb-4'>
+            <Sort
+              data={[
+                {
+                  orderBy: 'desc',
+                  sortBy: 'created_at',
+                  name: 'Nổi bật'
+                },
+                {
+                  orderBy: 'desc',
+                  sortBy: 'price_after_discount',
+                  name: 'Giá giảm dần'
+                },
+                {
+                  orderBy: 'asc',
+                  sortBy: 'price_after_discount',
+                  name: 'Giá tăng dần'
+                }
+              ]}
+            />
+          </div>
+
+          {/* Danh sách sản phẩm */}
+          {products && products.length > 0 && !getProductsQuery.isLoading && (
+            <Fragment>
+              <div className='grid grid-cols-12 lg:grid-cols-10 gap-3'>
+                {products.map((product, index) => (
+                  <div key={index} className='col-span-6 md:col-span-4 lg:col-span-2'>
+                    <ProductItem data={product} />
+                  </div>
+                ))}
+              </div>
+              <div className='flex justify-center mt-10'>
+                <Pagination
+                  pageSize={productsPageSize}
+                  classNameItem='w-8 h-8 md:w-10 md:h-10 mx-1 rounded-full flex justify-center items-center font-semibold text-sm md:text-base select-none'
+                  classNameItemActive='bg-black text-white pointer-events-none'
+                  classNameItemUnActive='bg-[#f3f3f3]'
+                />
+              </div>
+            </Fragment>
+          )}
+
+          {/* Không có sản phẩm nào phù hợp */}
+          {products && products.length <= 0 && !getProductsQuery.isLoading && (
+            <div className='p-2 md:p-[15px] bg-[#fcf8e3] border border-[#faebcc] text-xs md:text-sm text-[#8a6d3b]'>
+              Chưa có sản phẩm nào trong danh mục này
             </div>
-          </Fragment>
-        )}
+          )}
 
-        {/* Không có sản phẩm nào phù hợp */}
-        {products && products.length <= 0 && !getProductsQuery.isLoading && (
-          <div className='p-2 md:p-[15px] bg-[#fcf8e3] border border-[#faebcc] text-xs md:text-sm text-[#8a6d3b]'>
-            Chưa có sản phẩm nào trong danh mục này
-          </div>
-        )}
-
-        {/* Loading */}
-        {getProductsQuery.isLoading && (
-          <div className='min-h-[300px] flex justify-center items-center'>
-            <Loading />
-          </div>
-        )}
+          {/* Loading */}
+          {getProductsQuery.isLoading && (
+            <div className='min-h-[300px] flex justify-center items-center'>
+              <Loading />
+            </div>
+          )}
+        </div>
       </div>
-    </div>
+    </Fragment>
   );
 };
 

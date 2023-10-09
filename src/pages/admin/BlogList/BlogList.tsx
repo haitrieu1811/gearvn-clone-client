@@ -9,7 +9,7 @@ import { toast } from 'react-toastify';
 import blogApi from 'src/apis/blog.api';
 import Table from 'src/components/Table';
 import PATH from 'src/constants/path';
-import { ExtendedContext } from 'src/contexts/extended.context';
+import { AppContext } from 'src/contexts/app.context';
 import useQueryParams from 'src/hooks/useQueryParams';
 import { PaginationRequestParams } from 'src/types/utils.type';
 import { convertMomentFromNowToVietnamese } from 'src/utils/utils';
@@ -19,7 +19,7 @@ type QueryConfig = {
 };
 
 const BlogList = () => {
-  const { extendedBlogs, setExtendedBlogs } = useContext(ExtendedContext);
+  const { extendedBlogs, setExtendedBlogs } = useContext(AppContext);
   const queryParams: QueryConfig = useQueryParams();
   const queryConfig: QueryConfig = omitBy(
     {

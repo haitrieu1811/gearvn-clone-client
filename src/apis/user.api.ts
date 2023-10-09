@@ -5,6 +5,7 @@ import {
   GetCustomersResponse,
   GetMeResponse,
   GetQuantityPerCollectionResponse,
+  GetSellersResponse,
   GetUserResponse,
   GetUsersParams,
   GetViewedProductsResponse,
@@ -79,6 +80,10 @@ const userApi = {
   // Xóa người dụng
   deleteUsers(body: DeleteUsersRequestBody) {
     return http.delete<OnlyMessageResponse>('/users', { data: body });
+  },
+  // Lấy danh sách nhân viên bán hàng
+  getSellers() {
+    return http.get<GetSellersResponse>('/users/sellers');
   }
 };
 

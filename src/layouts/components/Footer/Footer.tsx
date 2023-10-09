@@ -1,14 +1,11 @@
 import { Fragment } from 'react';
-import { useMediaQuery } from 'react-responsive';
 
 import StickyBottomMenu from 'src/components/StickyBottomMenu';
-import CONFIG from 'src/constants/config';
 import FooterContact from './FooterContact';
 import FooterHeading from './FooterHeading';
 import FooterList from './FooterList';
 
 const Footer = () => {
-  const isTablet = useMediaQuery({ maxWidth: CONFIG.TABLET_SCREEN_SIZE });
   return (
     <Fragment>
       <footer className='bg-white'>
@@ -103,7 +100,7 @@ const Footer = () => {
       </footer>
 
       {/* Sticky menu bottom */}
-      {isTablet && <StickyBottomMenu />}
+      <StickyBottomMenu />
     </Fragment>
   );
 };

@@ -96,7 +96,7 @@ const ProductDetail = () => {
 
   // Danh sách blog
   const getBlogsQuery = useQuery({
-    queryKey: ['blogs'],
+    queryKey: ['product_detail_blogs'],
     queryFn: () => blogApi.getList({ limit: '5' }),
     staleTime: Infinity
   });

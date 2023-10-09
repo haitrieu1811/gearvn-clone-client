@@ -51,7 +51,7 @@ const MegaMenu = () => {
 
   return (
     <Fragment>
-      <div className='relative z-10 pointer-events-none'>
+      <div className='relative z-10 pointer-events-none hidden md:block'>
         {/* Sidebar */}
         <div className='w-[216px] bg-white rounded relative pointer-events-auto'>
           {megaMenuData.map((item, index) => {

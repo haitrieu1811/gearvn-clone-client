@@ -6,9 +6,13 @@ import Loading from '../Loading';
 
 interface FloatLoadingProps {
   isLoading: boolean;
+  className?: string;
 }
 
-const FloatLoading = ({ isLoading }: FloatLoadingProps) => {
+const FloatLoading = ({
+  isLoading,
+  className = 'bg-gray-200/50 fixed inset-0 z-[99999] flex justify-center items-center backdrop-blur-sm'
+}: FloatLoadingProps) => {
   // Vô hiệu hóa cuộn trang khi đang tải
   useEffect(() => {
     if (isLoading) document.body.classList.add('disable-scroll');
@@ -19,7 +23,7 @@ const FloatLoading = ({ isLoading }: FloatLoadingProps) => {
     <Fragment>
       {isLoading &&
         createPortal(
-          <div className='bg-gray-200/50 fixed inset-0 z-[99999] flex justify-center items-center backdrop-blur-sm'>
+          <div className={className}>
             <Loading />
           </div>,
           document.body
@@ -29,7 +33,8 @@ const FloatLoading = ({ isLoading }: FloatLoadingProps) => {
 };
 
 FloatLoading.propTypes = {
-  isLoading: PropTypes.bool.isRequired
+  isLoading: PropTypes.bool.isRequired,
+  className: PropTypes.string
 };
 
 export default FloatLoading;

@@ -6,7 +6,7 @@ import { Fragment, useContext, useEffect, useMemo } from 'react';
 import brandApi from 'src/apis/brand.api';
 import Table from 'src/components/Table';
 import PATH from 'src/constants/path';
-import { ExtendedContext } from 'src/contexts/extended.context';
+import { AppContext } from 'src/contexts/app.context';
 import useQueryParams from 'src/hooks/useQueryParams';
 import { PaginationRequestParams } from 'src/types/utils.type';
 import { convertMomentFromNowToVietnamese } from 'src/utils/utils';
@@ -16,7 +16,7 @@ type QueryConfig = {
 };
 
 const BrandList = () => {
-  const { extendedBrands, setExtendedBrands } = useContext(ExtendedContext);
+  const { extendedBrands, setExtendedBrands } = useContext(AppContext);
   const queryParams: QueryConfig = useQueryParams();
   const queryConfig: QueryConfig = {
     page: queryParams.page || '1',

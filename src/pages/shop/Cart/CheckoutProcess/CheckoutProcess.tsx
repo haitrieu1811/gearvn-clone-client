@@ -5,23 +5,21 @@ import { useNavigate } from 'react-router-dom';
 
 import purchaseApi from 'src/apis/purchase.api';
 import voucherApi from 'src/apis/voucher.api';
-import CODImage from 'src/assets/images/COD.webp';
 import Button from 'src/components/Button/Button';
 import { PaymentMethod } from 'src/constants/enum';
 import PATH from 'src/constants/path';
 import { AppContext } from 'src/contexts/app.context';
 import { CartContext } from 'src/contexts/cart.context';
-import { ExtendedContext } from 'src/contexts/extended.context';
 import { CheckoutRequestBody } from 'src/types/purchase.type';
 import { PaymentOrderSchema } from 'src/utils/rules';
 import socket from 'src/utils/socket';
 import { formatCurrency } from 'src/utils/utils';
+import CODImage from 'src/assets/images/COD.webp';
 
 const CheckoutProcess = () => {
   const navigate = useNavigate();
   const { handleSubmit, watch, getValues } = useFormContext<PaymentOrderSchema>();
-  const { profile } = useContext(AppContext);
-  const { cartTotal, checkedCartList } = useContext(ExtendedContext);
+  const { profile, cartTotal, checkedCartList } = useContext(AppContext);
   const { getCartQuery, totalReduced, voucherCode, totalPayment } = useContext(CartContext);
 
   const payment_method = watch('payment_method');
@@ -121,7 +119,7 @@ const CheckoutProcess = () => {
             value={PaymentMethod.Cash}
             checked={PaymentMethod.Cash === Number(payment_method)}
           />
-          <img src={CODImage} alt='' className='w-6 h-6' />
+          <img src={CODImage} alt='COD' className='w-6 h-6' />
           <label htmlFor='cash' className='text-sm md:text-base ml-5'>
             Thanh toán khi giao hàng (COD)
           </label>

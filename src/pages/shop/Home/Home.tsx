@@ -1,7 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { useMemo } from 'react';
 import { Helmet } from 'react-helmet-async';
-import { useMediaQuery } from 'react-responsive';
 import { Link } from 'react-router-dom';
 
 import blogApi from 'src/apis/blog.api';
@@ -10,14 +9,11 @@ import BlogVertical from 'src/components/BlogVertical';
 import Carousel from 'src/components/Carousel';
 import Loading from 'src/components/Loading';
 import MegaMenu from 'src/components/MegaMenu';
-import CONFIG from 'src/constants/config';
 import PATH from 'src/constants/path';
 import { Category } from 'src/types/category.type';
 import ProductSection from './ProductSection/ProductSection';
 
 const Home = () => {
-  const isTablet = useMediaQuery({ maxWidth: CONFIG.TABLET_SCREEN_SIZE });
-
   // Query: Lấy danh sách sản phẩm
   const getProductsQuery = useQuery({
     queryKey: ['products'],
@@ -60,9 +56,9 @@ const Home = () => {
 
   // Query: Lấy danh sách blog
   const getBlogsQuery = useQuery({
-    queryKey: ['blogs'],
+    queryKey: ['home_blogs'],
     queryFn: () => blogApi.getList({ limit: '4' }),
-    staleTime: 1000 * 60 * 10
+    staleTime: Infinity
   });
 
   // Danh sách blog
@@ -71,7 +67,7 @@ const Home = () => {
   return (
     <div className='my-2 lg:my-3'>
       <Helmet>
-        <title>Gearvn Clone | Trang chủ</title>
+        <title>Trang chủ</title>
         <meta
           name='description'
           content='Mua sắm đồ công nghệ chính hãng với giá tốt nhất tại Gearvn-clone. Chúng tôi cung cấp đa dạng các sản phẩm công nghệ từ các thương hiệu nổi tiếng như Apple, Samsung, Huawei, Xiaomi,...'
@@ -93,7 +89,7 @@ const Home = () => {
       <div className='px-2 lg:container'>
         {/* Mega menu, carousel */}
         <div className='flex'>
-          {!isTablet && <MegaMenu />}
+          <MegaMenu />
           <div className='flex-1 grid grid-cols-12 gap-2 lg:ml-[15px]'>
             <div className='col-span-12 lg:col-span-8'>
               <Carousel />

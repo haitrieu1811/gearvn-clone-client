@@ -12,8 +12,7 @@ import { ChatContext } from 'src/contexts/chat.context';
 
 const HeaderDashboard = () => {
   const { profile, logout } = useContext(AppContext);
-  const { setIsOpenChat, unreadCount } = useContext(ChatContext);
-
+  const { setIsOpenChat, totalUnreadMessagesCount } = useContext(ChatContext);
   return (
     <Fragment>
       <header className='flex justify-between items-center bg-white sticky top-0 white z-[999] h-14 px-4 border-b'>
@@ -26,9 +25,9 @@ const HeaderDashboard = () => {
             className='bg-slate-100 w-9 h-9 rounded-full flex justify-center items-center mr-4 relative'
           >
             <ChatIcon className='w-5 h-5 fill-none' />
-            {unreadCount > 0 && (
+            {totalUnreadMessagesCount > 0 && (
               <span className='absolute -top-1 -right-1  bg-red-500 text-[10px] text-white font-bold rounded-full w-5 h-5 flex justify-center items-center'>
-                {unreadCount <= 9 ? unreadCount : '9+'}
+                {totalUnreadMessagesCount <= 9 ? totalUnreadMessagesCount : '9+'}
               </span>
             )}
           </button>

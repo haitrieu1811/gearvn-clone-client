@@ -1,14 +1,12 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
-import { Fragment, useContext, useEffect, useMemo, useState, memo } from 'react';
-import { useMediaQuery } from 'react-responsive';
+import { Fragment, memo, useContext, useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
 import mediaApi from 'src/apis/media.api';
 import productApi from 'src/apis/product.api';
-import CONFIG from 'src/constants/config';
 import { NotificationType } from 'src/constants/enum';
 import PATH from 'src/constants/path';
 import { AppContext } from 'src/contexts/app.context';
@@ -27,7 +25,6 @@ interface SendReviewProps {
 const SendReview = ({ product }: SendReviewProps) => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const isTablet = useMediaQuery({ maxWidth: CONFIG.TABLET_SCREEN_SIZE });
   const { isAuthenticated, profile } = useContext(AppContext);
   const [isVisible, setIsVisible] = useState<boolean>(false);
   const [comment, setComment] = useState<string>('');
@@ -192,7 +189,7 @@ const SendReview = ({ product }: SendReviewProps) => {
         <SendReviewIcon className='w-[18px] h-[18px] mr-3' />
         <span className='text-sm text-white font-medium'>Gửi đánh giá của bạn</span>
       </button>
-
+      {/* Modal */}
       <Modal
         isVisible={isVisible}
         icon={false}
@@ -203,12 +200,10 @@ const SendReview = ({ product }: SendReviewProps) => {
         onCancel={closeModal}
       >
         <div className='flex'>
-          {!isTablet && (
-            <div className='w-[340px] bg-primary p-4'>
-              <img src={getImageUrl(product.thumbnail)} alt={product.name_vi} className='w-full' />
-              <div className='mt-4 mb-[10px] text-sm text-white font-semibold text-center'>{product.name_vi}</div>
-            </div>
-          )}
+          <div className='hidden md:block w-[340px] bg-primary p-4'>
+            <img src={getImageUrl(product.thumbnail)} alt={product.name_vi} className='w-full' />
+            <div className='mt-4 mb-[10px] text-sm text-white font-semibold text-center'>{product.name_vi}</div>
+          </div>
           <div className='w-[800px]'>
             <div className='flex justify-between items-center p-4 border-b'>
               <h3 className='line-clamp-1 md:line-clamp-none'>
@@ -245,7 +240,7 @@ const SendReview = ({ product }: SendReviewProps) => {
                       );
                     })}
                 </div>
-                {!isTablet && <div className='text-xs'>{reaction || 'Click vào để review!'}</div>}
+                <div className='hidden md:block text-xs'>{reaction || 'Click vào để review!'}</div>
               </div>
               <div
                 className={classNames(

@@ -1,6 +1,5 @@
 import Tippy from '@tippyjs/react/headless';
 import { useContext } from 'react';
-import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 
 import { ChartPieIcon, HandIcon, LogoutIcon, PurchaseIcon, UserIcon, ViewedIcon } from 'src/components/Icons';
@@ -10,7 +9,6 @@ import PATH from 'src/constants/path';
 import { AppContext } from 'src/contexts/app.context';
 
 const Account = () => {
-  const { t } = useTranslation('pages');
   const { isAuthenticated, profile, logout } = useContext(AppContext);
 
   // Render menu của người dùng
@@ -22,20 +20,20 @@ const Account = () => {
           <div className='p-5 min-w-[300px]'>
             <div className='flex mb-4'>
               <HandIcon className='w-5 h-5' />
-              <span className='ml-3 text-sm font-medium'>{t('register_login.please_login')}</span>
+              <span className='ml-3 text-sm font-medium'>Xin chào, vui lòng đăng nhập</span>
             </div>
             <div className='flex'>
               <Link
                 to={PATH.LOGIN}
                 className='flex-1 bg-black text-white rounded flex justify-center items-center text-sm px-5 py-1'
               >
-                {t('register_login.login')}
+                Đăng nhập
               </Link>
               <Link
                 to={PATH.REGISTER}
                 className='flex-1 text-black border-[2px] border-black rounded flex justify-center items-center text-sm px-5 py-1 ml-2'
               >
-                {t('register_login.register')}
+                Đăng ký
               </Link>
             </div>
           </div>

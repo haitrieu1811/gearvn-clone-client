@@ -7,20 +7,20 @@ import { useContext, useEffect, useMemo } from 'react';
 import { toast } from 'react-toastify';
 
 import userApi from 'src/apis/user.api';
-import fallbackAvatar from 'src/assets/images/fallback-avatar.jpg';
+import Image from 'src/components/Image';
 import Table from 'src/components/Table';
 import { UserStatus } from 'src/constants/enum';
-import { ExtendedContext } from 'src/contexts/extended.context';
+import { AppContext } from 'src/contexts/app.context';
 import useQueryParams from 'src/hooks/useQueryParams';
 import { PaginationRequestParams } from 'src/types/utils.type';
-import { convertMomentFromNowToVietnamese, formatCurrency, getImageUrl } from 'src/utils/utils';
+import { convertMomentFromNowToVietnamese, formatCurrency } from 'src/utils/utils';
 
 export type QueryConfig = {
   [key in keyof PaginationRequestParams]: string;
 };
 
 const CustomerList = () => {
-  const { extendedCustomers, setExtendedCustomers } = useContext(ExtendedContext);
+  const { extendedCustomers, setExtendedCustomers } = useContext(AppContext);
   const queryParams: QueryConfig = useQueryParams();
   const queryConfig: QueryConfig = omitBy(
     {
@@ -116,11 +116,7 @@ const CustomerList = () => {
       checked: customer.checked,
       name: (
         <div className='flex items-center'>
-          <img
-            src={customer.avatar ? getImageUrl(customer.avatar) : fallbackAvatar}
-            alt={customer.email}
-            className='w-7 h-7 object-cover rounded-full'
-          />
+          <Image src={customer.avatar} alt={customer.email} className='w-7 h-7 object-cover rounded-full' />
           <span className='ml-4'>{customer.fullname}</span>
         </div>
       ),

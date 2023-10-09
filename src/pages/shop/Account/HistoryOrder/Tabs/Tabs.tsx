@@ -24,7 +24,8 @@ const Tabs = ({ quantity, queryConfig }: TabsProps) => {
         pathname: location.pathname,
         search: createSearchParams({
           ...queryConfig,
-          status
+          status,
+          page: '1'
         }).toString()
       });
     },

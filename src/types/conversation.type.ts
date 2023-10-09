@@ -1,8 +1,27 @@
+import { User } from './user.type';
 import { Pagination, PaginationRequestParams, SuccessResponse } from './utils.type';
 
-// Type: Tin nhắn
-export interface Conversation {
+// Type: Cuộc trò chuyện
+export interface ConversationType {
   _id: string;
+  message_count: number;
+  unread_message_count: number;
+  receiver: User;
+  latest_message: {
+    _id: string;
+    content: string;
+    is_read: boolean;
+    created_at: string;
+    updated_at: string;
+  } | null;
+  created_at: string;
+  updated_at: string;
+}
+
+// Type: Tin nhắn
+export interface MessageType {
+  _id: string;
+  conversation_id: string;
   content: string;
   is_read: boolean;
   sender: {
@@ -21,33 +40,19 @@ export interface Conversation {
   updated_at: string;
 }
 
-// Type: Người nhận tin nhắn
-export interface ConversationReceiver {
-  _id: string;
-  email: string;
-  fullname: string;
-  avatar: string;
-  unread_count: number;
-  last_message: {
-    _id: string;
-    content: string;
-    created_at: string;
-    updated_at: string;
-  } | null;
-}
-
 // Request: Lấy danh sách tin nhắn
-export interface GetConversationsRequestParams extends PaginationRequestParams {
-  receiverId: string;
+export interface GetMessagesRequestParams extends PaginationRequestParams {
+  conversationId: string;
 }
 
-// Response: Lấy danh sách tin nhắn
+// Response: Lấy danh sách cuộc trò chuyện
 export type GetConversationsResponse = SuccessResponse<{
-  conversations: Conversation[];
+  conversations: ConversationType[];
   pagination: Pagination;
 }>;
 
-// Response: Lấy danh sách người dùng đã chat
-export type GetReceiversResponse = SuccessResponse<{
-  receivers: ConversationReceiver[];
+// Response: Lấy danh sách tin nhắn
+export type GetMessagesResponse = SuccessResponse<{
+  messages: MessageType[];
+  pagination: Pagination;
 }>;

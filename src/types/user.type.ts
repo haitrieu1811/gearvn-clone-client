@@ -98,7 +98,10 @@ export interface DeleteUsersRequestBody {
 }
 
 // Response: Lấy danh sách người dùng
-export type GetUserResponse = SuccessResponse<{ users: User[]; pagination: Pagination }>;
+export type GetUserResponse = SuccessResponse<{
+  users: User[];
+  pagination: Pagination;
+}>;
 
 // Response: Lấy thông tin tài khoản đăng nhập
 export type GetMeResponse = SuccessResponse<{
@@ -117,4 +120,9 @@ export type GetQuantityPerCollectionResponse = SuccessResponse<QuantityPerCollec
 export type GetCustomersResponse = SuccessResponse<{
   customers: Customer[];
   pagination: Pagination;
+}>;
+
+// Response: Lấy danh sách nhân viên bán hàng
+export type GetSellersResponse = SuccessResponse<{
+  sellers: User[];
 }>;

@@ -4,7 +4,7 @@ import SubMenuItem from '../SubMenuItem';
 
 const SubMenu = () => {
   return (
-    <div className='bg-white shadow-sm'>
+    <div className='bg-white shadow-sm hidden md:block'>
       <div className='flex items-center justify-center'>
         <SubMenuItem icon={<ItemIcon className='fill-none w-5 h-5' />} name='Tổng hợp khuyến mãi' separate />
         <SubMenuItem

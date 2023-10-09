@@ -9,15 +9,13 @@ import { PaymentMethod, ReceiveMethod } from 'src/constants/enum';
 import PATH from 'src/constants/path';
 import { AppContext } from 'src/contexts/app.context';
 import { CartContext } from 'src/contexts/cart.context';
-import { ExtendedContext } from 'src/contexts/extended.context';
 import { PaymentOrderSchema, paymentOrderSchema } from 'src/utils/rules';
 import PaymentProgress from './PaymentProgress';
 
 const Cart = () => {
   const navigate = useNavigate();
   const isCartListPage = !!useMatch(PATH.CART_LIST);
-  const { profile } = useContext(AppContext);
-  const { cartTotal } = useContext(ExtendedContext);
+  const { profile, cartTotal } = useContext(AppContext);
   const { defaultAddress } = useContext(CartContext);
 
   // Nếu không có sản phẩm nào trong giỏ hàng thì chuyển về trang danh sách sản phẩm

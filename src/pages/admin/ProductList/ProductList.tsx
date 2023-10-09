@@ -8,7 +8,7 @@ import { useQuery } from '@tanstack/react-query';
 import productApi from 'src/apis/product.api';
 import Table from 'src/components/Table';
 import PATH from 'src/constants/path';
-import { ExtendedContext } from 'src/contexts/extended.context';
+import { AppContext } from 'src/contexts/app.context';
 import useDebounce from 'src/hooks/useDebounce';
 import useQueryParams from 'src/hooks/useQueryParams';
 import { GetProductsRequestParams } from 'src/types/product.type';
@@ -19,7 +19,7 @@ type QueryConfig = {
 };
 
 const ProductList = () => {
-  const { extendedProducts, setExtendedProducts } = useContext(ExtendedContext);
+  const { extendedProducts, setExtendedProducts } = useContext(AppContext);
   const [keywordSearch, setKeywordSearch] = useState<string>('');
   const keywordSearchDebounce = useDebounce(keywordSearch, 1000);
   const queryParams: QueryConfig = useQueryParams();

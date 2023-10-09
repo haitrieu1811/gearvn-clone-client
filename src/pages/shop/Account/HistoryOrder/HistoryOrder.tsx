@@ -13,6 +13,7 @@ import { AppContext } from 'src/contexts/app.context';
 import useQueryParams from 'src/hooks/useQueryParams';
 import { GetOrdersRequestParams, OrderCountByStatus } from 'src/types/order.type';
 import Tabs from './Tabs';
+import Pagination from 'src/components/Pagination';
 
 export type QueryConfig = {
   [key in keyof GetOrdersRequestParams]: string;
@@ -23,9 +24,11 @@ const HistoryOrder = () => {
   const queryParams: QueryConfig = useQueryParams();
   const queryConfig: QueryConfig = useMemo(
     () => ({
-      status: queryParams.status || String(OrderStatus.All)
+      status: queryParams.status || String(OrderStatus.All),
+      page: queryParams.page || '1',
+      limit: queryParams.limit || '10'
     }),
-    [queryParams.status]
+    [queryParams.status, queryParams.page, queryParams.limit]
   );
 
   // Query: Lấy danh sách đơn hàng
@@ -38,8 +41,15 @@ const HistoryOrder = () => {
 
   // Danh sách đơn hàng
   const orders = useMemo(() => getOrdersQuery.data?.data.data.orders, [getOrdersQuery.data?.data.data.orders]);
+
   // Số lượng đơn hàng theo trạng thái
   const quantity = useMemo(() => getOrdersQuery.data?.data.data.quantity, [getOrdersQuery.data?.data.data.quantity]);
+
+  // Số lượng trang của danh sách đơn hàng
+  const pageSize = useMemo(
+    () => getOrdersQuery.data?.data.data.pagination.page_size || 0,
+    [getOrdersQuery.data?.data.data.pagination.page_size]
+  );
 
   return (
     <Fragment>
@@ -69,6 +79,16 @@ const HistoryOrder = () => {
           {orders.map((order) => (
             <OrderItem key={order._id} data={order} />
           ))}
+          {pageSize > 1 && (
+            <div className='flex justify-center rounded-b-md py-5 bg-white'>
+              <Pagination
+                pageSize={pageSize}
+                classNameItem='w-8 h-8 md:w-10 md:h-10 mx-1 rounded-full flex justify-center items-center font-semibold text-sm md:text-base select-none'
+                classNameItemActive='bg-black text-white pointer-events-none'
+                classNameItemUnActive='bg-[#f3f3f3]'
+              />
+            </div>
+          )}
         </div>
       )}
 

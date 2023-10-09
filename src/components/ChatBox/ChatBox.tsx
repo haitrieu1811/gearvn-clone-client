@@ -1,15 +1,13 @@
-import { useInfiniteQuery } from '@tanstack/react-query';
-import { FormEvent, Fragment, useCallback, useContext, useEffect, useRef } from 'react';
+import classNames from 'classnames';
+import { Fragment, useContext, useEffect } from 'react';
 
-import conversationApi from 'src/apis/conversation.api';
 import { AppContext } from 'src/contexts/app.context';
 import { ChatContext } from 'src/contexts/chat.context';
-import { Conversation, ConversationReceiver } from 'src/types/conversation.type';
-import socket from 'src/utils/socket';
+import { MessageType } from 'src/types/conversation.type';
 import { ChevronDownIcon, ChevronLeftIcon } from '../Icons';
 import Image from '../Image';
 import ChatWindow from './ChatWindow';
-import Receivers from './Receivers';
+import Conversations from './Conversations';
 
 interface ChatBoxProps {
   visible?: boolean;
@@ -17,170 +15,98 @@ interface ChatBoxProps {
 }
 
 const ChatBox = ({ visible = true, onClose }: ChatBoxProps) => {
-  const { profile } = useContext(AppContext);
+  const { socket } = useContext(AppContext);
   const {
-    unreadCount,
-    receivers,
-    refetchReceivers,
-    currentReceiver,
-    setCurrentReceiver,
-    conversations,
-    setConversations,
-    chatBodyHeight,
-    setChatBodyHeight,
-    message,
-    setMessage
+    currentConversation,
+    setCurrentConversation,
+    setMessages,
+    totalUnreadMessagesCount,
+    setTotalUnreadMessagesCount,
+    setConversations
   } = useContext(ChatContext);
-  const inputRef = useRef<HTMLInputElement>(null);
-  const chatBodyRef = useRef<HTMLDivElement>(null);
 
+  // Lắng nghe sự kiện khi có tin nhắn mới được gửi đến
   useEffect(() => {
-    if (!chatBodyRef.current) return;
-    setChatBodyHeight(chatBodyRef.current.offsetHeight);
-  });
-
-  // Nhận tin nhắn từ socket server và hiển thị lên màn hình
-  useEffect(() => {
-    socket.on('receive_message', (newConversation) => {
-      refetchReceivers();
+    if (socket.hasListeners('receive_message')) return;
+    socket.on('receive_message', (data) => {
+      const { new_message } = data.payload;
+      setTotalUnreadMessagesCount((prev) => prev + 1);
+      setConversations((prevConversations) => {
+        const existedConversation = prevConversations.find(
+          (conversation) => conversation._id === new_message.conversation_id
+        );
+        if (!existedConversation) return prevConversations;
+        existedConversation.latest_message = new_message;
+        existedConversation.unread_message_count += 1;
+        return [
+          existedConversation,
+          ...prevConversations.filter((conversation) => conversation._id !== new_message.conversation_id)
+        ];
+      });
       // Nếu đang ở một cuộc trò chuyện khác thì không hiển thị tin nhắn
-      if (newConversation.sender._id !== currentReceiver?._id) return;
-      setConversations((prev) => [newConversation, ...prev]);
+      if ((new_message as MessageType).conversation_id !== currentConversation?._id) return;
+      setMessages((prev) => [new_message, ...prev]);
     });
     return () => {
       socket.off('receive_message');
     };
-  }, [currentReceiver?._id]);
+  }, [currentConversation?._id]);
 
   // Đóng chat box
   const handleClose = () => {
     onClose && onClose();
   };
 
-  // Query: Lấy tin nhắn giữa mình và người nhận
-  const getConversationsQuery = useInfiniteQuery({
-    queryKey: ['conversations', currentReceiver?._id],
-    queryFn: ({ pageParam = 1 }) =>
-      conversationApi.getConversations({
-        receiverId: currentReceiver?._id as string,
-        page: pageParam,
-        limit: '20'
-      }),
-    getNextPageParam: (lastPage) => {
-      return lastPage.data.data.pagination.page < lastPage.data.data.pagination.page_size
-        ? lastPage.data.data.pagination.page + 1
-        : undefined;
-    },
-    enabled: !!currentReceiver?._id,
-    keepPreviousData: true
-  });
-
-  // Tải tin nhắn giữa mình và người nhận lúc vừa vào cuộc trò chuyện
-  useEffect(() => {
-    if (!getConversationsQuery.data) return;
-    const conversations = getConversationsQuery.data?.pages.map((page) => page.data.data.conversations).flat();
-    setConversations(conversations);
-  }, [getConversationsQuery.data]);
-
-  // Chọn người để chat
-  const handleSelectReceiver = useCallback(
-    (receiver: ConversationReceiver) => {
-      if (receiver._id === currentReceiver?._id) {
-        setConversations([]);
-        setCurrentReceiver(null);
-        return;
-      }
-      setCurrentReceiver(receiver);
-      inputRef.current?.focus();
-    },
-    [currentReceiver]
-  );
-
-  // Xử lý gửi tin nhắn
-  const handleSendMessage = useCallback(
-    (e: FormEvent<HTMLFormElement>) => {
-      e.preventDefault();
-      if (!message || !currentReceiver || !profile || !receivers) return;
-      const newConversation: Conversation = {
-        _id: new Date().getTime().toString(),
-        content: message,
-        is_read: false,
-        sender: {
-          _id: profile._id,
-          fullname: profile.fullname,
-          avatar: profile.avatar,
-          email: profile.email
-        },
-        receiver: {
-          _id: currentReceiver._id,
-          fullname: currentReceiver.fullname,
-          avatar: currentReceiver.avatar,
-          email: currentReceiver.email
-        },
-        created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString()
-      };
-      socket.emit('new_message', { content: message, receiver_id: currentReceiver._id, sender_id: profile?._id });
-      setConversations((prev) => [newConversation, ...prev]);
-      setMessage('');
-      refetchReceivers();
-    },
-    [currentReceiver, message, profile, receivers]
-  );
-
   return (
     <Fragment>
       {visible && (
-        <div className='bg-white fixed bottom-0 right-0 md:right-2 z-[999999] lg:z-[99] shadow-3xl rounded-t-lg h-[80vh] md:h-[550px] max-w-full w-full md:w-[640px] flex flex-col duration-300'>
-          {/* Heading */}
-          <div className='flex-shrink-0 flex justify-between items-center h-[50px] pl-6 pr-3 border-b'>
+        <div className='fixed bottom-0 right-0 md:right-2 z-[999999] lg:z-[99] shadow-3xl rounded-t-lg h-[550px] max-h-screen w-full md:w-[640px]'>
+          {/* Chat heading */}
+          <div className='flex justify-between items-center bg-white rounded-t-lg h-[50px] pl-6 pr-3 border-b relative z-10'>
+            {/* Tiêu đề */}
             <div className='flex items-center'>
               {/* Trở về danh sách chat */}
-              {currentReceiver && (
-                <button className='md:hidden py-2 pr-4' onClick={() => setCurrentReceiver(null)}>
+              {currentConversation && (
+                <button className='md:hidden py-2 pr-4' onClick={() => setCurrentConversation(null)}>
                   <ChevronLeftIcon className='w-4 h-4' />
                 </button>
               )}
               {/* Tiêu đề */}
-              <div className='text-primary font-semibold text-lg hidden md:flex items-center'>
-                Chat {unreadCount > 0 && <span className='text-xs font-normal ml-1'>({unreadCount})</span>}
+              <div
+                className={classNames('text-primary font-semibold text-lg ', {
+                  'hidden md:flex md:items-center': currentConversation
+                })}
+              >
+                Chat{' '}
+                {totalUnreadMessagesCount > 0 && (
+                  <span className='text-xs font-normal ml-1'>({totalUnreadMessagesCount})</span>
+                )}
               </div>
               {/* Người nhận hiện tại */}
-              {currentReceiver && (
+              {currentConversation && (
                 <div className='flex md:hidden items-center'>
                   <Image
-                    src={currentReceiver.avatar}
-                    alt={currentReceiver.fullname}
+                    src={currentConversation.receiver.avatar}
+                    alt={currentConversation.receiver.fullname}
                     className='w-8 h-8 rounded-full object-cover'
                   />
-                  <span className='text-slate-600 text-[15px] ml-3 font-semibold'>{currentReceiver.fullname}</span>
+                  <span className='text-slate-600 text-[15px] ml-3 font-semibold'>
+                    {currentConversation.receiver.fullname}
+                  </span>
                 </div>
               )}
             </div>
+            {/* Thao tác */}
             <button className='py-1 px-2' onClick={handleClose}>
               <ChevronDownIcon className='w-4 h-4' />
             </button>
           </div>
-          {/* Body */}
-          <div ref={chatBodyRef} className='flex-1 bg-white border-t-slate-900'>
-            <div className='flex relative h-full'>
-              {/* Danh sách người đã nhắn tin với mình */}
-              <Receivers
-                chatBodyHeight={chatBodyHeight}
-                receivers={receivers}
-                currentReceiver={currentReceiver}
-                handleSelectReceiver={handleSelectReceiver}
-              />
-              {/* Cửa sổ chat */}
-              <ChatWindow
-                chatBodyHeight={chatBodyHeight}
-                conversations={conversations}
-                currentReceiver={currentReceiver}
-                handleSendMessage={handleSendMessage}
-                message={message}
-                setMessage={setMessage}
-              />
-            </div>
+          {/* Chat body */}
+          <div className='bg-white border-t-slate-900 flex h-full'>
+            {/* Danh sách cuộc hội thoại */}
+            <Conversations />
+            {/* Cửa sổ chat */}
+            <ChatWindow />
           </div>
         </div>
       )}
