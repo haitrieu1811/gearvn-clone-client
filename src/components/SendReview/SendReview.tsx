@@ -11,12 +11,12 @@ import { NotificationType } from 'src/constants/enum';
 import PATH from 'src/constants/path';
 import { AppContext } from 'src/contexts/app.context';
 import { Product } from 'src/types/product.type';
-import socket from 'src/utils/socket';
 import { getImageUrl } from 'src/utils/utils';
 import Button from '../Button';
 import { CloseIcon, SendReviewIcon, StarIcon, UploadIcon } from '../Icons';
 import InputFile from '../InputFile';
 import Modal from '../Modal';
+import { Notification } from 'src/types/notification.type';
 
 interface SendReviewProps {
   product: Product;
@@ -25,7 +25,7 @@ interface SendReviewProps {
 const SendReview = ({ product }: SendReviewProps) => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const { isAuthenticated, profile } = useContext(AppContext);
+  const { isAuthenticated, profile, socket } = useContext(AppContext);
   const [isVisible, setIsVisible] = useState<boolean>(false);
   const [comment, setComment] = useState<string>('');
   const [currentStar, setCurrentStar] = useState<number | null>(null);
@@ -133,14 +133,27 @@ const SendReview = ({ product }: SendReviewProps) => {
       queryClient.invalidateQueries(['product', product._id]);
       queryClient.invalidateQueries(['review_detail', product._id]);
       // Gửi thông báo
-      socket.emit('new_review', {
+      const new_notification: Notification = {
+        _id: new Date().getTime().toString(),
         type: NotificationType.NewReview,
         title: 'Có đánh giá mới',
         content: `<strong>${profile?.fullname || ''}</strong> đã đánh giá sản phẩm <strong>${product.name_vi}</strong>`,
         path: PATH.DASHBOARD_REVIEW_LIST,
-        sender_id: profile?._id,
-        receiver_id: product.author._id,
-        sender: profile
+        is_read: false,
+        sender: {
+          _id: profile?._id || '',
+          email: profile?.email || '',
+          fullname: profile?.fullname || '',
+          avatar: profile?.avatar || '',
+          phone_number: profile?.phone_number || ''
+        },
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString()
+      };
+      socket.emit('new_notification', {
+        payload: {
+          new_notification
+        }
       });
     }
   });

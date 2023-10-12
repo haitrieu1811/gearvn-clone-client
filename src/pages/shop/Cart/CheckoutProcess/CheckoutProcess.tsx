@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import purchaseApi from 'src/apis/purchase.api';
 import voucherApi from 'src/apis/voucher.api';
 import Button from 'src/components/Button/Button';
-import { PaymentMethod } from 'src/constants/enum';
+import { NotificationType, PaymentMethod } from 'src/constants/enum';
 import PATH from 'src/constants/path';
 import { AppContext } from 'src/contexts/app.context';
 import { CartContext } from 'src/contexts/cart.context';
@@ -15,6 +15,7 @@ import { PaymentOrderSchema } from 'src/utils/rules';
 import socket from 'src/utils/socket';
 import { formatCurrency } from 'src/utils/utils';
 import CODImage from 'src/assets/images/COD.webp';
+import { Notification } from 'src/types/notification.type';
 
 const CheckoutProcess = () => {
   const navigate = useNavigate();
@@ -35,17 +36,33 @@ const CheckoutProcess = () => {
           order_id: orderId
         }
       });
-      socket.emit('new_order', {
+      // Sử dụng voucher nếu có voucher code
+      !!voucherCode && useVoucherMutation.mutate(voucherCode);
+      // Gửi thông báo
+      const new_notification: Notification = {
+        _id: new Date().getTime().toString(),
+        type: NotificationType.NewOrder,
+        title: 'Có đơn hàng mới',
+        content: `<strong>${getValues('customer_name')}</strong> vừa đặt hàng với tổng đơn là <strong>${formatCurrency(
+          cartTotal as number
+        )}₫</strong>`,
+        path: `${PATH.DASHBOARD_ORDER_DETAIL_WITHOUT_ID}/${orderId}`,
+        is_read: false,
+        sender: {
+          _id: profile?._id || '',
+          email: profile?.email || '',
+          fullname: profile?.fullname || '',
+          avatar: profile?.avatar || '',
+          phone_number: profile?.phone_number || ''
+        },
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString()
+      };
+      socket.emit('new_notification', {
         payload: {
-          sender: profile,
-          title: 'Có đơn hàng mới',
-          path: `${PATH.DASHBOARD_ORDER_DETAIL_WITHOUT_ID}/${orderId}`,
-          content: `<strong>${getValues(
-            'customer_name'
-          )}</strong> vừa đặt hàng với tổng đơn là <strong>${formatCurrency(cartTotal as number)}₫</strong>`
+          new_notification
         }
       });
-      !!voucherCode && useVoucherMutation.mutate(voucherCode);
     }
   });
 

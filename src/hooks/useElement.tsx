@@ -61,13 +61,9 @@ const RejectedRoute = () => {
   return !isAuthenticated ? <Outlet /> : <Navigate to={PATH.HOME} />;
 };
 
-const AdminAndSellerRoute = () => {
+const AdminRoute = () => {
   const { isAuthenticated, profile } = useContext(AppContext);
-  return isAuthenticated && (profile?.role === UserRole.Admin || profile?.role === UserRole.Seller) ? (
-    <Outlet />
-  ) : (
-    <Navigate to={PATH.HOME} />
-  );
+  return isAuthenticated && profile?.role === UserRole.Admin ? <Outlet /> : <Navigate to={PATH.HOME} />;
 };
 
 const useElement = () => {
@@ -256,10 +252,10 @@ const useElement = () => {
         }
       ]
     },
-    // ADMIN AND SELLER ROUTES
+    // ADMIN ROUTES
     {
       path: '/',
-      element: <AdminAndSellerRoute />,
+      element: <AdminRoute />,
       children: [
         {
           path: PATH.DASHBOARD,

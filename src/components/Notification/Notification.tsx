@@ -10,24 +10,27 @@ import { Link } from 'react-router-dom';
 import notificationApi from 'src/apis/notification.api';
 import { AppContext } from 'src/contexts/app.context';
 import { Notification } from 'src/types/notification.type';
-import socket from 'src/utils/socket';
 import { convertMomentFromNowToVietnamese } from 'src/utils/utils';
 import ContextMenu from '../ContextMenu';
 import { BellIcon, DocumentCheckIcon, EmptyImage, SpinnerIcon, TrashIcon } from '../Icons';
 import Image from '../Image';
 
 const Notification = () => {
-  const { profile } = useContext(AppContext);
+  const { profile, socket } = useContext(AppContext);
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [unreadCount, setUnreadCount] = useState<number>(0);
 
   // Socket lắng nghe sự kiện có thông báo mới
   useEffect(() => {
+    if (socket.hasListeners('receive_notification')) return;
     socket.on('receive_notification', (data) => {
-      const { new_notification } = data.payload;
+      const { new_notification } = data.payload as { new_notification: Notification };
       setNotifications((prevState) => [new_notification, ...prevState]);
       setUnreadCount((prevState) => prevState + 1);
     });
+    return () => {
+      socket.off('receive_notification');
+    };
   }, []);
 
   // Query lấy danh sách thông báo

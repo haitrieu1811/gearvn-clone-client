@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import Tippy from '@tippyjs/react/headless';
-import { FormEvent, memo, useContext, useEffect, useMemo, useRef, useState } from 'react';
+import { FormEvent, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { Link, createSearchParams, useNavigate } from 'react-router-dom';
 
 import productApi from 'src/apis/product.api';
@@ -88,7 +88,6 @@ const Search = () => {
               </Link>
             </div>
           ))}
-
         {/* Xem thêm */}
         {searchResultCount !== undefined && searchResultCount > 5 && (
           <button
@@ -98,12 +97,10 @@ const Search = () => {
             Xem thêm {searchResultCount - SEARCH_RESULT_LIMIT} sản phẩm
           </button>
         )}
-
         {/* Hiển thị khi không có dữ liệu */}
         {searchResult && searchResult.length <= 0 && !getProductsQuery.isLoading && (
           <div className='text-sm text-center text-[#111111] py-4'>Không có sản phẩm nào...</div>
         )}
-
         {/* Loading */}
         {getProductsQuery.isFetching && (
           <div className='min-h-[100px] flex justify-center items-center'>
@@ -143,7 +140,7 @@ const Search = () => {
           value={keywordSearch}
           onChange={(e) => setKeywordSearch(e.target.value)}
           onFocus={() => setShowSearchResult(true)}
-          className='w-full h-full py-2 pl-[15px] pr-12 rounded outline-none text-xs md:text-[15px]'
+          className='w-full h-full py-2 pl-[15px] pr-12 rounded outline-none text-sm md:text-[15px]'
         />
         <button className='absolute top-0 right-0 h-full w-9 flex justify-center items-center'>
           <SearchIcon className='w-4 h-4' />
@@ -153,4 +150,4 @@ const Search = () => {
   );
 };
 
-export default memo(Search);
+export default Search;

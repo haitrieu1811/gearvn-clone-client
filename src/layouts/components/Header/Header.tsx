@@ -57,7 +57,6 @@ const Header = () => {
             <Link to={PATH.HOME} className='flex items-center'>
               <img src={logo} alt='Logo' className='w-[140px]' />
             </Link>
-
             {/* Nút danh mục */}
             <div
               className='ml-4 h-[42px] bg-[#BE1529] px-2 flex items-center justify-center rounded cursor-pointer select-none'
@@ -66,10 +65,8 @@ const Header = () => {
               <BarIcon className='fill-white' />
               <span className='text-white text-[13px] ml-3 font-semibold'>Danh mục</span>
             </div>
-
             {/* Tìm kiếm */}
             <Search />
-
             {/* Header actions */}
             <div className='flex items-center'>
               {[
@@ -112,12 +109,10 @@ const Header = () => {
                 </div>
               ))}
             </div>
-
             {/* Tài khoản */}
             <Account />
           </nav>
         </div>
-
         {/* Mega menu */}
         {showMegaMenu && (
           <div className={'absolute top-full left-0 w-full'}>

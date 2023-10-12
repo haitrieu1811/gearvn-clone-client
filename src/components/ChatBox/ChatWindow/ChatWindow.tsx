@@ -28,54 +28,44 @@ const ChatWindow = () => {
   // Xử lý gửi tin nhắn
   const handleSendMessage = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!message || !currentConversation || !profile) return;
-    const newMessage: MessageType = {
+    // Nếu chưa nhập gì, chưa chọn người để chat hoặc chưa đăng nhập thì không gửi tin nhắn
+    if (!message.trim() || !currentConversation || !profile) return;
+    const new_message: MessageType = {
       _id: new Date().getTime().toString(),
       conversation_id: currentConversation._id,
+      sender_id: profile._id,
+      receiver_id: currentConversation.receiver._id,
       content: message,
       is_read: false,
-      sender: {
-        _id: profile._id,
-        fullname: profile.fullname,
-        avatar: profile.avatar,
-        email: profile.email
-      },
-      receiver: {
-        _id: currentConversation.receiver._id,
-        fullname: currentConversation.receiver.fullname,
-        avatar: currentConversation.receiver.avatar,
-        email: currentConversation.receiver.email
-      },
+      is_sender: true,
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString()
     };
+    // Gửi tin nhắn lên server
     socket.emit('new_message', {
       payload: {
-        conversation_id: currentConversation._id,
-        receiver_id: currentConversation.receiver._id,
-        sender_id: profile?._id,
-        content: message
+        new_message
       }
     });
-    setMessages((prev) => [newMessage, ...prev]);
-    setMessage('');
     setConversations((prevConversations) => {
       const existedConversation = prevConversations.find(
-        (conversation) => conversation._id === newMessage.conversation_id
+        (conversation) => conversation._id === new_message.conversation_id
       );
       if (!existedConversation) return prevConversations;
       existedConversation.latest_message = {
-        _id: newMessage._id,
-        content: newMessage.content,
-        is_read: newMessage.is_read,
-        created_at: newMessage.created_at,
-        updated_at: newMessage.updated_at
+        _id: new_message._id,
+        content: new_message.content,
+        is_read: new_message.is_read,
+        created_at: new_message.created_at,
+        updated_at: new_message.updated_at
       };
       return [
         existedConversation,
-        ...prevConversations.filter((conversation) => conversation._id !== newMessage.conversation_id)
+        ...prevConversations.filter((conversation) => conversation._id !== new_message.conversation_id)
       ];
     });
+    setMessages((prev) => [new_message, ...prev]);
+    setMessage('');
   };
 
   return (
@@ -84,7 +74,7 @@ const ChatWindow = () => {
       {currentConversation && (
         <div className='h-full relative'>
           {/* Đã nhắn tin từ trước */}
-          {messages.length > 0 && !isLoadingMessages && (
+          {currentConversation && currentConversation.message_count > 0 && !isLoadingMessages && (
             <div
               id='scrollableDiv'
               style={{
@@ -109,13 +99,13 @@ const ChatWindow = () => {
               >
                 {/* Danh sách tin nhắn */}
                 {messages.map((message) => (
-                  <Message key={message._id} message={message} isSender={message.sender._id === profile?._id} />
+                  <Message key={message._id} message={message} isSender={message.is_sender} />
                 ))}
               </InfiniteScroll>
             </div>
           )}
           {/* Chưa nhắn tin lần nào */}
-          {messages.length === 0 && !isFetchingMessages && (
+          {currentConversation && currentConversation.message_count === 0 && !isLoadingMessages && (
             <div className='h-[450px] flex flex-col justify-center items-center'>
               {!isFetchingMessages && (
                 <Fragment>
@@ -129,7 +119,7 @@ const ChatWindow = () => {
             </div>
           )}
           {/* Loading */}
-          {isFetchingMessages && (
+          {isLoadingMessages && (
             <div className='absolute inset-0 flex justify-center items-center bg-white'>
               <Loading />
             </div>

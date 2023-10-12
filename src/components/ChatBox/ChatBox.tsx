@@ -29,7 +29,7 @@ const ChatBox = ({ visible = true, onClose }: ChatBoxProps) => {
   useEffect(() => {
     if (socket.hasListeners('receive_message')) return;
     socket.on('receive_message', (data) => {
-      const { new_message } = data.payload;
+      const { new_message } = data.payload as { new_message: MessageType };
       setTotalUnreadMessagesCount((prev) => prev + 1);
       setConversations((prevConversations) => {
         const existedConversation = prevConversations.find(
@@ -44,7 +44,7 @@ const ChatBox = ({ visible = true, onClose }: ChatBoxProps) => {
         ];
       });
       // Nếu đang ở một cuộc trò chuyện khác thì không hiển thị tin nhắn
-      if ((new_message as MessageType).conversation_id !== currentConversation?._id) return;
+      if (new_message.conversation_id !== currentConversation?._id) return;
       setMessages((prev) => [new_message, ...prev]);
     });
     return () => {

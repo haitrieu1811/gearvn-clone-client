@@ -22,20 +22,11 @@ export interface ConversationType {
 export interface MessageType {
   _id: string;
   conversation_id: string;
+  sender_id: string;
+  receiver_id: string;
   content: string;
   is_read: boolean;
-  sender: {
-    _id: string;
-    email: string;
-    fullname: string;
-    avatar: string;
-  };
-  receiver: {
-    _id: string;
-    email: string;
-    fullname: string;
-    avatar: string;
-  };
+  is_sender: boolean;
   created_at: string;
   updated_at: string;
 }

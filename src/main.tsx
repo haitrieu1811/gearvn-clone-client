@@ -1,5 +1,4 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { Suspense } from 'react';
 import ReactDOM from 'react-dom/client';
 import { HelmetProvider } from 'react-helmet-async';
 import { BrowserRouter } from 'react-router-dom';
@@ -25,21 +24,19 @@ const queryClient = new QueryClient({
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <QueryClientProvider client={queryClient}>
     <BrowserRouter>
-      <Suspense>
-        <HelmetProvider>
-          <AppProvider>
-            <ChatProvider>
-              <CartProvider>
-                <ErrorBoundary>
-                  <ScrollToTop>
-                    <App />
-                  </ScrollToTop>
-                </ErrorBoundary>
-              </CartProvider>
-            </ChatProvider>
-          </AppProvider>
-        </HelmetProvider>
-      </Suspense>
+      <HelmetProvider>
+        <AppProvider>
+          <ChatProvider>
+            <CartProvider>
+              <ErrorBoundary>
+                <ScrollToTop>
+                  <App />
+                </ScrollToTop>
+              </ErrorBoundary>
+            </CartProvider>
+          </ChatProvider>
+        </AppProvider>
+      </HelmetProvider>
     </BrowserRouter>
   </QueryClientProvider>
 );

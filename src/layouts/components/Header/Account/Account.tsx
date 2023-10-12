@@ -48,7 +48,7 @@ const Account = () => {
                 Xin chào, <span className='capitalize font-semibold'>{profile?.fullname}</span>
               </span>
             </Link>
-            {profile?.role !== UserRole.Customer && (
+            {profile?.role === UserRole.Admin && (
               <Link to={PATH.DASHBOARD_PRODUCT} className='px-5 py-3 flex hover:underline'>
                 <ChartPieIcon className='w-5 h-5' />
                 <span className='ml-4 text-sm'>Dashboard</span>
