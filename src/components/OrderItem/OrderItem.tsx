@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useMemo, memo } from 'react';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
@@ -22,7 +22,6 @@ export const orderStatusName = {
 
 const OrderItem = ({ data }: OrderItemProps) => {
   const purchases = useMemo(() => data.purchases, [data]);
-
   return (
     <div className='px-2 md:px-6 py-4 mt-2 md:mt-4 bg-white rounded shadow-sm'>
       {/* Head */}
@@ -44,9 +43,9 @@ const OrderItem = ({ data }: OrderItemProps) => {
               <img
                 src={getImageUrl(purchase.product.thumbnail)}
                 alt={purchase.product.name_vi}
-                className='w-[50px] h-[50px] md:w-[90px] md:h-[90px] object-cover rounded'
+                className='w-[70px] h-[70px] md:w-[90px] md:h-[90px] object-cover rounded'
               />
-              <span className='absolute bottom-0 right-0 bg-[#ECECEC] font-semibold text-[10px] md:text-xs w-5 h-5 md:w-6 md:h-6 rounded-tl rounded-br flex justify-center items-center text-[#6D6E72]'>
+              <span className='absolute bottom-0 right-0 bg-[#ECECEC] font-semibold text-xs w-5 h-5 md:w-6 md:h-6 rounded-tl rounded-br flex justify-center items-center text-[#6D6E72]'>
                 x{purchase.buy_count}
               </span>
             </Link>
@@ -55,7 +54,7 @@ const OrderItem = ({ data }: OrderItemProps) => {
                 name: purchase.product.name_vi,
                 id: purchase.product._id
               })}`}
-              className='text-[#111111] font-semibold ml-2 line-clamp-2 text-[12px] md:text-base'
+              className='text-[#111111] font-semibold ml-2 line-clamp-2 text-sm md:text-base'
             >
               {purchase.product.name_vi}
             </Link>
@@ -64,7 +63,7 @@ const OrderItem = ({ data }: OrderItemProps) => {
             <div className='text-[#111111] text-sm md:text-base'>
               {formatCurrency(purchase.unit_price_after_discount * purchase.buy_count)}₫
             </div>
-            <div className='text-[12px] md:text-sm text-[#111111] line-through'>
+            <div className='text-xs md:text-sm text-[#111111] line-through'>
               {formatCurrency(purchase.unit_price * purchase.buy_count)}₫
             </div>
           </div>
@@ -78,7 +77,7 @@ const OrderItem = ({ data }: OrderItemProps) => {
         </div>
         <Link
           to={`${PATH.ACCOUNT_ORDER_DETAIL_WITHOUT_ID}/${data._id}`}
-          className='px-2 md:px-4 py-1 md:py-[6px] border border-[#1982F9] rounded text-[12px] md:text-sm text-[#1982F9] font-medium'
+          className='px-4 py-[6px] border border-[#1982F9] rounded text-sm text-[#1982F9] font-medium'
         >
           Xem chi tiết
         </Link>
@@ -91,4 +90,4 @@ OrderItem.propTypes = {
   data: PropTypes.object.isRequired
 };
 
-export default OrderItem;
+export default memo(OrderItem);

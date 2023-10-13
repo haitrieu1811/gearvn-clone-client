@@ -16,12 +16,12 @@ interface FooterListProps {
 
 const FooterList = ({ heading, data }: FooterListProps) => {
   return (
-    <div className='lg:col-span-2 col-span-12 mt-2 md:mt-4 lg:mt-0'>
+    <div className='lg:col-span-2 col-span-12 mt-4 lg:mt-0'>
       <FooterHeading name={heading} />
       <ul className='md:leading-loose'>
         {data.map((item, index) => (
           <li key={index}>
-            <Link to={PATH.HOME} className='text-xs md:text-sm hover:underline hover:text-primary'>
+            <Link to={PATH.HOME} className='text-sm hover:underline hover:text-primary'>
               {item.name}
             </Link>
           </li>

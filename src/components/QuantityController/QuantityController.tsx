@@ -67,14 +67,14 @@ const QuantityController = ({
     >
       <button
         onClick={handleDecrease}
-        className='border border-[#cfcfcf] rounded-tl rounded-bl w-6 md:w-8 flex justify-center items-center active:bg-slate-50 text-slate-700 bg-white'
+        className='border border-[#cfcfcf] rounded-tl rounded-bl w-8 flex justify-center items-center active:bg-slate-50 text-slate-700 bg-white'
       >
-        <MinusIcon className='w-3 h-3 md:w-4 md:h-4' />
+        <MinusIcon className='w-4 h-4' />
       </button>
       <InputNumber value={value || localValue} onChange={handleChange} onBlur={handleBlur} />
       <button
         onClick={handleIncrease}
-        className='border border-[#cfcfcf] rounded-tr rounded-br w-6 md:w-8 flex justify-center items-center active:bg-slate-50 text-slate-700 bg-white'
+        className='border border-[#cfcfcf] rounded-tr rounded-br w-8 flex justify-center items-center active:bg-slate-50 text-slate-700 bg-white'
       >
         <PlusIcon className='w-4 h-4' />
       </button>

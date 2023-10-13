@@ -1,6 +1,6 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { isAxiosError } from 'axios';
-import { useContext, useMemo, useState } from 'react';
+import { Fragment, useContext, useMemo, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { toast } from 'react-toastify';
 
@@ -107,7 +107,7 @@ const Address = () => {
   };
 
   return (
-    <div className='bg-white rounded shadow-sm pb-10'>
+    <Fragment>
       <Helmet>
         <title>Danh sách địa chỉ</title>
         <meta
@@ -124,117 +124,119 @@ const Address = () => {
         <meta property='og:type' content='website' />
       </Helmet>
 
-      <div className='py-4 px-4 md:px-6 flex justify-between items-center'>
-        <h2 className='text-xl md:text-2xl font-semibold'>Sổ địa chỉ</h2>
-        <button
-          className='flex items-center bg-[#005EC9] rounded py-[6px] md:py-2 px-2 md:px-3 hover:bg-[#005EC9]/90'
-          onClick={startAdd}
-        >
-          <PlusIcon className='w-3 h-3 stroke-white stroke-[3.5] mr-2' />
-          <span className='text-xs md:text-sm text-white'>Thêm địa chỉ mới</span>
-        </button>
-      </div>
+      <div className='bg-white rounded shadow-sm pb-10'>
+        <div className='py-4 px-4 md:px-6 flex justify-between items-center'>
+          <h2 className='text-xl md:text-2xl font-semibold'>Sổ địa chỉ</h2>
+          <button
+            className='flex items-center bg-[#005EC9] rounded py-[6px] md:py-2 px-2 md:px-3 hover:bg-[#005EC9]/90'
+            onClick={startAdd}
+          >
+            <PlusIcon className='w-3 h-3 stroke-white stroke-[3.5] mr-2' />
+            <span className='text-sm text-white'>Thêm địa chỉ mới</span>
+          </button>
+        </div>
 
-      {/* Khi đã có địa chỉ */}
-      {addresses && addresses.length > 0 && !getAddressesQuery?.isLoading && (
-        <div className='lg:min-h-[280px] flex flex-col justify-between'>
-          <div className='px-2 md:px-6 py-4'>
-            {addresses.map((address) => (
-              <div key={address._id} className='py-3 border-b border-[#cfcfcf] flex justify-between items-center'>
-                <div className='flex items-center'>
-                  {address.is_default ? (
-                    <span className='py-1 px-2 whitespace-nowrap text-xs md:text-sm border border-primary rounded text-primary mr-4'>
-                      Mặc định
-                    </span>
-                  ) : (
-                    <button
-                      className='mr-4 whitespace-nowrap text-xs md:text-sm border border-[#cfcfcf] rounded py-1 px-1 md:px-2 text-slate-500'
-                      onClick={() => setDefaultAddress(address._id)}
-                    >
-                      Thiết lập mặc định
-                    </button>
-                  )}
-                  <div className='text-slate-700 capitalize text-xs md:text-base'>
-                    {address.street}, {address.ward}, {address.district}, {address.province}
+        {/* Khi đã có địa chỉ */}
+        {addresses && addresses.length > 0 && !getAddressesQuery?.isLoading && (
+          <div className='lg:min-h-[280px] flex flex-col justify-between'>
+            <div className='px-2 md:px-6 py-4'>
+              {addresses.map((address) => (
+                <div key={address._id} className='py-3 border-b border-[#cfcfcf] flex justify-between items-center'>
+                  <div className='flex items-center'>
+                    {address.is_default ? (
+                      <span className='py-1 px-2 whitespace-nowrap text-sm border border-primary rounded text-primary mr-4'>
+                        Mặc định
+                      </span>
+                    ) : (
+                      <button
+                        className='mr-4 whitespace-nowrap text-sm border border-[#cfcfcf] rounded py-1 px-1 md:px-2 text-slate-500'
+                        onClick={() => setDefaultAddress(address._id)}
+                      >
+                        Thiết lập mặc định
+                      </button>
+                    )}
+                    <div className='text-slate-700 capitalize text-sm md:text-base'>
+                      {address.street}, {address.ward}, {address.district}, {address.province}
+                    </div>
                   </div>
+                  <ContextMenu
+                    wrapperClassName='ml-4'
+                    items={[
+                      {
+                        icon: <PencilIcon className='w-4 h-4 mr-3' />,
+                        label: 'Cập nhật địa chỉ',
+                        onClick: () => startUpdate(address._id)
+                      },
+                      {
+                        icon: <TrashIcon className='w-4 h-4 mr-3' />,
+                        label: 'Xóa địa chỉ',
+                        onClick: () => startDelete(address._id)
+                      }
+                    ]}
+                  />
                 </div>
-                <ContextMenu
-                  wrapperClassName='ml-2 md:ml-4'
-                  items={[
-                    {
-                      icon: <PencilIcon className='w-4 h-4 mr-3' />,
-                      label: 'Cập nhật địa chỉ',
-                      onClick: () => startUpdate(address._id)
-                    },
-                    {
-                      icon: <TrashIcon className='w-4 h-4 mr-3' />,
-                      label: 'Xóa địa chỉ',
-                      onClick: () => startDelete(address._id)
-                    }
-                  ]}
-                />
-              </div>
-            ))}
+              ))}
+            </div>
+            <Alert>Nếu địa chỉ nhận hàng chưa chính xác, vui lòng kiểm tra và cập nhật.</Alert>
           </div>
-          <Alert>Nếu địa chỉ nhận hàng chưa chính xác, vui lòng kiểm tra và cập nhật.</Alert>
-        </div>
-      )}
+        )}
 
-      {/* Khi chưa có địa chỉ nào */}
-      {addresses && addresses.length <= 0 && !getAddressesQuery?.isLoading && (
-        <div className='flex justify-center items-center flex-col mt-10'>
-          <EmptyImage />
-          <p className='text-center mt-4'>Chưa có địa chỉ nào</p>
-        </div>
-      )}
+        {/* Khi chưa có địa chỉ nào */}
+        {addresses && addresses.length <= 0 && !getAddressesQuery?.isLoading && (
+          <div className='flex justify-center items-center flex-col mt-10'>
+            <EmptyImage />
+            <p className='text-center mt-4'>Chưa có địa chỉ nào</p>
+          </div>
+        )}
 
-      {/* Loading */}
-      {getAddressesQuery?.isLoading && (
-        <div className='min-h-[300px] flex justify-center items-center'>
-          <Loading />
-        </div>
-      )}
+        {/* Loading */}
+        {getAddressesQuery?.isLoading && (
+          <div className='min-h-[300px] flex justify-center items-center'>
+            <Loading />
+          </div>
+        )}
 
-      {/* Modal thêm, sửa địa chỉ */}
-      <Modal
-        icon={false}
-        name={!isUpdateMode ? 'THÊM ĐỊA CHỈ' : 'CẬP NHẬT ĐỊA CHỈ'}
-        isVisible={addModalOpen}
-        onCancel={!isUpdateMode ? stopAdd : stopUpdate}
-        cancelButton={false}
-        okButton={false}
-        paddingBody={false}
-      >
-        <CreateAddress
-          onSuccess={
-            isUpdateMode
-              ? () => {
-                  stopUpdate();
-                  getAddressesQuery?.refetch();
-                }
-              : () => {
-                  stopAdd();
-                  getAddressesQuery?.refetch();
-                }
-          }
-          currentId={isUpdateMode ? currentId : null}
-        />
-      </Modal>
+        {/* Modal thêm, sửa địa chỉ */}
+        <Modal
+          icon={false}
+          name={!isUpdateMode ? 'THÊM ĐỊA CHỈ' : 'CẬP NHẬT ĐỊA CHỈ'}
+          isVisible={addModalOpen}
+          onCancel={!isUpdateMode ? stopAdd : stopUpdate}
+          cancelButton={false}
+          okButton={false}
+          paddingBody={false}
+        >
+          <CreateAddress
+            onSuccess={
+              isUpdateMode
+                ? () => {
+                    stopUpdate();
+                    getAddressesQuery?.refetch();
+                  }
+                : () => {
+                    stopAdd();
+                    getAddressesQuery?.refetch();
+                  }
+            }
+            currentId={isUpdateMode ? currentId : null}
+          />
+        </Modal>
 
-      {/* Modal xác nhận xóa địa chỉ */}
-      <Modal
-        name='Xác nhận xóa địa chỉ'
-        isVisible={deleteConfirmModalOpen}
-        onCancel={stopDelete}
-        onOk={handleDeleteAddress}
-      >
-        <div className='text-center text-slate-600 text-sm md:text-base'>
-          <div>Bạn có chắc muốn xóa địa chỉ này</div>
-          <div className='my-2'>khỏi danh sách địa chỉ nhận hàng của bạn ?</div>
-          <div className='font-semibold text-red-500 underline'>Địa chỉ này sẽ bị xóa vĩnh viễn</div>
-        </div>
-      </Modal>
-    </div>
+        {/* Modal xác nhận xóa địa chỉ */}
+        <Modal
+          name='Xác nhận xóa địa chỉ'
+          isVisible={deleteConfirmModalOpen}
+          onCancel={stopDelete}
+          onOk={handleDeleteAddress}
+        >
+          <div className='text-center text-slate-600 text-sm md:text-base'>
+            <div>Bạn có chắc muốn xóa địa chỉ này</div>
+            <div className='my-2'>khỏi danh sách địa chỉ nhận hàng của bạn ?</div>
+            <div className='font-semibold text-red-500 underline'>Địa chỉ này sẽ bị xóa vĩnh viễn</div>
+          </div>
+        </Modal>
+      </div>
+    </Fragment>
   );
 };
 

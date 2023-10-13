@@ -64,7 +64,7 @@ const Modal = ({
                 </div>
                 {closeButton && (
                   <button className='p-1 ml-6 rounded hover:bg-slate-100/80' onClick={handleCancel}>
-                    <CloseIcon className='w-4 h-4 md:w-5 md:h-5' />
+                    <CloseIcon className='w-5 h-5' />
                   </button>
                 )}
               </div>
@@ -76,7 +76,7 @@ const Modal = ({
               <div className='flex justify-end flex-wrap p-4 rounded-b-lg bg-white'>
                 {cancelButton && (
                   <button
-                    className='py-2 px-4 w-full md:w-auto text-xs md:text-sm rounded bg-slate-100 hover:bg-slate-200/80 font-semibold'
+                    className='py-2 px-4 w-full md:w-auto text-sm rounded bg-slate-100 hover:bg-slate-200/80 font-semibold'
                     onClick={handleCancel}
                   >
                     {cancelText}
@@ -84,7 +84,7 @@ const Modal = ({
                 )}
                 {okButton && (
                   <button
-                    className='py-2 px-4 w-full md:w-auto text-xs md:text-sm rounded text-white bg-primary hover:bg-primary/90 font-semibold md:ml-2 mt-2 md:mt-0'
+                    className='py-2 px-4 w-full md:w-auto text-sm rounded text-white bg-primary hover:bg-primary/90 font-semibold md:ml-2 mt-2 md:mt-0'
                     onClick={handleOk}
                   >
                     {okText}

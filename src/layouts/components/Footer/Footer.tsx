@@ -25,13 +25,13 @@ const Footer = () => {
             <div className='lg:col-span-3 col-span-12 mt-4 lg:mt-0'>
               <FooterHeading name='Tổng đài hỗ trợ' />
               <ul className='leading-loose'>
-                <li className='flex items-center text-xs md:text-sm mt-3'>
+                <li className='flex items-center text-sm mt-3'>
                   <FooterContact field='Gọi mua' to='1800.6975' time='(8:00 - 21:00)' />
                 </li>
-                <li className='flex items-center text-xs md:text-sm mt-3'>
+                <li className='flex items-center text-sm mt-3'>
                   <FooterContact field='CSKH' to='1800.6173' time='(8:00 - 21:00)' />
                 </li>
-                <li className='flex items-center text-xs md:text-sm mt-3'>
+                <li className='flex items-center text-sm mt-3'>
                   <FooterContact field='Email' to='cskh@gearvn.com' />
                 </li>
               </ul>
@@ -45,8 +45,8 @@ const Footer = () => {
                   'https://theme.hstatic.net/200000722513/1001065590/14/ship_3.png?v=1171',
                   'https://theme.hstatic.net/200000722513/1001065590/14/ship_4.png?v=1171'
                 ].map((url) => (
-                  <div key={url} className='col-span-2 md:col-span-3'>
-                    <img src={url} alt='' />
+                  <div key={url} className='col-span-3'>
+                    <img src={url} alt={url} />
                   </div>
                 ))}
               </div>
@@ -62,7 +62,7 @@ const Footer = () => {
                   'https://theme.hstatic.net/200000722513/1001065590/14/pay_7.png?v=1171',
                   'https://theme.hstatic.net/200000722513/1001065590/14/pay_8.png?v=1171'
                 ].map((url) => (
-                  <div key={url} className='col-span-2 md:col-span-3'>
+                  <div key={url} className='col-span-3'>
                     <img src={url} alt={url} />
                   </div>
                 ))}
@@ -83,8 +83,8 @@ const Footer = () => {
                   'https://file.hstatic.net/200000636033/file/youtube_1_d8de1f41ca614424aca55aa0c2791684.png',
                   'https://file.hstatic.net/200000722513/file/2023-06-07_11.08.09_2bc09900263b4b1c8935646b4a7b2d32.jpg',
                   'https://file.hstatic.net/200000636033/file/group_1_54d23abd89b74ead806840aa9458661d.png'
-                ].map((url, index) => (
-                  <img key={index} src={url} className='w-7 h-7 md:w-8 md:h-8 object-cover mr-3' alt='' />
+                ].map((url) => (
+                  <img key={url} src={url} className='w-8 h-8 object-cover mr-3' alt={url} />
                 ))}
               </div>
             </div>
@@ -92,7 +92,7 @@ const Footer = () => {
               <img
                 src='https://theme.hstatic.net/200000722513/1001065590/14/logo-bct.png?v=1171'
                 alt=''
-                className='w-28 md:w-[133px]'
+                className='w-[133px]'
               />
             </div>
           </div>

@@ -8,7 +8,7 @@ export interface InputNumberProps extends InputHTMLAttributes<HTMLInputElement> 
 
 const InputNumber = (
   {
-    classNameInput = 'outline-none border-t border-b border-[#cfcfcf] w-8 md:w-12 h-8 py-2 text-center text-xs md:text-sm',
+    classNameInput = 'outline-none border-t border-b border-[#cfcfcf] w-10 md:w-12 h-8 py-2 text-center text-sm',
     onChange,
     value = '',
     errorMessage,

@@ -7,7 +7,8 @@ import { toast } from 'react-toastify';
 import purchaseApi from 'src/apis/purchase.api';
 import PATH from 'src/constants/path';
 import { Purchase } from 'src/types/purchase.type';
-import { formatCurrency, generateNameId, getImageUrl } from 'src/utils/utils';
+import { formatCurrency, generateNameId } from 'src/utils/utils';
+import Image from '../Image';
 import QuantityController from '../QuantityController';
 
 interface CartItemProps {
@@ -59,31 +60,24 @@ const CartItem = ({
         onChange={(e) => chooseToCheckout({ purchaseId: data._id, e })}
         className='peer appearance-none absolute'
       />
-      <div className='flex justify-between p-2 md:p-6 mb-2 peer-checked:bg-slate-100 cursor-pointer'>
+      <div className='flex justify-between py-4 px-3 md:p-6 mb-2 peer-checked:bg-slate-100 cursor-pointer'>
         <div className='w-[90px] flex flex-col items-center'>
-          <div className='border border-[#ececec] rounded-sm w-[60px] h-[60px] md:w-[90px] md:h-[90px]'>
+          <div className='border border-[#ececec] rounded-sm w-[70px] h-[70px] md:w-[90px] md:h-[90px]'>
             <Link
               to={`${PATH.PRODUCT_DETAIL_WITHOUT_ID}/${generateNameId({
                 name: data.product.name_vi,
                 id: data.product._id
               })}`}
             >
-              <img
-                src={getImageUrl(data.product.thumbnail)}
-                alt={data.product.name_vi}
-                className='w-full h-full object-cover'
-              />
+              <Image src={data.product.thumbnail} alt={data.product.name_vi} className='w-full h-full object-cover' />
             </Link>
           </div>
           <div className='flex justify-center items-center mt-3'>
-            <button onClick={chooseToBuy} className='text-[#6D6E72] text-[10px] md:text-xs font-medium'>
+            <button onClick={chooseToBuy} className='text-[#6D6E72] text-xs font-medium'>
               {!checked ? 'Chọn' : 'Bỏ chọn'}
             </button>
             <div className='w-[1px] h-3 bg-slate-400 mx-[6px]' />
-            <button
-              onClick={() => handleDelete(data._id)}
-              className='text-[#6D6E72] text-[10px] md:text-xs font-medium'
-            >
+            <button onClick={() => handleDelete(data._id)} className='text-[#6D6E72] text-xs font-medium'>
               Xóa
             </button>
           </div>
@@ -94,15 +88,15 @@ const CartItem = ({
               name: data.product.name_vi,
               id: data.product._id
             })}`}
-            className='pr-5 font-semibold line-clamp-3 md:line-clamp-2 text-xs md:text-base'
+            className='pr-5 font-semibold line-clamp-3 md:line-clamp-2 text-sm md:text-base'
           >
             {data.product.name_vi}
           </Link>
           <div className='flex flex-col items-end'>
-            <div className='text-primary font-semibold text-sm md:text-lg'>
+            <div className='text-primary font-semibold text-base md:text-lg'>
               {formatCurrency(data.product.price_after_discount * data.buy_count)}₫
             </div>
-            <div className='text-[#6D6E72] text-xs'>{formatCurrency(data.product.price_after_discount)}₫</div>
+            <div className='text-[#6D6E72] text-sm'>{formatCurrency(data.product.price_after_discount)}₫</div>
             <div className='mt-4'>
               <QuantityController
                 value={data.buy_count}

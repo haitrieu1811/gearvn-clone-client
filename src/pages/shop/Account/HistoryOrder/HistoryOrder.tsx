@@ -7,13 +7,13 @@ import orderApi from 'src/apis/order.api';
 import { EmptyImage } from 'src/components/Icons';
 import Loading from 'src/components/Loading';
 import OrderItem from 'src/components/OrderItem';
+import Pagination from 'src/components/Pagination';
 import { OrderStatus } from 'src/constants/enum';
 import PATH from 'src/constants/path';
 import { AppContext } from 'src/contexts/app.context';
 import useQueryParams from 'src/hooks/useQueryParams';
 import { GetOrdersRequestParams, OrderCountByStatus } from 'src/types/order.type';
 import Tabs from './Tabs';
-import Pagination from 'src/components/Pagination';
 
 export type QueryConfig = {
   [key in keyof GetOrdersRequestParams]: string;

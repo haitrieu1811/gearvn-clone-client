@@ -187,12 +187,10 @@ const CartList = () => {
                   className='flex items-center py-2 px-3 border border-[#CFCFCF] rounded cursor-pointer select-none'
                 >
                   <div className='flex items-center'>
-                    <VoucherIcon className='w-3 h-3 md:w-4 md:h-4' />
-                    <span className='ml-2 text-[#1982F9] text-xs md:text-base'>Sử dụng mã giảm giá</span>
+                    <VoucherIcon className='w-4 h-4' />
+                    <span className='ml-2 text-[#1982F9] text-sm md:text-base'>Sử dụng mã giảm giá</span>
                   </div>
-                  <CaretDownIcon
-                    className={`fill-[#1982F9] w-2 h-2 md:w-3 md:h-3 ml-2 ${isUsingVoucher && 'rotate-180'}`}
-                  />
+                  <CaretDownIcon className={`fill-[#1982F9] w-3 h-3 ml-2 ${isUsingVoucher && 'rotate-180'}`} />
                 </div>
               </div>
               {/* Input voucher */}
@@ -207,7 +205,7 @@ const CartList = () => {
                     />
                     <button
                       type='submit'
-                      className='bg-[#1982F9] text-white text-xs md:text-base ml-2 font-semibold px-2 md:px-4 rounded'
+                      className='bg-[#1982F9] text-white text-sm md:text-base ml-2 font-semibold px-4 rounded'
                     >
                       Áp dụng
                     </button>

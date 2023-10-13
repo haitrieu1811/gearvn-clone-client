@@ -6,11 +6,12 @@ import { Link, useNavigate, useParams } from 'react-router-dom';
 
 import orderApi from 'src/apis/order.api';
 import { CheckCircleGreenIcon, CustomerInfoImage, PaymentMethodImage, ProductInfoImage } from 'src/components/Icons';
+import Image from 'src/components/Image';
 import Loading from 'src/components/Loading';
 import { orderStatusName } from 'src/components/OrderItem/OrderItem';
 import { OrderStatus } from 'src/constants/enum';
 import PATH from 'src/constants/path';
-import { formatCurrency, generateNameId, getImageUrl } from 'src/utils/utils';
+import { formatCurrency, generateNameId } from 'src/utils/utils';
 import OrderTracking from './OrderTracking';
 
 const OrderDetail = () => {
@@ -56,7 +57,7 @@ const OrderDetail = () => {
         {order && !getOrderDetailQuery.isLoading && (
           <Fragment>
             <div className='py-4 px-2 md:px-6 flex flex-wrap md:flex-nowrap justify-between items-center'>
-              <h2 className='text-base md:text-2xl w-full md:w-auto text-center md:text-left'>
+              <h2 className='text-lg md:text-2xl w-full md:w-auto text-center md:text-left'>
                 <span className='font-semibold'>Chi tiết đơn hàng {`#${order._id.slice(-6)}`} -</span>{' '}
                 <span className='text-[#FF7A00] font-semibold md:mt-0'>{orderStatusName[order.status]}</span>
               </h2>
@@ -78,19 +79,19 @@ const OrderDetail = () => {
                     <CustomerInfoImage className='w-5 h-5 md:w-6 md:h-6 mr-2' />{' '}
                     <h3 className='text-[#333333] font-semibold text-sm md:text-base'>Thông tin khách hàng</h3>
                   </div>
-                  <div className='flex mb-4 text-xs md:text-base'>
+                  <div className='flex mb-4 text-sm md:text-base'>
                     <span className='w-1/3'>Người nhận:</span>
-                    <span className='flex-1'>
+                    <span className='flex-1 ml-5'>
                       {order.customer_name} - {order.customer_phone}
                     </span>
                   </div>
-                  <div className='flex mb-4 text-xs md:text-base'>
+                  <div className='flex mb-4 text-sm md:text-base'>
                     <span className='w-1/3'>Địa chỉ nhận hàng:</span>
-                    <span className='capitalize flex-1'>{`${order.street}, ${order.ward}, ${order.district}, ${order.province}`}</span>
+                    <span className='capitalize flex-1 ml-5'>{`${order.street}, ${order.ward}, ${order.district}, ${order.province}`}</span>
                   </div>
-                  <div className='flex text-xs md:text-base'>
+                  <div className='flex text-sm md:text-base'>
                     <span className='w-1/3'>Thời gian nhận hàng:</span>
-                    <span className='flex-1'>{moment(order.created_at).add(3, 'days').format('DD.MM.YYYY')}</span>
+                    <span className='flex-1 ml-5'>{moment(order.created_at).add(3, 'days').format('DD.MM.YYYY')}</span>
                   </div>
                 </div>
                 {/* Hình thức thanh toán */}
@@ -99,7 +100,7 @@ const OrderDetail = () => {
                     <PaymentMethodImage className='w-5 h-5 md:w-6 md:h-6 mr-2' />{' '}
                     <h3 className='text-[#333333] font-semibold text-sm md:text-base'>Hình thức thanh toán</h3>
                   </div>
-                  <div className='text-[#FF7A00] text-xs md:text-base'>Thanh toán khi nhận hàng</div>
+                  <div className='text-[#FF7A00] text-sm md:text-base'>Thanh toán khi nhận hàng</div>
                 </div>
               </div>
               {/* Thông tin sản phẩm */}
@@ -120,10 +121,10 @@ const OrderDetail = () => {
                           })}`}
                           className='flex-shrink-0'
                         >
-                          <img
-                            src={getImageUrl(purchase.product.thumbnail)}
+                          <Image
+                            src={purchase.product.thumbnail}
                             alt={purchase.product.name_vi}
-                            className='w-[50px] h-[50px] md:w-[90px] md:h-[90px] rounded-sm'
+                            className='w-[70px] h-[70px] md:w-[90px] md:h-[90px] rounded-sm'
                           />
                         </Link>
                         <div className='ml-2 flex flex-col'>
@@ -132,14 +133,13 @@ const OrderDetail = () => {
                               name: purchase.product.name_vi,
                               id: purchase.product._id
                             })}`}
-                            className='text-xs md:text-base line-clamp-2'
                           >
-                            {purchase.product.name_vi}
+                            <span className='text-sm md:text-base line-clamp-2'>{purchase.product.name_vi}</span>
                           </Link>
-                          <span className='text-xs md:text-sm text-[#535353]'>Số lượng: {purchase.buy_count}</span>
+                          <span className='text-sm md:text-sm text-[#535353]'>Số lượng: {purchase.buy_count}</span>
                         </div>
                       </div>
-                      <div className='text-primary ml-2 text-xs md:text-base'>
+                      <div className='text-primary ml-4 text-sm md:text-base'>
                         {`${formatCurrency(purchase.product.price_after_discount * purchase.buy_count)}₫`}
                       </div>
                     </div>
@@ -148,7 +148,7 @@ const OrderDetail = () => {
               </div>
               {/* Thông tin thanh toán */}
               <div className='mt-4 flex justify-end'>
-                <div className='w-full md:w-[424px] text-xs md:text-base'>
+                <div className='w-full md:w-[424px] text-sm md:text-base'>
                   <div className='flex justify-between items-center mb-3'>
                     <span>Giá tạm tính:</span>
                     <span>{`${formatCurrency(order.total_amount_before_discount)}₫`}</span>
@@ -176,11 +176,10 @@ const OrderDetail = () => {
                   </div>
                 </div>
               </div>
-
               {/* Quay lại danh sách đơn hàng */}
               <div className='mt-8 md:mt-16 mb-4 md:mb-8 flex justify-center'>
                 <button
-                  className='bg-[#1982F9] rounded px-3 md:px-6 py-2 md:py-3 text-white text-xs md:text-base hover:bg-[#1982F9]/90'
+                  className='bg-[#1982F9] rounded px-3 md:px-6 py-2 md:py-3 text-white text-sm md:text-base hover:bg-[#1982F9]/90'
                   onClick={() => navigate(-1)}
                 >
                   Quay lại danh sách đơn hàng

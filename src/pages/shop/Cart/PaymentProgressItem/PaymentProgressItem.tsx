@@ -44,7 +44,7 @@ const PaymentProgressItem = ({ isActive, icon, name, border = true }: PaymentPro
         </div>
       </div>
       <p
-        className={classNames('mt-1 text-center text-xs md:text-base', {
+        className={classNames('mt-1 text-center text-sm md:text-base', {
           'text-[##535353]': !isActive,
           'text-primary': isActive
         })}
